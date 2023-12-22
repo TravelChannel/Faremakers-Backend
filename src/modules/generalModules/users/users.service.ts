@@ -14,7 +14,6 @@ import { databaseConfig } from 'src/database/config/default';
 
 // import { SessionData } from 'express-session';
 
-import { Role } from '../roles/entities/role.entity';
 import {
   sequelize,
   Transaction,
@@ -50,13 +49,8 @@ export class UsersService {
   ): Promise<User> {
     const t: Transaction = await sequelize.transaction();
     try {
-      const { password, branch, department, roles, ...rest } = createUserDto;
-      let company;
-      if (currentCompanyId) {
-        company = currentCompanyId;
-      } else {
-        company = createUserDto.company;
-      }
+      const { password, ...rest } = createUserDto;
+
       const hashedPassword = await bcrypt.hash(password + PASSWORD_SECRET, 10); // Hash the password with a salt of 10 rounds
       const newUser = await this.userRepository.create(
         {
@@ -426,6 +420,7 @@ export class UsersService {
     }
   }
   async removeUserRole(id: string): Promise<void> {
+    console.log(id);
     return this.responseService.createResponse(
       HttpStatus.OK,
       null,
