@@ -8,7 +8,7 @@ import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrUser } from '../pnrUsers';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
-// import { EXCEPTION } from '../../../shared/messages.constants';
+//  // import { EXCEPTION } from '../../../shared/messages.constants';
 @Injectable()
 export class PnrBookingsService {
   constructor(
