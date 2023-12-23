@@ -79,7 +79,7 @@ export class UsersService {
   async findByEmail(email: string): Promise<User | null> {
     try {
       const users = await this.userRepository.findOne({
-        where: { email },
+        where: { email, isActive: 1 },
       });
       return this.responseService.createResponse(
         HttpStatus.OK,

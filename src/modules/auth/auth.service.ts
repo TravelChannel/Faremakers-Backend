@@ -43,14 +43,10 @@ export class AuthService {
 
   async login(
     loginDto: LoginDto,
-    // companyId: number,
     // @Session() session: Record<string, any>,
   ): Promise<any> {
     try {
-      const user = await this.userService.findUserWithCompanyByEmail(
-        loginDto.email,
-        // companyId,
-      );
+      const user = await this.userService.findByEmail(loginDto.email);
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,

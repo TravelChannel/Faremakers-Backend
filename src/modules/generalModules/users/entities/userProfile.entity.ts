@@ -31,31 +31,7 @@ export class UserProfile extends Model {
     allowNull: true,
   })
   birthPlace: string;
-  @Column({
-    type: DataType.DATE,
-    allowNull: true,
-  })
-  birthDate: Date;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  gender: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  maritalStatus: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  nationality: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  bloodGroup: string;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
