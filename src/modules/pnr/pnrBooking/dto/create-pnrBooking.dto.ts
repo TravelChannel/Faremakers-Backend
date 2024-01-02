@@ -1,7 +1,10 @@
-import { ArrayNotEmpty } from 'class-validator';
+import { IsNotEmpty, ArrayNotEmpty } from 'class-validator';
 import { PnrBookingArrayDto } from './PnrBookingArray.dto';
 
 export class PnrBookingDto {
-  @ArrayNotEmpty({ message: 'Provide atleast one pnrBooking.' })
-  pnrBooking: PnrBookingArrayDto[];
+  @IsNotEmpty({ message: 'phoneNumber is required.' })
+  phoneNumber: number;
+
+  @ArrayNotEmpty({ message: 'Provide at least one pnrBooking' })
+  pnrBookings: PnrBookingArrayDto[];
 }

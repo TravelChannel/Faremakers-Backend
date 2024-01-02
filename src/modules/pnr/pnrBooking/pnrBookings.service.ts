@@ -19,25 +19,16 @@ export class PnrBookingsService {
   async create(pnrBookingDto: PnrBookingDto): Promise<any> {
     const t: Transaction = await sequelize.transaction();
     try {
-      const { pnrBooking } = pnrBookingDto;
+      const { pnrBookings, phoneNumber } = pnrBookingDto;
       let pnrUser = await PnrUser.findOne({
         where: {
-          phoneNumber: pnrBooking[0].phoneNumber,
+          phoneNumber: phoneNumber,
         },
       });
       if (!pnrUser) {
         pnrUser = await PnrUser.create(
           {
-            phoneNumber: pnrBooking[0].phoneNumber,
-            userEmail: pnrBooking[0].userEmail,
-            dateOfBirth: pnrBooking[0].userInfoDetails.dateOfBirth,
-            passportExpiryDate:
-              pnrBooking[0].userInfoDetails.passportExpiryDate,
-            firstName: pnrBooking[0].userInfoDetails.firstName,
-            lastName: pnrBooking[0].userInfoDetails.lastName,
-            gender: pnrBooking[0].userInfoDetails.gender,
-            cnic: pnrBooking[0].userInfoDetails.cnic,
-            passportNo: pnrBooking[0].userInfoDetails.passportNo,
+            phoneNumber: phoneNumber,
           },
           { transaction: t },
         );
@@ -45,7 +36,7 @@ export class PnrBookingsService {
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           pnrUserId: pnrUser.id,
-          pnr: pnrBooking[0].pnr,
+          pnr: pnrBookings[0].pnr,
         },
         { transaction: t },
       );
