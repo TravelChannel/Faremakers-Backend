@@ -37,7 +37,16 @@ export class PnrBookingsService {
         {
           pnrUserId: pnrUser.id,
           pnr: pnr,
+
           phoneNumber: pnrBookings[0].phoneNumber,
+          userEmail: pnrBookings[0].userEmail,
+          dateOfBirth: pnrBookings[0].dateOfBirth,
+          passportExpiryDate: pnrBookings[0].passportExpiryDate,
+          firstName: pnrBookings[0].firstName,
+          lastName: pnrBookings[0].lastName,
+          gender: pnrBookings[0].gender,
+          cnic: pnrBookings[0].cnic,
+          passportNo: pnrBookings[0].passportNo,
         },
         { transaction: t },
       );
@@ -67,6 +76,7 @@ export class PnrBookingsService {
           },
         ],
       });
+      console.log('doneeee');
       return this.responseService.createResponse(
         HttpStatus.OK,
         users,
