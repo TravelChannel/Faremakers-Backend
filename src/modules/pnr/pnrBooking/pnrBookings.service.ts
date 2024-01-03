@@ -121,6 +121,12 @@ export class PnrBookingsService {
         include: [
           {
             model: PnrBooking,
+            include: [
+              {
+                model: PnrDetail,
+                as: 'pnrDetail',
+              },
+            ],
           },
         ],
       });
@@ -147,6 +153,57 @@ export class PnrBookingsService {
   }
   async findBy(req): Promise<any> {
     try {
+      const whereOptions: any = {};
+      if (req.query.pnr) {
+        whereOptions.pnr = req.query.pnr;
+      } else {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Please provide search parameter.',
+        );
+      }
+
+      const users = await PnrUser.findOne({
+        include: [
+          {
+            model: PnrBooking,
+            where: whereOptions,
+
+            include: [
+              {
+                model: PnrDetail,
+                as: 'pnrDetail',
+              },
+            ],
+          },
+        ],
+      });
+      if (users) {
+        return this.responseService.createResponse(
+          HttpStatus.OK,
+          users,
+          // { userFromSession, users },
+          GET_SUCCESS,
+        );
+      } else {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Record Not Found',
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async findByPnr(req): Promise<any> {
+    try {
       console.log('req', req.query);
       const whereOptions: any = {};
       if (req.query.cnic) {
@@ -165,12 +222,17 @@ export class PnrBookingsService {
         );
       }
 
-      console.log('ddddddwhereOptions', whereOptions);
       const users = await PnrUser.findOne({
         where: whereOptions,
         include: [
           {
             model: PnrBooking,
+            include: [
+              {
+                model: PnrDetail,
+                as: 'pnrDetail',
+              },
+            ],
           },
         ],
       });
