@@ -6,6 +6,3 @@ import { databaseProviders } from './database.providers';
   exports: [...databaseProviders],
 })
 export class DatabaseModule {}
-
-
-// test comment

@@ -59,7 +59,7 @@ export class PnrUser extends Model {
   gender: string;
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
     unique: {
       name: 'unique_user_cnic',
       msg: 'cnic must be unique.',
@@ -68,11 +68,7 @@ export class PnrUser extends Model {
   cnic: string;
   @Column({
     type: DataType.STRING,
-    // allowNull: false,
-    // unique: {
-    //   name: 'unique_user_passport',
-    //   msg: 'passport must be unique.',
-    // },
+    allowNull: true,
   })
   passportNo: string;
   @HasMany(() => PnrBooking)

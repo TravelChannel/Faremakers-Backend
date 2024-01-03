@@ -36,7 +36,7 @@ export class PnrBookingsService {
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           pnrUserId: pnrUser.id,
-          pnr: pnrBookings[0].pnr,
+          pnr: pnrBookings[0].ispnr,
         },
         { transaction: t },
       );

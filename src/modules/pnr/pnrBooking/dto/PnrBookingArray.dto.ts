@@ -1,15 +1,35 @@
-import { IsNotEmpty, IsOptional } from 'class-validator';
-import { UserInfoDetails } from './userInfoDetails.dto';
-// Test Commmit
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsDateString,
+  IsISO8601,
+  IsDate,
+} from 'class-validator';
 export class PnrBookingArrayDto {
-  @IsNotEmpty({ message: 'phoneNumber is required.' })
-  phoneNumber: string;
+  @IsOptional()
+  phoneNumber?: string;
 
   @IsOptional()
   userEmail?: string;
 
-  userInfoDetails: UserInfoDetails;
+  @IsOptional()
+  @IsDate()
+  dateOfBirth?: Date;
+  @IsISO8601({ strict: true })
+  @IsDateString()
+  @IsDate()
+  passportExpiryDate: Date;
+  @IsOptional()
+  firstName?: string;
+  @IsOptional()
+  lastName?: string;
+  @IsOptional()
+  gender?: string;
+  @IsNotEmpty({ message: 'CNIC is required.' })
+  cnic: string;
+  @IsOptional()
+  passportNo?: string;
 
   @IsNotEmpty({ message: 'PNR is required.' })
-  pnr: string;
+  ispnr: string;
 }

@@ -28,11 +28,11 @@ sequelize
   // })
   .sync()
   .then(() => {
-    console.log('Database synchronized...');
+    console.log('Database synchronized....');
   })
   .catch((error) => {
     console.error('Error synchronizing the database:', error);
-    console.error('--------------------------------:', error.message);
+    console.error('-------------------------------:', error.message);
   });
 
 export { sequelize, Transaction, Op };
