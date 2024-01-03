@@ -19,7 +19,7 @@ export class PnrBookingsService {
   async create(pnrBookingDto: PnrBookingDto): Promise<any> {
     const t: Transaction = await sequelize.transaction();
     try {
-      const { pnrBookings, phoneNumber } = pnrBookingDto;
+      const { pnrBookings, pnr, phoneNumber } = pnrBookingDto;
       let pnrUser = await PnrUser.findOne({
         where: {
           phoneNumber: phoneNumber,
@@ -36,7 +36,8 @@ export class PnrBookingsService {
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           pnrUserId: pnrUser.id,
-          pnr: pnrBookings[0].ispnr,
+          pnr: pnr,
+          phoneNumber: pnrBookings[0].phoneNumber,
         },
         { transaction: t },
       );
