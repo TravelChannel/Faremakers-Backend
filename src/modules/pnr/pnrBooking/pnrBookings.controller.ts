@@ -55,10 +55,12 @@ export class PnrBookingsController {
   async findBy(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findBy(req);
   }
+  @Get('findByPnr')
   @SkipAuth()
   async findByPnr(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findByPnr(req);
   }
+
   @Get(':id')
   @SkipAuth()
   async findOne(@Param('id') id: string): Promise<any> {

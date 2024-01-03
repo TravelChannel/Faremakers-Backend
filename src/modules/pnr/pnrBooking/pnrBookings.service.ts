@@ -85,25 +85,20 @@ export class PnrBookingsService {
   }
   async findAll(): Promise<any> {
     try {
-      console.log('data', PnrDetail.associations);
-      const users = await PnrUser.findAll({
+      const pnrBookings = await PnrBooking.findAll({
         include: [
           {
-            model: PnrBooking,
-            include: [
-              {
-                model: PnrDetail,
-                as: 'pnrDetail',
-              },
-            ],
+            model: PnrUser,
+          },
+          {
+            model: PnrDetail,
+            as: 'pnrDetail',
           },
         ],
       });
-      console.log('doneeee');
       return this.responseService.createResponse(
         HttpStatus.OK,
-        users,
-        // { userFromSession, users },
+        pnrBookings,
         GET_SUCCESS,
       );
     } catch (error) {
@@ -117,20 +112,18 @@ export class PnrBookingsService {
   }
   async findOne(id: string): Promise<any> {
     try {
-      const user = await PnrUser.findByPk(id, {
+      const pnrBookings = await PnrBooking.findByPk(id, {
         include: [
           {
-            model: PnrBooking,
-            include: [
-              {
-                model: PnrDetail,
-                as: 'pnrDetail',
-              },
-            ],
+            model: PnrUser,
+          },
+          {
+            model: PnrDetail,
+            as: 'pnrDetail',
           },
         ],
       });
-      if (!user) {
+      if (!pnrBookings) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
           null,
@@ -139,7 +132,7 @@ export class PnrBookingsService {
       }
       return this.responseService.createResponse(
         HttpStatus.OK,
-        user,
+        pnrBookings,
         GET_SUCCESS,
       );
     } catch (error) {
@@ -151,7 +144,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async findBy(req): Promise<any> {
+  async findByPnr(req): Promise<any> {
     try {
       const whereOptions: any = {};
       if (req.query.pnr) {
@@ -164,25 +157,23 @@ export class PnrBookingsService {
         );
       }
 
-      const users = await PnrUser.findOne({
+      const pnrBookings = await PnrBooking.findOne({
+        where: whereOptions,
+
         include: [
           {
-            model: PnrBooking,
-            where: whereOptions,
-
-            include: [
-              {
-                model: PnrDetail,
-                as: 'pnrDetail',
-              },
-            ],
+            model: PnrUser,
+          },
+          {
+            model: PnrDetail,
+            as: 'pnrDetail',
           },
         ],
       });
-      if (users) {
+      if (pnrBookings) {
         return this.responseService.createResponse(
           HttpStatus.OK,
-          users,
+          pnrBookings,
           // { userFromSession, users },
           GET_SUCCESS,
         );
@@ -202,7 +193,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async findByPnr(req): Promise<any> {
+  async findBy(req): Promise<any> {
     try {
       console.log('req', req.query);
       const whereOptions: any = {};
@@ -222,24 +213,22 @@ export class PnrBookingsService {
         );
       }
 
-      const users = await PnrUser.findOne({
-        where: whereOptions,
+      const pnrBookings = await PnrBooking.findOne({
         include: [
           {
-            model: PnrBooking,
-            include: [
-              {
-                model: PnrDetail,
-                as: 'pnrDetail',
-              },
-            ],
+            model: PnrUser,
+          },
+          {
+            model: PnrDetail,
+            as: 'pnrDetail',
+            where: whereOptions,
           },
         ],
       });
-      if (users) {
+      if (pnrBookings) {
         return this.responseService.createResponse(
           HttpStatus.OK,
-          users,
+          pnrBookings,
           // { userFromSession, users },
           GET_SUCCESS,
         );
