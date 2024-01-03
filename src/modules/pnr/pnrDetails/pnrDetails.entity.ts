@@ -10,7 +10,7 @@ import {
 import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
 
 @Table
-export class PnrDetails extends Model {
+export class PnrDetail extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -85,4 +85,4 @@ export class PnrDetails extends Model {
   pnrBooking: PnrBooking;
 }
 
-export default PnrDetails;
+export default PnrDetail;

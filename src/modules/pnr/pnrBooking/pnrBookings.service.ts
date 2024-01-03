@@ -5,7 +5,7 @@ import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 import { SAVED_SUCCESS, GET_SUCCESS } from '../../../shared/messages.constants';
 import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
-import { PnrDetails } from '../pnrDetails';
+import { PnrDetail } from '../pnrDetails';
 import { PnrUser } from '../pnrUsers';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
@@ -48,7 +48,7 @@ export class PnrBookingsService {
         await Promise.all(
           pnrBookings.map(async (pnrBooking) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const newPnrDetails = await PnrDetails.create(
+            const newPnrDetails = await PnrDetail.create(
               {
                 pnrBookingId: newPnrBookingRepository.id,
                 phoneNumber: pnrBooking.phoneNumber,
@@ -85,10 +85,17 @@ export class PnrBookingsService {
   }
   async findAll(): Promise<any> {
     try {
+      console.log('data', PnrDetail.associations);
       const users = await PnrUser.findAll({
         include: [
           {
             model: PnrBooking,
+            include: [
+              {
+                model: PnrDetail,
+                as: 'pnrDetail',
+              },
+            ],
           },
         ],
       });

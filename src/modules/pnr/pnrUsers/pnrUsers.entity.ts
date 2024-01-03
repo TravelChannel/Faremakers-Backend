@@ -60,10 +60,10 @@ export class PnrUser extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: true,
-    unique: {
-      name: 'unique_user_cnic',
-      msg: 'cnic must be unique.',
-    },
+    // unique: {
+    //   name: 'unique_user_cnic',
+    //   msg: 'cnic must be unique.',
+    // },
   })
   cnic: string;
   @Column({

@@ -9,7 +9,7 @@ import {
 } from 'sequelize-typescript';
 
 import { PnrUser } from '../../pnrUsers';
-import { PnrDetails } from '../../PnrDetails';
+import { PnrDetail } from '../../PnrDetails';
 
 @Table
 export class PnrBooking extends Model {
@@ -51,8 +51,8 @@ export class PnrBooking extends Model {
   pnr: string;
   @BelongsTo(() => PnrUser)
   pnrUser: PnrUser;
-  @HasMany(() => PnrDetails)
-  pnrDetails: PnrDetails[];
+  @HasMany(() => PnrDetail)
+  pnrDetail: PnrDetail[];
 }
 
 export default PnrBooking;
