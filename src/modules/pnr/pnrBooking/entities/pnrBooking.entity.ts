@@ -28,6 +28,27 @@ export class PnrBooking extends Model {
   })
   pnrUserId: number;
 
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: {
+      name: 'unique_pnr',
+      msg: 'pnr must be unique.',
+    },
+    validate: {
+      notNull: {
+        msg: 'pnr is required.',
+      },
+      notEmpty: {
+        msg: 'pnr cannot be empty.',
+      },
+      len: {
+        args: [3, 50],
+        msg: 'pnr must be between 9 and 20 characters.',
+      },
+    },
+  })
+  pnr: string;
   @BelongsTo(() => PnrUser)
   pnrUser: PnrUser;
   @HasMany(() => PnrDetails)

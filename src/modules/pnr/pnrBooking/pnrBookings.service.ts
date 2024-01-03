@@ -39,25 +39,34 @@ export class PnrBookingsService {
         {
           pnrUserId: pnrUser.id,
           pnr: pnr,
-
-          phoneNumber: pnrBookings[0].phoneNumber,
-          userEmail: pnrBookings[0].userEmail,
-          dateOfBirth: pnrBookings[0].dateOfBirth,
-          passportExpiryDate: pnrBookings[0].passportExpiryDate,
-          firstName: pnrBookings[0].firstName,
-          lastName: pnrBookings[0].lastName,
-          gender: pnrBookings[0].gender,
-          cnic: pnrBookings[0].cnic,
-          passportNo: pnrBookings[0].passportNo,
         },
         { transaction: t },
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const newPnrDetails = await PnrDetails.create(
-        { pnrBookingId: newPnrBookingRepository.id },
-        { transaction: t },
-      );
-      console.log('done');
+
+      if (pnrBookings.length > 0) {
+        await Promise.all(
+          pnrBookings.map(async (pnrBooking) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const newPnrDetails = await PnrDetails.create(
+              {
+                pnrBookingId: newPnrBookingRepository.id,
+                phoneNumber: pnrBooking.phoneNumber,
+                userEmail: pnrBooking.userEmail,
+                dateOfBirth: pnrBooking.dateOfBirth,
+                passportExpiryDate: pnrBooking.passportExpiryDate,
+                firstName: pnrBooking.firstName,
+                lastName: pnrBooking.lastName,
+                gender: pnrBooking.gender,
+                cnic: pnrBooking.cnic,
+                passportNo: pnrBooking.passportNo,
+              },
+              { transaction: t },
+            );
+          }),
+        );
+      }
+
       await t.commit();
       return this.responseService.createResponse(
         HttpStatus.OK,
