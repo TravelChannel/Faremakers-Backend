@@ -5,9 +5,11 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
 
 import { PnrUser } from '../../pnrUsers';
+import { PnrDetails } from '../../PnrDetails';
 
 @Table
 export class PnrBooking extends Model {
@@ -25,82 +27,11 @@ export class PnrBooking extends Model {
     onDelete: 'NO ACTION',
   })
   pnrUserId: number;
-  // Start
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
 
-    validate: {
-      notNull: {
-        msg: 'pnr is required.',
-      },
-      notEmpty: {
-        msg: 'pnr cannot be empty.',
-      },
-      len: {
-        args: [3, 50],
-        msg: 'pnr must be between 5 and 20 characters.',
-      },
-    },
-  })
-  pnr: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-
-    validate: {
-      notNull: {
-        msg: 'phoneNumber is required.',
-      },
-      notEmpty: {
-        msg: 'phoneNumber cannot be empty.',
-      },
-      len: {
-        args: [3, 50],
-        msg: 'phoneNumber must be between 9 and 20 characters.',
-      },
-    },
-  })
-  phoneNumber: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  userEmail: string;
-  @Column({
-    type: DataType.DATE,
-  })
-  dateOfBirth: Date;
-  @Column({
-    type: DataType.DATE,
-  })
-  passportExpiryDate: Date;
-  @Column({
-    type: DataType.STRING,
-  })
-  firstName: string;
-  @Column({
-    type: DataType.STRING,
-  })
-  lastName: string;
-  @Column({
-    type: DataType.STRING,
-  })
-  gender: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  cnic: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  passportNo: string;
-  // End
   @BelongsTo(() => PnrUser)
   pnrUser: PnrUser;
+  @HasMany(() => PnrDetails)
+  pnrDetails: PnrDetails[];
 }
 
 export default PnrBooking;

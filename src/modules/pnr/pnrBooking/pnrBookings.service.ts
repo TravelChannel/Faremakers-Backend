@@ -5,6 +5,7 @@ import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 import { SAVED_SUCCESS, GET_SUCCESS } from '../../../shared/messages.constants';
 import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
+import { PnrDetails } from '../pnrDetails';
 import { PnrUser } from '../pnrUsers';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
@@ -33,6 +34,7 @@ export class PnrBookingsService {
           { transaction: t },
         );
       }
+
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           pnrUserId: pnrUser.id,
@@ -48,6 +50,11 @@ export class PnrBookingsService {
           cnic: pnrBookings[0].cnic,
           passportNo: pnrBookings[0].passportNo,
         },
+        { transaction: t },
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const newPnrDetails = await PnrDetails.create(
+        { pnrBookingId: newPnrBookingRepository.id },
         { transaction: t },
       );
       console.log('done');
