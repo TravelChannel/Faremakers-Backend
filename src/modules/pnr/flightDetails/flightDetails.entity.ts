@@ -5,9 +5,16 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasMany,
+  HasOne,
 } from 'sequelize-typescript';
 
 import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { ExtraBaggage } from '../../pnr/extraBaggage';
+import { BaggageAllowance } from '../../pnr/baggageAllowance';
+import { BookingFlight } from '../../pnr/bookingFlight';
+import { Fare } from '../../pnr/fare';
+import { GroupDescription } from '../../pnr/groupDescription';
 
 @Table
 export class FlightDetails extends Model {
@@ -26,6 +33,8 @@ export class FlightDetails extends Model {
   })
   pnrBookingId: number;
   // Start
+  @Column
+  pricingSubsource: string;
   @Column(DataType.INTEGER)
   adults: number;
   @Column(DataType.INTEGER)
@@ -37,6 +46,16 @@ export class FlightDetails extends Model {
   // End
   @BelongsTo(() => PnrBooking)
   pnrBooking: PnrBooking;
+  @HasMany(() => ExtraBaggage)
+  extraBaggages: ExtraBaggage;
+  @HasMany(() => BaggageAllowance)
+  baggageAllowance: BaggageAllowance;
+  @HasMany(() => BookingFlight)
+  bookingFlight: BookingFlight;
+  @HasOne(() => Fare)
+  fare: Fare;
+  @HasMany(() => GroupDescription)
+  groupDescription: GroupDescription;
 }
 
 export default FlightDetails;
