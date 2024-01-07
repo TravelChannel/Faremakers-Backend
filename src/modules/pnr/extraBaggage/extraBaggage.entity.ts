@@ -27,8 +27,8 @@ export class ExtraBaggage extends Model {
   pnrBookingId: number;
   // Start
 
-  @Column
-  SUB_CLASS_ID: string;
+  @Column(DataType.INTEGER)
+  SUB_CLASS_ID: number;
 
   @Column
   SUB_CLASS_DESC: string;
@@ -36,23 +36,23 @@ export class ExtraBaggage extends Model {
   @Column
   ABBR: string;
 
-  @Column
-  NO_OF_BAGS: string;
+  @Column(DataType.INTEGER)
+  NO_OF_BAGS: number;
 
-  @Column
-  ADV_TAX: string;
+  @Column(DataType.DOUBLE)
+  ADV_TAX: number;
 
-  @Column
-  AMOUNT: string;
+  @Column(DataType.DOUBLE)
+  AMOUNT: number;
 
-  @Column
-  ACTUAL_AMOUNT: string;
+  @Column(DataType.DOUBLE)
+  ACTUAL_AMOUNT: number;
 
-  @Column
-  WEIGHT: string;
+  @Column(DataType.DOUBLE)
+  WEIGHT: number;
 
-  @Column
-  PIECE: string;
+  @Column(DataType.INTEGER)
+  PIECE: number;
 
   @Column
   DESCRIPTION: string;
