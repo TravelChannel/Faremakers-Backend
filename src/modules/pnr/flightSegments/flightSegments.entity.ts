@@ -10,7 +10,7 @@ import {
 import { FlightDetails } from '../../pnr/flightDetails';
 
 @Table
-export class GroupDescription extends Model {
+export class FlightSegments extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -25,17 +25,16 @@ export class GroupDescription extends Model {
     onDelete: 'NO ACTION',
   })
   flightDetailsId: number;
-  // Start
+  // Start\
   @Column
-  arrivalLocation: string;
+  departure: string;
   @Column
-  departureDate: string;
+  arrival: string;
   @Column
-  departureLocation: string;
-
+  date: string;
   // End
   @BelongsTo(() => FlightDetails)
   flightDetails: FlightDetails;
 }
 
-export default GroupDescription;
+export default FlightSegments;

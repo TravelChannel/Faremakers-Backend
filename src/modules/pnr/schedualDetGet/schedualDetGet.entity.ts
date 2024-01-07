@@ -10,7 +10,7 @@ import {
 import { FlightDetails } from '../../pnr/flightDetails';
 
 @Table
-export class GroupDescription extends Model {
+export class SchedualDetGet extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -26,16 +26,10 @@ export class GroupDescription extends Model {
   })
   flightDetailsId: number;
   // Start
-  @Column
-  arrivalLocation: string;
-  @Column
-  departureDate: string;
-  @Column
-  departureLocation: string;
 
   // End
   @BelongsTo(() => FlightDetails)
   flightDetails: FlightDetails;
 }
 
-export default GroupDescription;
+export default SchedualDetGet;

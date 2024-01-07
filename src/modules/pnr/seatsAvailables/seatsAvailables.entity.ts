@@ -10,7 +10,7 @@ import {
 import { FlightDetails } from '../../pnr/flightDetails';
 
 @Table
-export class ExtraBaggage extends Model {
+export class SeatsAvailables extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -32,4 +32,4 @@ export class ExtraBaggage extends Model {
   flightDetails: FlightDetails;
 }
 
-export default ExtraBaggage;
+export default SeatsAvailables;
