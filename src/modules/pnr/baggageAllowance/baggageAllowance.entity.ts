@@ -16,6 +16,10 @@ export class BaggageAllowance extends Model {
     primaryKey: true,
     autoIncrement: true,
   })
+  localId: number;
+  @Column({
+    type: DataType.BIGINT,
+  })
   id: number;
 
   @ForeignKey(() => PnrBooking)
@@ -26,6 +30,12 @@ export class BaggageAllowance extends Model {
   })
   pnrBookingId: number;
   // Start
+
+  @Column
+  unit: string;
+
+  @Column(DataType.DOUBLE)
+  weight: number;
 
   // End
   @BelongsTo(() => PnrBooking)

@@ -16,10 +16,6 @@ export class ExtraBaggage extends Model {
     primaryKey: true,
     autoIncrement: true,
   })
-  localId: number;
-  @Column({
-    type: DataType.BIGINT,
-  })
   id: number;
 
   @ForeignKey(() => PnrBooking)
@@ -34,9 +30,32 @@ export class ExtraBaggage extends Model {
   @Column
   unit: string;
 
-  @Column(DataType.DOUBLE)
-  weight: number;
+  @Column
+  weight: string;
 
+  @Column
+  ABBR: string;
+
+  @Column
+  NO_OF_BAGS: string;
+
+  @Column
+  ADV_TAX: string;
+
+  @Column
+  AMOUNT: string;
+
+  @Column
+  ACTUAL_AMOUNT: string;
+
+  @Column
+  WEIGHT: string;
+
+  @Column
+  PIECE: string;
+
+  @Column
+  DESCRIPTION: string;
   // End
   @BelongsTo(() => PnrBooking)
   pnrBooking: PnrBooking;
