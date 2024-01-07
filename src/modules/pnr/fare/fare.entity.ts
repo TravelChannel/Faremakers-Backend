@@ -6,10 +6,12 @@ import {
   ForeignKey,
   BelongsTo,
   HasOne,
+  HasMany,
 } from 'sequelize-typescript';
 
 import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
 import { TotalFare } from '../../pnr/totalFare';
+import { PassengerInfoList } from '../../pnr/passengerInfoList';
 
 @Table
 export class Fare extends Model {
@@ -45,6 +47,8 @@ export class Fare extends Model {
   pnrBooking: PnrBooking;
   @HasOne(() => TotalFare)
   totalFare: TotalFare;
+  @HasMany(() => PassengerInfoList)
+  passengerInfoList: PassengerInfoList;
 }
 
 export default Fare;
