@@ -8,6 +8,8 @@ import { City } from '../modules/generalModules/cities';
 import { PnrUser } from '../modules/pnr/pnrUsers';
 import { PnrBooking } from '../modules/pnr/pnrBooking/entities/pnrBooking.entity';
 import { PnrDetail } from '../modules/pnr/pnrDetails';
+import { BaggageAllowance } from '../modules/pnr/baggageAllowance';
+import { ExtraBaggage } from '../modules/pnr/extraBaggage';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -20,14 +22,23 @@ const sequelize = new Sequelize({
   dialectOptions: dbConfig.dialectOptions,
 });
 
-sequelize.addModels([User, Role, City, PnrUser, PnrBooking, PnrDetail]);
+sequelize.addModels([
+  User,
+  Role,
+  City,
+  PnrUser,
+  PnrBooking,
+  PnrDetail,
+  BaggageAllowance,
+  ExtraBaggage,
+]);
 
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  // .sync()
   .then(() => {
     console.log('Database synchronized...');
   })
