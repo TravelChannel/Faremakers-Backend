@@ -26,7 +26,22 @@ export class TotalFare extends Model {
   })
   fareId: number;
   // Start
-
+  @Column(DataType.INTEGER)
+  baseFareAmount: number;
+  @Column(DataType.INTEGER)
+  baseFareCurrency: number;
+  @Column(DataType.INTEGER)
+  constructionAmount: number;
+  @Column(DataType.INTEGER)
+  constructionCurrency: number;
+  @Column
+  currency: string;
+  @Column(DataType.INTEGER)
+  equivalentAmount: number;
+  @Column(DataType.INTEGER)
+  totalPrice: number;
+  @Column(DataType.INTEGER)
+  totalTaxAmount: number;
   // End
   @BelongsTo(() => Fare)
   fare: Fare;

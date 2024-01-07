@@ -15,6 +15,7 @@ import { Fare } from '../modules/pnr/fare';
 import { TotalFare } from '../modules/pnr/totalFare';
 import { PassengerInfoList } from '../modules/pnr/passengerInfoList';
 import { PassengerInfo } from '../modules/pnr/passengerInfo';
+import { FlightDetails } from '../modules/pnr/flightDetails';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -34,6 +35,7 @@ sequelize.addModels([
   PnrUser,
   PnrBooking,
   PnrDetail,
+  FlightDetails,
   BaggageAllowance,
   ExtraBaggage,
   BookingFlight,

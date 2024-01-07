@@ -6,10 +6,12 @@ import {
   ForeignKey,
   BelongsTo,
   HasMany,
+  HasOne,
 } from 'sequelize-typescript';
 
 import { PnrUser } from '../../pnrUsers';
 import { PnrDetail } from '../../PnrDetails';
+import { FlightDetails } from '../../flightDetails';
 
 @Table
 export class PnrBooking extends Model {
@@ -53,6 +55,8 @@ export class PnrBooking extends Model {
   pnrUser: PnrUser;
   @HasMany(() => PnrDetail)
   pnrDetail: PnrDetail[];
+  @HasOne(() => FlightDetails)
+  flightDetails: FlightDetails;
 }
 
 export default PnrBooking;
