@@ -9,7 +9,7 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 
-import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { FlightDetails } from '../../pnr/flightDetails';
 import { TotalFare } from '../../pnr/totalFare';
 import { PassengerInfoList } from '../../pnr/passengerInfoList';
 
@@ -22,13 +22,13 @@ export class Fare extends Model {
   })
   id: number;
 
-  @ForeignKey(() => PnrBooking)
+  @ForeignKey(() => FlightDetails)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  pnrBookingId: number;
+  flightDetailsId: number;
   // Start
   @Column(DataType.BOOLEAN)
   eTicketable: boolean;
@@ -43,8 +43,8 @@ export class Fare extends Model {
   @Column(DataType.BOOLEAN)
   vita: boolean;
   // End
-  @BelongsTo(() => PnrBooking)
-  pnrBooking: PnrBooking;
+  @BelongsTo(() => FlightDetails)
+  flightDetails: FlightDetails;
   @HasOne(() => TotalFare)
   totalFare: TotalFare;
   @HasMany(() => PassengerInfoList)

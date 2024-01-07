@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { FlightDetails } from '../../pnr/flightDetails';
 
 @Table
 export class BookingFlight extends Model {
@@ -22,13 +22,13 @@ export class BookingFlight extends Model {
   })
   id: number;
 
-  @ForeignKey(() => PnrBooking)
+  @ForeignKey(() => FlightDetails)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  pnrBookingId: number;
+  flightDetailsId: number;
   // Start
   @Column
   JOURNEY_CODE: string;
@@ -37,8 +37,8 @@ export class BookingFlight extends Model {
   @Column(DataType.INTEGER)
   FareType: number;
   // End
-  @BelongsTo(() => PnrBooking)
-  pnrBooking: PnrBooking;
+  @BelongsTo(() => FlightDetails)
+  flightDetails: FlightDetails;
 }
 
 export default BookingFlight;
