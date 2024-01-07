@@ -28,10 +28,10 @@ export class ExtraBaggage extends Model {
   // Start
 
   @Column
-  unit: string;
+  SUB_CLASS_ID: string;
 
   @Column
-  weight: string;
+  SUB_CLASS_DESC: string;
 
   @Column
   ABBR: string;
