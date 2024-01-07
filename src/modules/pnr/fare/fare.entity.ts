@@ -26,7 +26,18 @@ export class Fare extends Model {
   })
   pnrBookingId: number;
   // Start
-
+  @Column(DataType.BOOLEAN)
+  eTicketable: boolean;
+  @Column
+  governingCarriers: string;
+  @Column
+  lastTicketDate: string;
+  @Column
+  lastTicketTime: string;
+  @Column
+  validatingCarrierCode: string;
+  @Column(DataType.BOOLEAN)
+  vita: boolean;
   // End
   @BelongsTo(() => PnrBooking)
   pnrBooking: PnrBooking;
