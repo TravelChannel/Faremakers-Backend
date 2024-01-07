@@ -12,6 +12,7 @@ import { BaggageAllowance } from '../modules/pnr/baggageAllowance';
 import { ExtraBaggage } from '../modules/pnr/extraBaggage';
 import { BookingFlight } from '../modules/pnr/bookingFlight';
 import { Fare } from '../modules/pnr/fare';
+import { TotalFare } from '../modules/pnr/totalFare';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -35,6 +36,7 @@ sequelize.addModels([
   ExtraBaggage,
   BookingFlight,
   Fare,
+  TotalFare,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
