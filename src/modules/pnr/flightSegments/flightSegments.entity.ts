@@ -25,7 +25,7 @@ export class FlightSegments extends Model {
     onDelete: 'NO ACTION',
   })
   flightDetailsId: number;
-  // Start\
+  // Start
   @Column
   departure: string;
   @Column

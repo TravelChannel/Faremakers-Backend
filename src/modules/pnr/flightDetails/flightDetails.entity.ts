@@ -15,6 +15,9 @@ import { BaggageAllowance } from '../../pnr/baggageAllowance';
 import { BookingFlight } from '../../pnr/bookingFlight';
 import { Fare } from '../../pnr/fare';
 import { GroupDescription } from '../../pnr/groupDescription';
+import { SchedualDetGet } from '../../pnr/schedualDetGet';
+import { FlightSegments } from '../../pnr/flightSegments';
+import { SeatsAvailables } from '../../pnr/seatsAvailables';
 
 @Table
 export class FlightDetails extends Model {
@@ -56,6 +59,12 @@ export class FlightDetails extends Model {
   fare: Fare;
   @HasMany(() => GroupDescription)
   groupDescription: GroupDescription;
+  @HasMany(() => SchedualDetGet)
+  schedualDetGet: SchedualDetGet;
+  @HasMany(() => SeatsAvailables)
+  seatsAvailables: SeatsAvailables;
+  @HasMany(() => FlightSegments)
+  flightSegments: FlightSegments;
 }
 
 export default FlightDetails;
