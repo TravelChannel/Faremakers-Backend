@@ -7,10 +7,10 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { FlightDetails } from '../../pnr/flightDetails';
 
 @Table
-export class ExtraBaggage extends Model {
+export class GroupDescription extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -18,18 +18,18 @@ export class ExtraBaggage extends Model {
   })
   id: number;
 
-  @ForeignKey(() => PnrBooking)
+  @ForeignKey(() => FlightDetails)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  pnrBookingId: number;
+  flightDetailsId: number;
   // Start
 
   // End
-  @BelongsTo(() => PnrBooking)
-  pnrBooking: PnrBooking;
+  @BelongsTo(() => FlightDetails)
+  flightDetails: FlightDetails;
 }
 
-export default ExtraBaggage;
+export default GroupDescription;

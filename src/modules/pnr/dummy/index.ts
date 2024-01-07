@@ -1,1 +1,1 @@
-export * from './extraBaggage.entity';
+export * from './dummy.entity';
