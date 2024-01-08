@@ -5,9 +5,11 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasOne,
 } from 'sequelize-typescript';
 
 import { SchedualDetGet } from '../../pnr/schedualDetGet';
+import { Equipment } from '../../pnr/equipment';
 
 @Table
 export class Carrier extends Model {
@@ -39,6 +41,8 @@ export class Carrier extends Model {
 
   @BelongsTo(() => SchedualDetGet)
   schedualDetGet: SchedualDetGet;
+  @HasOne(() => Equipment)
+  equipment: Equipment;
 }
 
 export default Carrier;
