@@ -26,6 +26,16 @@ export class Arrival extends Model {
   })
   schedualDetGetId: number;
   // Start
+  @Column
+  airport: string;
+  @Column
+  city: string;
+  @Column
+  country: string;
+  @Column
+  terminal: string;
+  @Column
+  time: string;
 
   // End
 
