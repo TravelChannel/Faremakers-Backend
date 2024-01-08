@@ -20,6 +20,7 @@ import { GroupDescription } from '../modules/pnr/groupDescription';
 import { SchedualDetGet } from '../modules/pnr/schedualDetGet';
 import { SeatsAvailables } from '../modules/pnr/seatsAvailables';
 import { FlightSegments } from '../modules/pnr/flightSegments';
+import { Arrival } from '../modules/pnr/arrival';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -51,14 +52,15 @@ sequelize.addModels([
   SchedualDetGet,
   SeatsAvailables,
   FlightSegments,
+  Arrival,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  .sync({
-    force: true,
-  })
-  // .sync()
+  // .sync({
+  //   force: true,
+  // })
+  .sync()
   .then(() => {
     console.log('Database synchronized...');
   })

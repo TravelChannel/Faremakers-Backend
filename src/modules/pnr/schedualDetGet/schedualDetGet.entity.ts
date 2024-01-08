@@ -5,9 +5,11 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasOne,
 } from 'sequelize-typescript';
 
 import { FlightDetails } from '../../pnr/flightDetails';
+import { Arrival } from '../../pnr/arrival';
 
 @Table
 export class SchedualDetGet extends Model {
@@ -43,6 +45,8 @@ export class SchedualDetGet extends Model {
   // End
   @BelongsTo(() => FlightDetails)
   flightDetails: FlightDetails;
+  @HasOne(() => Arrival)
+  arrival: Arrival;
 }
 
 export default SchedualDetGet;
