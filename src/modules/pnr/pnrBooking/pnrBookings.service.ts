@@ -288,10 +288,15 @@ export class PnrBookingsService {
                 model: Fare,
                 include: [
                   {
-                    model: TotalFare,
+                    model: PassengerInfoList,
+                    include: [
+                      {
+                        model: PassengerInfo,
+                      },
+                    ],
                   },
                   {
-                    model: PassengerInfoList,
+                    model: TotalFare,
                   },
                 ],
               },
