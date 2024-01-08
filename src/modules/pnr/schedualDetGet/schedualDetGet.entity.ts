@@ -10,6 +10,8 @@ import {
 
 import { FlightDetails } from '../../pnr/flightDetails';
 import { Arrival } from '../../pnr/arrival';
+import { Departure } from '../../pnr/departure';
+import { Carrier } from '../../pnr/carrier';
 
 @Table
 export class SchedualDetGet extends Model {
@@ -47,6 +49,10 @@ export class SchedualDetGet extends Model {
   flightDetails: FlightDetails;
   @HasOne(() => Arrival)
   arrival: Arrival;
+  @HasOne(() => Departure)
+  departure: Departure;
+  @HasOne(() => Carrier)
+  carrier: Carrier;
 }
 
 export default SchedualDetGet;

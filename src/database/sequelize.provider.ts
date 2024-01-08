@@ -22,6 +22,7 @@ import { SeatsAvailables } from '../modules/pnr/seatsAvailables';
 import { FlightSegments } from '../modules/pnr/flightSegments';
 import { Arrival } from '../modules/pnr/arrival';
 import { Departure } from '../modules/pnr/departure';
+import { Carrier } from '../modules/pnr/carrier';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -55,6 +56,7 @@ sequelize.addModels([
   FlightSegments,
   Arrival,
   Departure,
+  Carrier,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
