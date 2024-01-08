@@ -55,6 +55,7 @@ export class PnrBookingsService {
         { transaction: t },
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      console.log('****************5');
 
       if (pnrBookings.length > 0) {
         await Promise.all(
@@ -78,6 +79,8 @@ export class PnrBookingsService {
           }),
         );
       }
+      console.log('****************3');
+
       if (flightDetails) {
         const newflightDetails = await FlightDetails.create(
           {
@@ -90,8 +93,11 @@ export class PnrBookingsService {
           },
           { transaction: t },
         );
-
-        if (flightDetails.extraBaggages.length > 0) {
+        console.log('****************1');
+        if (
+          flightDetails.extraBaggages &&
+          flightDetails.extraBaggages.length > 0
+        ) {
           await Promise.all(
             flightDetails.extraBaggages.map(async (extraBaggage) => {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -114,6 +120,8 @@ export class PnrBookingsService {
             }),
           );
         }
+        console.log('****************2');
+
         if (flightDetails.baggageAllowance.length > 0) {
           await Promise.all(
             flightDetails.baggageAllowance.map(async (baggageAllowance) => {
@@ -130,7 +138,12 @@ export class PnrBookingsService {
             }),
           );
         }
-        if (flightDetails.bookingFlight.length > 0) {
+        console.log('****************33333');
+
+        if (
+          flightDetails.bookingFlight &&
+          flightDetails.bookingFlight.length > 0
+        ) {
           await Promise.all(
             flightDetails.bookingFlight.map(async (bookingFlightItem) => {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -147,6 +160,8 @@ export class PnrBookingsService {
             }),
           );
         }
+        console.log('****************444');
+
         if (flightDetails.groupDescription.length > 0) {
           await Promise.all(
             flightDetails.groupDescription.map(async (groupDescriptionItem) => {
@@ -163,6 +178,8 @@ export class PnrBookingsService {
             }),
           );
         }
+        console.log('****************5555');
+
         if (flightDetails.flightSegments.length > 0) {
           await Promise.all(
             flightDetails.flightSegments.map(async (flightSegment) => {
@@ -179,6 +196,8 @@ export class PnrBookingsService {
             }),
           );
         }
+        console.log('****************666');
+
         if (flightDetails.fare) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const newFare = await Fare.create(
