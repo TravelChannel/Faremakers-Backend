@@ -15,6 +15,9 @@ import { BaggageAllowance } from '../baggageAllowance';
 import { BookingFlight } from '../bookingFlight';
 import { GroupDescription } from '../groupDescription';
 import { FlightSegments } from '../flightSegments';
+import { Fare } from '../fare';
+import { PassengerInfoList } from '../passengerInfoList';
+import { PassengerInfo } from '../passengerInfo';
 
 @Injectable()
 export class PnrBookingsService {
@@ -172,6 +175,49 @@ export class PnrBookingsService {
               );
             }),
           );
+        }
+        if (flightDetails.fare) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const newFare = await Fare.create(
+            {
+              flightDetailsId: newflightDetails.id,
+              eTicketable: flightDetails.fare.eTicketable,
+              governingCarriers: flightDetails.fare.governingCarriers,
+              lastTicketDate: flightDetails.fare.lastTicketDate,
+              lastTicketTime: flightDetails.fare.lastTicketTime,
+              validatingCarrierCode: flightDetails.fare.validatingCarrierCode,
+              vita: flightDetails.fare.vita,
+            },
+            { transaction: t },
+          );
+          if (flightDetails.fare.passengerInfoList.length > 0) {
+            await Promise.all(
+              flightDetails.fare.passengerInfoList.map(
+                async (passengerInfoList) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newPassengerInfoList = await PassengerInfoList.create(
+                    {
+                      fareId: newFare.id,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newPassengerInfo = await PassengerInfo.create(
+                    {
+                      passengerInfoListId: newPassengerInfoList.id,
+                      nonRefundable:
+                        passengerInfoList.passengerInfo.nonRefundable,
+                      passengerNumber:
+                        passengerInfoList.passengerInfo.passengerNumber,
+                      passengerType:
+                        passengerInfoList.passengerInfo.passengerType,
+                    },
+                    { transaction: t },
+                  );
+                },
+              ),
+            );
+          }
         }
       }
 
