@@ -9,7 +9,9 @@ import { PnrDetail } from '../pnrDetails';
 import { PnrUser } from '../pnrUsers';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
-//  // import { EXCEPTION } from '../../../shared/messages.constants';
+import { FlightDetails } from '../flightDetails';
+import { ExtraBaggage } from '../extraBaggage';
+
 @Injectable()
 export class PnrBookingsService {
   constructor(
@@ -20,7 +22,7 @@ export class PnrBookingsService {
   async create(pnrBookingDto: PnrBookingDto): Promise<any> {
     const t: Transaction = await sequelize.transaction();
     try {
-      const { pnrBookings, pnr, phoneNumber } = pnrBookingDto;
+      const { pnrBookings, pnr, phoneNumber, flightDetails } = pnrBookingDto;
       let pnrUser = await PnrUser.findOne({
         where: {
           phoneNumber: phoneNumber,
@@ -66,6 +68,53 @@ export class PnrBookingsService {
           }),
         );
       }
+      console.log('*****************************1');
+      if (flightDetails) {
+        console.log('*****************************2');
+
+        const newflightDetails = await FlightDetails.create(
+          {
+            pnrBookingId: newPnrBookingRepository.id,
+            adults: flightDetails.adults,
+            children: flightDetails.children,
+            infants: flightDetails.infants,
+            classtype: flightDetails.classtype,
+            pricingSubsource: flightDetails.pricingSubsource,
+          },
+          { transaction: t },
+        );
+        console.log('*****************************3');
+
+        if (flightDetails.extraBaggages.length > 0) {
+          console.log('*****************************4');
+          await Promise.all(
+            flightDetails.extraBaggages.map(async (extraBaggage) => {
+              console.log('*****************************5');
+
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newExtraBaggage = await ExtraBaggage.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  SUB_CLASS_ID: extraBaggage.SUB_CLASS_ID,
+                  SUB_CLASS_DESC: extraBaggage.SUB_CLASS_DESC,
+                  ABBR: extraBaggage.ABBR,
+                  NO_OF_BAGS: extraBaggage.NO_OF_BAGS,
+                  ADV_TAX: extraBaggage.ADV_TAX,
+                  AMOUNT: extraBaggage.AMOUNT,
+                  ACTUAL_AMOUNT: extraBaggage.ACTUAL_AMOUNT,
+                  WEIGHT: extraBaggage.WEIGHT,
+                  PIECE: extraBaggage.PIECE,
+                  DESCRIPTION: extraBaggage.DESCRIPTION,
+                },
+                { transaction: t },
+              );
+              console.log('*****************************6');
+            }),
+          );
+          console.log('*****************************7');
+        }
+      }
+      console.log('*****************************8');
 
       await t.commit();
       return this.responseService.createResponse(
