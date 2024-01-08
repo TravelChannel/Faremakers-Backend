@@ -18,6 +18,7 @@ import { FlightSegments } from '../flightSegments';
 import { Fare } from '../fare';
 import { PassengerInfoList } from '../passengerInfoList';
 import { PassengerInfo } from '../passengerInfo';
+import { CurrencyConversion } from '../currencyConversion';
 import { SeatsAvailables } from '../seatsAvailables';
 import { SchedualDetGet } from '../schedualDetGet';
 import { TotalFare } from '../totalFare';
@@ -257,6 +258,22 @@ export class PnrBookingsService {
                     },
                     { transaction: t },
                   );
+                  if (passengerInfoList.passengerInfo.currencyConversion) {
+                    const newCurrencyConversion =
+                      await CurrencyConversion.create(
+                        {
+                          passengerInfoId: newPassengerInfo.id,
+                          from: passengerInfoList.passengerInfo
+                            .currencyConversion.from,
+                          to: passengerInfoList.passengerInfo.currencyConversion
+                            .to,
+                          exchangeRateUsed:
+                            passengerInfoList.passengerInfo.currencyConversion
+                              .exchangeRateUsed,
+                        },
+                        { transaction: t },
+                      );
+                  }
                 },
               ),
             );
@@ -311,6 +328,11 @@ export class PnrBookingsService {
                     include: [
                       {
                         model: PassengerInfo,
+                        include: [
+                          {
+                            model: CurrencyConversion,
+                          },
+                        ],
                       },
                     ],
                   },
