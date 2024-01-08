@@ -5,9 +5,11 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
+  HasOne,
 } from 'sequelize-typescript';
 
 import { PassengerInfoList } from '../../pnr/passengerInfoList';
+import { CurrencyConversion } from '../../pnr/currencyConversion';
 
 @Table
 export class PassengerInfo extends Model {
@@ -35,6 +37,8 @@ export class PassengerInfo extends Model {
   // End
   @BelongsTo(() => PassengerInfoList)
   passengerInfoList: PassengerInfoList;
+  @HasOne(() => CurrencyConversion)
+  currencyConversion: CurrencyConversion;
 }
 
 export default PassengerInfo;

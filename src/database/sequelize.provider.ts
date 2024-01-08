@@ -24,6 +24,7 @@ import { Arrival } from '../modules/pnr/arrival';
 import { Departure } from '../modules/pnr/departure';
 import { Carrier } from '../modules/pnr/carrier';
 import { Equipment } from '../modules/pnr/equipment';
+import { CurrencyConversion } from '../modules/pnr/currencyConversion';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -59,6 +60,7 @@ sequelize.addModels([
   Departure,
   Carrier,
   Equipment,
+  CurrencyConversion,
 ]);
 
 // Sync the models with the database, dropping and recreating tables

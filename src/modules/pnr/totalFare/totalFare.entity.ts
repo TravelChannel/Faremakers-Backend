@@ -28,16 +28,19 @@ export class TotalFare extends Model {
   // Start
   @Column(DataType.INTEGER)
   baseFareAmount: number;
-  @Column(DataType.INTEGER)
-  baseFareCurrency: number;
+  @Column
+  baseFareCurrency: string;
   @Column(DataType.INTEGER)
   constructionAmount: number;
-  @Column(DataType.INTEGER)
-  constructionCurrency: number;
+  @Column
+  constructionCurrency: string;
   @Column
   currency: string;
+
   @Column(DataType.INTEGER)
   equivalentAmount: number;
+  @Column
+  equivalentCurrency: string;
   @Column(DataType.INTEGER)
   totalPrice: number;
   @Column(DataType.INTEGER)
