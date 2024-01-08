@@ -259,6 +259,7 @@ export class PnrBookingsService {
                     { transaction: t },
                   );
                   if (passengerInfoList.passengerInfo.currencyConversion) {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
                     const newCurrencyConversion =
                       await CurrencyConversion.create(
                         {
