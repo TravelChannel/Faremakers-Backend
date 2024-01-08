@@ -18,6 +18,9 @@ import { FlightSegments } from '../flightSegments';
 import { Fare } from '../fare';
 import { PassengerInfoList } from '../passengerInfoList';
 import { PassengerInfo } from '../passengerInfo';
+import { SeatsAvailables } from '../seatsAvailables';
+import { SchedualDetGet } from '../schedualDetGet';
+import { TotalFare } from '../totalFare';
 
 @Injectable()
 export class PnrBookingsService {
@@ -190,6 +193,27 @@ export class PnrBookingsService {
             },
             { transaction: t },
           );
+          if (flightDetails.fare.totalFare) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const newTotalFare = await TotalFare.create(
+              {
+                fareId: newFare.id,
+                baseFareAmount: flightDetails.fare.totalFare.baseFareAmount,
+                baseFareCurrency: flightDetails.fare.totalFare.baseFareCurrency,
+                constructionAmount:
+                  flightDetails.fare.totalFare.constructionAmount,
+                constructionCurrency:
+                  flightDetails.fare.totalFare.constructionCurrency,
+                currency: flightDetails.fare.totalFare.currency,
+                equivalentAmount: flightDetails.fare.totalFare.equivalentAmount,
+                equivalentCurrency:
+                  flightDetails.fare.totalFare.equivalentCurrency,
+                totalPrice: flightDetails.fare.totalFare.totalPrice,
+                totalTaxAmount: flightDetails.fare.totalFare.totalTaxAmount,
+              },
+              { transaction: t },
+            );
+          }
           if (flightDetails.fare.passengerInfoList.length > 0) {
             await Promise.all(
               flightDetails.fare.passengerInfoList.map(
@@ -247,6 +271,43 @@ export class PnrBookingsService {
           {
             model: PnrDetail,
             as: 'pnrDetail',
+          },
+          {
+            model: FlightDetails,
+            include: [
+              {
+                model: ExtraBaggage,
+              },
+              {
+                model: BaggageAllowance,
+              },
+              {
+                model: BookingFlight,
+              },
+              {
+                model: Fare,
+                include: [
+                  {
+                    model: TotalFare,
+                  },
+                  {
+                    model: PassengerInfoList,
+                  },
+                ],
+              },
+              {
+                model: GroupDescription,
+              },
+              {
+                model: SchedualDetGet,
+              },
+              {
+                model: SeatsAvailables,
+              },
+              {
+                model: FlightSegments,
+              },
+            ],
           },
         ],
       });
