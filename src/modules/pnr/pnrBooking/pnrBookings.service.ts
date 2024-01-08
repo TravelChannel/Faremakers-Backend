@@ -68,10 +68,7 @@ export class PnrBookingsService {
           }),
         );
       }
-      console.log('*****************************1');
       if (flightDetails) {
-        console.log('*****************************2');
-
         const newflightDetails = await FlightDetails.create(
           {
             pnrBookingId: newPnrBookingRepository.id,
@@ -83,14 +80,10 @@ export class PnrBookingsService {
           },
           { transaction: t },
         );
-        console.log('*****************************3');
 
         if (flightDetails.extraBaggages.length > 0) {
-          console.log('*****************************4');
           await Promise.all(
             flightDetails.extraBaggages.map(async (extraBaggage) => {
-              console.log('*****************************5');
-
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const newExtraBaggage = await ExtraBaggage.create(
                 {
@@ -108,13 +101,10 @@ export class PnrBookingsService {
                 },
                 { transaction: t },
               );
-              console.log('*****************************6');
             }),
           );
-          console.log('*****************************7');
         }
       }
-      console.log('*****************************8');
 
       await t.commit();
       return this.responseService.createResponse(
