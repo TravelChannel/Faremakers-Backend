@@ -11,6 +11,10 @@ import { sequelize, Transaction } from '../../../database/sequelize.provider'; /
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { FlightDetails } from '../flightDetails';
 import { ExtraBaggage } from '../extraBaggage';
+import { BaggageAllowance } from '../baggageAllowance';
+import { BookingFlight } from '../bookingFlight';
+import { GroupDescription } from '../groupDescription';
+import { FlightSegments } from '../flightSegments';
 
 @Injectable()
 export class PnrBookingsService {
@@ -98,6 +102,71 @@ export class PnrBookingsService {
                   WEIGHT: extraBaggage.WEIGHT,
                   PIECE: extraBaggage.PIECE,
                   DESCRIPTION: extraBaggage.DESCRIPTION,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        if (flightDetails.baggageAllowance.length > 0) {
+          await Promise.all(
+            flightDetails.baggageAllowance.map(async (baggageAllowance) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newBaggageAllowance = await BaggageAllowance.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  id: baggageAllowance.id,
+                  unit: baggageAllowance.unit,
+                  weight: baggageAllowance.weight,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        if (flightDetails.bookingFlight.length > 0) {
+          await Promise.all(
+            flightDetails.bookingFlight.map(async (bookingFlightItem) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newBookingFlight = await BookingFlight.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  id: bookingFlightItem.id,
+                  JOURNEY_CODE: bookingFlightItem.JOURNEY_CODE,
+                  CLASS_CODE: bookingFlightItem.CLASS_CODE,
+                  FareType: bookingFlightItem.FareType,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        if (flightDetails.groupDescription.length > 0) {
+          await Promise.all(
+            flightDetails.groupDescription.map(async (groupDescriptionItem) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newGroupDescription = await GroupDescription.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  arrivalLocation: groupDescriptionItem.arrivalLocation,
+                  departureDate: groupDescriptionItem.departureDate,
+                  departureLocation: groupDescriptionItem.departureLocation,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        if (flightDetails.flightSegments.length > 0) {
+          await Promise.all(
+            flightDetails.flightSegments.map(async (flightSegment) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newFlightSegment = await FlightSegments.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  departure: flightSegment.departure,
+                  arrival: flightSegment.arrival,
+                  date: flightSegment.date,
                 },
                 { transaction: t },
               );
