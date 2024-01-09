@@ -432,6 +432,7 @@ export class PnrBookingsService {
               },
               {
                 model: SchedualDetGet,
+                attributes: ['id'],
                 include: [
                   {
                     model: InnerSchedualDetGet,
