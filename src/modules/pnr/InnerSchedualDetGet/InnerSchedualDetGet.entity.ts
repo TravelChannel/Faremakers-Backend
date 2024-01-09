@@ -20,6 +20,8 @@ export class InnerSchedualDetGet extends Model {
     primaryKey: true,
     autoIncrement: true,
   })
+  localId: number;
+  @Column
   id: number;
 
   @ForeignKey(() => SchedualDetGet)

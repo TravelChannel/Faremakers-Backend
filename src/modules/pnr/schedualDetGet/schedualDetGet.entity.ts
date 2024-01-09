@@ -18,11 +18,11 @@ export class SchedualDetGet extends Model {
     primaryKey: true,
     autoIncrement: true,
   })
-  localId: number;
-  @Column({
-    type: DataType.BIGINT,
-  })
   id: number;
+  // @Column({
+  //   type: DataType.BIGINT,
+  // })
+  // id: number;
 
   @ForeignKey(() => FlightDetails)
   @Column({
@@ -32,16 +32,7 @@ export class SchedualDetGet extends Model {
   })
   flightDetailsId: number;
   // Start
-  @Column(DataType.BOOLEAN)
-  eTicketable: boolean;
-  @Column(DataType.INTEGER)
-  elapsedTime: number;
-  @Column
-  frequency: string;
-  @Column(DataType.INTEGER)
-  stopCount: number;
-  @Column(DataType.INTEGER)
-  totalMilesFlown: number;
+
   // End
   @HasMany(() => InnerSchedualDetGet)
   innerSchedualDetGet: InnerSchedualDetGet[];

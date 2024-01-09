@@ -21,7 +21,12 @@ import { PassengerInfo } from '../passengerInfo';
 import { CurrencyConversion } from '../currencyConversion';
 import { SeatsAvailables } from '../seatsAvailables';
 import { SchedualDetGet } from '../schedualDetGet';
+import { InnerSchedualDetGet } from '../innerSchedualDetGet';
 import { TotalFare } from '../totalFare';
+import { Carrier } from '../carrier';
+import { Departure } from '../departure';
+import { Arrival } from '../arrival';
+import { Equipment } from '../equipment';
 
 @Injectable()
 export class PnrBookingsService {
@@ -283,19 +288,75 @@ export class PnrBookingsService {
         if (flightDetails.schedualDetGet.length > 0) {
           await Promise.all(
             flightDetails.schedualDetGet.map(async (schedualDetGet) => {
-              console.log('schedualDetGet***************', schedualDetGet);
+              const newSchedualDetGet = await SchedualDetGet.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                },
+                { transaction: t },
+              );
+              console.log('**********', newSchedualDetGet.id);
               await Promise.all(
                 schedualDetGet.map(async (schedualDetGetInner) => {
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  const newSchedualDetGet = await SchedualDetGet.create(
+                  const newInnerSchedualDetGet =
+                    await InnerSchedualDetGet.create(
+                      {
+                        schedualDetGetId: newSchedualDetGet.id,
+                        id: schedualDetGetInner.id,
+                        frequency: schedualDetGetInner.frequency,
+                        stopCount: schedualDetGetInner.stopCount,
+                        eTicketable: schedualDetGetInner.eTicketable,
+                        totalMilesFlown: schedualDetGetInner.totalMilesFlown,
+                        elapsedTime: schedualDetGetInner.elapsedTime,
+                      },
+                      { transaction: t },
+                    );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newArrival = await Arrival.create(
                     {
-                      flightDetailsId: newflightDetails.id,
-                      id: schedualDetGetInner.id,
-                      frequency: schedualDetGetInner.frequency,
-                      stopCount: schedualDetGetInner.stopCount,
-                      eTicketable: schedualDetGetInner.eTicketable,
-                      totalMilesFlown: schedualDetGetInner.totalMilesFlown,
-                      elapsedTime: schedualDetGetInner.elapsedTime,
+                      innerSchedualDetGetId: newInnerSchedualDetGet.localId,
+                      airport: schedualDetGetInner.arrival.airport,
+                      city: schedualDetGetInner.arrival.city,
+                      country: schedualDetGetInner.arrival.country,
+                      terminal: schedualDetGetInner.arrival.terminal,
+                      time: schedualDetGetInner.arrival.time,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newDeparture = await Departure.create(
+                    {
+                      innerSchedualDetGetId: newInnerSchedualDetGet.localId,
+                      airport: schedualDetGetInner.departure.airport,
+                      city: schedualDetGetInner.departure.city,
+                      country: schedualDetGetInner.departure.country,
+                      terminal: schedualDetGetInner.departure.terminal,
+                      time: schedualDetGetInner.departure.time,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newCarrier = await Carrier.create(
+                    {
+                      innerSchedualDetGetId: newInnerSchedualDetGet.localId,
+                      marketing: schedualDetGetInner.carrier.marketing,
+                      marketingFlightNumber:
+                        schedualDetGetInner.carrier.marketingFlightNumber,
+                      operating: schedualDetGetInner.carrier.operating,
+                      operatingFlightNumber:
+                        schedualDetGetInner.carrier.operatingFlightNumber,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newEquipment = await Equipment.create(
+                    {
+                      carrierId: newCarrier.id,
+                      code: schedualDetGetInner.carrier.equipment.code,
+                      typeForFirstLeg:
+                        schedualDetGetInner.carrier.equipment.typeForFirstLeg,
+                      typeForLastLeg:
+                        schedualDetGetInner.carrier.equipment.typeForLastLeg,
                     },
                     { transaction: t },
                   );
@@ -371,6 +432,27 @@ export class PnrBookingsService {
               },
               {
                 model: SchedualDetGet,
+                include: [
+                  {
+                    model: InnerSchedualDetGet,
+                    include: [
+                      {
+                        model: Arrival,
+                      },
+                      {
+                        model: Departure,
+                      },
+                      {
+                        model: Carrier,
+                        include: [
+                          {
+                            model: Equipment,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
               },
               {
                 model: SeatsAvailables,
