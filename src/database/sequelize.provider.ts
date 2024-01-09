@@ -18,7 +18,6 @@ import { PassengerInfo } from '../modules/pnr/passengerInfo';
 import { FlightDetails } from '../modules/pnr/flightDetails';
 import { GroupDescription } from '../modules/pnr/groupDescription';
 import { SchedualDetGet } from '../modules/pnr/schedualDetGet';
-import { SeatsAvailables } from '../modules/pnr/seatsAvailables';
 import { FlightSegments } from '../modules/pnr/flightSegments';
 import { Arrival } from '../modules/pnr/arrival';
 import { Departure } from '../modules/pnr/departure';
@@ -55,7 +54,6 @@ sequelize.addModels([
   PassengerInfo,
   GroupDescription,
   SchedualDetGet,
-  SeatsAvailables,
   FlightSegments,
   Arrival,
   Departure,

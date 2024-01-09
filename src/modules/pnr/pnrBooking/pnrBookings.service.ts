@@ -19,7 +19,6 @@ import { Fare } from '../fare';
 import { PassengerInfoList } from '../passengerInfoList';
 import { PassengerInfo } from '../passengerInfo';
 import { CurrencyConversion } from '../currencyConversion';
-import { SeatsAvailables } from '../seatsAvailables';
 import { SchedualDetGet } from '../schedualDetGet';
 import { InnerSchedualDetGet } from '../innerSchedualDetGet';
 import { TotalFare } from '../totalFare';
@@ -96,6 +95,7 @@ export class PnrBookingsService {
             infants: flightDetails.infants,
             classtype: flightDetails.classtype,
             pricingSubsource: flightDetails.pricingSubsource,
+            seatsAvailables22: flightDetails.seatsAvailables,
           },
           { transaction: t },
         );
@@ -455,9 +455,7 @@ export class PnrBookingsService {
                   },
                 ],
               },
-              {
-                model: SeatsAvailables,
-              },
+
               {
                 model: FlightSegments,
               },

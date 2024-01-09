@@ -17,7 +17,6 @@ import { Fare } from '../../pnr/fare';
 import { GroupDescription } from '../../pnr/groupDescription';
 import { SchedualDetGet } from '../../pnr/schedualDetGet';
 import { FlightSegments } from '../../pnr/flightSegments';
-import { SeatsAvailables } from '../../pnr/seatsAvailables';
 
 @Table
 export class FlightDetails extends Model {
@@ -36,6 +35,19 @@ export class FlightDetails extends Model {
   })
   pnrBookingId: number;
   // Start
+  @Column({
+    type: DataType.TEXT, // or use DataType.JSON for PostgreSQL
+    get: function () {
+      // Parse the JSON string when retrieving from the database
+      const seatsAvailables = this.getDataValue('seatsAvailables');
+      return seatsAvailables ? JSON.parse(seatsAvailables) : null;
+    },
+    set: function (val) {
+      // Store the array as a JSON string in the database
+      this.setDataValue('seatsAvailables', val ? JSON.stringify(val) : null);
+    },
+  })
+  seatsAvailables: number[];
   @Column
   pricingSubsource: string;
   @Column(DataType.INTEGER)
@@ -61,8 +73,7 @@ export class FlightDetails extends Model {
   groupDescription: GroupDescription;
   @HasMany(() => SchedualDetGet)
   schedualDetGet: SchedualDetGet;
-  @HasMany(() => SeatsAvailables)
-  seatsAvailables: SeatsAvailables;
+
   @HasMany(() => FlightSegments)
   flightSegments: FlightSegments;
 }
