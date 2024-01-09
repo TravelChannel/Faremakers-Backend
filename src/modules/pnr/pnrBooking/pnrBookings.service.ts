@@ -95,7 +95,8 @@ export class PnrBookingsService {
             infants: flightDetails.infants,
             classtype: flightDetails.classtype,
             pricingSubsource: flightDetails.pricingSubsource,
-            seatsAvailables22: flightDetails.seatsAvailables,
+            seatsAvailables: flightDetails.seatsAvailables,
+            price: flightDetails.price,
           },
           { transaction: t },
         );

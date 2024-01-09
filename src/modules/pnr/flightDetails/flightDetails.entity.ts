@@ -36,7 +36,7 @@ export class FlightDetails extends Model {
   pnrBookingId: number;
   // Start
   @Column({
-    type: DataType.TEXT, // or use DataType.JSON for PostgreSQL
+    type: DataType.TEXT,
     get: function () {
       // Parse the JSON string when retrieving from the database
       const seatsAvailables = this.getDataValue('seatsAvailables');
@@ -47,7 +47,20 @@ export class FlightDetails extends Model {
       this.setDataValue('seatsAvailables', val ? JSON.stringify(val) : null);
     },
   })
-  seatsAvailables: number[];
+  seatsAvailables: (string | number)[];
+  @Column({
+    type: DataType.TEXT,
+    get: function () {
+      // Parse the JSON string when retrieving from the database
+      const price = this.getDataValue('price');
+      return price ? JSON.parse(price) : null;
+    },
+    set: function (val) {
+      // Store the array as a JSON string in the database
+      this.setDataValue('price', val ? JSON.stringify(val) : null);
+    },
+  })
+  price: (string | number)[];
   @Column
   pricingSubsource: string;
   @Column(DataType.INTEGER)
