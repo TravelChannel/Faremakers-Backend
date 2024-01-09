@@ -466,33 +466,19 @@ export class PnrBookingsService {
         ],
       })
         .then((rawData) => {
-          console.log('((((((((((((', rawData);
-          // Transform the result into the desired array inside array format
-          const transformedResult = (rawData as any[]).map((a) =>
-            (a.flightDetails as any[]).map((flightDetail) =>
-              (flightDetail.SchedualDetGets as any[]).map((schedualDetGet) =>
-                (schedualDetGet.InnerSchedualDetGets as any[]).map(
-                  (innerSchedualDetGet) => innerSchedualDetGet.toJSON(),
-                ),
-              ),
-            ),
-          );
+          const plainObjects = rawData.map((instance) => instance.toJSON());
 
-          // Your custom function to modify the raw data
-          const modifiedResult = transformedResult.map((data) => {
-            // Apply your modifications here
-            // For example, you can flatten the array or perform other transformations
-            // ...
-
-            return data; // Return the modified data
+          plainObjects.map((data) => {
+            const arr = data.flightDetails.schedualDetGet;
+            data.flightDetails.schedualDetGet = [];
+            arr.map((data2) => {
+              data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
+            });
           });
 
-          return modifiedResult;
+          return plainObjects;
         })
-        .then((modifiedResult) => {
-          // Use the modified result in your application logic
-          console.log(modifiedResult);
-        })
+
         .catch((error) => {
           // Handle errors here
           console.error(error);
