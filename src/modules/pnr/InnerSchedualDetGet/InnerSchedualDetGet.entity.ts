@@ -5,32 +5,30 @@ import {
   DataType,
   ForeignKey,
   BelongsTo,
-  HasMany,
+  HasOne,
 } from 'sequelize-typescript';
 
-import { FlightDetails } from '../../pnr/flightDetails';
-import { InnerSchedualDetGet } from '../../pnr/innerSchedualDetGet';
+import { Arrival } from '../../pnr/arrival';
+import { Departure } from '../../pnr/departure';
+import { Carrier } from '../../pnr/carrier';
+import { SchedualDetGet } from '../../pnr/schedualDetGet';
 
 @Table
-export class SchedualDetGet extends Model {
+export class InnerSchedualDetGet extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   })
-  localId: number;
-  @Column({
-    type: DataType.BIGINT,
-  })
   id: number;
 
-  @ForeignKey(() => FlightDetails)
+  @ForeignKey(() => SchedualDetGet)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  flightDetailsId: number;
+  schedualDetGetId: number;
   // Start
   @Column(DataType.BOOLEAN)
   eTicketable: boolean;
@@ -43,10 +41,14 @@ export class SchedualDetGet extends Model {
   @Column(DataType.INTEGER)
   totalMilesFlown: number;
   // End
-  @HasMany(() => InnerSchedualDetGet)
-  innerSchedualDetGet: InnerSchedualDetGet[];
-  @BelongsTo(() => FlightDetails)
-  flightDetails: FlightDetails;
+  @BelongsTo(() => SchedualDetGet)
+  schedualDetGet: SchedualDetGet;
+  @HasOne(() => Arrival)
+  arrival: Arrival;
+  @HasOne(() => Departure)
+  departure: Departure;
+  @HasOne(() => Carrier)
+  carrier: Carrier;
 }
 
-export default SchedualDetGet;
+export default InnerSchedualDetGet;

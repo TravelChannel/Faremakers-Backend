@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { SchedualDetGet } from '../../pnr/schedualDetGet';
+import { InnerSchedualDetGet } from '../../pnr/innerSchedualDetGet';
 
 @Table
 export class Departure extends Model {
@@ -18,13 +18,13 @@ export class Departure extends Model {
   })
   id: number;
 
-  @ForeignKey(() => SchedualDetGet)
+  @ForeignKey(() => InnerSchedualDetGet)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  schedualDetGetId: number;
+  innerSchedualDetGetId: number;
   // Start
   @Column
   airport: string;
@@ -39,8 +39,8 @@ export class Departure extends Model {
 
   // End
 
-  @BelongsTo(() => SchedualDetGet)
-  schedualDetGet: SchedualDetGet;
+  @BelongsTo(() => InnerSchedualDetGet)
+  innerSchedualDetGet: InnerSchedualDetGet;
 }
 
 export default Departure;

@@ -8,7 +8,7 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { SchedualDetGet } from '../../pnr/schedualDetGet';
+import { InnerSchedualDetGet } from '../../pnr/innerSchedualDetGet';
 import { Equipment } from '../../pnr/equipment';
 
 @Table
@@ -20,13 +20,13 @@ export class Carrier extends Model {
   })
   id: number;
 
-  @ForeignKey(() => SchedualDetGet)
+  @ForeignKey(() => InnerSchedualDetGet)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  schedualDetGetId: number;
+  innerSchedualDetGetId: number;
   // Start
   @Column
   marketing: string;
@@ -39,8 +39,8 @@ export class Carrier extends Model {
 
   // End
 
-  @BelongsTo(() => SchedualDetGet)
-  schedualDetGet: SchedualDetGet;
+  @BelongsTo(() => InnerSchedualDetGet)
+  innerSchedualDetGet: InnerSchedualDetGet;
   @HasOne(() => Equipment)
   equipment: Equipment;
 }
