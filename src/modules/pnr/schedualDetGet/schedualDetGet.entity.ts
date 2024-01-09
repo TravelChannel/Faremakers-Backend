@@ -45,6 +45,7 @@ export class SchedualDetGet extends Model {
   @Column(DataType.INTEGER)
   totalMilesFlown: number;
   // End
+
   @BelongsTo(() => FlightDetails)
   flightDetails: FlightDetails;
   @HasOne(() => Arrival)

@@ -280,6 +280,30 @@ export class PnrBookingsService {
             );
           }
         }
+        if (flightDetails.schedualDetGet.length > 0) {
+          await Promise.all(
+            flightDetails.schedualDetGet.map(async (schedualDetGet) => {
+              console.log('schedualDetGet***************', schedualDetGet);
+              await Promise.all(
+                schedualDetGet.map(async (schedualDetGetInner) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newSchedualDetGet = await SchedualDetGet.create(
+                    {
+                      flightDetailsId: newflightDetails.id,
+                      id: schedualDetGetInner.id,
+                      frequency: schedualDetGetInner.frequency,
+                      stopCount: schedualDetGetInner.stopCount,
+                      eTicketable: schedualDetGetInner.eTicketable,
+                      totalMilesFlown: schedualDetGetInner.totalMilesFlown,
+                      elapsedTime: schedualDetGetInner.elapsedTime,
+                    },
+                    { transaction: t },
+                  );
+                }),
+              );
+            }),
+          );
+        }
       }
 
       await t.commit();
