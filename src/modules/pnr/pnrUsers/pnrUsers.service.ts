@@ -12,7 +12,7 @@ import { AxiosResponse } from 'axios';
 import { PnrUser } from './entities/pnrUsers.entity';
 import { PNR_USERS_REPOSITORY } from '../../../shared/constants';
 import {
-  GET_SUCCESS,
+  // GET_SUCCESS,
   EXCEPTION,
   AUTHENTICATION_ERROR,
 } from '../../../shared/messages.constants';
@@ -53,22 +53,51 @@ export class PnrUsersService {
           AUTHENTICATION_ERROR,
         );
       }
+      const response = await this.generateAndSendOtp(userLoginDto.phoneNumber);
+      return response.data; // Assuming the API response contains relevant data
 
-      // const isPasswordValid = await bcrypt.compare(
-      //   loginDto.password + PASSWORD_SECRET,
-      //   user.password,
-      // );
-      // if (!isPasswordValid) {
-      //   return this.responseService.createResponse(
-      //     HttpStatus.UNAUTHORIZED,
-      //     null,
-      //     AUTHENTICATION_ERROR,
-      //   );
-      // }
-
-      // session.user = user;
-      // const accessToken = generateAccessToken(user, 1);
-      // const refreshToken = generateRefreshToken(user, 1);
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        {
+          // accessToken,
+          // refreshToken,
+          userData: user,
+        },
+        'Done',
+      );
+    } catch (error) {
+      // Handle any unexpected errors here
+      console.error(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
+  async requestOtp(
+    userLoginDto: UserLoginDto,
+    // @Session() session: Record<string, any>,
+  ): Promise<any> {
+    try {
+      const user = await this.findByPhoneNumber(userLoginDto.phoneNumber);
+      if (!user) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
+      const isAuthorized = true;
+      if (!isAuthorized) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
+      const response = await this.generateAndSendOtp(userLoginDto.phoneNumber);
+      return response.data; // Assuming the API response contains relevant data
 
       return this.responseService.createResponse(
         HttpStatus.OK,
@@ -92,20 +121,19 @@ export class PnrUsersService {
 
   async findByPhoneNumber(phoneNumber: string): Promise<PnrUser | null> {
     try {
-      const users = await this.pnrUserRepository.findOne({
+      let user = await this.pnrUserRepository.findOne({
         where: { phoneNumber },
       });
-      return this.responseService.createResponse(
-        HttpStatus.OK,
-        users,
-        GET_SUCCESS,
-      );
+      if (user) {
+        return user;
+      } else {
+        user = await this.pnrUserRepository.create({
+          phoneNumber,
+        });
+      }
+      return user;
     } catch (error) {
-      return this.responseService.createResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        error.message,
-      );
+      return null;
     }
   }
 
@@ -149,10 +177,11 @@ export class PnrUsersService {
         },
       ],
     }; // Sabre API endpoint
-    const url = 'YOUR_API_ENDPOINT'; // Sabre API endpoint
+    const url = 'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
     const headers = {
       headers: {
-        Authorization: 'YOUR_API_KEY',
+        Authorization:
+          'App c094e9214ea4e99fa31b84ab6c5c7883-4bca245d-a8b5-4959-baa8-a19c08ec8117',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -160,7 +189,7 @@ export class PnrUsersService {
     const response = await this.httpService
       .post(url, payload, headers)
       .toPromise();
-
+    console.log('*******************', response);
     return response;
   }
   // Temporary Api
