@@ -6,7 +6,7 @@ import { SAVED_SUCCESS, GET_SUCCESS } from '../../../shared/messages.constants';
 import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
-import { PnrUser } from '../pnrUsers';
+import { PnrUser } from '../pnrUsers/entities/pnrUsers.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { FlightDetails } from '../flightDetails';

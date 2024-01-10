@@ -20,6 +20,7 @@ import { AuthGuard } from './common/guards/auth.guard';
 import { DatabaseModule } from './database/database.module';
 import { RolesModule } from './modules/generalModules/roles/roles.module';
 import { PnrBookingsModule } from './modules/pnr/pnrBooking/pnrBookings.module';
+import { PnrUsersModule } from './modules/pnr/pnrUsers/pnrUsers.module';
 import { databaseConfig } from 'src/database/config/default';
 import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
 import { ResponseModule } from './common/utility/response/response.module';
@@ -35,6 +36,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     ResponseModule,
     DatabaseModule,
     UsersModule,
+    PnrUsersModule,
     RolesModule,
     AuthModule,
     PnrBookingsModule,

@@ -5,7 +5,7 @@ import { databaseConfig } from 'src/database/config/default';
 import { User } from '../modules/generalModules/users/entities/user.entity';
 import { Role } from '../modules/generalModules/roles/entities/role.entity';
 import { City } from '../modules/generalModules/cities';
-import { PnrUser } from '../modules/pnr/pnrUsers';
+import { PnrUser } from '../modules/pnr/pnrUsers/entities/pnrUsers.entity';
 import { PnrBooking } from '../modules/pnr/pnrBooking/entities/pnrBooking.entity';
 import { PnrDetail } from '../modules/pnr/pnrDetails';
 import { BaggageAllowance } from '../modules/pnr/baggageAllowance';

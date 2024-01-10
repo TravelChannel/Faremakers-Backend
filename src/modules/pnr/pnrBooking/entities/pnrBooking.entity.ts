@@ -9,7 +9,7 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { PnrUser } from '../../pnrUsers';
+import { PnrUser } from '../../pnrUsers/entities/pnrUsers.entity';
 import { PnrDetail } from '../../PnrDetails';
 import { FlightDetails } from '../../flightDetails';
 
