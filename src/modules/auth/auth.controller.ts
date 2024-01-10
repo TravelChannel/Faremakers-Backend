@@ -25,7 +25,6 @@ import { LocalAuthGuard } from '../../common/guards/local-auth.guard'; // Adjust
 // import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { LoginDto } from './dto/login.dto';
-import { UserLoginDto } from './dto/userLogin.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -70,36 +69,7 @@ export class AuthController {
       throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
     }
   }
-  @Post('userLogin')
-  @UseGuards(LocalAuthGuard)
-  @SkipAuth() // Apply the decorator here to exclude this route
-  async userLogin(
-    @Body() userLoginDto: UserLoginDto,
-    @Session() session: Record<string, any>,
-    @Res({ passthrough: true }) res,
-  ) {
-    try {
-      const result = await this.authService.userLogin(userLoginDto);
 
-      if (result.status === 'SUCCESS') {
-        res.cookie('user_token', result.payload.accessToken, {
-          // secure: true, // Set to true if serving over HTTPS
-          sameSite: 'strict', // Set to 'none' for cross-site requests
-          httpOnly: true, // Prevent JavaScript access to the cookie
-          maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
-        });
-        res.cookie('refresh_token', result.payload.refreshToken, {
-          // secure: true, // Set to true if serving over HTTPS
-          sameSite: 'strict', // Set to 'none' for cross-site requests
-          httpOnly: true, // Prevent JavaScript access to the cookie
-        });
-      }
-
-      return result;
-    } catch (error) {
-      throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
-    }
-  }
   // @UseGuards(AuthGuard, RolesGuard)
 
   @Post('refresh-token')

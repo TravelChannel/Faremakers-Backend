@@ -33,7 +33,6 @@ const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load 
 const PASSWORD_SECRET = dbConfig.PASSWORD_SECRET;
 const JWT_REFRESH_SECRET = dbConfig.JWT_REFRESH_SECRET;
 import { LoginDto } from './dto/login.dto';
-import { UserLoginDto } from './dto/userLogin.dto';
 
 @Injectable()
 export class AuthService {
@@ -48,65 +47,6 @@ export class AuthService {
   ): Promise<any> {
     try {
       const user = await this.userService.findByEmail(loginDto.email);
-      if (!user) {
-        return this.responseService.createResponse(
-          HttpStatus.UNAUTHORIZED,
-          null,
-          AUTHENTICATION_ERROR,
-        );
-      }
-      const isAuthorized = true;
-      if (!isAuthorized) {
-        return this.responseService.createResponse(
-          HttpStatus.UNAUTHORIZED,
-          null,
-          AUTHENTICATION_ERROR,
-        );
-      }
-
-      const isPasswordValid = await bcrypt.compare(
-        loginDto.password + PASSWORD_SECRET,
-        user.password,
-      );
-      if (!isPasswordValid) {
-        return this.responseService.createResponse(
-          HttpStatus.UNAUTHORIZED,
-          null,
-          AUTHENTICATION_ERROR,
-        );
-      }
-
-      // session.user = user;
-      const accessToken = generateAccessToken(user, 1);
-      const refreshToken = generateRefreshToken(user, 1);
-
-      return this.responseService.createResponse(
-        HttpStatus.OK,
-        {
-          accessToken,
-          refreshToken,
-          userData: user,
-        },
-        LOGIN,
-      );
-    } catch (error) {
-      // Handle any unexpected errors here
-      console.error(error);
-      return this.responseService.createResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        EXCEPTION,
-      );
-    }
-  }
-  async userLogin(
-    userLoginDto: UserLoginDto,
-    // @Session() session: Record<string, any>,
-  ): Promise<any> {
-    try {
-      const user = await this.userService.findByPhoneNumber(
-        userLoginDto.phoneNumber,
-      );
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
