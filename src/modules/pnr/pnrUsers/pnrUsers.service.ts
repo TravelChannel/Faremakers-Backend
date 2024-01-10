@@ -4,6 +4,8 @@ import {
   HttpStatus,
   //  Session
 } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+
 import { UserLoginDto } from './dto/userLogin.dto';
 import { AxiosResponse } from 'axios';
 
@@ -27,6 +29,7 @@ export class PnrUsersService {
     @Inject(PNR_USERS_REPOSITORY)
     private readonly pnrUserRepository: typeof PnrUser,
     private readonly responseService: ResponseService,
+    private readonly httpService: HttpService,
   ) {}
 
   async userLogin(
@@ -106,11 +109,11 @@ export class PnrUsersService {
     }
   }
 
-  // async generateAndSendOtp(phoneNumber: string): Promise<AxiosResponse> {
-  //   const otp = this.generateOtp();
-  //   await this.storeOtpInDatabase(phoneNumber, otp);
-  //   // return this.sendOtpViaApi(phoneNumber, otp);
-  // }
+  async generateAndSendOtp(phoneNumber: string): Promise<AxiosResponse> {
+    const otp = this.generateOtp();
+    await this.storeOtpInDatabase(phoneNumber, otp);
+    return this.sendOtpViaApi(phoneNumber, otp);
+  }
 
   private generateOtp(): string {
     // Implement your OTP generation logic here
@@ -130,5 +133,35 @@ export class PnrUsersService {
     await user.save(); // Save the changes
   }
 
+  private async sendOtpViaApi(
+    phoneNumber: string,
+    otp: string,
+  ): Promise<AxiosResponse> {
+    // Implement your OTP sending logic here
+    // Use Axios or any other HTTP client library to make the API request
+    // Make sure to replace the following placeholders with your actual API details
+    const payload = {
+      messages: [
+        {
+          from: 'Faremaker',
+          destinations: [{ to: phoneNumber }],
+          text: `Your Pin: ${otp}`,
+        },
+      ],
+    }; // Sabre API endpoint
+    const url = 'YOUR_API_ENDPOINT'; // Sabre API endpoint
+    const headers = {
+      headers: {
+        Authorization: 'YOUR_API_KEY',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+    const response = await this.httpService
+      .post(url, payload, headers)
+      .toPromise();
+
+    return response;
+  }
   // Temporary Api
 }
