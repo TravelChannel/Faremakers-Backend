@@ -5,6 +5,7 @@ import {
   //  Session
 } from '@nestjs/common';
 import { UserLoginDto } from './dto/userLogin.dto';
+import { AxiosResponse } from 'axios';
 
 import { PnrUser } from './entities/pnrUsers.entity';
 import { PNR_USERS_REPOSITORY } from '../../../shared/constants';
@@ -104,5 +105,30 @@ export class PnrUsersService {
       );
     }
   }
+
+  // async generateAndSendOtp(phoneNumber: string): Promise<AxiosResponse> {
+  //   const otp = this.generateOtp();
+  //   await this.storeOtpInDatabase(phoneNumber, otp);
+  //   // return this.sendOtpViaApi(phoneNumber, otp);
+  // }
+
+  private generateOtp(): string {
+    // Implement your OTP generation logic here
+    // For example, use a library or generate a random 6-digit number
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  private async storeOtpInDatabase(
+    phoneNumber: string,
+    otp: string,
+  ): Promise<void> {
+    const user = await this.pnrUserRepository.findOne({
+      where: { phoneNumber },
+    });
+    user.otp = otp;
+
+    await user.save(); // Save the changes
+  }
+
   // Temporary Api
 }

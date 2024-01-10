@@ -36,6 +36,11 @@ export class PnrUser extends Model {
     type: DataType.STRING,
     allowNull: true,
   })
+  otp: string;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
   userEmail: string;
   @Column({
     type: DataType.DATE,
