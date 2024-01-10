@@ -48,7 +48,7 @@ import { RolesGuard } from '../../../common/guards/roles.guard';
 @Controller('users')
 @UseGuards(RolesGuard)
 @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
-export class UsersController {
+export class PnrUsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('createUser')

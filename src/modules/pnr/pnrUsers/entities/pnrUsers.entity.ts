@@ -1,6 +1,6 @@
 // branch-department.entity.ts
 import { Table, DataType, Model, Column, HasMany } from 'sequelize-typescript';
-import { PnrBooking } from '../pnrBooking/entities/pnrBooking.entity';
+import { PnrBooking } from '../../pnrBooking/entities/pnrBooking.entity';
 
 @Table
 export class PnrUser extends Model {
