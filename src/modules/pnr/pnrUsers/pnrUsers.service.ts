@@ -7,6 +7,7 @@ import {
 import { HttpService } from '@nestjs/axios';
 
 import { UserLoginDto } from './dto/userLogin.dto';
+import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 import { AxiosResponse } from 'axios';
 
 import { PnrUser } from './entities/pnrUsers.entity';
@@ -33,11 +34,14 @@ export class PnrUsersService {
   ) {}
 
   async userLogin(
-    userLoginDto: UserLoginDto,
+    userLoginOtpDto: UserLoginOtpDto,
     // @Session() session: Record<string, any>,
   ): Promise<any> {
     try {
-      const user = await this.findByPhoneNumber(userLoginDto.phoneNumber);
+      const user = await this.verifyOtp(
+        userLoginOtpDto.phoneNumber,
+        userLoginOtpDto.otp,
+      );
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
@@ -53,8 +57,6 @@ export class PnrUsersService {
           AUTHENTICATION_ERROR,
         );
       }
-      const response = await this.generateAndSendOtp(userLoginDto.phoneNumber);
-      return response.data; // Assuming the API response contains relevant data
 
       return this.responseService.createResponse(
         HttpStatus.OK,
@@ -132,6 +134,20 @@ export class PnrUsersService {
         });
       }
       return user;
+    } catch (error) {
+      return null;
+    }
+  }
+  async verifyOtp(phoneNumber: string, otp): Promise<PnrUser | null> {
+    try {
+      const user = await this.pnrUserRepository.findOne({
+        where: { phoneNumber, otp },
+      });
+      if (user) {
+        return user;
+      } else {
+        return null;
+      }
     } catch (error) {
       return null;
     }

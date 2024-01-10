@@ -14,6 +14,7 @@ import {
 // import { RolesGuard } from '../../../common/guards/roles.guard';
 // import { Roles } from '../../../common/decorators/roles.decorator';
 import { UserLoginDto } from './dto/userLogin.dto';
+import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 
 import { PnrUsersService } from './pnrUsers.service';
 // import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
@@ -30,12 +31,12 @@ export class PnrUsersController {
   // @UseGuards(LocalAuthGuard)
   @SkipAuth() // Apply the decorator here to exclude this route
   async userLogin(
-    @Body() userLoginDto: UserLoginDto,
+    @Body() userLoginOtpDto: UserLoginOtpDto,
     @Session() session: Record<string, any>,
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const result = await this.pnrUsersService.userLogin(userLoginDto);
+      const result = await this.pnrUsersService.userLogin(userLoginOtpDto);
 
       if (result.status === 'SUCCESS') {
         res.cookie('user_token', result.payload.accessToken, {
