@@ -36,10 +36,7 @@ export class PnrUser extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
-    unique: {
-      name: 'unique_user_countryCode',
-      msg: 'countryCode must be unique.',
-    },
+
     validate: {
       notNull: {
         msg: 'countryCode is required.',

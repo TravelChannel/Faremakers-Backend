@@ -216,6 +216,7 @@ export class PnrUsersService {
     // Implement your OTP sending logic here
     // Use Axios or any other HTTP client library to make the API request
     // Make sure to replace the following placeholders with your actual API details
+    console.log('Done 1');
     const payload = {
       messages: [
         {
@@ -237,7 +238,8 @@ export class PnrUsersService {
     const response = await this.httpService
       .post(url, payload, headers)
       .toPromise();
-    console.log('*******************', response);
+    console.log('Done 2');
+
     return response;
   }
   // Temporary Api
