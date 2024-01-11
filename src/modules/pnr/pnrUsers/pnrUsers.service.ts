@@ -40,6 +40,7 @@ export class PnrUsersService {
     try {
       const user = await this.verifyOtp(
         userLoginOtpDto.phoneNumber,
+        userLoginOtpDto.countryCode,
         userLoginOtpDto.otp,
       );
       if (!user) {
@@ -82,7 +83,10 @@ export class PnrUsersService {
     // @Session() session: Record<string, any>,
   ): Promise<any> {
     try {
-      const user = await this.findByPhoneNumber(userLoginDto.phoneNumber);
+      const user = await this.findByPhoneNumber(
+        userLoginDto.phoneNumber,
+        userLoginDto.countryCode,
+      );
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
@@ -98,7 +102,10 @@ export class PnrUsersService {
           AUTHENTICATION_ERROR,
         );
       }
-      const response = await this.generateAndSendOtp(userLoginDto.phoneNumber);
+      const response = await this.generateAndSendOtp(
+        userLoginDto.phoneNumber,
+        userLoginDto.countryCode,
+      );
       return response.data; // Assuming the API response contains relevant data
 
       return this.responseService.createResponse(
@@ -121,16 +128,20 @@ export class PnrUsersService {
     }
   }
 
-  async findByPhoneNumber(phoneNumber: string): Promise<PnrUser | null> {
+  async findByPhoneNumber(
+    phoneNumber: string,
+    countryCode: string,
+  ): Promise<PnrUser | null> {
     try {
       let user = await this.pnrUserRepository.findOne({
-        where: { phoneNumber },
+        where: { phoneNumber, countryCode },
       });
       if (user) {
         return user;
       } else {
         user = await this.pnrUserRepository.create({
           phoneNumber,
+          countryCode,
         });
       }
       return user;
@@ -138,10 +149,14 @@ export class PnrUsersService {
       return null;
     }
   }
-  async verifyOtp(phoneNumber: string, otp): Promise<PnrUser | null> {
+  async verifyOtp(
+    phoneNumber: string,
+    countryCode: string,
+    otp,
+  ): Promise<PnrUser | null> {
     try {
       const user = await this.pnrUserRepository.findOne({
-        where: { phoneNumber, otp },
+        where: { phoneNumber, countryCode, otp },
       });
       if (user) {
         return user;
@@ -153,10 +168,13 @@ export class PnrUsersService {
     }
   }
 
-  async generateAndSendOtp(phoneNumber: string): Promise<AxiosResponse> {
+  async generateAndSendOtp(
+    phoneNumber: string,
+    countryCode: string,
+  ): Promise<AxiosResponse> {
     const otp = this.generateOtp();
-    await this.storeOtpInDatabase(phoneNumber, otp);
-    return this.sendOtpViaApi(phoneNumber, otp);
+    await this.storeOtpInDatabase(countryCode, phoneNumber, otp);
+    return this.sendOtpViaApi(countryCode, phoneNumber, otp);
   }
 
   private generateOtp(): string {
@@ -167,18 +185,21 @@ export class PnrUsersService {
 
   private async storeOtpInDatabase(
     phoneNumber: string,
+    countryCode: string,
     otp: string,
   ): Promise<void> {
     const user = await this.pnrUserRepository.findOne({
-      where: { phoneNumber },
+      where: { phoneNumber, countryCode },
     });
     user.otp = otp;
+    user.countryCode = countryCode;
 
     await user.save(); // Save the changes
   }
 
   private async sendOtpViaApi(
     phoneNumber: string,
+    countryCode: string,
     otp: string,
   ): Promise<AxiosResponse> {
     // Implement your OTP sending logic here
@@ -188,7 +209,7 @@ export class PnrUsersService {
       messages: [
         {
           from: 'Faremaker',
-          destinations: [{ to: phoneNumber }],
+          destinations: [{ to: `${countryCode}${phoneNumber}` }],
           text: `Your Pin: ${otp}`,
         },
       ],

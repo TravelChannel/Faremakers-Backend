@@ -32,6 +32,28 @@ export class PnrUser extends Model {
     },
   })
   phoneNumber: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: {
+      name: 'unique_user_countryCode',
+      msg: 'countryCode must be unique.',
+    },
+    validate: {
+      notNull: {
+        msg: 'countryCode is required.',
+      },
+      notEmpty: {
+        msg: 'countryCode cannot be empty.',
+      },
+      len: {
+        args: [3, 50],
+        msg: 'countryCode must be between 9 and 20 characters.',
+      },
+    },
+  })
+  countryCode: string;
   @Column({
     type: DataType.STRING,
     allowNull: true,
