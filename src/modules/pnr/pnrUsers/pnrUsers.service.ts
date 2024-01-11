@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 
+import {
+  generateAccessTokenOtpUser,
+  generateRefreshTokenOtpUser,
+} from '../../../common/utils/jwt.utils';
 import { UserLoginDto } from './dto/userLogin.dto';
 import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 import { AxiosResponse } from 'axios';
@@ -13,7 +17,7 @@ import { AxiosResponse } from 'axios';
 import { PnrUser } from './entities/pnrUsers.entity';
 import { PNR_USERS_REPOSITORY } from '../../../shared/constants';
 import {
-  // GET_SUCCESS,
+  LOGIN,
   EXCEPTION,
   AUTHENTICATION_ERROR,
 } from '../../../shared/messages.constants';
@@ -58,15 +62,17 @@ export class PnrUsersService {
           AUTHENTICATION_ERROR,
         );
       }
+      const accessToken = generateAccessTokenOtpUser(user, 0);
+      const refreshToken = generateRefreshTokenOtpUser(user, 0);
 
       return this.responseService.createResponse(
         HttpStatus.OK,
         {
-          // accessToken,
-          // refreshToken,
+          accessToken,
+          refreshToken,
           userData: user,
         },
-        'Done',
+        LOGIN,
       );
     } catch (error) {
       // Handle any unexpected errors here
