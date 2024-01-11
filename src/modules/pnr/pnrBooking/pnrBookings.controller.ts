@@ -66,4 +66,26 @@ export class PnrBookingsController {
   async findOne(@Param('id') id: string): Promise<any> {
     return this.pnrBookingsService.findOne(id);
   }
+
+  @Patch('reqForCancellation/:id')
+  @SkipAuth()
+  reqForCancellation(@Param('id') id: string) {
+    return this.pnrBookingsService.reqForCancellation(+id);
+  }
+  @Patch('reqForRefund/:id')
+  @SkipAuth()
+  reqForRefund(@Param('id') id: string) {
+    return this.pnrBookingsService.reqForRefund(+id);
+  }
+  @Patch('reqForReIssue/:id')
+  @SkipAuth()
+  reqForReIssue(@Param('id') id: string) {
+    return this.pnrBookingsService.reqForReIssue(+id);
+  }
+
+  @Delete(':id')
+  @SkipAuth()
+  remove(@Param('id') id: string) {
+    return this.pnrBookingsService.remove(+id);
+  }
 }

@@ -29,7 +29,27 @@ export class PnrBooking extends Model {
     onDelete: 'NO ACTION',
   })
   pnrUserId: number;
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
 
+    allowNull: false,
+  })
+  isReqForCancellation: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+
+    allowNull: false,
+  })
+  isReqForRefund: boolean;
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+    allowNull: false,
+  })
+  isReqForReIssue: boolean;
   @Column({
     type: DataType.STRING,
     allowNull: false,

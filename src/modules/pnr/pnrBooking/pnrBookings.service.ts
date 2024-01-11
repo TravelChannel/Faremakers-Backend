@@ -512,6 +512,73 @@ export class PnrBookingsService {
             model: PnrDetail,
             as: 'pnrDetail',
           },
+          {
+            model: FlightDetails,
+            include: [
+              {
+                model: ExtraBaggage,
+              },
+              {
+                model: BaggageAllowance,
+              },
+              {
+                model: BookingFlight,
+              },
+              {
+                model: Fare,
+                include: [
+                  {
+                    model: PassengerInfoList,
+                    include: [
+                      {
+                        model: PassengerInfo,
+                        include: [
+                          {
+                            model: CurrencyConversion,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    model: TotalFare,
+                  },
+                ],
+              },
+              {
+                model: GroupDescription,
+              },
+              {
+                model: SchedualDetGet,
+                attributes: ['id'],
+                include: [
+                  {
+                    model: InnerSchedualDetGet,
+                    include: [
+                      {
+                        model: Arrival,
+                      },
+                      {
+                        model: Departure,
+                      },
+                      {
+                        model: Carrier,
+                        include: [
+                          {
+                            model: Equipment,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              {
+                model: FlightSegments,
+              },
+            ],
+          },
         ],
       });
       if (!pnrBookings) {
@@ -630,6 +697,112 @@ export class PnrBookingsService {
           'Record Not Found',
         );
       }
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async remove(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      await pnrBooking.destroy();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Success',
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async reqForCancellation(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      pnrBooking.isReqForCancellation = true;
+
+      await pnrBooking.save();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Cancellation Request Initiated Successfully ',
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async reqForRefund(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      pnrBooking.isReqForRefund = true;
+
+      await pnrBooking.save();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Refund Request Initiated Successfully ',
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async reqForReIssue(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      pnrBooking.isReqForReIssue = true;
+
+      await pnrBooking.save();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Reissue Request Initiated Successfully ',
+      );
     } catch (error) {
       console.log(error);
       return this.responseService.createResponse(
