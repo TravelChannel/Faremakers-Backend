@@ -78,20 +78,16 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User | null> {
     try {
-      const users = await this.userRepository.findOne({
+      const user = await this.userRepository.findOne({
         where: { email, isActive: 1 },
       });
-      return this.responseService.createResponse(
-        HttpStatus.OK,
-        users,
-        GET_SUCCESS,
-      );
+      if (user) {
+        return user;
+      } else {
+        return null;
+      }
     } catch (error) {
-      return this.responseService.createResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        error.message,
-      );
+      return null;
     }
   }
   async findByEmailAndCompany(
