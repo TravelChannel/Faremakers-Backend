@@ -37,16 +37,19 @@ export class PnrBookingsService {
   async create(pnrBookingDto: PnrBookingDto): Promise<any> {
     const t: Transaction = await sequelize.transaction();
     try {
-      const { pnrBookings, pnr, phoneNumber, flightDetails } = pnrBookingDto;
+      const { pnrBookings, pnr, phoneNumber, countryCode, flightDetails } =
+        pnrBookingDto;
       let pnrUser = await PnrUser.findOne({
         where: {
           phoneNumber: phoneNumber,
+          countryCode,
         },
       });
       if (!pnrUser) {
         pnrUser = await PnrUser.create(
           {
             phoneNumber: phoneNumber,
+            countryCode,
           },
           { transaction: t },
         );

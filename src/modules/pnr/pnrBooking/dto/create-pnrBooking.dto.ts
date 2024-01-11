@@ -3,7 +3,9 @@ import { PnrBookingArrayDto } from './PnrBookingArray.dto';
 
 export class PnrBookingDto {
   @IsNotEmpty({ message: 'phoneNumber is required.' })
-  phoneNumber: number;
+  phoneNumber: string;
+  @IsNotEmpty({ message: 'countryCode is required.' })
+  countryCode: string;
   @IsNotEmpty({ message: 'pnr is required.' })
   pnr: number;
 
