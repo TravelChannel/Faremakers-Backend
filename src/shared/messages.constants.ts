@@ -84,3 +84,6 @@ export const FAILED_TO_CONFIRM_EMAIL_ADDRESS =
   'Failed to confirm your email address, please contact support.';
 export const UNABLE_TO_UPDATE_RECORD =
   'Unable to update this record, please make sure that you are providing the correct id to update';
+export const OTP_VALIDATED = 'OTP Validated Successfully';
+export const OTP_VALIDATION_FAILS = 'Invalid OTP';
+export const OTP_SENT_SUCCESS = 'OTP Sent Successfully';

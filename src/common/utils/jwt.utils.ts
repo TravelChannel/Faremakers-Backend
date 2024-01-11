@@ -33,9 +33,9 @@ export function verifyToken(token: string, secret: string): any {
   }
 }
 export function generateAccessTokenOtpUser(user: PnrUser, isAdmin): string {
-  const payload = { sub: user.id, email: user.phoneNumber, isAdmin };
+  const payload = { sub: user.id, phoneNumber: user.phoneNumber, isAdmin };
   const token = jwt.sign(payload, JWT_SECRET, {
-    expiresIn: '6h',
+    expiresIn: '4h',
   });
   return token;
 }

@@ -4,6 +4,9 @@ import {
   HttpStatus,
   //  Session
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { databaseConfig } from 'src/database/config/default';
+
 import { HttpService } from '@nestjs/axios';
 
 import {
@@ -17,7 +20,9 @@ import { AxiosResponse } from 'axios';
 import { PnrUser } from './entities/pnrUsers.entity';
 import { PNR_USERS_REPOSITORY } from '../../../shared/constants';
 import {
-  LOGIN,
+  OTP_SENT_SUCCESS,
+  OTP_VALIDATION_FAILS,
+  OTP_VALIDATED,
   EXCEPTION,
   AUTHENTICATION_ERROR,
 } from '../../../shared/messages.constants';
@@ -27,6 +32,9 @@ import {
 import { ResponseService } from '../../../common/utility/response/response.service';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
+const OTP_SECRET = dbConfig.OTP_SECRET;
 
 @Injectable()
 export class PnrUsersService {
@@ -47,11 +55,12 @@ export class PnrUsersService {
         userLoginOtpDto.phoneNumber,
         userLoginOtpDto.otp,
       );
+
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
           null,
-          AUTHENTICATION_ERROR,
+          OTP_VALIDATION_FAILS,
         );
       }
       const isAuthorized = true;
@@ -72,7 +81,7 @@ export class PnrUsersService {
           refreshToken,
           userData: user,
         },
-        LOGIN,
+        OTP_VALIDATED,
       );
     } catch (error) {
       // Handle any unexpected errors here
@@ -89,16 +98,12 @@ export class PnrUsersService {
     // @Session() session: Record<string, any>,
   ): Promise<any> {
     try {
-      console.log('Here 1');
       const user = await this.findByPhoneNumber(
         userLoginDto.countryCode,
         userLoginDto.phoneNumber,
       );
-      console.log('Here 5');
 
       if (!user) {
-        console.log('Here 6');
-
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
           null,
@@ -117,16 +122,11 @@ export class PnrUsersService {
         userLoginDto.countryCode,
         userLoginDto.phoneNumber,
       );
-      return response.data; // Assuming the API response contains relevant data
-
+      // return response.data; // Assuming the API response contains relevant data
       return this.responseService.createResponse(
         HttpStatus.OK,
-        {
-          // accessToken,
-          // refreshToken,
-          userData: user,
-        },
-        'Done',
+        response.data,
+        `${OTP_SENT_SUCCESS} on +${userLoginDto.countryCode}-${userLoginDto.phoneNumber}`,
       );
     } catch (error) {
       // Handle any unexpected errors here
@@ -174,9 +174,13 @@ export class PnrUsersService {
   ): Promise<PnrUser | null> {
     try {
       const user = await this.pnrUserRepository.findOne({
-        where: { phoneNumber, countryCode, otp },
+        where: { phoneNumber, countryCode },
       });
       if (user) {
+        const isOtpValid = await bcrypt.compare(otp + OTP_SECRET, user.otp);
+        if (!isOtpValid) {
+          return null;
+        }
         return user;
       } else {
         return null;
@@ -190,14 +194,15 @@ export class PnrUsersService {
     countryCode: string,
     phoneNumber: string,
   ): Promise<AxiosResponse> {
-    const otp = this.generateOtp();
+    const otp = await this.generateOtp();
     await this.storeOtpInDatabase(countryCode, phoneNumber, otp);
     return this.sendOtpViaApi(countryCode, phoneNumber, otp);
   }
 
-  private generateOtp(): string {
+  private async generateOtp(): Promise<string> {
     // Implement your OTP generation logic here
     // For example, use a library or generate a random 6-digit number
+
     return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
@@ -209,7 +214,8 @@ export class PnrUsersService {
     const user = await this.pnrUserRepository.findOne({
       where: { phoneNumber, countryCode },
     });
-    user.otp = otp;
+    const hashedOtp = await bcrypt.hash(otp + OTP_SECRET, 10); // Hash the password with a salt of 10 rounds
+    user.otp = hashedOtp;
 
     await user.save(); // Save the changes
   }
