@@ -44,7 +44,7 @@ export class UsersService {
   ) {}
 
   async create(
-    currentCompanyId: number,
+    isCurrentUserAdmin: number,
     createUserDto: CreateUserDto,
   ): Promise<User> {
     const t: Transaction = await sequelize.transaction();
@@ -111,17 +111,14 @@ export class UsersService {
   }
   // Login Function
 
-  async findAll(currentCompanyId: number, req): Promise<User[]> {
+  async findAll(isCurrentUserAdmin: number, req): Promise<User[]> {
     try {
       console.log('params ', req.query);
-      const whereOptions: any = {};
       const whereOptionsMain: any = {};
       const whereOptionsCompanyId: any = {};
       const whereOptionsBranchId: any = {};
       const whereOptionsDepartmentId: any = {};
-      if (currentCompanyId) {
-        whereOptions.companyId = currentCompanyId;
-      }
+
       if (req.query.companyId > 0) {
         whereOptionsCompanyId.companyId = req.query.companyId;
       }
@@ -212,7 +209,7 @@ export class UsersService {
   }
 
   async update(
-    currentCompanyId: number,
+    isCurrentUserAdmin: number,
     currentUserId: number,
     id: number,
 
@@ -222,16 +219,8 @@ export class UsersService {
     try {
       const whereOptions: any = {};
 
-      // if (currentCompanyId) {
-      //   whereOptions.id = currentUserId;
-      // }else{
-
-      // }
       whereOptions.id = id;
 
-      if (currentCompanyId) {
-        // whereOptions.companyId = currentCompanyId;
-      }
       const user = await this.userRepository.findOne({
         where: whereOptions,
       });
@@ -273,7 +262,7 @@ export class UsersService {
     }
   }
   async toggleUserStatusByI(
-    currentCompanyId: number,
+    isCurrentUserAdmin: number,
     id: number,
     toggleIsActiveDto: ToggleIsActiveDto,
   ): Promise<any> {
@@ -283,9 +272,6 @@ export class UsersService {
       const whereOptions: any = {};
       whereOptions.id = id;
 
-      if (currentCompanyId) {
-        whereOptions.companyId = currentCompanyId;
-      }
       const user = await this.userRepository.findOne({
         where: whereOptions,
       });

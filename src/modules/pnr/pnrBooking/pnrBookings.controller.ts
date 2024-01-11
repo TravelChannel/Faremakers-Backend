@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
-import { CurrentCompanyId } from 'src/common/decorators/currentCompanyId.decorator';
+import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 

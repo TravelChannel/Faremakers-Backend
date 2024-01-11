@@ -24,7 +24,7 @@ import { createFileStorage } from '../../../common/utils/file-storage.util'; // 
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
-import { CurrentCompanyId } from 'src/common/decorators/currentCompanyId.decorator';
+import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
 // import { Express } from 'express';
 // import { SessionData } from 'express-session';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -53,10 +53,10 @@ export class UsersController {
 
   @Post('createUser')
   async createUser(
-    @CurrentCompanyId() currentCompanyId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Body() createUserDto: CreateUserDto,
   ) {
-    return await this.usersService.create(currentCompanyId, createUserDto);
+    return await this.usersService.create(isCurrentUserAdmin, createUserDto);
   }
   // @Post('createUserTemp')
   // async createTemp(@Body() data: any) {
@@ -69,10 +69,10 @@ export class UsersController {
 
   @Get()
   findAll(
-    @CurrentCompanyId() currentCompanyId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Req() req: Request,
   ): Promise<User[]> {
-    return this.usersService.findAll(currentCompanyId, req);
+    return this.usersService.findAll(isCurrentUserAdmin, req);
   }
 
   @Get('me')
@@ -94,7 +94,7 @@ export class UsersController {
   update(
     @Param('id') id: string,
     @CurrentUserId() currentUserId: number,
-    @CurrentCompanyId() currentCompanyId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Body() payload: { data: string },
     // @UploadedFile(
     //   new ParseFilePipe({
@@ -124,7 +124,7 @@ export class UsersController {
   ) {
     const updateUserDto: UpdateUserDto = JSON.parse(payload.data);
     return this.usersService.update(
-      currentCompanyId,
+      isCurrentUserAdmin,
       currentUserId,
       +id,
       updateUserDto,
@@ -134,11 +134,11 @@ export class UsersController {
   @Patch('toggleUserStatusById/:id')
   toggleUserStatusByI(
     @Param('id') id: string,
-    @CurrentCompanyId() currentCompanyId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Body() toggleIsActiveDto: ToggleIsActiveDto,
   ) {
     return this.usersService.toggleUserStatusByI(
-      currentCompanyId,
+      isCurrentUserAdmin,
       +id,
       toggleIsActiveDto,
     );
