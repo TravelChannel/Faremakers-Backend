@@ -26,8 +26,8 @@ export class PnrUser extends Model {
         msg: 'phoneNumber cannot be empty.',
       },
       len: {
-        args: [3, 50],
-        msg: 'phoneNumber must be between 9 and 20 characters.',
+        args: [6, 20],
+        msg: 'phoneNumber must be between 6 and 20 characters.',
       },
     },
   })
@@ -48,8 +48,8 @@ export class PnrUser extends Model {
         msg: 'countryCode cannot be empty.',
       },
       len: {
-        args: [3, 50],
-        msg: 'countryCode must be between 9 and 20 characters.',
+        args: [1, 4],
+        msg: 'countryCode must be between 1 and 4 characters.',
       },
     },
   })
