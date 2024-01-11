@@ -390,7 +390,6 @@ export class PnrBookingsService {
   async findAll(req): Promise<any> {
     try {
       const whereOptions: any = {};
-
       if (req.query.isReqForCancellation) {
         whereOptions.isReqForCancellation = req.query.isReqForCancellation;
       }
