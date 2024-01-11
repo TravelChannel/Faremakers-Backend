@@ -387,9 +387,21 @@ export class PnrBookingsService {
       );
     }
   }
-  async findAll(): Promise<any> {
+  async findAll(req): Promise<any> {
     try {
+      const whereOptions: any = {};
+
+      if (req.query.isReqForCancellation) {
+        whereOptions.isReqForCancellation = req.query.isReqForCancellation;
+      }
+      if (req.query.isReqForRefund) {
+        whereOptions.isReqForRefund = req.query.isReqForRefund;
+      }
+      if (req.query.isReqForReIssue) {
+        whereOptions.isReqForReIssue = req.query.isReqForReIssue;
+      }
       const pnrBookings = await PnrBooking.findAll({
+        where: whereOptions,
         include: [
           {
             model: PnrUser,

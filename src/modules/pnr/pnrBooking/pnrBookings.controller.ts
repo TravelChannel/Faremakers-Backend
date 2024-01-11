@@ -21,6 +21,7 @@ import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 
 import { getUserCompanyId } from '../../auth/getUserDecodedData';
+import { PnrBooking } from './entities/pnrBooking.entity';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
@@ -47,8 +48,8 @@ export class PnrBookingsController {
   }
   @Get()
   @SkipAuth()
-  async findAll() {
-    return await this.pnrBookingsService.findAll();
+  async findAll(@Req() req: Request): Promise<PnrBooking[]> {
+    return await this.pnrBookingsService.findAll(req);
   }
   @Get('findBy')
   @SkipAuth()
