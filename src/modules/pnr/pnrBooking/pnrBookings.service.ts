@@ -73,7 +73,7 @@ export class PnrBookingsService {
               {
                 pnrBookingId: newPnrBookingRepository.id,
                 phoneNumber: pnrBooking.phoneNumber,
-                userEmail: pnrBooking.userEmail,
+                email: pnrBooking.email,
                 dateOfBirth: pnrBooking.dateOfBirth,
                 passportExpiryDate: pnrBooking.passportExpiryDate,
                 firstName: pnrBooking.firstName,
@@ -677,8 +677,8 @@ export class PnrBookingsService {
         whereOptions.passportNo = req.query.passportNo;
       } else if (req.query.phoneNumber) {
         whereOptions.phoneNumber = req.query.phoneNumber;
-      } else if (req.query.userEmail) {
-        whereOptions.userEmail = req.query.userEmail;
+      } else if (req.query.email) {
+        whereOptions.email = req.query.email;
       } else {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,

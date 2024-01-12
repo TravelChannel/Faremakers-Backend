@@ -49,7 +49,7 @@ export class PnrDetail extends Model {
     type: DataType.STRING,
     allowNull: true,
   })
-  userEmail: string;
+  email: string;
   @Column({
     type: DataType.DATE,
   })

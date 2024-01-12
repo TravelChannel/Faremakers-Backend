@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import { PnrBooking } from '../../../pnr/pnrBooking/entities/pnrBooking.entity';
 
 @Table
 export class User extends Model {
@@ -11,115 +12,110 @@ export class User extends Model {
 
   @Column({
     type: DataType.STRING,
+    allowNull: true,
+    // unique: {
+    //   name: 'unique_user_username',
+    //   msg: 'Username must be unique.',
+    // },
+    // validate: {
+    //   notNull: {
+    //     msg: 'Username is required.',
+    //   },
+    //   notEmpty: {
+    //     msg: 'Username cannot be empty.',
+    //   },
+    //   len: {
+    //     args: [3, 50],
+    //     msg: 'Username must be between 3 and 50 characters.',
+    //   },
+    // },
+  })
+  username: string;
+
+  @Column({
+    type: DataType.STRING,
     allowNull: false,
     unique: {
-      name: 'unique_user_username',
-      msg: 'Username must be unique.',
+      name: 'unique_user_phoneNumber',
+      msg: 'phoneNumber must be unique.',
     },
     validate: {
       notNull: {
-        msg: 'Username is required.',
+        msg: 'phoneNumber is required.',
       },
       notEmpty: {
-        msg: 'Username cannot be empty.',
+        msg: 'phoneNumber cannot be empty.',
       },
       len: {
-        args: [3, 50],
-        msg: 'Username must be between 3 and 50 characters.',
+        args: [6, 20],
+        msg: 'phoneNumber must be between 6 and 20 characters.',
       },
     },
   })
-  username: string;
+  phoneNumber: string;
+
   @Column({
     type: DataType.STRING,
     allowNull: false,
 
     validate: {
       notNull: {
-        msg: 'firstName is required.',
+        msg: 'countryCode is required.',
       },
       notEmpty: {
-        msg: 'firstName cannot be empty.',
+        msg: 'countryCode cannot be empty.',
       },
       len: {
-        args: [3, 50],
-        msg: 'firstName must be between 3 and 50 characters.',
+        args: [1, 4],
+        msg: 'countryCode must be between 1 and 4 characters.',
       },
     },
+  })
+  countryCode: string;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  otp: string;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  email: string;
+  @Column({
+    type: DataType.DATE,
+  })
+  dateOfBirth: Date;
+  @Column({
+    type: DataType.DATE,
+  })
+  passportExpiryDate: Date;
+  @Column({
+    type: DataType.STRING,
   })
   firstName: string;
   @Column({
     type: DataType.STRING,
-    allowNull: false,
-
-    validate: {
-      notNull: {
-        msg: 'lastName is required.',
-      },
-      notEmpty: {
-        msg: 'lastName cannot be empty.',
-      },
-      len: {
-        args: [3, 50],
-        msg: 'lastName must be between 3 and 50 characters.',
-      },
-    },
   })
   lastName: string;
-
   @Column({
     type: DataType.STRING,
-    allowNull: false,
-    unique: {
-      name: 'unique_user_email',
-      msg: 'Email must be unique.',
-    },
-    validate: {
-      isEmail: {
-        msg: 'Invalid email format.',
-      },
-    },
   })
-  email: string;
-
+  gender: string;
   @Column({
     type: DataType.STRING,
-    allowNull: false,
-    validate: {
-      notNull: {
-        msg: 'Password is required.',
-      },
-      notEmpty: {
-        msg: 'Password cannot be empty.',
-      },
-      len: {
-        args: [3, 200],
-        msg: 'Password must be between 3 and 200 characters.',
-      },
-    },
+    allowNull: true,
+    // unique: {
+    //   name: 'unique_user_cnic',
+    //   msg: 'cnic must be unique.',
+    // },
   })
-  password: string;
+  cnic: string;
   @Column({
     type: DataType.STRING,
-    allowNull: false,
-    unique: {
-      name: 'contact_user_email',
-      msg: 'contact must be unique.',
-    },
-    validate: {
-      notNull: {
-        msg: 'contact is required.',
-      },
-      notEmpty: {
-        msg: 'contact cannot be empty.',
-      },
-      len: {
-        args: [3, 200],
-        msg: 'contact must be between 3 and 200 characters.',
-      },
-    },
+    allowNull: true,
   })
-  contact: string;
+  passportNo: string;
 
   @Column({
     type: DataType.STRING,
@@ -131,6 +127,24 @@ export class User extends Model {
     allowNull: true,
   })
   imgSrc: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+    // validate: {
+    //   notNull: {
+    //     msg: 'Password is required.',
+    //   },
+    //   notEmpty: {
+    //     msg: 'Password cannot be empty.',
+    //   },
+    //   len: {
+    //     args: [3, 200],
+    //     msg: 'Password must be between 3 and 200 characters.',
+    //   },
+    // },
+  })
+  password: string;
   @Column({
     type: DataType.TINYINT,
     defaultValue: 1,
@@ -138,6 +152,8 @@ export class User extends Model {
   })
   isActive: number;
   // Define the hasMany association
+  @HasMany(() => PnrBooking)
+  pnrBooking: PnrBooking[];
 }
 
 export default User;

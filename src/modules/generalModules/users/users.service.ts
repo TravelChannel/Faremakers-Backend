@@ -235,7 +235,7 @@ export class UsersService {
       user.email = updateUserDto.email || user.email;
       user.lastName = updateUserDto.lastName || user.lastName;
       user.firstName = updateUserDto.firstName || user.firstName;
-      user.contact = updateUserDto.contact || user.contact;
+      user.phoneNumber = updateUserDto.phoneNumber || user.phoneNumber;
       user.username = updateUserDto.username || user.username;
       if (imgFile) {
         const imagePath =
@@ -409,6 +409,33 @@ export class UsersService {
       'Role Removed!',
     );
   }
+  async findByPhoneNumber(
+    countryCode: string,
+    phoneNumber: string,
+  ): Promise<User | null> {
+    try {
+      console.log('Here 2');
 
+      let user = await this.userRepository.findOne({
+        where: { phoneNumber, countryCode },
+      });
+      if (user) {
+        console.log('Here 3');
+
+        return user;
+      } else {
+        console.log('Here 4');
+
+        user = await this.userRepository.create({
+          phoneNumber,
+          countryCode,
+        });
+      }
+      return user;
+    } catch (error) {
+      console.log('Error-', error.message);
+      return null;
+    }
+  }
   // Temporary Api
 }

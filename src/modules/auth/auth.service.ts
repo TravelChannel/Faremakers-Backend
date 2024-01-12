@@ -32,6 +32,8 @@ const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load 
 
 const PASSWORD_SECRET = dbConfig.PASSWORD_SECRET;
 const JWT_REFRESH_SECRET = dbConfig.JWT_REFRESH_SECRET;
+const OTP_SECRET = dbConfig.OTP_SECRET;
+
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
@@ -168,5 +170,29 @@ export class AuthService {
     }
     return null;
   }
+  async validateUserLocalOtp(
+    countryCode: string,
+    phoneNumber: string,
+    otp: string,
+  ): Promise<any | null> {
+    try {
+      const user = await this.userService.findByPhoneNumber(
+        countryCode,
+        phoneNumber,
+      );
+      if (user) {
+        const isOtpValid = await bcrypt.compare(otp + OTP_SECRET, user.otp);
+        if (!isOtpValid) {
+          return null;
+        }
+        return user;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
   // async logout() {}
 }

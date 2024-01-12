@@ -10,7 +10,7 @@ export class PnrBookingArrayDto {
   phoneNumber?: string;
 
   @IsOptional()
-  userEmail?: string;
+  email?: string;
 
   @IsOptional()
   @IsDate()

@@ -44,7 +44,7 @@ export class CreateUserDto {
   @Length(10, 50, { message: 'Contact must be between 3 and 50 characters.' })
 
   // @Max(50, { message: 'Contact must not exceed 50 digits.' })
-  contact: number;
+  phoneNumber: number;
 
   @IsNotEmpty({ message: 'Email is required.' })
   @IsEmail({}, { message: 'Invalid email format.' })

@@ -9,7 +9,7 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { PnrUser } from '../../pnrUsers/entities/pnrUsers.entity';
+import { User } from '../../../generalModules/users/entities/user.entity';
 import { PnrDetail } from '../../PnrDetails';
 import { FlightDetails } from '../../flightDetails';
 
@@ -22,13 +22,13 @@ export class PnrBooking extends Model {
   })
   id: number;
 
-  @ForeignKey(() => PnrUser)
+  @ForeignKey(() => User)
   @Column({
     type: DataType.BIGINT,
     allowNull: false,
     onDelete: 'NO ACTION',
   })
-  pnrUserId: number;
+  userId: number;
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: 0,
@@ -71,8 +71,8 @@ export class PnrBooking extends Model {
     },
   })
   pnr: string;
-  @BelongsTo(() => PnrUser)
-  pnrUser: PnrUser;
+  @BelongsTo(() => User)
+  user: User;
   @HasMany(() => PnrDetail)
   pnrDetail: PnrDetail[];
   @HasOne(() => FlightDetails)
