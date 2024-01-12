@@ -44,8 +44,8 @@ export class PnrBookingsController {
   @Post()
   async create(
     @Body() pnrBookingDto: PnrBookingDto,
-    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
   ) {
     return await this.pnrBookingsService.create(
       currentUserId,
@@ -56,18 +56,26 @@ export class PnrBookingsController {
   @Get()
   async findAll(
     @Req() req: Request,
-    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
   ): Promise<PnrBooking[]> {
     return await this.pnrBookingsService.findAll(
       req,
-      isCurrentUserAdmin,
       currentUserId,
+      isCurrentUserAdmin,
     );
   }
   @Get('findBy')
-  async findBy(@Req() req: Request): Promise<any> {
-    return this.pnrBookingsService.findBy(req);
+  async findBy(
+    @Req() req: Request,
+    @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  ): Promise<any> {
+    return this.pnrBookingsService.findBy(
+      req,
+      currentUserId,
+      isCurrentUserAdmin,
+    );
   }
   @Get('findByPnr')
   async findByPnr(@Req() req: Request): Promise<any> {
@@ -75,8 +83,16 @@ export class PnrBookingsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<any> {
-    return this.pnrBookingsService.findOne(id);
+  async findOne(
+    @Param('id') id: string,
+    @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  ): Promise<any> {
+    return this.pnrBookingsService.findOne(
+      id,
+      currentUserId,
+      isCurrentUserAdmin,
+    );
   }
 
   @Patch('reqForCancellation/:id')

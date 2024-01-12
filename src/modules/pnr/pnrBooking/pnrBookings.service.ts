@@ -2,7 +2,11 @@ import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 // import { PnrBookingArrayDto } from './dto/PnrBookingArray.dto';
 // import { UpdateVoucherDto } from './dto/update-vouchers.dto';
-import { SAVED_SUCCESS, GET_SUCCESS } from '../../../shared/messages.constants';
+import {
+  SAVED_SUCCESS,
+  GET_SUCCESS,
+  AUTHENTICATION_ERROR,
+} from '../../../shared/messages.constants';
 import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
@@ -35,8 +39,8 @@ export class PnrBookingsService {
     private readonly responseService: ResponseService,
   ) {}
   async create(
-    isCurrentUserAdmin: number,
     currentUserId: number,
+    isCurrentUserAdmin: number,
     pnrBookingDto: PnrBookingDto,
   ): Promise<any> {
     const t: Transaction = await sequelize.transaction();
@@ -59,7 +63,7 @@ export class PnrBookingsService {
       //     { transaction: t },
       //   );
       // }
-
+      console.log('currentUserId', currentUserId);
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           userId: currentUserId,
@@ -385,12 +389,12 @@ export class PnrBookingsService {
   }
   async findAll(
     req,
-    isCurrentUserAdmin: number,
     currentUserId: number,
+    isCurrentUserAdmin: number,
   ): Promise<any> {
     try {
       const whereOptions: any = {};
-      if (currentUserId) {
+      if (!isCurrentUserAdmin && currentUserId) {
         whereOptions.userId = currentUserId;
       }
       if (req.query.isReqForCancellation) {
@@ -515,8 +519,16 @@ export class PnrBookingsService {
       );
     }
   }
-  async findOne(id: string): Promise<any> {
+  async findOne(
+    id: string,
+    currentUserId: number,
+    isCurrentUserAdmin: number,
+  ): Promise<any> {
     try {
+      const whereOptions: any = {};
+      if (!isCurrentUserAdmin && currentUserId) {
+        whereOptions.userId = currentUserId;
+      }
       const pnrBookings = await PnrBooking.findByPk(id, {
         include: [
           {
@@ -602,6 +614,13 @@ export class PnrBookingsService {
           'Record Not Found',
         );
       }
+      if (!isCurrentUserAdmin && pnrBookings.userId !== currentUserId) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
       return this.responseService.createResponse(
         HttpStatus.OK,
         pnrBookings,
@@ -665,9 +684,16 @@ export class PnrBookingsService {
       );
     }
   }
-  async findBy(req): Promise<any> {
+  async findBy(
+    req,
+    currentUserId: number,
+    isCurrentUserAdmin: number,
+  ): Promise<any> {
     try {
       const whereOptions: any = {};
+      if (!isCurrentUserAdmin && currentUserId) {
+        whereOptions.userId = currentUserId;
+      }
       if (req.query.cnic) {
         whereOptions.cnic = req.query.cnic;
       } else if (req.query.passportNo) {
