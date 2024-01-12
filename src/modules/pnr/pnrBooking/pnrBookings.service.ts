@@ -387,7 +387,11 @@ export class PnrBookingsService {
       );
     }
   }
-  async findAll(req): Promise<any> {
+  async findAll(
+    req,
+    isCurrentUserAdmin: number,
+    currentUserId: number,
+  ): Promise<any> {
     try {
       const whereOptions: any = {};
       if (req.query.isReqForCancellation) {
@@ -496,6 +500,7 @@ export class PnrBookingsService {
           // Handle errors here
           console.error(error);
         });
+      console.log('jjjjj', currentUserId, isCurrentUserAdmin);
 
       return this.responseService.createResponse(
         HttpStatus.OK,

@@ -111,7 +111,7 @@ export class UsersService {
   }
   // Login Function
 
-  async findAll(isCurrentUserAdmin: number, req): Promise<User[]> {
+  async findAll(req): Promise<User[]> {
     try {
       console.log('params ', req.query);
       const whereOptionsMain: any = {};

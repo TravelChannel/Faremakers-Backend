@@ -14,6 +14,8 @@ import {
   Req,
   Query,
 } from '@nestjs/common';
+import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
+
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
@@ -42,14 +44,26 @@ import {
 export class PnrBookingsController {
   constructor(private readonly pnrBookingsService: PnrBookingsService) {}
   @Post()
-  @SkipAuth()
-  async create(@Body() pnrBookingDto: PnrBookingDto) {
+
+  // @SkipAuth()
+  async create(
+    @Body() pnrBookingDto: PnrBookingDto,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  ) {
     return await this.pnrBookingsService.create(pnrBookingDto);
   }
   @Get()
-  @SkipAuth()
-  async findAll(@Req() req: Request): Promise<PnrBooking[]> {
-    return await this.pnrBookingsService.findAll(req);
+  // @SkipAuth()
+  async findAll(
+    @Req() req: Request,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+    @CurrentUserId() currentUserId: number,
+  ): Promise<PnrBooking[]> {
+    return await this.pnrBookingsService.findAll(
+      req,
+      isCurrentUserAdmin,
+      currentUserId,
+    );
   }
   @Get('findBy')
   @SkipAuth()

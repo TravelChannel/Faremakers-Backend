@@ -72,10 +72,10 @@ export class UsersController {
 
   @Get()
   findAll(
-    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Req() req: Request,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
   ): Promise<User[]> {
-    return this.usersService.findAll(isCurrentUserAdmin, req);
+    return this.usersService.findAll(req);
   }
 
   @Get('me')

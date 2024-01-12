@@ -120,8 +120,8 @@ export class AuthService {
         );
       }
 
-      const accessToken = generateAccessToken(user, decoded.companyId);
-      const refreshTokenNew = generateRefreshToken(user, decoded.companyId);
+      const accessToken = generateAccessToken(user, decoded.isAdmin);
+      const refreshTokenNew = generateRefreshToken(user, decoded.isAdmin);
       return this.responseService.createResponse(
         HttpStatus.OK,
         { access: accessToken, refresh: refreshTokenNew, user: user },
@@ -142,7 +142,7 @@ export class AuthService {
       const userDecoded = {
         id: user.id,
         email: user.email,
-        companyId: payload.companyId,
+        isAdmin: 1,
       };
       return userDecoded;
     }
