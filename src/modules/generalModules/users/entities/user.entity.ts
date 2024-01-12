@@ -4,11 +4,11 @@ import {
   Model,
   DataType,
   HasMany,
-  BelongsTo,
-  ForeignKey,
+  // BelongsTo,
+  // ForeignKey,
 } from 'sequelize-typescript';
 import { PnrBooking } from '../../../pnr/pnrBooking/entities/pnrBooking.entity';
-import { Role } from '../../roles/entities/role.entity';
+// import { Role } from '../../roles/entities/role.entity';
 
 @Table
 export class User extends Model {
@@ -18,14 +18,14 @@ export class User extends Model {
     autoIncrement: true,
   })
   id: number;
-  @ForeignKey(() => Role)
-  @Column({
-    type: DataType.INTEGER,
-    // allowNull: false,
-    allowNull: true,
-    onDelete: 'NO ACTION',
-  })
-  roleId: number;
+  // @ForeignKey(() => Role)
+  // @Column({
+  //   type: DataType.INTEGER,
+  //   // allowNull: false,
+  //   allowNull: true,
+  //   onDelete: 'NO ACTION',
+  // })
+  // roleId: number;
 
   @Column({
     type: DataType.STRING,
@@ -171,8 +171,8 @@ export class User extends Model {
   // Define the hasMany association
   @HasMany(() => PnrBooking)
   pnrBooking: PnrBooking[];
-  @BelongsTo(() => Role)
-  role: Role;
+  // @BelongsTo(() => Role)
+  // role: Role;
 }
 
 export default User;

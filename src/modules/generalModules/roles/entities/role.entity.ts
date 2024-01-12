@@ -1,5 +1,11 @@
-import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
-import { User } from '../../users/entities/user.entity';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  // HasMany
+} from 'sequelize-typescript';
+// import { User } from '../../users/entities/user.entity';
 
 @Table
 export class Role extends Model {
@@ -43,8 +49,8 @@ export class Role extends Model {
     allowNull: false,
   })
   isActive: number;
-  @HasMany(() => User)
-  users: User[];
+  // @HasMany(() => User)
+  // users: User[];
 }
 
 // You can define associations here if needed

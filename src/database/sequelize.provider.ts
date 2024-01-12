@@ -3,7 +3,7 @@ import { Transaction, Op } from 'sequelize';
 import { databaseConfig } from 'src/database/config/default';
 
 import { User } from '../modules/generalModules/users/entities/user.entity';
-import { Role } from '../modules/generalModules/roles/entities/role.entity';
+// import { Role } from '../modules/generalModules/roles/entities/role.entity';
 import { City } from '../modules/generalModules/cities';
 // import { PnrUser } from '../modules/pnr/pnrUsers/entities/pnrUsers.entity';
 import { PnrBooking } from '../modules/pnr/pnrBooking/entities/pnrBooking.entity';
@@ -39,7 +39,7 @@ const sequelize = new Sequelize({
 
 sequelize.addModels([
   User,
-  Role,
+  // Role,
   City,
   // PnrUser,
   PnrBooking,
@@ -65,10 +65,10 @@ sequelize.addModels([
 
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  // .sync()
   .then(() => {
     console.log('Database synchronized...');
   })
