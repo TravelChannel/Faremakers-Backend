@@ -4,6 +4,10 @@ import {
   // Session,
   // Req,
 } from '@nestjs/common';
+import { AxiosResponse } from 'axios';
+import { UserLoginDto } from './dto/userLogin.dto';
+import { HttpService } from '@nestjs/axios';
+
 // import { Response } from 'express';
 
 // import { Request } from 'express'; // Import the Request object
@@ -20,6 +24,7 @@ import { databaseConfig } from 'src/database/config/default';
 import { ResponseService } from '../../common/utility/response/response.service';
 import {
   AUTHENTICATION_ERROR,
+  OTP_SENT_SUCCESS,
   LOGIN,
   REFRESH_TOKEN_SUCCESS,
   EXCEPTION,
@@ -41,6 +46,7 @@ export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly responseService: ResponseService,
+    private readonly httpService: HttpService,
   ) {}
 
   async login(
@@ -48,7 +54,11 @@ export class AuthService {
     // @Session() session: Record<string, any>,
   ): Promise<any> {
     try {
-      const user = await this.userService.findByEmail(loginDto.email);
+      const user = await this.userService.verifyOtp(
+        loginDto.countryCode,
+        loginDto.phoneNumber,
+        loginDto.otp,
+      );
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
@@ -65,19 +75,6 @@ export class AuthService {
         );
       }
 
-      const isPasswordValid = await bcrypt.compare(
-        loginDto.password + PASSWORD_SECRET,
-        user.password,
-      );
-      if (!isPasswordValid) {
-        return this.responseService.createResponse(
-          HttpStatus.UNAUTHORIZED,
-          null,
-          AUTHENTICATION_ERROR,
-        );
-      }
-
-      // session.user = user;
       const accessToken = generateAccessToken(user, 1);
       const refreshToken = generateRefreshToken(user, 1);
 
@@ -99,6 +96,116 @@ export class AuthService {
         EXCEPTION,
       );
     }
+  }
+
+  async requestOtp(
+    userLoginDto: UserLoginDto,
+    // @Session() session: Record<string, any>,
+  ): Promise<any> {
+    try {
+      const user = await this.userService.findByPhoneNumber(
+        userLoginDto.countryCode,
+        userLoginDto.phoneNumber,
+      );
+
+      if (!user) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
+      const isAuthorized = true;
+      if (!isAuthorized) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
+      const response = await this.generateAndSendOtp(
+        userLoginDto.countryCode,
+        userLoginDto.phoneNumber,
+      );
+      // return response.data; // Assuming the API response contains relevant data
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        response.data,
+        `${OTP_SENT_SUCCESS} on +${userLoginDto.countryCode}-${userLoginDto.phoneNumber}`,
+      );
+    } catch (error) {
+      // Handle any unexpected errors here
+      console.error(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
+  async generateAndSendOtp(
+    countryCode: string,
+    phoneNumber: string,
+  ): Promise<AxiosResponse> {
+    const otp = await this.generateOtp();
+    await this.storeOtpInDatabase(countryCode, phoneNumber, otp);
+    return this.sendOtpViaApi(countryCode, phoneNumber, otp);
+  }
+
+  private async storeOtpInDatabase(
+    countryCode: string,
+    phoneNumber: string,
+    otp: string,
+  ): Promise<void> {
+    const user = await this.userService.findByPhoneNumber(
+      countryCode,
+      phoneNumber,
+    );
+    const hashedOtp = await bcrypt.hash(otp + OTP_SECRET, 10); // Hash the password with a salt of 10 rounds
+    user.otp = hashedOtp;
+
+    await user.save(); // Save the changes
+  }
+
+  private async sendOtpViaApi(
+    countryCode: string,
+    phoneNumber: string,
+    otp: string,
+  ): Promise<AxiosResponse> {
+    // Implement your OTP sending logic here
+    // Use Axios or any other HTTP client library to make the API request
+    // Make sure to replace the following placeholders with your actual API details
+    console.log('Done 1');
+    const payload = {
+      messages: [
+        {
+          from: 'Faremaker',
+          destinations: [{ to: `${countryCode}${phoneNumber}` }],
+          text: `Your Pin: ${otp}`,
+        },
+      ],
+    }; // Sabre API endpoint
+    const url = 'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
+    const headers = {
+      headers: {
+        Authorization:
+          'App c094e9214ea4e99fa31b84ab6c5c7883-4bca245d-a8b5-4959-baa8-a19c08ec8117',
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+    const response = await this.httpService
+      .post(url, payload, headers)
+      .toPromise();
+    console.log('Done 2');
+
+    return response;
+  }
+  private async generateOtp(): Promise<string> {
+    // Implement your OTP generation logic here
+    // For example, use a library or generate a random 6-digit number
+
+    return Math.floor(100000 + Math.random() * 900000).toString();
   }
 
   async refreshAccessToken(refreshToken: string): Promise<any> {

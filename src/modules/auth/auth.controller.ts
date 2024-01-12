@@ -10,6 +10,7 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common';
+import { UserLoginDto } from './dto/userLogin.dto';
 
 import { ResponseService } from '../../common/utility/response/response.service';
 
@@ -71,7 +72,36 @@ export class AuthController {
   }
 
   // @UseGuards(AuthGuard, RolesGuard)
+  @Post('requestOtp')
+  // @UseGuards(LocalAuthGuard)
+  @SkipAuth() // Apply the decorator here to exclude this route
+  async requestOtp(
+    @Body() userLoginDto: UserLoginDto,
+    @Session() session: Record<string, any>,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const result = await this.authService.requestOtp(userLoginDto);
 
+      if (result.status === 'SUCCESS') {
+        res.cookie('user_token', result.payload.accessToken, {
+          // secure: true, // Set to true if serving over HTTPS
+          sameSite: 'strict', // Set to 'none' for cross-site requests
+          httpOnly: true, // Prevent JavaScript access to the cookie
+          maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
+        });
+        res.cookie('refresh_token', result.payload.refreshToken, {
+          // secure: true, // Set to true if serving over HTTPS
+          sameSite: 'strict', // Set to 'none' for cross-site requests
+          httpOnly: true, // Prevent JavaScript access to the cookie
+        });
+      }
+
+      return result;
+    } catch (error) {
+      throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
+    }
+  }
   @Post('refresh-token')
   @SkipAuth()
   async refreshAccessToken(

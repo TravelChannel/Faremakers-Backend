@@ -34,6 +34,7 @@ import { UserProfile } from './entities/userProfile.entity';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const PASSWORD_SECRET = dbConfig.PASSWORD_SECRET;
+const OTP_SECRET = dbConfig.OTP_SECRET;
 
 @Injectable()
 export class UsersService {
@@ -408,6 +409,28 @@ export class UsersService {
       null,
       'Role Removed!',
     );
+  }
+  async verifyOtp(
+    countryCode: string,
+    phoneNumber: string,
+    otp: string,
+  ): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { phoneNumber, countryCode },
+      });
+      if (user) {
+        const isOtpValid = await bcrypt.compare(otp + OTP_SECRET, user.otp);
+        if (!isOtpValid) {
+          return null;
+        }
+        return user;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
   }
   async findByPhoneNumber(
     countryCode: string,
