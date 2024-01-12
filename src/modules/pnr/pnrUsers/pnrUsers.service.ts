@@ -71,14 +71,14 @@ export class PnrUsersService {
           AUTHENTICATION_ERROR,
         );
       }
-      const accessToken = generateAccessTokenOtpUser(user, 0);
-      const refreshToken = generateRefreshTokenOtpUser(user, 0);
+      // const accessToken = generateAccessTokenOtpUser(user);
+      // const refreshToken = generateRefreshTokenOtpUser(user);
 
       return this.responseService.createResponse(
         HttpStatus.OK,
         {
-          accessToken,
-          refreshToken,
+          // accessToken,
+          // refreshToken,
           userData: user,
         },
         OTP_VALIDATED,

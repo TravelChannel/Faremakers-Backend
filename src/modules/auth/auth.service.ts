@@ -15,8 +15,8 @@ import { HttpService } from '@nestjs/axios';
 import { UsersService } from '../../modules/generalModules/users/users.service'; // Adjust the path based on your project structure
 import * as bcrypt from 'bcrypt';
 import {
-  generateAccessToken,
-  generateRefreshToken,
+  generateAccessTokenOtpUser,
+  generateRefreshTokenOtpUser,
   verifyToken,
 } from '../../common/utils/jwt.utils';
 import { databaseConfig } from 'src/database/config/default';
@@ -74,9 +74,8 @@ export class AuthService {
           AUTHENTICATION_ERROR,
         );
       }
-
-      const accessToken = generateAccessToken(user, 1);
-      const refreshToken = generateRefreshToken(user, 1);
+      const accessToken = generateAccessTokenOtpUser(user);
+      const refreshToken = generateRefreshTokenOtpUser(user);
 
       return this.responseService.createResponse(
         HttpStatus.OK,
@@ -229,8 +228,14 @@ export class AuthService {
         );
       }
 
-      const accessToken = generateAccessToken(user, decoded.isAdmin);
-      const refreshTokenNew = generateRefreshToken(user, decoded.isAdmin);
+      const accessToken = generateAccessTokenOtpUser(
+        user,
+        // decoded.isAdmin
+      );
+      const refreshTokenNew = generateRefreshTokenOtpUser(
+        user,
+        // decoded.isAdmin,
+      );
       return this.responseService.createResponse(
         HttpStatus.OK,
         { access: accessToken, refresh: refreshTokenNew, user: user },
