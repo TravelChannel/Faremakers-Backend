@@ -41,7 +41,7 @@ export class AuthController {
   }
 
   @Post('login')
-  @UseGuards(LocalAuthGuard)
+  // @UseGuards(LocalAuthGuard)
   @SkipAuth() // Apply the decorator here to exclude this route
   async login(
     @Body() loginDto: LoginDto,
@@ -71,7 +71,7 @@ export class AuthController {
     }
   }
 
-  // @UseGuards(AuthGuard, RolesGuard)
+  // @UseGuards(AuthGuard, RolesGuard)s
   @Post('requestOtp')
   // @UseGuards(LocalAuthGuard)
   @SkipAuth() // Apply the decorator here to exclude this route
