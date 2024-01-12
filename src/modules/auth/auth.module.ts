@@ -11,7 +11,8 @@ import { HttpModule } from '@nestjs/axios';
   imports: [
     UsersModule,
     HttpModule,
-    PassportModule.register({ defaultStrategy: 'local', session: true }),
+    PassportModule.register({ defaultStrategy: 'OTPStrategy', session: true }),
+    // PassportModule.register({ defaultStrategy: 'local', session: true }),
   ], // Make sure UsersModule is imported here
 
   controllers: [AuthController],
