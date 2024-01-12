@@ -26,6 +26,14 @@ export class User extends Model {
   //   onDelete: 'NO ACTION',
   // })
   // roleId: number;
+  @Column({
+    type: DataType.INTEGER,
+    // allowNull: false,
+    defaultValue: 0,
+    allowNull: false,
+    // onDelete: 'NO ACTION',
+  })
+  isAdmin: number;
 
   @Column({
     type: DataType.STRING,
