@@ -16,7 +16,6 @@ export class AuthMiddleware implements NestMiddleware {
     const token = req.headers.authorization?.split(' ')[1];
     if (token) {
       try {
-        console.log('*****');
         const decoded = verifyToken(token, JWT_SECRET); // Replace with your actual JWT secret
         if (decoded) {
           req['userDecoded'] = decoded;

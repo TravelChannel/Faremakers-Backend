@@ -114,7 +114,6 @@ export class UsersService {
 
   async findAll(req): Promise<User[]> {
     try {
-      console.log('params ', req.query);
       const whereOptionsMain: any = {};
       const whereOptionsCompanyId: any = {};
       const whereOptionsBranchId: any = {};
@@ -437,18 +436,12 @@ export class UsersService {
     phoneNumber: string,
   ): Promise<User | null> {
     try {
-      console.log('Here 2');
-
       let user = await this.userRepository.findOne({
         where: { phoneNumber, countryCode },
       });
       if (user) {
-        console.log('Here 3');
-
         return user;
       } else {
-        console.log('Here 4');
-
         user = await this.userRepository.create({
           phoneNumber,
           countryCode,

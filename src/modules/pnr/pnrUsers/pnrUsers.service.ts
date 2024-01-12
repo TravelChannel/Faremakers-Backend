@@ -144,18 +144,12 @@ export class PnrUsersService {
     phoneNumber: string,
   ): Promise<PnrUser | null> {
     try {
-      console.log('Here 2');
-
       let user = await this.pnrUserRepository.findOne({
         where: { phoneNumber, countryCode },
       });
       if (user) {
-        console.log('Here 3');
-
         return user;
       } else {
-        console.log('Here 4');
-
         user = await this.pnrUserRepository.create({
           phoneNumber,
           countryCode,
@@ -163,7 +157,6 @@ export class PnrUsersService {
       }
       return user;
     } catch (error) {
-      console.log('Error-', error.message);
       return null;
     }
   }
@@ -228,7 +221,6 @@ export class PnrUsersService {
     // Implement your OTP sending logic here
     // Use Axios or any other HTTP client library to make the API request
     // Make sure to replace the following placeholders with your actual API details
-    console.log('Done 1');
     const payload = {
       messages: [
         {
@@ -250,7 +242,6 @@ export class PnrUsersService {
     const response = await this.httpService
       .post(url, payload, headers)
       .toPromise();
-    console.log('Done 2');
 
     return response;
   }

@@ -58,7 +58,6 @@ export class UsersController {
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Body() createUserDto: CreateUserDto,
   ) {
-    console.log('Hello');
     return await this.usersService.create(isCurrentUserAdmin, createUserDto);
   }
   // @Post('createUserTemp')
@@ -66,7 +65,6 @@ export class UsersController {
   //   try {
   //     return await this.usersService.createTempRecent(data);
   //   } catch (error) {
-  //     console.log('eeeee', error);
   //   }
   // }
 

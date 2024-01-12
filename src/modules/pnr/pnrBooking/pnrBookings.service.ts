@@ -68,7 +68,6 @@ export class PnrBookingsService {
         { transaction: t },
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.log('****************5');
 
       if (pnrBookings.length > 0) {
         await Promise.all(
@@ -92,7 +91,6 @@ export class PnrBookingsService {
           }),
         );
       }
-      console.log('****************3');
 
       if (flightDetails) {
         const newflightDetails = await FlightDetails.create(
@@ -108,7 +106,6 @@ export class PnrBookingsService {
           },
           { transaction: t },
         );
-        console.log('****************1');
         if (
           flightDetails.extraBaggages &&
           flightDetails.extraBaggages.length > 0
@@ -135,7 +132,6 @@ export class PnrBookingsService {
             }),
           );
         }
-        console.log('****************2');
 
         if (flightDetails.baggageAllowance.length > 0) {
           await Promise.all(
@@ -153,7 +149,6 @@ export class PnrBookingsService {
             }),
           );
         }
-        console.log('****************33333');
 
         if (
           flightDetails.bookingFlight &&
@@ -175,7 +170,6 @@ export class PnrBookingsService {
             }),
           );
         }
-        console.log('****************444');
 
         if (flightDetails.groupDescription.length > 0) {
           await Promise.all(
@@ -193,7 +187,6 @@ export class PnrBookingsService {
             }),
           );
         }
-        console.log('****************5555');
 
         if (flightDetails.flightSegments.length > 0) {
           await Promise.all(
@@ -211,7 +204,6 @@ export class PnrBookingsService {
             }),
           );
         }
-        console.log('****************666');
 
         if (flightDetails.fare) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -303,7 +295,6 @@ export class PnrBookingsService {
                 },
                 { transaction: t },
               );
-              console.log('**********', newSchedualDetGet.id);
               await Promise.all(
                 schedualDetGet.map(async (schedualDetGetInner) => {
                   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -676,7 +667,6 @@ export class PnrBookingsService {
   }
   async findBy(req): Promise<any> {
     try {
-      console.log('req', req.query);
       const whereOptions: any = {};
       if (req.query.cnic) {
         whereOptions.cnic = req.query.cnic;

@@ -7,9 +7,7 @@ import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
 export class LocalAuthGuard extends NestAuthGuard('local') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      console.log('LocalAuthGuard');
       const result = (await super.canActivate(context)) as boolean;
-      console.log('result');
       if (!result) {
         return false;
       }

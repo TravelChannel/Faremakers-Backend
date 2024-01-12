@@ -7,9 +7,7 @@ import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
 export class OtpAuthGuard extends NestAuthGuard('OTPStrategy') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      console.log('OtpAuthGuard ');
       const result = (await super.canActivate(context)) as boolean;
-      console.log('result');
       if (!result) {
         return false;
       }
@@ -18,7 +16,6 @@ export class OtpAuthGuard extends NestAuthGuard('OTPStrategy') {
 
       return result;
     } catch (error) {
-      console.log('errorrrrr', error);
       return false;
     }
   }

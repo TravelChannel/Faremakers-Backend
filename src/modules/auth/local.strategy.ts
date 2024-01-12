@@ -8,8 +8,6 @@ import { AuthService } from './auth.service'; // Import your AuthService
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(private authService: AuthService) {
-    console.log('LocalStrategy0');
-
     super({
       usernameField: 'phoneNumber',
       passwordField: 'otp',
@@ -20,7 +18,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     //   async validate(username: string, password: string): Promise<any> {
     // Validate the user's credentials
     try {
-      console.log('LocalStrategy');
       const user = await this.authService.validateUserLocalOtp(
         req.body.countryCode,
         phoneNumber,
@@ -35,7 +32,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
       }
       return user;
     } catch (error) {
-      console.log('eeeeeee');
       return null;
     }
   }
