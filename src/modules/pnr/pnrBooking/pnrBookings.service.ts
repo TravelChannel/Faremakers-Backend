@@ -34,30 +34,35 @@ export class PnrBookingsService {
     private pnrBookingRepository: typeof PnrBooking,
     private readonly responseService: ResponseService,
   ) {}
-  async create(pnrBookingDto: PnrBookingDto): Promise<any> {
+  async create(
+    isCurrentUserAdmin: number,
+    currentUserId: number,
+    pnrBookingDto: PnrBookingDto,
+  ): Promise<any> {
     const t: Transaction = await sequelize.transaction();
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { pnrBookings, pnr, phoneNumber, countryCode, flightDetails } =
         pnrBookingDto;
-      let pnrUser = await User.findOne({
-        where: {
-          phoneNumber: phoneNumber,
-          countryCode,
-        },
-      });
-      if (!pnrUser) {
-        pnrUser = await User.create(
-          {
-            phoneNumber: phoneNumber,
-            countryCode,
-          },
-          { transaction: t },
-        );
-      }
+      // let newUser = await User.findOne({
+      //   where: {
+      //     phoneNumber: phoneNumber,
+      //     countryCode,
+      //   },
+      // });
+      // if (!newUser) {
+      //   newUser = await User.create(
+      //     {
+      //       phoneNumber: phoneNumber,
+      //       countryCode,
+      //     },
+      //     { transaction: t },
+      //   );
+      // }
 
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
-          pnrUserId: pnrUser.id,
+          userId: currentUserId,
           pnr: pnr,
         },
         { transaction: t },
@@ -393,6 +398,8 @@ export class PnrBookingsService {
     currentUserId: number,
   ): Promise<any> {
     try {
+      console.log('jjjjj', currentUserId, isCurrentUserAdmin);
+
       const whereOptions: any = {};
       if (req.query.isReqForCancellation) {
         whereOptions.isReqForCancellation = req.query.isReqForCancellation;
@@ -500,7 +507,6 @@ export class PnrBookingsService {
           // Handle errors here
           console.error(error);
         });
-      console.log('jjjjj', currentUserId, isCurrentUserAdmin);
 
       return this.responseService.createResponse(
         HttpStatus.OK,

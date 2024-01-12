@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
 
-import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
+// import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
@@ -44,16 +44,18 @@ import {
 export class PnrBookingsController {
   constructor(private readonly pnrBookingsService: PnrBookingsService) {}
   @Post()
-
-  // @SkipAuth()
   async create(
     @Body() pnrBookingDto: PnrBookingDto,
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+    @CurrentUserId() currentUserId: number,
   ) {
-    return await this.pnrBookingsService.create(pnrBookingDto);
+    return await this.pnrBookingsService.create(
+      currentUserId,
+      isCurrentUserAdmin,
+      pnrBookingDto,
+    );
   }
   @Get()
-  // @SkipAuth()
   async findAll(
     @Req() req: Request,
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
@@ -66,40 +68,33 @@ export class PnrBookingsController {
     );
   }
   @Get('findBy')
-  @SkipAuth()
   async findBy(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findBy(req);
   }
   @Get('findByPnr')
-  @SkipAuth()
   async findByPnr(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findByPnr(req);
   }
 
   @Get(':id')
-  @SkipAuth()
   async findOne(@Param('id') id: string): Promise<any> {
     return this.pnrBookingsService.findOne(id);
   }
 
   @Patch('reqForCancellation/:id')
-  @SkipAuth()
   reqForCancellation(@Param('id') id: string) {
     return this.pnrBookingsService.reqForCancellation(+id);
   }
   @Patch('reqForRefund/:id')
-  @SkipAuth()
   reqForRefund(@Param('id') id: string) {
     return this.pnrBookingsService.reqForRefund(+id);
   }
   @Patch('reqForReIssue/:id')
-  @SkipAuth()
   reqForReIssue(@Param('id') id: string) {
     return this.pnrBookingsService.reqForReIssue(+id);
   }
 
   @Delete(':id')
-  @SkipAuth()
   remove(@Param('id') id: string) {
     return this.pnrBookingsService.remove(+id);
   }

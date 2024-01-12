@@ -256,6 +256,7 @@ export class AuthService {
       const userDecoded = {
         id: user.id,
         email: user.email,
+        phoneNumber: user.phoneNumber,
         isAdmin: 1,
       };
       return userDecoded;

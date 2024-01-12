@@ -2,9 +2,9 @@ import { IsNotEmpty, ArrayNotEmpty, IsOptional } from 'class-validator';
 import { PnrBookingArrayDto } from './PnrBookingArray.dto';
 
 export class PnrBookingDto {
-  @IsNotEmpty({ message: 'phoneNumber is required.' })
+  @IsOptional()
   phoneNumber: string;
-  @IsNotEmpty({ message: 'countryCode is required.' })
+  @IsOptional()
   countryCode: string;
   @IsNotEmpty({ message: 'pnr is required.' })
   pnr: number;
