@@ -18,7 +18,6 @@ export class LocalAuthGuard extends NestAuthGuard('local') {
 
       return result;
     } catch (error) {
-      console.log('errorrrrr', error);
       return false;
     }
   }
