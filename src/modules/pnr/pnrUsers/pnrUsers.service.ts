@@ -170,7 +170,7 @@ export class PnrUsersService {
   async verifyOtp(
     countryCode: string,
     phoneNumber: string,
-    otp,
+    otp: string,
   ): Promise<PnrUser | null> {
     try {
       const user = await this.pnrUserRepository.findOne({

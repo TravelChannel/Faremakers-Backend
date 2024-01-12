@@ -4,10 +4,10 @@ import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard as NestAuthGuard } from '@nestjs/passport';
 
 @Injectable()
-export class LocalAuthGuard extends NestAuthGuard('local') {
+export class OtpAuthGuard extends NestAuthGuard('OTPStrategy') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
-      console.log('LocalAuthGuard');
+      console.log('OtpAuthGuard ');
       const result = (await super.canActivate(context)) as boolean;
       console.log('result');
       if (!result) {
