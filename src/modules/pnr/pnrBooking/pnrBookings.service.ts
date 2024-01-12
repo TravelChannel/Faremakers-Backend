@@ -398,9 +398,10 @@ export class PnrBookingsService {
     currentUserId: number,
   ): Promise<any> {
     try {
-      console.log('jjjjj', currentUserId, isCurrentUserAdmin);
-
       const whereOptions: any = {};
+      if (currentUserId) {
+        whereOptions.userId = currentUserId;
+      }
       if (req.query.isReqForCancellation) {
         whereOptions.isReqForCancellation = req.query.isReqForCancellation;
       }
