@@ -6,7 +6,7 @@ import { SAVED_SUCCESS, GET_SUCCESS } from '../../../shared/messages.constants';
 import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
-import { PnrUser } from '../pnrUsers/entities/pnrUsers.entity';
+import { User } from '../..//generalModules/users/entities/user.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { FlightDetails } from '../flightDetails';
@@ -39,14 +39,14 @@ export class PnrBookingsService {
     try {
       const { pnrBookings, pnr, phoneNumber, countryCode, flightDetails } =
         pnrBookingDto;
-      let pnrUser = await PnrUser.findOne({
+      let pnrUser = await User.findOne({
         where: {
           phoneNumber: phoneNumber,
           countryCode,
         },
       });
       if (!pnrUser) {
-        pnrUser = await PnrUser.create(
+        pnrUser = await User.create(
           {
             phoneNumber: phoneNumber,
             countryCode,
@@ -407,7 +407,7 @@ export class PnrBookingsService {
         where: whereOptions,
         include: [
           {
-            model: PnrUser,
+            model: User,
           },
           {
             model: PnrDetail,
@@ -522,7 +522,7 @@ export class PnrBookingsService {
       const pnrBookings = await PnrBooking.findByPk(id, {
         include: [
           {
-            model: PnrUser,
+            model: User,
           },
           {
             model: PnrDetail,
@@ -636,7 +636,7 @@ export class PnrBookingsService {
 
         include: [
           {
-            model: PnrUser,
+            model: User,
           },
           {
             model: PnrDetail,
@@ -690,7 +690,7 @@ export class PnrBookingsService {
       const pnrBookings = await PnrBooking.findOne({
         include: [
           {
-            model: PnrUser,
+            model: User,
           },
           {
             model: PnrDetail,
