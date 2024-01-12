@@ -27,13 +27,13 @@ export class User extends Model {
   // })
   // roleId: number;
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BOOLEAN,
     // allowNull: false,
-    defaultValue: 0,
+    defaultValue: false,
     allowNull: false,
     // onDelete: 'NO ACTION',
   })
-  isAdmin: number;
+  isAdmin: boolean;
 
   @Column({
     type: DataType.STRING,
