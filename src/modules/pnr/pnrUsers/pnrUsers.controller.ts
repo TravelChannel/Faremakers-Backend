@@ -1,6 +1,6 @@
 import {
   Controller,
-  // UseGuards,
+  UseGuards,
   HttpStatus,
   HttpException,
   Res,
@@ -19,7 +19,7 @@ import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 import { PnrUsersService } from './pnrUsers.service';
 // import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
-// import { LocalAuthGuard } from '../../../common/guards/local-auth.guard'; // Adjust the import path
+import { LocalAuthGuard } from '../../../common/guards/local-auth.guard'; // Adjust the import path
 
 @Controller('pnrUsers')
 // @UseGuards(RolesGuard)
@@ -28,7 +28,7 @@ export class PnrUsersController {
   constructor(private readonly pnrUsersService: PnrUsersService) {}
 
   @Post('userLogin')
-  // @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @SkipAuth() // Apply the decorator here to exclude this route
   async userLogin(
     @Body() userLoginOtpDto: UserLoginOtpDto,

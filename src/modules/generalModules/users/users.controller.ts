@@ -28,6 +28,7 @@ import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.dec
 // import { Express } from 'express';
 // import { SessionData } from 'express-session';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { AuthGuard } from '../../../common/guards/auth.guard';
 
@@ -46,16 +47,18 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
 @Controller('users')
-@UseGuards(RolesGuard)
-@Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
+// @UseGuards(RolesGuard)
+// @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post('createUser')
+  // @SkipAuth() // Apply the decorator here to exclude this route
   async createUser(
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
     @Body() createUserDto: CreateUserDto,
   ) {
+    console.log('Hello');
     return await this.usersService.create(isCurrentUserAdmin, createUserDto);
   }
   // @Post('createUserTemp')
