@@ -83,17 +83,19 @@ export class UsersController {
     return this.usersService.findOne(id);
   }
 
-  @Post(':id')
+  // @Patch(':id')
+  @Patch()
   @UseInterceptors(
     FileInterceptor('imgFile', {
       storage: createFileStorage('./uploads/users/profiles'),
     }),
   )
   update(
-    @Param('id') id: string,
+    // @Param('id') id: string,
     @CurrentUserId() currentUserId: number,
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
-    @Body() payload: { data: string },
+    // @Body() payload: { data: any },
+    @Body() payload: UpdateUserDto,
     // @UploadedFile(
     //   new ParseFilePipe({
     //     validators: [
@@ -103,30 +105,33 @@ export class UsersController {
     //     fileIsRequired: false,
     //   }),
     // )
-    @UploadedFile(
-      new ParseFilePipeBuilder()
-        .addFileTypeValidator({
-          fileType: 'jpeg|png',
-        })
 
-        .addMaxSizeValidator({
-          maxSize: 5000000,
-          // errorMessage: 'File size should not exceed 1MB',
-        })
-        .build({
-          fileIsRequired: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        }),
-    )
-    imgFile?: Express.Multer.File | null | undefined,
+    // Working code is below
+    // @UploadedFile(
+    //   new ParseFilePipeBuilder()
+    //     .addFileTypeValidator({
+    //       fileType: 'jpeg|png',
+    //     })
+
+    //     .addMaxSizeValidator({
+    //       maxSize: 5000000,
+    //       // errorMessage: 'File size should not exceed 1MB',
+    //     })
+    //     .build({
+    //       fileIsRequired: false,
+    //       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+    //     }),
+    // )
+    // imgFile?: Express.Multer.File | null | undefined,
   ) {
-    const updateUserDto: UpdateUserDto = JSON.parse(payload.data);
+    // const updateUserDto: UpdateUserDto = JSON.parse(payload.data);
+    const updateUserDto: UpdateUserDto = payload;
     return this.usersService.update(
-      isCurrentUserAdmin,
       currentUserId,
-      +id,
+      isCurrentUserAdmin,
+      // +id,
       updateUserDto,
-      imgFile,
+      // imgFile,
     );
   }
   @Patch('toggleUserStatusById/:id')

@@ -209,18 +209,17 @@ export class UsersService {
   }
 
   async update(
-    isCurrentUserAdmin: number,
     currentUserId: number,
-    id: number,
+    isCurrentUserAdmin: number,
+    // id: number,
 
     updateUserDto: UpdateUserDto,
-    imgFile: Express.Multer.File,
+    // imgFile: Express.Multer.File,
   ): Promise<any> {
     try {
       const whereOptions: any = {};
 
-      whereOptions.id = id;
-
+      whereOptions.id = currentUserId;
       const user = await this.userRepository.findOne({
         where: whereOptions,
       });
@@ -232,20 +231,25 @@ export class UsersService {
         );
       }
 
-      user.email = updateUserDto.email || user.email;
-      user.lastName = updateUserDto.lastName || user.lastName;
-      user.firstName = updateUserDto.firstName || user.firstName;
-      user.phoneNumber = updateUserDto.phoneNumber || user.phoneNumber;
       user.username = updateUserDto.username || user.username;
-      if (imgFile) {
-        const imagePath =
-          process.env.BASE_URL +
-          ':' +
-          process.env.PORT +
-          '/uploads/users/profiles/' +
-          imgFile.filename;
-        user.imgSrc = imagePath; // Store the file path in the user table
-      }
+      user.email = updateUserDto.email || user.email;
+      user.dateOfBirth = updateUserDto.dateOfBirth || user.dateOfBirth;
+      user.passportExpiryDate =
+        updateUserDto.passportExpiryDate || user.passportExpiryDate;
+      user.firstName = updateUserDto.firstName || user.firstName;
+      user.lastName = updateUserDto.lastName || user.lastName;
+      user.gender = updateUserDto.gender || user.gender;
+      user.cnic = updateUserDto.cnic || user.cnic;
+      user.passportNo = updateUserDto.passportNo || user.passportNo;
+      // if (imgFile) {
+      //   const imagePath =
+      //     process.env.BASE_URL +
+      //     ':' +
+      //     process.env.PORT +
+      //     '/uploads/users/profiles/' +
+      //     imgFile.filename;
+      //   user.imgSrc = imagePath; // Store the file path in the user table
+      // }
       await user.save(); // Save the changes
 
       return this.responseService.createResponse(
