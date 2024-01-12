@@ -255,7 +255,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        isAdmin: 1,
+        isAdmin: user.isAdmin,
       };
       return userDecoded;
     }

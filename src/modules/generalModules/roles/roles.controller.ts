@@ -13,17 +13,13 @@ import {
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
-import {
-  SUPERADMIN_SUBJECT,
-  SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT,
-} from 'src/common/aclSubjects';
+// import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
+import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
 @Controller('roles')
 @UseGuards(RolesGuard)
-@Roles(SUPERADMIN_SUBJECT)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 

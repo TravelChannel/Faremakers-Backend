@@ -47,8 +47,6 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
 @Controller('users')
-// @UseGuards(RolesGuard)
-// @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -77,7 +75,6 @@ export class UsersController {
   }
 
   @Get('me')
-  @Roles(PUBLIC_SUBJECT)
   async getCurrentUser(@CurrentUserId() currentUserId: string): Promise<User> {
     return this.usersService.findMe(currentUserId);
   }

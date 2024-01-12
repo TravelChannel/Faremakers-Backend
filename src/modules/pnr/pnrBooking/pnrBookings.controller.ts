@@ -39,8 +39,6 @@ import {
 } from 'src/common/aclSubjects';
 
 @Controller('pnrBooking')
-// @UseGuards(RolesGuard)
-// @Roles(ACCOUNTS_SUBJECT)
 export class PnrBookingsController {
   constructor(private readonly pnrBookingsService: PnrBookingsService) {}
   @Post()
