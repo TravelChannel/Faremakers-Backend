@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
 @Table
-export class CommissionCategories extends Model {
+export class CommissionPercentage extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -9,17 +9,13 @@ export class CommissionCategories extends Model {
   })
   id: number;
 
-  @Column
-  name: string;
-  @Column
-  description: string;
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.DOUBLE,
     allowNull: false,
   })
-  precedence: number;
+  percentage: number;
 
   // End
 }
 
-export default CommissionCategories;
+export default CommissionPercentage;
