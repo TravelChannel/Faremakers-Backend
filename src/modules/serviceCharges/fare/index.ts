@@ -1,1 +1,1 @@
-export * from './fare.entity';
+export * from './commissionCategories.entity';
