@@ -18,7 +18,7 @@ export class Sector extends Model {
     type: DataType.STRING,
     allowNull: false,
   })
-  description: code;
+  code: string;
 
   // End
 }
