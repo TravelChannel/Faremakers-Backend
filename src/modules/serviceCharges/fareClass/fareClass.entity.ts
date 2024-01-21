@@ -1,7 +1,7 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
 
 @Table
-export class Sector extends Model {
+export class FareClass extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -23,4 +23,4 @@ export class Sector extends Model {
   // End
 }
 
-export default Sector;
+export default FareClass;

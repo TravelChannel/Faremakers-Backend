@@ -1,1 +1,1 @@
-export * from './sector.entity';
+export * from './fareClass.entity';
