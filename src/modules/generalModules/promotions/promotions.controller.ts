@@ -11,8 +11,8 @@ import {
   // HttpException,
 } from '@nestjs/common';
 import { PromotionsService } from './promotions.service';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreatePromotionDto } from './dto/create-promotion.dto';
+import { UpdatePromotionDto } from './dto/update-promotion.dto';
 // import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
 import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -24,8 +24,8 @@ export class PromotionsController {
   constructor(private readonly promotionsService: PromotionsService) {}
 
   @Post()
-  async create(@Body() createRoleDto: CreateRoleDto) {
-    return await this.promotionsService.create(createRoleDto);
+  async create(@Body() createPromotionDto: CreatePromotionDto) {
+    return await this.promotionsService.create(createPromotionDto);
   }
 
   @Get('dropdown')
@@ -45,8 +45,11 @@ export class PromotionsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.promotionsService.update(+id, updateRoleDto);
+  update(
+    @Param('id') id: string,
+    @Body() updatePromotionDto: UpdatePromotionDto,
+  ) {
+    return this.promotionsService.update(+id, updatePromotionDto);
   }
 
   @Delete(':id')

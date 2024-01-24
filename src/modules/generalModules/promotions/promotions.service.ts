@@ -1,6 +1,6 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
-import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdateRoleDto } from './dto/update-role.dto';
+import { CreatePromotionDto } from './dto/create-promotion.dto';
+import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
 import { Promotion } from './entities/promotion.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
@@ -15,11 +15,11 @@ export class PromotionsService {
     private readonly responseService: ResponseService,
   ) {}
 
-  async create(createRoleDto: CreateRoleDto) {
+  async create(createPromotionDto: CreatePromotionDto) {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const { ...rest } = createRoleDto;
+      const { ...rest } = createPromotionDto;
 
       const newRole = await this.promotionsRepository.create(
         { name: rest.name, description: rest.description },
@@ -45,11 +45,11 @@ export class PromotionsService {
 
   async findAll(): Promise<Promotion[]> {
     try {
-      const role = await this.promotionsRepository.findAll();
+      const promotion = await this.promotionsRepository.findAll();
       return this.responseService.createResponse(
         HttpStatus.OK,
-        role,
-        'Roles Fetched',
+        promotion,
+        'promotion Fetched',
       );
     } catch (error) {
       // await t.rollback();
@@ -63,11 +63,11 @@ export class PromotionsService {
 
   async findOne(id: number) {
     try {
-      const role = await this.promotionsRepository.findByPk(id, {});
+      const promotion = await this.promotionsRepository.findByPk(id, {});
       return this.responseService.createResponse(
         HttpStatus.OK,
-        { ...role.toJSON() },
-        'role retrieved successfully',
+        { ...promotion.toJSON() },
+        'promotion retrieved successfully',
       );
     } catch (error) {
       return this.responseService.createResponse(
@@ -78,7 +78,7 @@ export class PromotionsService {
     }
   }
 
-  async update(id: number, updateRoleDto: UpdateRoleDto) {
+  async update(id: number, updateRoleDto: UpdatePromotionDto) {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
@@ -102,16 +102,16 @@ export class PromotionsService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const role = await this.promotionsRepository.findByPk(id);
-      if (!role) {
+      const promotion = await this.promotionsRepository.findByPk(id);
+      if (!promotion) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
           null,
-          'role not found',
+          'promotion not found',
         );
       }
 
-      await role.destroy({ transaction: t });
+      await promotion.destroy({ transaction: t });
       await t.commit();
 
       return this.responseService.createResponse(
