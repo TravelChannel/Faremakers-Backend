@@ -22,7 +22,7 @@ export class PromotionsService {
       const { ...rest } = createPromotionDto;
 
       const newRole = await this.promotionsRepository.create(
-        { name: rest.name, description: rest.description },
+        { title: rest.title, description: rest.description },
         { transaction: t },
       );
 
@@ -132,7 +132,7 @@ export class PromotionsService {
   async getDropdown() {
     try {
       const dropdownsArray = await this.promotionsRepository.findAll({
-        attributes: ['id', 'name'],
+        attributes: ['id', 'title'],
         // include: [Right],
       });
       return this.responseService.createResponse(

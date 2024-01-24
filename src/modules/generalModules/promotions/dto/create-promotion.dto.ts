@@ -2,7 +2,7 @@ import {
   IsNotEmpty,
   IsString,
   Length,
-  ArrayMinSize,
+  // ArrayMinSize,
   // ArrayNotEmpty,
   // ValidateNested,
 } from 'class-validator';
@@ -10,10 +10,10 @@ import {
 
 // import { Rights } from './rights.dto';
 export class CreatePromotionDto {
-  @IsNotEmpty({ message: 'name is required.' })
-  @IsString({ message: 'name must be a string.' })
-  @Length(3, 50, { message: 'name must be between 3 and 25 characters.' })
-  name: string;
+  @IsNotEmpty({ message: 'title is required.' })
+  @IsString({ message: 'title must be a string.' })
+  @Length(3, 50, { message: 'title must be between 3 and 25 characters.' })
+  title: string;
 
   @IsNotEmpty({ message: 'description is required.' })
   @IsString({ message: 'description must be a string.' })
@@ -25,7 +25,4 @@ export class CreatePromotionDto {
   // @ValidateNested({ each: true }) // Validate each item in the array
   // @Type(() => Rights) // Specify the class type for validation
   // rights: Rights[];
-  @IsNotEmpty({ message: 'Right is required.' })
-  @ArrayMinSize(1, { message: 'At least one right is required.' })
-  rights: number[];
 }
