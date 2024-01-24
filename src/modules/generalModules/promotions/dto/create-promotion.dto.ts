@@ -9,7 +9,7 @@ import {
 // import { Type } from 'class-transformer'; // You need to import Type from class-transformer
 
 // import { Rights } from './rights.dto';
-export class CreateRoleDto {
+export class CreatePromotionDto {
   @IsNotEmpty({ message: 'name is required.' })
   @IsString({ message: 'name must be a string.' })
   @Length(3, 50, { message: 'name must be between 3 and 25 characters.' })
