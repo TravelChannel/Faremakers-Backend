@@ -2,7 +2,7 @@ import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
-import { Role } from './entities/role.entity';
+import { Promotion } from './entities/promotion.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
@@ -11,7 +11,7 @@ import { EXCEPTION } from '../../../shared/messages.constants';
 export class PromotionsService {
   constructor(
     @Inject(PROMOTIONS_REPOSITORY)
-    private promotionsRepository: typeof Role,
+    private promotionsRepository: typeof Promotion,
     private readonly responseService: ResponseService,
   ) {}
 
@@ -31,7 +31,7 @@ export class PromotionsService {
       return this.responseService.createResponse(
         HttpStatus.OK,
         newRole,
-        'Role Added',
+        'Promotion Added',
       );
     } catch (error) {
       await t.rollback();
@@ -43,7 +43,7 @@ export class PromotionsService {
     }
   }
 
-  async findAll(): Promise<Role[]> {
+  async findAll(): Promise<Promotion[]> {
     try {
       const role = await this.promotionsRepository.findAll();
       return this.responseService.createResponse(
@@ -86,7 +86,7 @@ export class PromotionsService {
       return this.responseService.createResponse(
         HttpStatus.OK,
         null,
-        'Role updated successfully',
+        'Promotion updated successfully',
       );
     } catch (error) {
       await t.rollback();

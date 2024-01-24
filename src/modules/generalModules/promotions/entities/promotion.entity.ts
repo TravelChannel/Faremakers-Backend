@@ -8,7 +8,7 @@ import {
 // import { User } from '../../users/entities/user.entity';
 
 @Table
-export class Role extends Model {
+export class Promotion extends Model {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -18,26 +18,9 @@ export class Role extends Model {
 
   @Column({
     type: DataType.STRING,
-    allowNull: false,
-    unique: {
-      name: 'unique_role_name',
-      msg: 'Role name must be unique.',
-    },
-    validate: {
-      notNull: {
-        msg: 'Name is required.',
-      },
-      notEmpty: {
-        msg: 'Name cannot be empty.',
-      },
-      len: {
-        args: [3, 50],
-        msg: 'Name must be between 3 and 50 characters.',
-      },
-    },
+    allowNull: true,
   })
-  name: string;
-
+  title: string;
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -49,10 +32,8 @@ export class Role extends Model {
     allowNull: false,
   })
   isActive: number;
-  // @HasMany(() => User)
-  // users: User[];
 }
 
 // You can define associations here if needed
 
-export default Role;
+export default Promotion;

@@ -1,9 +1,9 @@
-import { Role } from './entities/role.entity';
+import { Promotion } from './entities/promotion.entity';
 import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
 
-export const promotionsProvider = [
+export const promotionsProviders = [
   {
     provide: PROMOTIONS_REPOSITORY,
-    useValue: Role,
+    useValue: Promotion,
   },
 ];

@@ -25,6 +25,7 @@ import { Carrier } from '../modules/pnr/carrier';
 import { Equipment } from '../modules/pnr/equipment';
 import { CurrencyConversion } from '../modules/pnr/currencyConversion';
 import { InnerSchedualDetGet } from '../modules/pnr/innerSchedualDetGet';
+import { Promotion } from '../modules/generalModules/promotions/entities/promotion.entity';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -61,14 +62,15 @@ sequelize.addModels([
   Equipment,
   CurrencyConversion,
   InnerSchedualDetGet,
+  Promotion,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  // .sync()
   .then(() => {
     console.log('Database synchronized...');
   })

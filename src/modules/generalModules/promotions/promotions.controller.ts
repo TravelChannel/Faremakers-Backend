@@ -10,7 +10,7 @@ import {
   // HttpStatus,
   // HttpException,
 } from '@nestjs/common';
-import { RolesService } from './roles.service';
+import { PromotionsService } from './promotions.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 // import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
@@ -18,39 +18,39 @@ import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
-@Controller('roles')
+@Controller('promotions')
 @UseGuards(RolesGuard)
-export class RolesController {
-  constructor(private readonly rolesService: RolesService) {}
+export class PromotionsController {
+  constructor(private readonly promotionsService: PromotionsService) {}
 
   @Post()
   async create(@Body() createRoleDto: CreateRoleDto) {
-    return await this.rolesService.create(createRoleDto);
+    return await this.promotionsService.create(createRoleDto);
   }
 
   @Get('dropdown')
   @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {
-    return this.rolesService.getDropdown();
+    return this.promotionsService.getDropdown();
   }
 
   @Get()
   findAll() {
-    return this.rolesService.findAll();
+    return this.promotionsService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+    return this.promotionsService.findOne(+id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
+    return this.promotionsService.update(+id, updateRoleDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
+    return this.promotionsService.remove(+id);
   }
 }
