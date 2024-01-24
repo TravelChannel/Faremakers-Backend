@@ -30,6 +30,13 @@ import { Carrier } from '../carrier';
 import { Departure } from '../departure';
 import { Arrival } from '../arrival';
 import { Equipment } from '../equipment';
+import { PnrServiceCharges } from '../../serviceCharges/pnrServiceCharges';
+import { CommissionPercentage } from '../../serviceCharges/commissionPercentage';
+import { Destination } from '../../serviceCharges/destination';
+import { Sector } from '../../serviceCharges/sector';
+import { FareClass } from '../../serviceCharges/fareClass';
+import { Airline } from '../../serviceCharges/airline';
+import { CommissionCategories } from '../../serviceCharges/commissionCategories';
 
 @Injectable()
 export class PnrBookingsService {
@@ -376,14 +383,73 @@ export class PnrBookingsService {
 
       if (commissionCategory) {
         let pnrServiceChargesPercentage = 0;
-        if (commissionCategory.id === 1) {
-          commissionPercentage = await CommissionPercentage.findOne({
-            where: { airlineId },
-          });
+        const pnrServiceChargesCode = 'unknownCode';
+        switch (commissionCategory.id) {
+          case 1:
+            const airline = await Airline.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
 
-          if (commissionPercentage) {
-            pnrServiceChargesPercentage = commissionPercentage.percentage;
-          }
+            if (airline) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: { airlineId: airline.id },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            break;
+
+          case 2:
+            const fareClass = await FareClass.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (fareClass) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: { fareClassId: fareClass.id },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            break;
+          case 3:
+            const sector = await Sector.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (sector) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: { sectorId: sector.id },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            break;
+
+          case 4:
+            const destination = await Destination.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (destination) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: { destinationId: destination.id },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            break;
+          default:
+            pnrServiceChargesPercentage = 0;
+            break;
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -392,7 +458,7 @@ export class PnrBookingsService {
             pnrBookingId: newPnrBookingRepository.id,
             commissionCategoryId: commissionCategory.id,
             percentage: pnrServiceChargesPercentage,
-            code: code,
+            code: pnrServiceChargesCode,
           },
           { transaction: t },
         );
