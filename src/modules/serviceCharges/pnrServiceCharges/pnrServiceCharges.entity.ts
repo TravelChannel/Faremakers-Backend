@@ -8,6 +8,7 @@ import {
 } from 'sequelize-typescript';
 
 import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { CommissionCategories } from '../../serviceCharges/commissionCategories';
 
 @Table
 export class PnrServiceCharges extends Model {
@@ -25,10 +26,18 @@ export class PnrServiceCharges extends Model {
     onDelete: 'NO ACTION',
   })
   pnrBookingId: number;
-  @Column
-  name: string;
-  @Column
-  description: string;
+  @ForeignKey(() => CommissionCategories)
+  @Column({
+    type: DataType.BIGINT,
+    allowNull: false,
+    onDelete: 'NO ACTION',
+  })
+  commissionCategoryId: number;
+  @Column({
+    type: DataType.DOUBLE,
+    allowNull: false,
+  })
+  percentage: number;
 
   @Column({
     type: DataType.STRING,
@@ -39,6 +48,8 @@ export class PnrServiceCharges extends Model {
   // End
   @BelongsTo(() => PnrBooking)
   pnrBooking: PnrBooking;
+  @BelongsTo(() => CommissionCategories)
+  commissionCategory: CommissionCategories;
 }
 
 export default PnrServiceCharges;
