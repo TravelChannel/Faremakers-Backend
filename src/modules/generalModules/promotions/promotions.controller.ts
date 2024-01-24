@@ -14,8 +14,8 @@ import { PromotionsService } from './promotions.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 // import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
-import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
-import { Roles } from '../../../common/decorators/roles.decorator';
+// import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
+// import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
 @Controller('promotions')
@@ -29,7 +29,7 @@ export class PromotionsController {
   }
 
   @Get('dropdown')
-  @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
+  // @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {
     return this.promotionsService.getDropdown();
   }

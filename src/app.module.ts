@@ -21,6 +21,7 @@ import { DatabaseModule } from './database/database.module';
 import { RolesModule } from './modules/generalModules/roles/roles.module';
 import { PnrBookingsModule } from './modules/pnr/pnrBooking/pnrBookings.module';
 import { PnrUsersModule } from './modules/pnr/pnrUsers/pnrUsers.module';
+import { PromotionsModule } from './modules/generalModules/promotions/promotions.module';
 import { databaseConfig } from 'src/database/config/default';
 import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
 import { ResponseModule } from './common/utility/response/response.module';
@@ -41,6 +42,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     AuthModule,
     PnrBookingsModule,
     HttpModule,
+    PromotionsModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',
