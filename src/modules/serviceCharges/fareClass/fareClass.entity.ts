@@ -17,6 +17,10 @@ export class FareClass extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    unique: {
+      name: 'unique_fareClass_code',
+      msg: 'code must be unique.',
+    },
   })
   code: string;
 

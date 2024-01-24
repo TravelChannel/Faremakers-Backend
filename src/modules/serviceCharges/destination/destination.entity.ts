@@ -17,6 +17,10 @@ export class Destination extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    unique: {
+      name: 'unique_destination_code',
+      msg: 'code must be unique.',
+    },
   })
   code: string;
 

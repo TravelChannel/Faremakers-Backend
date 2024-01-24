@@ -370,6 +370,33 @@ export class PnrBookingsService {
           );
         }
       }
+      const commissionCategory = await CommissionCategories.findOne({
+        order: [['precedence', 'ASC']],
+      });
+
+      if (commissionCategory) {
+        let pnrServiceChargesPercentage = 0;
+        if (commissionCategory.id === 1) {
+          commissionPercentage = await CommissionPercentage.findOne({
+            where: { airlineId },
+          });
+
+          if (commissionPercentage) {
+            pnrServiceChargesPercentage = commissionPercentage.percentage;
+          }
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const newPnrServiceCharges = await PnrServiceCharges.create(
+          {
+            pnrBookingId: newPnrBookingRepository.id,
+            commissionCategoryId: commissionCategory.id,
+            percentage: pnrServiceChargesPercentage,
+            code: code,
+          },
+          { transaction: t },
+        );
+      }
 
       await t.commit();
       return this.responseService.createResponse(

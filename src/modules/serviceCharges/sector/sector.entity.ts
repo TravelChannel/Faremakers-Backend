@@ -17,6 +17,10 @@ export class Sector extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    unique: {
+      name: 'unique_Sector_code',
+      msg: 'code must be unique.',
+    },
   })
   code: string;
 
