@@ -13,13 +13,14 @@ import {
 import { PromotionsService } from './promotions.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
-// import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
-// import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
-// import { Roles } from '../../../common/decorators/roles.decorator';
+import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
+
 import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('promotions')
 @UseGuards(RolesGuard)
+@Roles(ADMIN_SUBJECT)
 export class PromotionsController {
   constructor(private readonly promotionsService: PromotionsService) {}
 
