@@ -4,6 +4,7 @@ import {
   Model,
   DataType,
   ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 
 import { Airline } from '../airline/index';
@@ -56,6 +57,15 @@ export class CommissionPercentage extends Model {
   sectorId: number;
 
   // End
+
+  @BelongsTo(() => Airline)
+  airline: Airline;
+  @BelongsTo(() => FareClass)
+  fareClass: FareClass;
+  @BelongsTo(() => Destination)
+  destination: Destination;
+  @BelongsTo(() => Sector)
+  sector: Sector;
 }
 
 export default CommissionPercentage;

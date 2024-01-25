@@ -12,6 +12,8 @@ import {
 import { User } from '../../../generalModules/users/entities/user.entity';
 import { PnrDetail } from '../../PnrDetails';
 import { FlightDetails } from '../../flightDetails';
+import { PnrServiceCharges } from '../../../serviceCharges/pnrServiceCharges';
+import { PnrPayment } from '../../../paymentModules/paymob';
 
 @Table
 export class PnrBooking extends Model {
@@ -77,6 +79,10 @@ export class PnrBooking extends Model {
   pnrDetail: PnrDetail[];
   @HasOne(() => FlightDetails)
   flightDetails: FlightDetails;
+  @HasOne(() => PnrServiceCharges)
+  pnrServiceCharges: PnrServiceCharges;
+  @HasMany(() => PnrPayment)
+  pnrPayment: PnrPayment;
 }
 
 export default PnrBooking;

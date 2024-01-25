@@ -28,6 +28,12 @@ import { InnerSchedualDetGet } from '../modules/pnr/innerSchedualDetGet';
 import { Promotion } from '../modules/generalModules/promotions/entities/promotion.entity';
 import { CommissionCategories } from '../modules/serviceCharges/commissionCategories';
 import { PnrPayment } from '../modules/paymentModules/paymob';
+import { PnrServiceCharges } from '../modules/serviceCharges/pnrServiceCharges';
+import { CommissionPercentage } from '../modules/serviceCharges/commissionPercentage';
+import { Airline } from '../modules/serviceCharges/airline';
+import { Sector } from '../modules/serviceCharges/sector';
+import { Destination } from '../modules/serviceCharges/destination';
+import { FareClass } from '../modules/serviceCharges/fareClass';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -64,9 +70,15 @@ sequelize.addModels([
   Equipment,
   CurrencyConversion,
   InnerSchedualDetGet,
+  PnrServiceCharges,
   Promotion,
   CommissionCategories,
   PnrPayment,
+  CommissionPercentage,
+  Airline,
+  FareClass,
+  Destination,
+  Sector,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
