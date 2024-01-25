@@ -38,7 +38,7 @@ import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
+import { ADMIN_SUBJECT, ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
@@ -71,7 +71,7 @@ export class UsersController {
   ): Promise<User[]> {
     return this.usersService.findAll(req);
   }
-
+  @Roles(ADMIN_AND_USER_SUBJECT)
   @Get('me')
   async getCurrentUser(@CurrentUserId() currentUserId: string): Promise<User> {
     return this.usersService.findMe(currentUserId);

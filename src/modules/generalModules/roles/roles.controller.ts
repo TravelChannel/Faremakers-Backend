@@ -20,6 +20,7 @@ import { RolesGuard } from '../../../common/guards/roles.guard';
 
 @Controller('roles')
 @UseGuards(RolesGuard)
+@Roles(ADMIN_SUBJECT)
 export class RolesController {
   constructor(private readonly rolesService: RolesService) {}
 
