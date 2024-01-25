@@ -14,6 +14,8 @@ export class RolesGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('-----------------user');
+
     let requiredGuardParams = this.reflector.get<any>(
       'guardParams',
       context.getHandler(),
@@ -27,6 +29,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const { user } = context.switchToHttp().getRequest();
+    console.log('-----------------user', user);
     if (!user) {
       return false;
     }

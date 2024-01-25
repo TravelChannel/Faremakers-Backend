@@ -13,7 +13,10 @@ import {
   Session,
   Req,
   Query,
+  Res,
 } from '@nestjs/common';
+import { Response } from 'express';
+
 import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
 
 // import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
@@ -33,10 +36,7 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 import { PnrBookingsService } from './pnrBookings.service';
 
 import { SessionData } from 'express-session';
-import {
-  ACCOUNTS_SUBJECT,
-  SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT,
-} from 'src/common/aclSubjects';
+import { ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
 
 @Controller('pnrBooking')
 export class PnrBookingsController {
@@ -52,6 +52,27 @@ export class PnrBookingsController {
       isCurrentUserAdmin,
       pnrBookingDto,
     );
+  }
+  @Post('processPayment')
+  async processPayment(@Body() body: any, @Res() res: Response): Promise<any> {
+    const { paymentData, paymentInfo } = body;
+
+    // Step 1: Redirect to the payment gateway URL
+    const paymentCode = 117547;
+    const iframe_id = 134320;
+    const paymentGatewayUrl =
+      'https://pakistan.paymob.com/api/acceptance/iframes/${iframe_id}?payment_token=${paymentToken.token}'; // Replace with the actual URL
+    res.redirect(HttpStatus.FOUND, paymentGatewayUrl);
+    // return await this.pnrBookingsService.processPayment(
+    //   currentUserId,
+    //   isCurrentUserAdmin,
+    //   pnrBookingDto,
+    // );
+    const paymentInfoToStore = {
+      // Extract necessary payment information from the callback request or use paymentInfo from the original request
+      // Example: paymentId, payerId, paymentStatus, etc.
+      // Store this information in your database
+    };
   }
   @Get()
   async findAll(

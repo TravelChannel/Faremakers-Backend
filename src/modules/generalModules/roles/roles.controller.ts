@@ -14,7 +14,7 @@ import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 // import { AddRightsInRoleDto } from './dto/addRightsInRole.dto';
-import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
+import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
@@ -29,7 +29,7 @@ export class RolesController {
   }
 
   @Get('dropdown')
-  @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
+  @Roles(ADMIN_SUBJECT)
   getDropdown() {
     return this.rolesService.getDropdown();
   }

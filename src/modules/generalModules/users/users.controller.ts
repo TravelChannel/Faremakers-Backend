@@ -12,7 +12,6 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   // HttpException,
-  // UseGuards,
   Req,
   Patch,
   UseInterceptors,
@@ -39,14 +38,13 @@ import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
-import {
-  SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT,
-  PUBLIC_SUBJECT,
-} from 'src/common/aclSubjects';
+import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { RolesGuard } from '../../../common/guards/roles.guard';
 
 @Controller('users')
+@UseGuards(RolesGuard)
+@Roles(ADMIN_SUBJECT)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

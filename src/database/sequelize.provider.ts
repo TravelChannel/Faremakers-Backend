@@ -26,6 +26,7 @@ import { Equipment } from '../modules/pnr/equipment';
 import { CurrencyConversion } from '../modules/pnr/currencyConversion';
 import { InnerSchedualDetGet } from '../modules/pnr/innerSchedualDetGet';
 import { Promotion } from '../modules/generalModules/promotions/entities/promotion.entity';
+import { CommissionCategories } from '../modules/serviceCharges/commissionCategories';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -63,6 +64,7 @@ sequelize.addModels([
   CurrencyConversion,
   InnerSchedualDetGet,
   Promotion,
+  CommissionCategories,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
@@ -76,7 +78,7 @@ sequelize
   })
   .catch((error) => {
     console.error('Error synchronizing the database:', error);
-    console.error('-------------------------------:', error.message);
+    console.error('--------------------=-----------:', error.message);
   });
 
 export { sequelize, Transaction, Op };

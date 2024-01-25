@@ -480,6 +480,26 @@ export class PnrBookingsService {
       );
     }
   }
+  async processPayment(): Promise<any> {
+    const t: Transaction = await sequelize.transaction();
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      await t.commit();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        SAVED_SUCCESS,
+      );
+    } catch (error) {
+      console.log('Error', error.message);
+      await t.rollback();
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   // test comit issue
   async findAll(
     req,
