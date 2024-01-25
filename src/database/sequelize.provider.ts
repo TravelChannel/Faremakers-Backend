@@ -27,6 +27,7 @@ import { CurrencyConversion } from '../modules/pnr/currencyConversion';
 import { InnerSchedualDetGet } from '../modules/pnr/innerSchedualDetGet';
 import { Promotion } from '../modules/generalModules/promotions/entities/promotion.entity';
 import { CommissionCategories } from '../modules/serviceCharges/commissionCategories';
+import { PnrPayment } from '../modules/paymentModules/paymob';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -65,6 +66,7 @@ sequelize.addModels([
   InnerSchedualDetGet,
   Promotion,
   CommissionCategories,
+  PnrPayment,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
