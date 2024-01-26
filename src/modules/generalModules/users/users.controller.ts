@@ -88,6 +88,7 @@ export class UsersController {
       storage: createFileStorage('./uploads/users/profiles'),
     }),
   )
+  @Roles(ADMIN_AND_USER_SUBJECT)
   update(
     // @Param('id') id: string,
     @CurrentUserId() currentUserId: number,
@@ -132,6 +133,7 @@ export class UsersController {
       // imgFile,
     );
   }
+  // test
   @Patch('toggleUserStatusById/:id')
   toggleUserStatusByI(
     @Param('id') id: string,
