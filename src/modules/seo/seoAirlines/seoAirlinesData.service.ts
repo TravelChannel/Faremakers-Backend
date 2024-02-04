@@ -1,6 +1,6 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
-import { CreatePromotionDto } from './dto/create-promotion.dto';
-import { UpdatePromotionDto } from './dto/update-promotion.dto';
+import { CreateSEOAirlinesDataDto } from './dto/create-seoAirlinesData.dto';
+import { UpdateSEOAirlinesDataDto } from './dto/update-seoAirlinesData.dto';
 import { SEO_AIRLINES_DATA_REPOSITORY } from '../../../shared/constants';
 import { SEOAirlinesData } from './entities/seoAirlinesData.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
@@ -15,14 +15,14 @@ export class SEOAirlinesDataService {
     private readonly responseService: ResponseService,
   ) {}
 
-  async create(createPromotionDto: CreatePromotionDto) {
+  async create(createSEOAirlinesDataDto: CreateSEOAirlinesDataDto) {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const { ...rest } = createPromotionDto;
+      const { ...rest } = createSEOAirlinesDataDto;
 
       const newRole = await this.seoAirlinesDataRepository.create(
-        { title: rest.title, description: rest.description },
+        { flightname: rest.flightname, flightCode: rest.flightCode },
         { transaction: t },
       );
 
@@ -78,14 +78,14 @@ export class SEOAirlinesDataService {
     }
   }
 
-  async update(id: number, updatePromotionDto: UpdatePromotionDto) {
+  async update(id: number, updateSEOAirlinesDataDto: UpdateSEOAirlinesDataDto) {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
       const promotion = await this.seoAirlinesDataRepository.findByPk(id);
       if (promotion) {
-        promotion.title = updatePromotionDto.title;
-        promotion.description = updatePromotionDto.description;
+        promotion.flightname = updateSEOAirlinesDataDto.flightname;
+        promotion.flightCode = updateSEOAirlinesDataDto.flightCode;
         await promotion.save();
       } else {
         return this.responseService.createResponse(
