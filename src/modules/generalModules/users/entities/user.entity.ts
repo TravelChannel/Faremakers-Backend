@@ -21,17 +21,14 @@ export class User extends Model {
   @ForeignKey(() => Role)
   @Column({
     type: DataType.INTEGER,
-    // allowNull: false,
-    allowNull: true,
+    allowNull: false,
     onDelete: 'NO ACTION',
   })
   roleId: number;
   @Column({
     type: DataType.BOOLEAN,
-    // allowNull: false,
     defaultValue: false,
     allowNull: false,
-    // onDelete: 'NO ACTION',
   })
   isSuperAdmin: boolean;
 
