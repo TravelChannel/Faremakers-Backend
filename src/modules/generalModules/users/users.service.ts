@@ -447,7 +447,7 @@ export class UsersService {
         return user;
       } else {
         user = await this.userRepository.create({
-          roleId: 1, // Assign default role to user
+          roleId: 2, // Assign default role to user
           isSuperAdmin: false, // By default user is not super admin
           phoneNumber,
           countryCode,

@@ -20,6 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
         if (decoded) {
           req['userDecoded'] = decoded;
           req['isSuperAdmin'] = decoded.isSuperAdmin;
+          req['roleId'] = decoded.roleId;
         } else {
           throw new UnauthorizedException('Invalid token');
         }

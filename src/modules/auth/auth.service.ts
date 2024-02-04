@@ -254,6 +254,7 @@ export class AuthService {
       const userDecoded = {
         id: user.id,
         email: user.email,
+        roleId: user.roleId,
         phoneNumber: user.phoneNumber,
         isSuperAdmin: user.isSuperAdmin,
       };
