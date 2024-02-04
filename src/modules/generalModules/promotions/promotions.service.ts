@@ -78,11 +78,22 @@ export class PromotionsService {
     }
   }
 
-  async update(id: number, updateRoleDto: UpdatePromotionDto) {
+  async update(id: number, updatePromotionDto: UpdatePromotionDto) {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
-      console.log('updateRoleDto', updateRoleDto, 'id', id);
+      const promotion = await this.promotionsRepository.findByPk(id);
+      if (promotion) {
+        promotion.title = updatePromotionDto.title;
+        promotion.description = updatePromotionDto.description;
+        await promotion.save();
+      } else {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Promotion Not Found',
+        );
+      }
       return this.responseService.createResponse(
         HttpStatus.OK,
         null,
