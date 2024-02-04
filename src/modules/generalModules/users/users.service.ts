@@ -80,7 +80,7 @@ export class UsersService {
   async findByEmail(email: string): Promise<User | null> {
     try {
       const user = await this.userRepository.findOne({
-        where: { email, isActive: 1 },
+        where: { email, isActive: true },
       });
       if (user) {
         return user;
@@ -106,7 +106,7 @@ export class UsersService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ): Promise<User | null> {
     const user = await this.userRepository.findOne({
-      where: { email, isActive: 1 },
+      where: { email, isActive: true },
     });
     return user;
   }
@@ -287,7 +287,7 @@ export class UsersService {
         );
       }
 
-      user.isActive = toggleIsActiveDto.isActive || 0;
+      user.isActive = toggleIsActiveDto.isActive || false;
 
       await user.save({ transaction: t }); // Save the changes
       await t.commit();

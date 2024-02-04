@@ -168,11 +168,12 @@ export class User extends Model {
   })
   password: string;
   @Column({
-    type: DataType.TINYINT,
-    defaultValue: 1,
+    type: DataType.BOOLEAN,
+    defaultValue: true,
     allowNull: false,
   })
-  isActive: number;
+  isActive: boolean;
+
   // Define the hasMany association
   @HasMany(() => PnrBooking)
   pnrBooking: PnrBooking[];
