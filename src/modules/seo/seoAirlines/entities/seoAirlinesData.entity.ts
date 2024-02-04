@@ -1,16 +1,11 @@
-import {
-  Table,
-  Column,
-  Model,
-  DataType,
-  // HasMany
-} from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 // import { User } from '../../users/entities/user.entity';
+import { TopCities } from '../../topCities/index';
 
 @Table
 export class SEOAirlinesData extends Model {
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   })
@@ -52,6 +47,9 @@ export class SEOAirlinesData extends Model {
     allowNull: false,
   })
   isActive: number;
+
+  @HasMany(() => TopCities)
+  topCities: TopCities;
 }
 
 // You can define associations here if needed

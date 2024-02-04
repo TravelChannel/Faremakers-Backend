@@ -34,6 +34,8 @@ import { Airline } from '../modules/serviceCharges/airline';
 import { Sector } from '../modules/serviceCharges/sector';
 import { Destination } from '../modules/serviceCharges/destination';
 import { FareClass } from '../modules/serviceCharges/fareClass';
+import { SEOAirlinesData } from '../modules/seo/seoAirlines/entities/seoAirlinesData.entity';
+import { TopCities } from '../modules/seo/topCities/index';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -79,14 +81,16 @@ sequelize.addModels([
   FareClass,
   Destination,
   Sector,
+  SEOAirlinesData,
+  TopCities,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  // .sync()
   .then(() => {
     console.log('Database synchronized...');
   })

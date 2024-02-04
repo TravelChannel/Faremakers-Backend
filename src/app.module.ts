@@ -19,6 +19,7 @@ import { AuthGuard } from './common/guards/auth.guard';
 
 import { DatabaseModule } from './database/database.module';
 import { RolesModule } from './modules/generalModules/roles/roles.module';
+import { SEOAirlinesDataModule } from './modules/seo/seoAirlines/seoAirlinesData.module';
 import { PnrBookingsModule } from './modules/pnr/pnrBooking/pnrBookings.module';
 import { PnrUsersModule } from './modules/pnr/pnrUsers/pnrUsers.module';
 import { PromotionsModule } from './modules/generalModules/promotions/promotions.module';
@@ -39,6 +40,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     UsersModule,
     PnrUsersModule,
     RolesModule,
+    SEOAirlinesDataModule,
     AuthModule,
     PnrBookingsModule,
     HttpModule,
