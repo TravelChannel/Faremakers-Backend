@@ -228,11 +228,11 @@ export class AuthService {
 
       const accessToken = generateAccessTokenOtpUser(
         user,
-        // decoded.isAdmin
+        // decoded.isSuperAdmin
       );
       const refreshTokenNew = generateRefreshTokenOtpUser(
         user,
-        // decoded.isAdmin,
+        // decoded.isSuperAdmin,
       );
       return this.responseService.createResponse(
         HttpStatus.OK,
@@ -255,7 +255,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         phoneNumber: user.phoneNumber,
-        isAdmin: user.isAdmin,
+        isSuperAdmin: user.isSuperAdmin,
       };
       return userDecoded;
     }

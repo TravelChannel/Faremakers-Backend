@@ -37,10 +37,10 @@ export class RolesGuard implements CanActivate {
     const hasRequiredRoles = requiredGuardParams.roles.some((role) => {
       if (role === 1) {
         // Admin role
-        return user.isAdmin === true;
+        return user.isSuperAdmin === true;
       } else if (role === 0) {
         // Regular user role
-        return user.isAdmin === false;
+        return user.isSuperAdmin === false;
       }
       return false;
     });

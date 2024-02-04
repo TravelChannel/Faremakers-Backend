@@ -19,7 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
         const decoded = verifyToken(token, JWT_SECRET); // Replace with your actual JWT secret
         if (decoded) {
           req['userDecoded'] = decoded;
-          req['isAdmin'] = decoded.isAdmin;
+          req['isSuperAdmin'] = decoded.isSuperAdmin;
         } else {
           throw new UnauthorizedException('Invalid token');
         }

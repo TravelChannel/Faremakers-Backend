@@ -15,12 +15,44 @@ export class SEOAirlinesData extends Model {
 
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
+    unique: {
+      name: 'unique_flightname',
+      msg: 'flightname name must be unique.',
+    },
+    validate: {
+      notNull: {
+        msg: 'flightname is required.',
+      },
+      notEmpty: {
+        msg: 'flightname cannot be empty.',
+      },
+      len: {
+        args: [3, 50],
+        msg: 'flightname must be between 3 and 50 characters.',
+      },
+    },
   })
   flightname: string;
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
+    unique: {
+      name: 'unique_flightCode',
+      msg: 'flightCode name must be unique.',
+    },
+    validate: {
+      notNull: {
+        msg: 'flightCode is required.',
+      },
+      notEmpty: {
+        msg: 'flightCode cannot be empty.',
+      },
+      len: {
+        args: [3, 50],
+        msg: 'flightCode must be between 3 and 50 characters.',
+      },
+    },
   })
   flightCode: string;
   @Column({
