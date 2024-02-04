@@ -64,7 +64,7 @@ export class CommissionPercentage extends Model {
   fareClass: FareClass;
   // @BelongsTo(() => Destination)
   // destination: Destination;
-  // @BelongsTo(() => Sector)
+  @BelongsTo(() => Sector)
   sector: Sector;
 }
 

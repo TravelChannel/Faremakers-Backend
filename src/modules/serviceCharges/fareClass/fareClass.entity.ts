@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import { FareClassLetters } from '../fareClassLetters';
 
 @Table
 export class FareClass extends Model {
@@ -25,6 +26,8 @@ export class FareClass extends Model {
   code: string;
 
   // End
+  @HasMany(() => FareClassLetters)
+  fareClass: FareClassLetters;
 }
 
 export default FareClass;
