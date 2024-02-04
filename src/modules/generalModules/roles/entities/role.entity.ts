@@ -38,11 +38,11 @@ export class Role extends Model {
   })
   description: string;
   @Column({
-    type: DataType.TINYINT,
-    defaultValue: 1,
+    type: DataType.BOOLEAN,
+    defaultValue: true,
     allowNull: false,
   })
-  isActive: number;
+  isActive: boolean;
   @HasMany(() => User)
   users: User[];
 }

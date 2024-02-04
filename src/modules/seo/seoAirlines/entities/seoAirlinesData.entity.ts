@@ -76,11 +76,11 @@ export class SEOAirlinesData extends Model {
   })
   heading3: string;
   @Column({
-    type: DataType.TINYINT,
+    type: DataType.BOOLEAN,
     defaultValue: 1,
     allowNull: false,
   })
-  isActive: number;
+  isActive: boolean;
 
   @HasMany(() => TopPicks)
   topPicks: TopPicks;

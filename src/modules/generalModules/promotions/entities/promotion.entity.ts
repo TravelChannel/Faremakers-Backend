@@ -27,11 +27,11 @@ export class Promotion extends Model {
   })
   description: string;
   @Column({
-    type: DataType.TINYINT,
-    defaultValue: 1,
+    type: DataType.BOOLEAN,
+    defaultValue: true,
     allowNull: false,
   })
-  isActive: number;
+  isActive: boolean;
 }
 
 // You can define associations here if needed
