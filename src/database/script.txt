@@ -1,0 +1,16 @@
+USE [db_faremakers]
+GO
+SET IDENTITY_INSERT [dbo].[Roles] ON 
+GO
+INSERT [dbo].[Roles] ([id], [name], [description], [isActive], [createdAt], [updatedAt]) VALUES (1, N'Super Admin', N'Super Admin', 1, CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset), CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Roles] ([id], [name], [description], [isActive], [createdAt], [updatedAt]) VALUES (2, N'User', N'User', 1, CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset), CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Roles] ([id], [name], [description], [isActive], [createdAt], [updatedAt]) VALUES (3, N'Refund Admin', N'Refund Admin', 1, CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset), CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Roles] ([id], [name], [description], [isActive], [createdAt], [updatedAt]) VALUES (4, N'Reissue Admin', N'Reissue Admin', 1, CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset), CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Roles] ([id], [name], [description], [isActive], [createdAt], [updatedAt]) VALUES (5, N'Cancellation Admin', N'Cancellation Admin', 1, CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset), CAST(N'2023-08-25T11:44:08.0110000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[Roles] OFF
+GO
