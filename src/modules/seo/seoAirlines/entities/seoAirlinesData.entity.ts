@@ -1,6 +1,8 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 // import { User } from '../../users/entities/user.entity';
 import { TopCities } from '../../topCities/index';
+import { TopPicks } from '../../topPicks/index';
+import { TopCountries } from '../../topCountries/index';
 
 @Table
 export class SEOAirlinesData extends Model {
@@ -48,8 +50,12 @@ export class SEOAirlinesData extends Model {
   })
   isActive: number;
 
+  @HasMany(() => TopPicks)
+  topPicks: TopPicks;
   @HasMany(() => TopCities)
   topCities: TopCities;
+  @HasMany(() => TopCountries)
+  topCountries: TopCountries;
 }
 
 // You can define associations here if needed

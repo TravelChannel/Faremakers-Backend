@@ -10,7 +10,7 @@ import {
 import { SEOAirlinesData } from '../seoAirlines/entities/seoAirlinesData.entity';
 
 @Table
-export class TopCities extends Model {
+export class TopCountries extends Model {
   @Column({
     type: DataType.BIGINT,
     primaryKey: true,
@@ -31,4 +31,4 @@ export class TopCities extends Model {
   // End
 }
 
-export default TopCities;
+export default TopCountries;
