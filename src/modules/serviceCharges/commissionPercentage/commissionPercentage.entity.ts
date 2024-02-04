@@ -9,7 +9,7 @@ import {
 
 import { Airline } from '../airline/index';
 import { FareClass } from '../fareClass/index';
-import { Destination } from '../destination/index';
+// import { Destination } from '../destination/index';
 import { Sector } from '../sector/index';
 
 @Table
@@ -41,13 +41,13 @@ export class CommissionPercentage extends Model {
     onDelete: 'NO ACTION',
   })
   fareClassId: number;
-  @ForeignKey(() => Destination)
-  @Column({
-    type: DataType.BIGINT,
-    allowNull: true,
-    onDelete: 'NO ACTION',
-  })
-  destinationId: number;
+  // @ForeignKey(() => Destination)
+  // @Column({
+  //   type: DataType.BIGINT,
+  //   allowNull: true,
+  //   onDelete: 'NO ACTION',
+  // })
+  // destinationId: number;
   @ForeignKey(() => Sector)
   @Column({
     type: DataType.BIGINT,
@@ -62,9 +62,9 @@ export class CommissionPercentage extends Model {
   airline: Airline;
   @BelongsTo(() => FareClass)
   fareClass: FareClass;
-  @BelongsTo(() => Destination)
-  destination: Destination;
-  @BelongsTo(() => Sector)
+  // @BelongsTo(() => Destination)
+  // destination: Destination;
+  // @BelongsTo(() => Sector)
   sector: Sector;
 }
 

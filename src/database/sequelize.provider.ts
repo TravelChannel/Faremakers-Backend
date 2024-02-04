@@ -32,7 +32,7 @@ import { PnrServiceCharges } from '../modules/serviceCharges/pnrServiceCharges';
 import { CommissionPercentage } from '../modules/serviceCharges/commissionPercentage';
 import { Airline } from '../modules/serviceCharges/airline';
 import { Sector } from '../modules/serviceCharges/sector';
-import { Destination } from '../modules/serviceCharges/destination';
+// import { Destination } from '../modules/serviceCharges/destination';
 import { FareClass } from '../modules/serviceCharges/fareClass';
 import { SEOAirlinesData } from '../modules/seo/seoAirlines/entities/seoAirlinesData.entity';
 import { TopCities } from '../modules/seo/topCities/index';
@@ -81,7 +81,7 @@ sequelize.addModels([
   CommissionPercentage,
   Airline,
   FareClass,
-  Destination,
+  // Destination,
   Sector,
   SEOAirlinesData,
   TopCities,
