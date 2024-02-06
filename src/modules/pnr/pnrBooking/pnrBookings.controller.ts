@@ -19,7 +19,7 @@ import { Response } from 'express';
 
 import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
 
-// import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
@@ -75,6 +75,7 @@ export class PnrBookingsController {
     };
   }
   @Get()
+  // @SkipAuth()
   async findAll(
     @Req() req: Request,
     @CurrentUserId() currentUserId: number,
