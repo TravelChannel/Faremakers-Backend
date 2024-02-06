@@ -720,6 +720,18 @@ export class PnrBookingsService {
             ],
           },
         ],
+      }).then((rawData) => {
+        // console.log(rawData);
+        const plainObject = rawData.toJSON();
+        const arr = plainObject.flightDetails.schedualDetGet;
+        plainObject.flightDetails.schedualDetGet = [];
+        arr.map((data2) => {
+          plainObject.flightDetails.schedualDetGet.push(
+            data2.innerSchedualDetGet,
+          );
+        });
+
+        return plainObject;
       });
       if (!pnrBookings) {
         return this.responseService.createResponse(
@@ -728,13 +740,13 @@ export class PnrBookingsService {
           'Record Not Found',
         );
       }
-      if (!isCurrentUserAdmin && pnrBookings.userId !== currentUserId) {
-        return this.responseService.createResponse(
-          HttpStatus.UNAUTHORIZED,
-          null,
-          AUTHENTICATION_ERROR,
-        );
-      }
+      // if (!isCurrentUserAdmin && pnrBookings.userId !== currentUserId) {
+      //   return this.responseService.createResponse(
+      //     HttpStatus.UNAUTHORIZED,
+      //     null,
+      //     AUTHENTICATION_ERROR,
+      //   );
+      // }
       return this.responseService.createResponse(
         HttpStatus.OK,
         pnrBookings,
