@@ -599,19 +599,19 @@ export class PnrBookingsService {
           },
         ],
       })
-        // .then((rawData) => {
-        //   const plainObjects = rawData.map((instance) => instance.toJSON());
+        .then((rawData) => {
+          const plainObjects = rawData.map((instance) => instance.toJSON());
 
-        //   plainObjects.map((data) => {
-        //     const arr = data.flightDetails.schedualDetGet;
-        //     data.flightDetails.schedualDetGet = [];
-        //     arr.map((data2) => {
-        //       data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
-        //     });
-        //   });
+          plainObjects.map((data) => {
+            const arr = data.flightDetails.schedualDetGet;
+            data.flightDetails.schedualDetGet = [];
+            arr.map((data2) => {
+              data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
+            });
+          });
 
-        //   return plainObjects;
-        // })
+          return plainObjects;
+        })
 
         .catch((error) => {
           // Handle errors here
