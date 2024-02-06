@@ -740,13 +740,13 @@ export class PnrBookingsService {
           'Record Not Found',
         );
       }
-      // if (!isCurrentUserAdmin && pnrBookings.userId !== currentUserId) {
-      //   return this.responseService.createResponse(
-      //     HttpStatus.UNAUTHORIZED,
-      //     null,
-      //     AUTHENTICATION_ERROR,
-      //   );
-      // }
+      if (!isCurrentUserAdmin && pnrBookings.userId !== currentUserId) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
       return this.responseService.createResponse(
         HttpStatus.OK,
         pnrBookings,
