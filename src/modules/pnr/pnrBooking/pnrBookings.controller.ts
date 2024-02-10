@@ -36,7 +36,10 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 import { PnrBookingsService } from './pnrBookings.service';
 
 import { SessionData } from 'express-session';
-import { ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
+import {
+  ADMIN_AND_USER_SUBJECT,
+  PARTIAL_ADMIN_SUBJECT,
+} from 'src/common/aclSubjects';
 
 @Controller('pnrBooking')
 export class PnrBookingsController {
