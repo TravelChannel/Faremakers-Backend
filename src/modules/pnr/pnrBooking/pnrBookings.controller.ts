@@ -54,14 +54,14 @@ export class PnrBookingsController {
     );
   }
   @Get('processPayment')
+  @SkipAuth()
   async processPayment(
     @Body() callbackData: any,
+    @Req() req: Request,
 
     @Res() res: Response,
-    @CurrentUserId() currentUserId: number,
-    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
   ): Promise<any> {
-    return await this.pnrBookingsService.processPayment(callbackData, res);
+    return await this.pnrBookingsService.processPayment(callbackData, req, res);
   }
   @Get()
   // @SkipAuth()

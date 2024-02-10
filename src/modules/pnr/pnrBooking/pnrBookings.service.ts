@@ -959,12 +959,16 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment(callbackData: any, res): Promise<any> {
+  async processPayment(callbackData: any, req, res): Promise<any> {
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
-        pnr: callbackData.pnr,
+        // pnr: callbackData.pnr,
+        pnr: '140VP8',
       },
     });
+    console.log('req.query ', req.query.pending);
+    const viewETicketUrl = `http://localhost:3000/previewEticket?id=${pnrBooking.id}`;
+    const errorRedirectUrl = `http://localhost:3000/bookingpayment`;
 
     const t: Transaction = await sequelize.transaction();
 
@@ -1010,10 +1014,10 @@ export class PnrBookingsService {
         },
         { transaction: t },
       );
+      await t.commit();
+
       console.log(newPnrPayment);
       console.log('payment inserted');
-      await t.commit();
-      const viewETicketUrl = `http://localhost:3000/page?id=${pnrBooking.id}`;
       return res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(viewETicketUrl);
@@ -1021,7 +1025,11 @@ export class PnrBookingsService {
     } catch (error) {
       await t.rollback();
 
-      console.log(error);
+      // ndjhsdj
+      // return res.redirect(errorRedirectUrl);
+      return res.redirect(errorRedirectUrl);
+
+      console.log('error:', error);
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
