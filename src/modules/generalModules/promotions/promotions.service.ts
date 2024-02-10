@@ -95,6 +95,7 @@ export class PromotionsService {
           'Promotion Not Found',
         );
       }
+      t.commit();
       return this.responseService.createResponse(
         HttpStatus.OK,
         null,
