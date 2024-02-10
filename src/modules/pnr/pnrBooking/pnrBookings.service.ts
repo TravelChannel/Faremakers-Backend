@@ -994,7 +994,7 @@ export class PnrBookingsService {
           created_at: callbackData.created_at,
           currency: callbackData.currency,
           merchant_commission: callbackData.merchant_commission,
-          discount_details: callbackData.discount_details,
+          // discount_details: callbackData.discount_details,
           is_void: callbackData.is_void,
           is_refund: callbackData.is_refund,
           error_occurred: callbackData.error_occurred,

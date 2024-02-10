@@ -27,136 +27,214 @@ export class PnrPayment extends Model {
   pnrBookingId: number;
 
   @Column({
-    type: DataType.DOUBLE,
-    allowNull: false,
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  id: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  pending: boolean;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
   })
   amount_cents: number;
 
   @Column({
-    type: DataType.STRING,
-    allowNull: false,
+    type: DataType.BOOLEAN,
+    allowNull: true,
   })
-  created_at: string;
+  success: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_auth: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_capture: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_standalone_payment: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_voided: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_refunded: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_3d_secure: boolean;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  integration_id: number;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  profile_id: number;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  has_parent_transaction: boolean;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  order: number;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  created_at: Date;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
   currency: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  merchant_commission: number;
+
+  // @Column({
+  //   type: DataType.ARRAY(DataType.JSONB),
+  //   allowNull: true,
+  // })
+  // discount_details: any[];
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_void: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_refund: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  error_occurred: boolean;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  refunded_amount_cents: number;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  captured_amount: number;
+
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  updated_at: Date;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_settled: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  bill_balanced: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: true,
+  })
+  is_bill: boolean;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  owner: number;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  error_occured: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  has_parent_transaction: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  id: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  integration_id: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  is_3d_secure: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  is_auth: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  is_capture: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  is_refunded: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  is_standalone_payment: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  is_voided: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  order: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  owner: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  pending: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  source_data_pan: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  source_data_sub_type: string;
+  data_message: string;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
   source_data_type: string;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  success: string;
+  source_data_pan: string;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  payment_method: string;
+  source_data_sub_type: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  acq_response_code: number;
+
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  txn_response_code: number;
+
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  order_status: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  payment_status: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  transaction_ref: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  order_group_id: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: true,
-  })
-  cart_group_id: string;
+  hmac: string;
 
   // End
   @BelongsTo(() => PnrBooking)
