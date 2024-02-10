@@ -888,6 +888,13 @@ export class PnrBookingsService {
           'pnrBooking not found',
         );
       }
+      if (pnrBooking.isReqForRefund || pnrBooking.isReqForReIssue) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, another request in process',
+        );
+      }
       pnrBooking.isReqForCancellation = true;
 
       await pnrBooking.save();
@@ -915,6 +922,13 @@ export class PnrBookingsService {
           'pnrBooking not found',
         );
       }
+      if (pnrBooking.isReqForCancellation || pnrBooking.isReqForReIssue) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, another request in process',
+        );
+      }
       pnrBooking.isReqForRefund = true;
 
       await pnrBooking.save();
@@ -940,6 +954,13 @@ export class PnrBookingsService {
           HttpStatus.NOT_FOUND,
           null,
           'pnrBooking not found',
+        );
+      }
+      if (pnrBooking.isReqForCancellation || pnrBooking.isReqForRefund) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, another request in process',
         );
       }
       pnrBooking.isReqForReIssue = true;
@@ -1025,7 +1046,6 @@ export class PnrBookingsService {
     } catch (error) {
       await t.rollback();
 
-      // ndjhsdj
       // return res.redirect(errorRedirectUrl);
       return res.redirect(errorRedirectUrl);
 

@@ -34,6 +34,13 @@ export class PnrBooking extends Model {
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: 0,
+    allowNull: false,
+  })
+  isPaid: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
 
     allowNull: false,
   })
