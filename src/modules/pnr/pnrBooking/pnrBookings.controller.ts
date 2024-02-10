@@ -54,25 +54,19 @@ export class PnrBookingsController {
     );
   }
   @Post('processPayment')
-  async processPayment(@Body() body: any, @Res() res: Response): Promise<any> {
-    const { paymentData, paymentInfo } = body;
+  async processPayment(
+    @Body() callbackData: any,
 
-    // Step 1: Redirect to the payment gateway URL
-    const paymentCode = 117547;
-    const iframe_id = 134320;
-    const paymentGatewayUrl =
-      'https://pakistan.paymob.com/api/acceptance/iframes/${iframe_id}?payment_token=${paymentToken.token}'; // Replace with the actual URL
-    res.redirect(HttpStatus.FOUND, paymentGatewayUrl);
-    // return await this.pnrBookingsService.processPayment(
-    //   currentUserId,
-    //   isCurrentUserAdmin,
-    //   pnrBookingDto,
-    // );
-    const paymentInfoToStore = {
-      // Extract necessary payment information from the callback request or use paymentInfo from the original request
-      // Example: paymentId, payerId, paymentStatus, etc.
-      // Store this information in your database
-    };
+    @Res() res: Response,
+    @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  ): Promise<any> {
+    return await this.pnrBookingsService.processPayment(
+      currentUserId,
+      isCurrentUserAdmin,
+      callbackData,
+      res,
+    );
   }
   @Get()
   // @SkipAuth()

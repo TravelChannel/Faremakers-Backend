@@ -4,7 +4,7 @@ import {
   Model,
   DataType,
   Column,
-  HasMany,
+  // HasMany,
   // Index,
 } from 'sequelize-typescript';
 
