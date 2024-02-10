@@ -959,7 +959,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment(callbackData: any, res): Promise<void> {
+  async processPayment(callbackData: any, res): Promise<any> {
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         pnr: callbackData.pnr,
@@ -1013,8 +1013,11 @@ export class PnrBookingsService {
       console.log(newPnrPayment);
       console.log('payment inserted');
       await t.commit();
-      const paymentGatewayUrl = `http://localhost:3000/page?id=${pnrBooking.id}`;
-      return res.redirect(HttpStatus.FOUND, paymentGatewayUrl);
+      const viewETicketUrl = `http://localhost:3000/page?id=${pnrBooking.id}`;
+      return res.redirect(HttpStatus.FOUND, viewETicketUrl);
+      // res.redirect(HttpStatus.FOUND, viewETicketUrl);
+      // res.redirect(viewETicketUrl);
+      return { viewETicketUrl };
     } catch (error) {
       await t.rollback();
 
