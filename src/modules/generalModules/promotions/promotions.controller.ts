@@ -14,7 +14,7 @@ import { PromotionsService } from './promotions.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
-import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -61,8 +61,8 @@ export class PromotionsController {
   @Patch('toggleStatus/:id')
   toggleStatus(
     @Param('id') id: string,
-    @Body() toggleIsActiveDto: ToggleIsActiveDto,
+    // @Body() toggleIsActiveDto: ToggleIsActiveDto,
   ) {
-    return this.promotionsService.toggleStatus(+id, toggleIsActiveDto);
+    return this.promotionsService.toggleStatus(+id);
   }
 }

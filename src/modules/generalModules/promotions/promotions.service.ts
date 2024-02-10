@@ -160,10 +160,7 @@ export class PromotionsService {
       );
     }
   }
-  async toggleStatus(
-    id: number,
-    toggleIsActiveDto: ToggleIsActiveDto,
-  ): Promise<any> {
+  async toggleStatus(id: number): Promise<any> {
     const t: Transaction = await sequelize.transaction();
 
     try {
@@ -181,12 +178,12 @@ export class PromotionsService {
         );
       }
 
-      promotion.isActive = toggleIsActiveDto.isActive || false;
+      promotion.isActive = !promotion.isActive;
 
       await promotion.save({ transaction: t }); // Save the changes
       await t.commit();
       let message = '';
-      if (toggleIsActiveDto.isActive || false === false) {
+      if (promotion.isActive || false === false) {
         message = 'Promotion deactivated successfully';
       } else {
         message = 'Promotion activated successfully';
