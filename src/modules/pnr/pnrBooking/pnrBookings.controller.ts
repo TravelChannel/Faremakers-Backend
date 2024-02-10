@@ -61,12 +61,7 @@ export class PnrBookingsController {
     @CurrentUserId() currentUserId: number,
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
   ): Promise<any> {
-    return await this.pnrBookingsService.processPayment(
-      currentUserId,
-      isCurrentUserAdmin,
-      callbackData,
-      res,
-    );
+    return await this.pnrBookingsService.processPayment(callbackData, res);
   }
   @Get()
   // @SkipAuth()

@@ -959,12 +959,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment(
-    currentUserId: number,
-    isCurrentUserAdmin: number,
-    callbackData: any,
-    res,
-  ): Promise<void> {
+  async processPayment(callbackData: any, res): Promise<void> {
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         pnr: callbackData.pnr,
