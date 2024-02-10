@@ -53,7 +53,7 @@ export class PnrBookingsController {
       pnrBookingDto,
     );
   }
-  @Post('processPayment')
+  @Get('processPayment')
   async processPayment(
     @Body() callbackData: any,
 
