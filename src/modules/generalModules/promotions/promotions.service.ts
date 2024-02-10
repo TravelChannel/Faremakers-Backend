@@ -6,6 +6,7 @@ import { Promotion } from './entities/promotion.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
+import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
 export class PromotionsService {
@@ -156,6 +157,47 @@ export class PromotionsService {
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
         EXCEPTION,
+      );
+    }
+  }
+  async toggleStatus(
+    id: number,
+    toggleIsActiveDto: ToggleIsActiveDto,
+  ): Promise<any> {
+    const t: Transaction = await sequelize.transaction();
+
+    try {
+      const whereOptions: any = {};
+      whereOptions.id = id;
+
+      const promotion = await this.promotionsRepository.findOne({
+        where: whereOptions,
+      });
+      if (!promotion) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Record not found',
+        );
+      }
+
+      promotion.isActive = toggleIsActiveDto.isActive || false;
+
+      await promotion.save({ transaction: t }); // Save the changes
+      await t.commit();
+      let message = '';
+      if (toggleIsActiveDto.isActive || false === false) {
+        message = 'Promotion deactivated successfully';
+      } else {
+        message = 'Promotion activated successfully';
+      }
+      return this.responseService.createResponse(HttpStatus.OK, null, message);
+    } catch (error) {
+      await t.rollback();
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
       );
     }
   }
