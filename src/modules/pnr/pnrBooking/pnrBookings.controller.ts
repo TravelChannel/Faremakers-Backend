@@ -56,7 +56,7 @@ export class PnrBookingsController {
       pnrBookingDto,
     );
   }
-  @Get('processPayment')
+  @Post('processPayment')
   @SkipAuth()
   async processPayment(
     @Body() callbackData: any,
