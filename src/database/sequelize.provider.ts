@@ -27,7 +27,7 @@ import { CurrencyConversion } from '../modules/pnr/currencyConversion';
 import { InnerSchedualDetGet } from '../modules/pnr/innerSchedualDetGet';
 import { Promotion } from '../modules/generalModules/promotions/entities/promotion.entity';
 import { CommissionCategories } from '../modules/serviceCharges/commissionCategories';
-import { PnrPayment } from '../modules/paymentModules/paymob';
+import { PnrPayment } from '../modules//paymentModules/paymob/entities/pnrPayment.entity';
 import { PnrServiceCharges } from '../modules/serviceCharges/pnrServiceCharges';
 import { CommissionPercentage } from '../modules/serviceCharges/commissionPercentage';
 import { Airline } from '../modules/serviceCharges/airline';

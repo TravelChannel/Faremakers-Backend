@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PnrPaymentService } from './promotions.service';
-import { PnrPaymentController } from './promotions.controller';
-import { pnrPaymentProviders } from './promotions.providers'; // Import the providers
+import { PnrPaymentService } from './pnrPayment.service';
+import { PnrPaymentController } from './pnrPayment.controller';
+import { pnrPaymentProviders } from './pnrPayment.providers'; // Import the providers
 
 @Module({
   controllers: [PnrPaymentController],

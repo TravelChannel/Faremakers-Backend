@@ -37,7 +37,7 @@ import { Sector } from '../../serviceCharges/sector';
 import { FareClass } from '../../serviceCharges/fareClass';
 import { Airline } from '../../serviceCharges/airline';
 import { CommissionCategories } from '../../serviceCharges/commissionCategories';
-import { PnrPayment } from '../../paymentModules/paymob';
+import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.entity';
 
 @Injectable()
 export class PnrBookingsService {

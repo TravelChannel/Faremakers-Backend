@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { PnrBooking } from '../../../pnr/pnrBooking/entities/pnrBooking.entity';
 
 @Table
 export class PnrPayment extends Model {
