@@ -35,7 +35,7 @@ export class PnrPaymentController {
   findByPnr(@Param('id') id: string) {
     return this.pnrPaymentService.findByPnr(id);
   }
-  @Get('ByBookingId/:id')
+  @Get('byBookingId/:id')
   byBookingId(@Param('id') id: string) {
     return this.pnrPaymentService.byBookingId(id);
   }
