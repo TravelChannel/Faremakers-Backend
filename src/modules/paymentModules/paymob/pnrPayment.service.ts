@@ -4,6 +4,7 @@ import { PnrPayment } from './entities/pnrPayment.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
+import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
@@ -44,11 +45,17 @@ export class PnrPaymentService {
 
   async findAll(): Promise<PnrPayment[]> {
     try {
-      const promotion = await this.pnrPaymentRepository.findAll();
+      const pnrPayment = await this.pnrPaymentRepository.findAll({
+        include: [
+          {
+            model: PnrBooking,
+          },
+        ],
+      });
       return this.responseService.createResponse(
         HttpStatus.OK,
-        promotion,
-        'promotion Fetched',
+        pnrPayment,
+        'pnrPayment Fetched',
       );
     } catch (error) {
       // await t.rollback();
@@ -62,11 +69,11 @@ export class PnrPaymentService {
 
   async findOne(id: number) {
     try {
-      const promotion = await this.pnrPaymentRepository.findByPk(id, {});
+      const pnrPayment = await this.pnrPaymentRepository.findByPk(id, {});
       return this.responseService.createResponse(
         HttpStatus.OK,
-        { ...promotion.toJSON() },
-        'promotion retrieved successfully',
+        { ...pnrPayment.toJSON() },
+        'pnrPayment retrieved successfully',
       );
     } catch (error) {
       return this.responseService.createResponse(
