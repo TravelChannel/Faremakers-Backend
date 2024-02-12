@@ -67,12 +67,62 @@ export class PnrPaymentService {
     }
   }
 
+  async byBookingId(id: string) {
+    try {
+      const pnrPayment = await this.pnrPaymentRepository.findAll({
+        where: {
+          pnrBookingId: id,
+        },
+        include: [
+          {
+            model: PnrBooking,
+          },
+        ],
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        pnrPayment,
+        'pnrPayment retrieved successfully',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async findByPnr(id: string) {
+    try {
+      const pnrPayment = await this.pnrPaymentRepository.findAll({
+        include: [
+          {
+            model: PnrBooking,
+            where: {
+              pnr: id,
+            },
+          },
+        ],
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        pnrPayment,
+        'pnrPayment retrieved successfully',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async findOne(id: number) {
     try {
       const pnrPayment = await this.pnrPaymentRepository.findByPk(id, {});
       return this.responseService.createResponse(
         HttpStatus.OK,
-        { ...pnrPayment.toJSON() },
+        pnrPayment,
         'pnrPayment retrieved successfully',
       );
     } catch (error) {
