@@ -51,6 +51,7 @@ export class PnrBookingsService {
     isCurrentUserAdmin: number,
     pnrBookingDto: PnrBookingDto,
   ): Promise<any> {
+    console.log('currentUserId', currentUserId);
     const t: Transaction = await sequelize.transaction();
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -472,7 +473,7 @@ export class PnrBookingsService {
         SAVED_SUCCESS,
       );
     } catch (error) {
-      console.log('Error', error.message);
+      console.log('Error', error);
       await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -984,16 +985,20 @@ export class PnrBookingsService {
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         // pnr: callbackData.pnr,
-        pnr: '140VP8',
+        // pnr: '1BXGMB',
       },
+      order: [['createdAt', 'DESC']],
     });
-    console.log('req.query ', req.query.pending);
+    console.log('req.query *********** ', req.query);
     const viewETicketUrl = `http://localhost:3000/previewEticket?id=${pnrBooking.id}`;
     const errorRedirectUrl = `http://localhost:3000/bookingpayment`;
 
     const t: Transaction = await sequelize.transaction();
 
     try {
+      callbackData = req.query;
+      console.log('callbackData *********** ', callbackData);
+
       const newPnrPayment = await PnrPayment.create(
         {
           pnrBookingId: pnrBooking.id,
@@ -1025,10 +1030,10 @@ export class PnrBookingsService {
           bill_balanced: callbackData.bill_balanced,
           is_bill: callbackData.is_bill,
           owner: callbackData.owner,
-          data_message: callbackData.data.message,
-          source_data_type: callbackData.source_data.type,
-          source_data_pan: callbackData.source_data.pan,
-          source_data_sub_type: callbackData.source_data.sub_type,
+          data_message: callbackData.data?.message || '',
+          source_data_type: callbackData.source_data?.type,
+          source_data_pan: callbackData.source_data?.pan,
+          source_data_sub_type: callbackData.source_data?.sub_type,
           acq_response_code: callbackData.acq_response_code,
           txn_response_code: callbackData.txn_response_code,
           hmac: callbackData.hmac,
@@ -1044,16 +1049,18 @@ export class PnrBookingsService {
       // res.redirect(viewETicketUrl);
       return { viewETicketUrl };
     } catch (error) {
+      console.log('error:', error);
+
       await t.rollback();
 
-      // return res.redirect(errorRedirectUrl);
       return res.redirect(errorRedirectUrl);
+      // return res.redirect(errorRedirectUrl);
 
       console.log('error:', error);
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
-        error.message,
+        error,
       );
     }
   }
