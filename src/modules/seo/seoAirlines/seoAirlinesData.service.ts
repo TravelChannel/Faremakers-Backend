@@ -504,7 +504,7 @@ export class SEOAirlinesDataService {
         {
           id: 17,
           flightname: 'air-arabia-flights',
-          flightCode: 'SV',
+          flightCode: 'SVA',
           mainHeading: 'Air Arabia Airlines Top Destinations',
           heading1: 'Air Arabia  Top Picks',
           heading2: 'Air Arabia  Top Countries',
@@ -580,8 +580,9 @@ export class SEOAirlinesDataService {
           ],
         },
       ];
-      await Promise.all(
+      const ss = await Promise.all(
         SEOAirlinesData.map(async (element) => {
+          console.log(1);
           const newSeoAirlinesData =
             await this.seoAirlinesDataRepository.create(
               {
@@ -594,30 +595,45 @@ export class SEOAirlinesDataService {
               },
               { transaction: t },
             );
-          element.topPicks.map(async (element2) => {
-            const newTopPicks = await TopPicks.create(
-              {
-                destination: element2.destination,
-              },
-              { transaction: t },
-            );
-          });
-          element.topCountries.map(async (element2) => {
-            const newTopCountries = await TopCountries.create(
-              {
-                destination: element2.destination,
-              },
-              { transaction: t },
-            );
-          });
-          element.topCities.map(async (element2) => {
-            const newTopCities = await TopCities.create(
-              {
-                destination: element2.destination,
-              },
-              { transaction: t },
-            );
-          });
+          await Promise.all(
+            element.topPicks.map(async (element2) => {
+              console.log(2);
+
+              const newTopPicks = await TopPicks.create(
+                {
+                  seoAirlinesDataId: newSeoAirlinesData.id,
+                  destination: element2.destination,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+          await Promise.all(
+            element.topCountries.map(async (element2) => {
+              console.log(3);
+
+              const newTopCountries = await TopCountries.create(
+                {
+                  seoAirlinesDataId: newSeoAirlinesData.id,
+
+                  destination: element2.destination,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+          await Promise.all(
+            element.topCities.map(async (element2) => {
+              const newTopCities = await TopCities.create(
+                {
+                  seoAirlinesDataId: newSeoAirlinesData.id,
+
+                  destination: element2.destination,
+                },
+                { transaction: t },
+              );
+            }),
+          );
         }),
       );
 
@@ -629,11 +645,12 @@ export class SEOAirlinesDataService {
         'SEOAirlinesData Added',
       );
     } catch (error) {
-      await t.rollback();
+      console.log('error******', error);
+      // await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
-        error.message,
+        error,
       );
     }
   }
