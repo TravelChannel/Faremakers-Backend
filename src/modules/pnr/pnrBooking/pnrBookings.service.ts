@@ -11,7 +11,11 @@ import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
 import { User } from '../..//generalModules/users/entities/user.entity';
-import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import {
+  Op,
+  sequelize,
+  Transaction,
+} from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { FlightDetails } from '../flightDetails';
 import { ExtraBaggage } from '../extraBaggage';
@@ -483,7 +487,6 @@ export class PnrBookingsService {
     }
   }
 
-  // test comit issue
   async findAll(
     req,
     currentUserId: number,
@@ -506,6 +509,15 @@ export class PnrBookingsService {
       const pnrBookings = await PnrBooking.findAll({
         where: whereOptions,
         include: [
+          {
+            model: PnrPayment,
+            required: false,
+            where: {
+              id: {
+                [Op.is]: null,
+              },
+            },
+          },
           {
             model: User,
           },
@@ -600,6 +612,162 @@ export class PnrBookingsService {
           // Handle errors here
           console.error(error);
         });
+
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        // newPnrBookings,
+        pnrBookings,
+        GET_SUCCESS,
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async findAllWithPayment(
+    req,
+    currentUserId: number,
+    isCurrentUserAdmin: number,
+  ): Promise<any> {
+    try {
+      const isPaid = req.query.isPaid;
+      const whereOptions: any = {};
+      if (!isCurrentUserAdmin && currentUserId) {
+        whereOptions.userId = currentUserId;
+      }
+      if (req.query.isReqForCancellation) {
+        whereOptions.isReqForCancellation = req.query.isReqForCancellation;
+      }
+      if (req.query.isReqForRefund) {
+        whereOptions.isReqForRefund = req.query.isReqForRefund;
+      }
+      if (req.query.isReqForReIssue) {
+        whereOptions.isReqForReIssue = req.query.isReqForReIssue;
+      }
+      const pnrBookings = await PnrBooking.findAll({
+        where: whereOptions,
+        include: [
+          {
+            model: User,
+          },
+          ...(isPaid === '1'
+            ? [
+                {
+                  model: PnrPayment,
+                  required: true,
+                },
+              ]
+            : isPaid === 0
+            ? [
+                {
+                  model: PnrPayment,
+                  required: false,
+                  where: {
+                    id: null,
+                  },
+                },
+              ]
+            : [
+                {
+                  model: PnrPayment,
+                },
+              ]),
+          {
+            model: PnrDetail,
+            as: 'pnrDetail',
+          },
+          {
+            model: FlightDetails,
+            include: [
+              {
+                model: ExtraBaggage,
+              },
+              {
+                model: BaggageAllowance,
+              },
+              {
+                model: BookingFlight,
+              },
+              {
+                model: Fare,
+                include: [
+                  {
+                    model: PassengerInfoList,
+                    include: [
+                      {
+                        model: PassengerInfo,
+                        include: [
+                          {
+                            model: CurrencyConversion,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    model: TotalFare,
+                  },
+                ],
+              },
+              {
+                model: GroupDescription,
+              },
+              {
+                model: SchedualDetGet,
+                attributes: ['id'],
+                include: [
+                  {
+                    model: InnerSchedualDetGet,
+                    include: [
+                      {
+                        model: Arrival,
+                      },
+                      {
+                        model: Departure,
+                      },
+                      {
+                        model: Carrier,
+                        include: [
+                          {
+                            model: Equipment,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              {
+                model: FlightSegments,
+              },
+            ],
+          },
+        ],
+      })
+        .then((rawData) => {
+          const plainObjects = rawData.map((instance) => instance.toJSON());
+
+          plainObjects.map((data) => {
+            const arr = data.flightDetails.schedualDetGet;
+            data.flightDetails.schedualDetGet = [];
+            arr.map((data2) => {
+              data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
+            });
+          });
+
+          return plainObjects;
+        })
+
+        .catch((error) => {
+          // Handle errors here
+          console.error(error);
+        });
+      console.log('isPaid', isPaid);
 
       return this.responseService.createResponse(
         HttpStatus.OK,

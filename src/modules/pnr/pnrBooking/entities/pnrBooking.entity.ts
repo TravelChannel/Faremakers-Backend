@@ -88,7 +88,7 @@ export class PnrBooking extends Model {
   flightDetails: FlightDetails;
   @HasOne(() => PnrServiceCharges)
   pnrServiceCharges: PnrServiceCharges;
-  @HasMany(() => PnrPayment)
+  @HasOne(() => PnrPayment)
   pnrPayment: PnrPayment;
 }
 

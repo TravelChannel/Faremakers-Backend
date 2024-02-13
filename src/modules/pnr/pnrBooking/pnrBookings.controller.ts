@@ -79,6 +79,18 @@ export class PnrBookingsController {
       isCurrentUserAdmin,
     );
   }
+  @Get('paid')
+  async findAllWithPayment(
+    @Req() req: Request,
+    @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  ): Promise<PnrBooking[]> {
+    return await this.pnrBookingsService.findAllWithPayment(
+      req,
+      currentUserId,
+      isCurrentUserAdmin,
+    );
+  }
   @Get('findBy')
   async findBy(
     @Req() req: Request,
