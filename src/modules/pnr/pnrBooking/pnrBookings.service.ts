@@ -12,7 +12,7 @@ import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
 import { User } from '../..//generalModules/users/entities/user.entity';
 import {
-  Op,
+  // Op,
   sequelize,
   Transaction,
 } from '../../../database/sequelize.provider'; // Adjust the path accordingly
@@ -509,15 +509,16 @@ export class PnrBookingsService {
       const pnrBookings = await PnrBooking.findAll({
         where: whereOptions,
         include: [
-          {
-            model: PnrPayment,
-            required: false,
-            where: {
-              id: {
-                [Op.is]: null,
-              },
-            },
-          },
+          // ***********[Op.is]: null, not working  ******
+          // {
+          //   model: PnrPayment,
+          //   // required: false,
+          //   where: {
+          //     id: {
+          //       [Op.is]: null,
+          //     },
+          //   },
+          // },
           {
             model: User,
           },
@@ -617,7 +618,7 @@ export class PnrBookingsService {
         HttpStatus.OK,
         // newPnrBookings,
         pnrBookings,
-        GET_SUCCESS,
+        'GET_SUCCESS',
       );
     } catch (error) {
       console.log(error);
@@ -635,6 +636,7 @@ export class PnrBookingsService {
   ): Promise<any> {
     try {
       const isPaid = req.query.isPaid;
+      // const isPaid = 1;
       const whereOptions: any = {};
       if (!isCurrentUserAdmin && currentUserId) {
         whereOptions.userId = currentUserId;
