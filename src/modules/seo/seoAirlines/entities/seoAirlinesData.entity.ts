@@ -28,8 +28,8 @@ export class SEOAirlinesData extends Model {
         msg: 'flightname cannot be empty.',
       },
       len: {
-        args: [3, 50],
-        msg: 'flightname must be between 3 and 50 characters.',
+        args: [2, 50],
+        msg: 'flightname must be between 2 and 50 characters.',
       },
     },
   })
@@ -49,8 +49,8 @@ export class SEOAirlinesData extends Model {
         msg: 'flightCode cannot be empty.',
       },
       len: {
-        args: [3, 50],
-        msg: 'flightCode must be between 3 and 50 characters.',
+        args: [2, 50],
+        msg: 'flightCode must be between 2 and 50 characters.',
       },
     },
   })

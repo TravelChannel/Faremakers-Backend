@@ -18,11 +18,11 @@ export class SEOAirlinesDataService {
     private readonly responseService: ResponseService,
   ) {}
 
-  async create(createSEOAirlinesDataDto: CreateSEOAirlinesDataDto) {
+  async create() {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const { ...rest } = createSEOAirlinesDataDto;
+      // const { ...rest } = createSEOAirlinesDataDto;
       const SEOAirlinesData = [
         {
           id: 1,

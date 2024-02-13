@@ -27,8 +27,8 @@ export class SEOAirlinesDataController {
   ) {}
 
   @Post()
-  async create(@Body() createSEOAirlinesDataDto: CreateSEOAirlinesDataDto) {
-    return await this.seoAirlinesDataService.create(createSEOAirlinesDataDto);
+  async create() {
+    return await this.seoAirlinesDataService.create();
   }
 
   @Get('dropdown')
