@@ -1,5 +1,5 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
-import { CreateSEOAirlinesDataDto } from './dto/create-seoAirlinesData.dto';
+// import { CreateSEOAirlinesDataDto } from './dto/create-seoAirlinesData.dto';
 import { UpdateSEOAirlinesDataDto } from './dto/update-seoAirlinesData.dto';
 import { SEO_AIRLINES_DATA_REPOSITORY } from '../../../shared/constants';
 import { SEOAirlinesData } from './entities/seoAirlinesData.entity';
@@ -580,7 +580,7 @@ export class SEOAirlinesDataService {
           ],
         },
       ];
-      const ss = await Promise.all(
+      await Promise.all(
         SEOAirlinesData.map(async (element) => {
           console.log(1);
           const newSeoAirlinesData =
@@ -599,6 +599,7 @@ export class SEOAirlinesDataService {
             element.topPicks.map(async (element2) => {
               console.log(2);
 
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const newTopPicks = await TopPicks.create(
                 {
                   seoAirlinesDataId: newSeoAirlinesData.id,
@@ -612,6 +613,7 @@ export class SEOAirlinesDataService {
             element.topCountries.map(async (element2) => {
               console.log(3);
 
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const newTopCountries = await TopCountries.create(
                 {
                   seoAirlinesDataId: newSeoAirlinesData.id,
@@ -624,6 +626,7 @@ export class SEOAirlinesDataService {
           );
           await Promise.all(
             element.topCities.map(async (element2) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const newTopCities = await TopCities.create(
                 {
                   seoAirlinesDataId: newSeoAirlinesData.id,
@@ -646,7 +649,7 @@ export class SEOAirlinesDataService {
       );
     } catch (error) {
       console.log('error******', error);
-      // await t.rollback();
+      await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
@@ -657,11 +660,11 @@ export class SEOAirlinesDataService {
 
   async findAll(): Promise<SEOAirlinesData[]> {
     try {
-      const promotion = await this.seoAirlinesDataRepository.findAll();
+      const seoAirlinesData = await this.seoAirlinesDataRepository.findAll();
       return this.responseService.createResponse(
         HttpStatus.OK,
-        promotion,
-        'promotion Fetched',
+        seoAirlinesData,
+        'seoAirlinesData Fetched',
       );
     } catch (error) {
       // await t.rollback();
@@ -675,11 +678,14 @@ export class SEOAirlinesDataService {
 
   async findOne(id: number) {
     try {
-      const promotion = await this.seoAirlinesDataRepository.findByPk(id, {});
+      const seoAirlinesData = await this.seoAirlinesDataRepository.findByPk(
+        id,
+        {},
+      );
       return this.responseService.createResponse(
         HttpStatus.OK,
-        { ...promotion.toJSON() },
-        'promotion retrieved successfully',
+        seoAirlinesData,
+        'seoAirlinesData retrieved successfully',
       );
     } catch (error) {
       return this.responseService.createResponse(
@@ -694,11 +700,11 @@ export class SEOAirlinesDataService {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
-      const promotion = await this.seoAirlinesDataRepository.findByPk(id);
-      if (promotion) {
-        promotion.flightname = updateSEOAirlinesDataDto.flightname;
-        promotion.flightCode = updateSEOAirlinesDataDto.flightCode;
-        await promotion.save();
+      const seoAirlinesData = await this.seoAirlinesDataRepository.findByPk(id);
+      if (seoAirlinesData) {
+        seoAirlinesData.flightname = updateSEOAirlinesDataDto.flightname;
+        seoAirlinesData.flightCode = updateSEOAirlinesDataDto.flightCode;
+        await seoAirlinesData.save();
       } else {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
@@ -725,16 +731,16 @@ export class SEOAirlinesDataService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const promotion = await this.seoAirlinesDataRepository.findByPk(id);
-      if (!promotion) {
+      const seoAirlinesData = await this.seoAirlinesDataRepository.findByPk(id);
+      if (!seoAirlinesData) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
           null,
-          'promotion not found',
+          'seoAirlinesData not found',
         );
       }
 
-      await promotion.destroy({ transaction: t });
+      await seoAirlinesData.destroy({ transaction: t });
       await t.commit();
 
       return this.responseService.createResponse(
