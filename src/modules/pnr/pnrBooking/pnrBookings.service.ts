@@ -1226,13 +1226,17 @@ export class PnrBookingsService {
       return { viewETicketUrl };
     } catch (error) {
       console.log('error:', error);
+      console.log('*****processPayment Endpoint Hit*******');
 
       await t.rollback();
 
       return res.redirect(errorRedirectUrl);
       // return res.redirect(errorRedirectUrl);
+      console.log('*****processPayment Endpoint Hit*******');
 
       console.log('error:', error);
+      console.log('*****processPayment Endpoint Hit*******');
+
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
