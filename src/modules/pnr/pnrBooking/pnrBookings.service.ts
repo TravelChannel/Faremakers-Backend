@@ -1152,6 +1152,12 @@ export class PnrBookingsService {
     }
   }
   async processPayment(callbackData: any, req, res): Promise<any> {
+    console.log('*****processPayment Endpoint Hit******');
+    console.log('*****processPayment Endpoint Hit******');
+    console.log('*****processPayment Endpoint Hit******');
+    console.log('*****processPayment Endpoint Hit******');
+    console.log('*****processPayment Endpoint Hit******');
+    console.log('*****processPayment Endpoint Hit*******');
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         // pnr: callbackData.pnr,
