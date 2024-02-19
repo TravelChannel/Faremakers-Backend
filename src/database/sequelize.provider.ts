@@ -39,6 +39,8 @@ import { TopCities } from '../modules/seo/topCities/index';
 import { TopPicks } from '../modules/seo/topPicks/index';
 import { TopCountries } from '../modules/seo/topCountries/index';
 import { FareClassLetters } from '../modules/serviceCharges/fareClassLetters';
+import { Blog } from '../modules/generalModules/blogs/entities/blog.entity';
+import { BlogsDetails } from '../modules/generalModules/blogsDetails/index';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -89,14 +91,16 @@ sequelize.addModels([
   TopPicks,
   TopCountries,
   FareClassLetters,
+  Blog,
+  BlogsDetails,
 ]);
 
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  // .sync()
   .then(() => {
     console.log('Database synchronized...');
   })

@@ -8,6 +8,8 @@ import { ResponseService } from '../../../common/utility/response/response.servi
 import { EXCEPTION } from '../../../shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
+import { BlogsDetails } from '../blogsDetails/index';
+
 @Injectable()
 export class BlogsService {
   constructor(
@@ -20,18 +22,33 @@ export class BlogsService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const { ...rest } = createBlogDto;
-
-      const newRole = await this.blogsRepository.create(
-        { title: rest.title, description: rest.description },
+      const newBlog = await this.blogsRepository.create(
+        {
+          mainTitle: createBlogDto.mainTitle,
+          description: createBlogDto.description,
+        },
         { transaction: t },
       );
 
+      await Promise.all(
+        createBlogDto.content.map(async (element) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const newBlogsDetails = await BlogsDetails.create(
+            {
+              blogId: newBlog.id,
+
+              heading: element.heading,
+              summary: element.summary,
+            },
+            { transaction: t },
+          );
+        }),
+      );
       await t.commit();
 
       return this.responseService.createResponse(
         HttpStatus.OK,
-        newRole,
+        newBlog,
         'Blog Added',
       );
     } catch (error) {
@@ -46,7 +63,13 @@ export class BlogsService {
 
   async findAll(): Promise<Blog[]> {
     try {
-      const blog = await this.blogsRepository.findAll();
+      const blog = await this.blogsRepository.findAll({
+        include: [
+          {
+            model: BlogsDetails,
+          },
+        ],
+      });
       return this.responseService.createResponse(
         HttpStatus.OK,
         blog,
@@ -85,7 +108,7 @@ export class BlogsService {
     try {
       const blog = await this.blogsRepository.findByPk(id);
       if (blog) {
-        blog.title = updateBlogDto.title;
+        blog.mainTitle = updateBlogDto.mainTitle;
         blog.description = updateBlogDto.description;
         await blog.save();
       } else {
@@ -145,7 +168,7 @@ export class BlogsService {
   async getDropdown() {
     try {
       const dropdownsArray = await this.blogsRepository.findAll({
-        attributes: ['id', 'title'],
+        attributes: ['id', 'mainTitle'],
         // include: [Right],
       });
       return this.responseService.createResponse(
