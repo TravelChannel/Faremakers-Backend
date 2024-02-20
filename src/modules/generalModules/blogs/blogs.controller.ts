@@ -36,11 +36,12 @@ export class BlogsController {
   @Post()
   @UseInterceptors(
     FileInterceptor('imgFile', {
-      storage: createFileStorage('./uploads/users/profiles'),
+      storage: createFileStorage('./uploads/blogs/images'),
     }),
   )
   async create(
-    @Body() createBlogDto: CreateBlogDto,
+    @Body() payload: { data: string },
+
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
@@ -58,6 +59,9 @@ export class BlogsController {
     )
     imgFile?: Express.Multer.File | null | undefined,
   ) {
+    console.log('payload', payload);
+    const createBlogDto: CreateBlogDto = JSON.parse(payload.data);
+
     return await this.blogsService.create(createBlogDto, imgFile);
   }
 

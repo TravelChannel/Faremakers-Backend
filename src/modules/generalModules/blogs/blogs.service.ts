@@ -26,22 +26,24 @@ export class BlogsService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const newBlog = await this.blogsRepository.create(
-        {
-          mainTitle: createBlogDto.mainTitle,
-          description: createBlogDto.description,
-        },
-        { transaction: t },
-      );
+      let myImg = null;
       if (imgFile) {
         const imagePath =
           process.env.BASE_URL +
           ':' +
           process.env.PORT +
-          '/uploads/users/profiles/' +
+          '/uploads/blogs/images/' +
           imgFile.filename;
-        newBlog.img = imagePath; // Store the file path in the user table
+        myImg = imagePath; // Store the file path in the user table
       }
+      const newBlog = await this.blogsRepository.create(
+        {
+          mainTitle: createBlogDto.mainTitle,
+          description: createBlogDto.description,
+          img: myImg,
+        },
+        { transaction: t },
+      );
 
       await Promise.all(
         createBlogDto.content.map(async (element) => {
