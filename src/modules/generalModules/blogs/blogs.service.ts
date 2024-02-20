@@ -131,74 +131,11 @@ export class BlogsService {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
-      const blog = await this.blogsRepository.findByPk(id, {
-        include: [
-          {
-            model: BlogsDetails,
-          },
-        ],
-      });
-      if (blog) {
-        let myImg = null;
-        if (imgFile) {
-          const imagePath =
-            process.env.BASE_URL +
-            ':' +
-            process.env.PORT +
-            '/uploads/blogs/images/' +
-            imgFile.filename;
-          myImg = imagePath; // Store the file path in the user table
-        }
-        blog.mainTitle = updateBlogDto.mainTitle;
-        blog.description = updateBlogDto.description;
-        blog.img = myImg;
-        await blog.save();
-
-        const existingRightsIds = blog.blogDetails.map((right) => right.id);
-
-        // Find the new rights to be added
-        const newRights = updateBlogDto.content.filter(
-          (rightId) => !existingRightsIds.includes(rightId),
-        );
-        // Find the rights to be removed
-        const rightsToRemove = existingRightsIds.filter(
-          (rightId) =>
-            !updateBlogDto.content.some((right) => right === rightId),
-        );
-
-        await Promise.all(
-          rightsToRemove.map(async (rightId) => {
-            const right = await BlogsDetails.findByPk(rightId);
-            if (right) {
-              await BlogsDetails.destroy({
-                where: { blogId: id, rightId },
-                transaction: t,
-              });
-            }
-          }),
-        );
-
-        await Promise.all(
-          updateBlogDto.content.map(async (rightId) => {
-            const right = await BlogsDetails.findByPk(rightId);
-            if (right) {
-              await BlogsDetails.create(
-                {
-                  roleId: id,
-                  rightId: rightId,
-                },
-                { transaction: t },
-              );
-            }
-          }),
-        );
-      } else {
-        return this.responseService.createResponse(
-          HttpStatus.NOT_FOUND,
-          null,
-          'Blog Not Found',
-        );
-      }
+      return this.responseService.createResponse(
+        HttpStatus.NOT_FOUND,
+        null,
+        'Blog Not Found',
+      );
 
       await t.commit();
       return this.responseService.createResponse(
