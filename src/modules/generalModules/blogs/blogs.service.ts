@@ -18,7 +18,11 @@ export class BlogsService {
     private readonly responseService: ResponseService,
   ) {}
 
-  async create(createBlogDto: CreateBlogDto) {
+  async create(
+    createBlogDto: CreateBlogDto,
+
+    imgFile: Express.Multer.File,
+  ) {
     const t: Transaction = await sequelize.transaction();
 
     try {
@@ -29,6 +33,15 @@ export class BlogsService {
         },
         { transaction: t },
       );
+      if (imgFile) {
+        const imagePath =
+          process.env.BASE_URL +
+          ':' +
+          process.env.PORT +
+          '/uploads/users/profiles/' +
+          imgFile.filename;
+        newBlog.img = imagePath; // Store the file path in the user table
+      }
 
       await Promise.all(
         createBlogDto.content.map(async (element) => {

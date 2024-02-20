@@ -8,8 +8,10 @@ import {
   Delete,
   UseGuards,
   UseInterceptors,
+  HttpStatus,
+  ParseFilePipeBuilder,
+  UploadedFile,
 
-  // HttpStatus,
   // HttpException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -37,8 +39,26 @@ export class BlogsController {
       storage: createFileStorage('./uploads/users/profiles'),
     }),
   )
-  async create(@Body() createBlogDto: CreateBlogDto) {
-    return await this.blogsService.create(createBlogDto);
+  async create(
+    @Body() createBlogDto: CreateBlogDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg|png',
+        })
+
+        .addMaxSizeValidator({
+          maxSize: 5000000,
+          // errorMessage: 'File size should not exceed 1MB',
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    imgFile?: Express.Multer.File | null | undefined,
+  ) {
+    return await this.blogsService.create(createBlogDto, imgFile);
   }
 
   @Get('dropdown')
