@@ -7,9 +7,15 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
+
   // HttpStatus,
   // HttpException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+
+import { createFileStorage } from '../../../common/utils/file-storage.util'; // Import the utility function
+
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
@@ -26,6 +32,11 @@ export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
   @Post()
+  @UseInterceptors(
+    FileInterceptor('imgFile', {
+      storage: createFileStorage('./uploads/users/profiles'),
+    }),
+  )
   async create(@Body() createBlogDto: CreateBlogDto) {
     return await this.blogsService.create(createBlogDto);
   }
