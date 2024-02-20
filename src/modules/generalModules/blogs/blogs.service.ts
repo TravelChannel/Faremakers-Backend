@@ -102,7 +102,13 @@ export class BlogsService {
 
   async findOne(id: number) {
     try {
-      const blog = await this.blogsRepository.findByPk(id, {});
+      const blog = await this.blogsRepository.findByPk(id, {
+        include: [
+          {
+            model: BlogsDetails,
+          },
+        ],
+      });
       return this.responseService.createResponse(
         HttpStatus.OK,
         blog,
@@ -158,9 +164,10 @@ export class BlogsService {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
           null,
-          'blog not found',
+          'blog not found.',
         );
       }
+      await BlogsDetails.destroy({ where: { blogId: id }, transaction: t });
 
       await blog.destroy({ transaction: t });
       await t.commit();
