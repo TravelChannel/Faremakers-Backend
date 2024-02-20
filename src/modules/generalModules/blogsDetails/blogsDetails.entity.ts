@@ -31,8 +31,8 @@ export class BlogsDetails extends Model {
   @Column(DataType.STRING)
   heading: string;
 
-  @Column(DataType.FLOAT)
-  summary: number;
+  @Column(DataType.STRING)
+  summary: string;
   @BelongsTo(() => Blog)
   blog: Blog;
 }
