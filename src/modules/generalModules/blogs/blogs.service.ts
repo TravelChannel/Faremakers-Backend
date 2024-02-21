@@ -154,7 +154,7 @@ export class BlogsService {
   async update(
     id: number,
     updateBlogDto: UpdateBlogDto,
-    imgFile: Express.Multer.File,
+    // imgFile: Express.Multer.File,
   ) {
     const t = await sequelize.transaction(); // Start the transaction
 
@@ -227,6 +227,8 @@ export class BlogsService {
         'Blog updated successfully',
       );
     } catch (error) {
+      console.log('errorrr', error);
+
       await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,

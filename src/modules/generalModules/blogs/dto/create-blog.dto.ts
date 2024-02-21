@@ -21,7 +21,7 @@ export class CreateBlogDto {
     message: 'description must be between 3 and 50 characters.',
   })
   description: string;
-  @ArrayNotEmpty({ message: 'Please provide atleast one Right .' })
+  @ArrayNotEmpty({ message: 'Please provide atleast one content .' })
   content: BlogContentDto[];
   // @ArrayNotEmpty({ message: 'Please provide at least one role.' })
   // @ValidateNested({ each: true }) // Validate each item in the array
