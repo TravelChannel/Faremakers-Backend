@@ -94,32 +94,27 @@ export class BlogsController {
   )
   update(
     @Param('id') id: string,
-    // @Body() payload: { data: string },
-    @Body() updateBlogDto: UpdateBlogDto,
-    // @UploadedFile(
-    //   new ParseFilePipeBuilder()
-    //     .addFileTypeValidator({
-    //       fileType: 'jpeg|png',
-    //     })
+    @Body() payload: { data: string },
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg|png',
+        })
 
-    //     .addMaxSizeValidator({
-    //       maxSize: 5000000,
-    //       // errorMessage: 'File size should not exceed 1MB',
-    //     })
-    //     .build({
-    //       fileIsRequired: false,
-    //       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-    //     }),
-    // )
-    // imgFile?: Express.Multer.File | null | undefined,
+        .addMaxSizeValidator({
+          maxSize: 5000000,
+          // errorMessage: 'File size should not exceed 1MB',
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    imgFile?: Express.Multer.File | null | undefined,
   ) {
-    // const updateBlogDto: UpdateBlogDto = JSON.parse(payload.data);
+    const updateBlogDto: UpdateBlogDto = JSON.parse(payload.data);
 
-    return this.blogsService.update(
-      +id,
-      updateBlogDto,
-      //  imgFile
-    );
+    return this.blogsService.update(+id, updateBlogDto, imgFile);
   }
 
   @Delete(':id')

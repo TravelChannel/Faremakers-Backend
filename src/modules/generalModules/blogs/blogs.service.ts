@@ -154,11 +154,21 @@ export class BlogsService {
   async update(
     id: number,
     updateBlogDto: UpdateBlogDto,
-    // imgFile: Express.Multer.File,
+    imgFile: Express.Multer.File,
   ) {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
+      let myImg = updateBlogDto.img;
+      if (imgFile) {
+        const imagePath =
+          process.env.BASE_URL +
+          ':' +
+          process.env.PORT +
+          '/uploads/blogs/images/' +
+          imgFile.filename;
+        myImg = imagePath; // Store the file path in the user table
+      }
       const blogId = id;
       const existingBlog = await this.blogsRepository.findByPk(id, {
         include: [{ model: BlogsDetails }],
@@ -176,7 +186,7 @@ export class BlogsService {
         {
           mainTitle: updateBlogDto.mainTitle,
           description: updateBlogDto.description,
-          // img: myImg,
+          img: myImg,
         },
         { transaction: t },
       );
@@ -219,7 +229,6 @@ export class BlogsService {
           ),
         ),
       ]);
-      // *****
       await t.commit();
       return this.responseService.createResponse(
         HttpStatus.OK,

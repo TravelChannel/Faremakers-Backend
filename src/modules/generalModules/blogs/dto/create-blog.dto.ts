@@ -10,6 +10,7 @@ import {
 
 import { BlogContentDto } from './blog-content.dto';
 export class CreateBlogDto {
+  img: string;
   @IsNotEmpty({ message: 'mainTitle is required.' })
   @IsString({ message: 'mainTitle must be a string.' })
   @Length(3, 50, { message: 'mainTitle must be between 3 and 25 characters.' })
