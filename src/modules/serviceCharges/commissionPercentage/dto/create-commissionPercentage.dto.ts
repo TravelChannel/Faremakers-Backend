@@ -1,5 +1,7 @@
 import {
   IsNotEmpty,
+  IsNumber,
+  IsOptional,
   // ArrayMinSize,
   // ArrayNotEmpty,
   // ValidateNested,
@@ -8,12 +10,17 @@ import {
 
 // import { Rights } from './rights.dto';
 export class CreateCommissionPercentageDto {
+  @IsNumber({ allowInfinity: false }, { message: 'Must be a number' })
   @IsNotEmpty({ message: 'percentage is required.' })
   percentage: number;
-  @IsNotEmpty({ message: 'airlineId is required.' })
+  @IsOptional()
+
+  // @IsNotEmpty({ message: 'airlineId is required.' })
   airlineId: number;
-  @IsNotEmpty({ message: 'fareClassId is required.' })
+  // @IsNotEmpty({ message: 'fareClassId is required.' })
+  @IsOptional()
   fareClassId: number;
-  @IsNotEmpty({ message: 'sectorId is required.' })
+  // @IsNotEmpty({ message: 'sectorId is required.' })
+  @IsOptional()
   sectorId: number;
 }
