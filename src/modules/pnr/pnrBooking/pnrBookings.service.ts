@@ -36,7 +36,6 @@ import { Arrival } from '../arrival';
 import { Equipment } from '../equipment';
 import { PnrServiceCharges } from '../../serviceCharges/pnrServiceCharges';
 import { CommissionPercentage } from '../../serviceCharges/commissionPercentage/entities/commissionPercentage.entity';
-import { Destination } from '../../serviceCharges/destination';
 import { Sector } from '../../serviceCharges/sector';
 import { FareClass } from '../../serviceCharges/fareClass';
 import { Airline } from '../../serviceCharges/airline';
@@ -62,8 +61,8 @@ export class PnrBookingsService {
       const {
         pnrBookings,
         pnr,
-        phoneNumber,
-        countryCode,
+        // phoneNumber,
+        // countryCode,
         flightDetails,
         MajorInfo,
       } = pnrBookingDto;
@@ -407,7 +406,11 @@ export class PnrBookingsService {
 
             if (airline) {
               const commissionPercentage = await CommissionPercentage.findOne({
-                where: { airlineId: airline.id },
+                where: {
+                  airlineId: airline.id,
+                  fareClassId: null,
+                  sectorId: null,
+                },
               });
 
               if (commissionPercentage) {
@@ -424,7 +427,11 @@ export class PnrBookingsService {
 
             if (sector) {
               const commissionPercentage = await CommissionPercentage.findOne({
-                where: { sectorId: sector.id },
+                where: {
+                  sectorId: sector.id,
+                  airlineId: null,
+                  fareClassId: null,
+                },
               });
 
               if (commissionPercentage) {
@@ -442,7 +449,11 @@ export class PnrBookingsService {
 
             if (fareClass) {
               const commissionPercentage = await CommissionPercentage.findOne({
-                where: { fareClassId: fareClass.id },
+                where: {
+                  fareClassId: fareClass.id,
+                  sectorId: null,
+                  airlineId: null,
+                },
               });
 
               if (commissionPercentage) {
@@ -1151,7 +1162,7 @@ export class PnrBookingsService {
   }
   async processPayment(
     callbackData: any,
-    req,
+    // req,
     //  res
   ): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');

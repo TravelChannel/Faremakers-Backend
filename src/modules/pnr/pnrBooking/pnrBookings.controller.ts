@@ -66,7 +66,7 @@ export class PnrBookingsController {
   ): Promise<any> {
     return await this.pnrBookingsService.processPayment(
       callbackData,
-      req,
+      // req,
       // res
     );
   }
