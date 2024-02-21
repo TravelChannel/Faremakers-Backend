@@ -9,6 +9,7 @@ import {
 
 // import { Rights } from './rights.dto';
 export class BlogContentDto {
+  id: number;
   @IsNotEmpty({ message: 'heading is required.' })
   @IsString({ message: 'heading must be a string.' })
   @Length(3, 50, { message: 'heading must be between 3 and 25 characters.' })

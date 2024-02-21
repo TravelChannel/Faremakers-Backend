@@ -159,12 +159,67 @@ export class BlogsService {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
-      return this.responseService.createResponse(
-        HttpStatus.NOT_FOUND,
-        null,
-        'Blog Not Found',
+      const blogId = id;
+      const existingBlog = await this.blogsRepository.findByPk(id, {
+        include: [{ model: BlogsDetails }],
+      });
+      if (!existingBlog) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Blog not found',
+        );
+      }
+
+      // Update the role details
+      await existingBlog.update(
+        {
+          mainTitle: updateBlogDto.mainTitle,
+          description: updateBlogDto.description,
+          // img: myImg,
+        },
+        { transaction: t },
       );
 
+      // Steps 2 to 5: Handle blog details updates
+      const existingDetails = await BlogsDetails.findAll({
+        where: { blogId: blogId },
+        transaction: t,
+      });
+
+      // Determine changes
+      const updateBlogDetailsIds = updateBlogDto.content
+        .map((detail) => detail.id)
+        .filter((id) => id !== undefined);
+      const newBlogDetails = updateBlogDto.content.filter(
+        (detail) => !detail.id,
+      );
+      const detailsToDelete = existingDetails.filter(
+        (detail) => !updateBlogDetailsIds.includes(detail.id),
+      );
+      const detailsToUpdate = updateBlogDto.content.filter(
+        (detail) => detail.id,
+      );
+
+      // Delete, add, and update details as necessary
+      await Promise.all([
+        ...detailsToDelete.map((detail) =>
+          BlogsDetails.destroy({ where: { id: detail.id }, transaction: t }),
+        ),
+        ...newBlogDetails.map((element) =>
+          BlogsDetails.create(
+            { blogId: blogId, ...element },
+            { transaction: t },
+          ),
+        ),
+        ...detailsToUpdate.map((element) =>
+          BlogsDetails.update(
+            { ...element },
+            { where: { id: element.id }, transaction: t },
+          ),
+        ),
+      ]);
+      // *****
       await t.commit();
       return this.responseService.createResponse(
         HttpStatus.OK,
