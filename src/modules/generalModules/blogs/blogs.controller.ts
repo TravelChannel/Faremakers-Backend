@@ -76,6 +76,10 @@ export class BlogsController {
     return this.blogsService.findAll();
   }
 
+  // @Get(':id')
+  // findOneByTitle(@Param('id') id: string) {
+  //   return this.blogsService.findOneByTitle(+id);
+  // }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.blogsService.findOne(+id);
