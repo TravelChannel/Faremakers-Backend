@@ -24,10 +24,13 @@ export class CommissionPercentageService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const { ...rest } = createCommissionPercentageDto;
-
       const newRole = await this.commissionPercentageRepository.create(
-        { title: rest.title, description: rest.description },
+        {
+          percentage: createCommissionPercentageDto.percentage ?? 0,
+          airlineId: createCommissionPercentageDto.airlineId ?? null,
+          fareClassId: createCommissionPercentageDto.fareClassId ?? null,
+          sectorId: createCommissionPercentageDto.sectorId ?? null,
+        },
         { transaction: t },
       );
 
