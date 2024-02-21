@@ -1225,11 +1225,7 @@ export class PnrBookingsService {
   }
   async processPayment2(callbackData: any, req, res): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
-    console.log('*****processPayment Endpoint Hit******');
-    console.log('*****processPayment Endpoint Hit******');
-    console.log('*****processPayment Endpoint Hit******');
-    console.log('*****processPayment Endpoint Hit******');
-    console.log('*****processPayment Endpoint Hit*******');
+
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         // pnr: callbackData.pnr,
@@ -1302,13 +1298,11 @@ export class PnrBookingsService {
       return { viewETicketUrl };
     } catch (error) {
       console.log('error:', error);
-      console.log('*****processPayment Endpoint Hit*******');
 
       await t.rollback();
 
       return res.redirect(errorRedirectUrl);
       // return res.redirect(errorRedirectUrl);
-      console.log('*****processPayment Endpoint Hit*******');
 
       console.log('error:', error);
       console.log('*****processPayment Endpoint Hit*******');
