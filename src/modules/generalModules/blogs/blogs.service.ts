@@ -100,6 +100,34 @@ export class BlogsService {
     }
   }
 
+  async findOneBy(req) {
+    try {
+      const whereOptions: any = {};
+      if (req.query.mainTitle) {
+        whereOptions.mainTitle = req.query.mainTitle;
+      }
+      const blog = await this.blogsRepository.findOne({
+        where: whereOptions,
+
+        include: [
+          {
+            model: BlogsDetails,
+          },
+        ],
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        blog,
+        'blog retrieved successfully',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async findOne(id: number) {
     try {
       const blog = await this.blogsRepository.findByPk(id, {

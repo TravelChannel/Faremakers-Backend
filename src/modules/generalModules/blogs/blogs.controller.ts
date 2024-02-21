@@ -11,6 +11,7 @@ import {
   HttpStatus,
   ParseFilePipeBuilder,
   UploadedFile,
+  Req,
 
   // HttpException,
 } from '@nestjs/common';
@@ -76,10 +77,10 @@ export class BlogsController {
     return this.blogsService.findAll();
   }
 
-  // @Get(':id')
-  // findOneByTitle(@Param('id') id: string) {
-  //   return this.blogsService.findOneByTitle(+id);
-  // }
+  @Get('/by')
+  findOneBy(@Req() req: Request) {
+    return this.blogsService.findOneBy(req);
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.blogsService.findOne(+id);
