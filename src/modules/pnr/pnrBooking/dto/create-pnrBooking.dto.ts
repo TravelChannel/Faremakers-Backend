@@ -13,4 +13,6 @@ export class PnrBookingDto {
   pnrBookings: PnrBookingArrayDto[];
   @IsOptional()
   flightDetails: any;
+  @IsOptional()
+  MajorInfo: any;
 }

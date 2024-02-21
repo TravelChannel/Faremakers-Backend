@@ -59,8 +59,14 @@ export class PnrBookingsService {
     const t: Transaction = await sequelize.transaction();
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { pnrBookings, pnr, phoneNumber, countryCode, flightDetails } =
-        pnrBookingDto;
+      const {
+        pnrBookings,
+        pnr,
+        phoneNumber,
+        countryCode,
+        flightDetails,
+        MajorInfo,
+      } = pnrBookingDto;
       // let newUser = await User.findOne({
       //   where: {
       //     phoneNumber: phoneNumber,
@@ -389,9 +395,12 @@ export class PnrBookingsService {
 
       if (commissionCategory) {
         let pnrServiceChargesPercentage = 0;
-        const pnrServiceChargesCode = 'unknownCode';
+        let pnrServiceChargesCode = 'unknownCode';
+
         switch (commissionCategory.id) {
           case 1:
+            pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
+
             const airline = await Airline.findOne({
               where: { code: pnrServiceChargesCode },
             });
@@ -408,6 +417,7 @@ export class PnrBookingsService {
             break;
 
           case 2:
+            pnrServiceChargesCode = MajorInfo.Destinations[0] ?? null;
             const sector = await Sector.findOne({
               where: { code: pnrServiceChargesCode },
             });
@@ -424,6 +434,8 @@ export class PnrBookingsService {
 
             break;
           case 3:
+            pnrServiceChargesCode = MajorInfo.ClassType[0] ?? null;
+
             const fareClass = await FareClass.findOne({
               where: { code: pnrServiceChargesCode },
             });
@@ -439,21 +451,6 @@ export class PnrBookingsService {
             }
             break;
 
-          case 4:
-            const destination = await Destination.findOne({
-              where: { code: pnrServiceChargesCode },
-            });
-
-            if (destination) {
-              const commissionPercentage = await CommissionPercentage.findOne({
-                where: { destinationId: destination.id },
-              });
-
-              if (commissionPercentage) {
-                pnrServiceChargesPercentage = commissionPercentage.percentage;
-              }
-            }
-            break;
           default:
             pnrServiceChargesPercentage = 0;
             break;
