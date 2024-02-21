@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreateCommissionPercentageDto } from './dto/create-commissionPercentage.dto';
 import { UpdateCommissionPercentageDto } from './dto/update-commissionPercentage.dto';
@@ -6,6 +7,9 @@ import { CommissionPercentage } from './entities/commissionPercentage.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
+import { Airline } from '../airline';
+import { FareClass } from '../fareClass';
+import { Sector } from '../sector';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
@@ -141,12 +145,59 @@ export class CommissionPercentageService {
       );
     }
   }
-  async getDropdown() {
+  async getAirlineDropdown() {
     try {
-      const dropdownsArray = await this.commissionPercentageRepository.findAll({
-        attributes: ['id', 'title'],
-        // include: [Right],
-      });
+      const dropdownsArray = await Airline.findAll({});
+      let dropdown = [];
+
+      dropdown = dropdownsArray.map((item) => ({
+        id: item.id,
+        name: `${item.code}-${item.name}`,
+      }));
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        dropdownsArray,
+        'Success',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
+  async getSectorDropdown() {
+    try {
+      const dropdownsArray = await Sector.findAll({});
+      let dropdown = [];
+
+      dropdown = dropdownsArray.map((item) => ({
+        id: item.id,
+        name: `${item.code}-${item.name}`,
+      }));
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        dropdownsArray,
+        'Success',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
+  async getFareClassDropdown() {
+    try {
+      const dropdownsArray = await FareClass.findAll({});
+      let dropdown = [];
+
+      dropdown = dropdownsArray.map((item) => ({
+        id: item.id,
+        name: `${item.code}-${item.name}`,
+      }));
       return this.responseService.createResponse(
         HttpStatus.OK,
         dropdownsArray,

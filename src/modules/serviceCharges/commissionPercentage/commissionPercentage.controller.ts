@@ -36,9 +36,17 @@ export class CommissionPercentageController {
     );
   }
 
-  @Get('dropdown')
-  getDropdown() {
-    return this.rolesService.getDropdown();
+  @Get('getAirlineDropdown')
+  getAirlineDropdown() {
+    return this.commissionPercentageService.getAirlineDropdown();
+  }
+  @Get('getSectorDropdown')
+  getSectorDropdown() {
+    return this.commissionPercentageService.getSectorDropdown();
+  }
+  @Get('getFareClassDropdown')
+  getFareClassDropdown() {
+    return this.commissionPercentageService.getFareClassDropdown();
   }
   @Get()
   findAll() {
