@@ -16,8 +16,8 @@ export class BlogContentDto {
 
   @IsNotEmpty({ message: 'summary is required.' })
   @IsString({ message: 'summary must be a string.' })
-  @Length(3, 500, {
-    message: 'summary must be between 3 and 500 characters.',
+  @Length(3, 2500, {
+    message: 'summary must be between 3 and 2500 characters.',
   })
   summary: string;
 }

@@ -31,7 +31,7 @@ export class BlogsDetails extends Model {
   @Column(DataType.STRING)
   heading: string;
 
-  @Column(DataType.STRING)
+  @Column(DataType.TEXT)
   summary: string;
   @BelongsTo(() => Blog)
   blog: Blog;
