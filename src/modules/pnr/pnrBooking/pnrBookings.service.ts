@@ -532,6 +532,14 @@ export class PnrBookingsService {
             model: User,
           },
           {
+            model: PnrServiceCharges,
+            include: [
+              {
+                model: CommissionCategories,
+              },
+            ],
+          },
+          {
             model: PnrDetail,
             as: 'pnrDetail',
           },
@@ -664,6 +672,14 @@ export class PnrBookingsService {
         include: [
           {
             model: User,
+          },
+          {
+            model: PnrServiceCharges,
+            include: [
+              {
+                model: CommissionCategories,
+              },
+            ],
           },
           ...(isPaid === '1'
             ? [
@@ -811,6 +827,14 @@ export class PnrBookingsService {
             model: User,
           },
           {
+            model: PnrServiceCharges,
+            include: [
+              {
+                model: CommissionCategories,
+              },
+            ],
+          },
+          {
             model: PnrDetail,
             as: 'pnrDetail',
           },
@@ -944,6 +968,14 @@ export class PnrBookingsService {
             model: User,
           },
           {
+            model: PnrServiceCharges,
+            include: [
+              {
+                model: CommissionCategories,
+              },
+            ],
+          },
+          {
             model: PnrDetail,
             as: 'pnrDetail',
           },
@@ -1002,6 +1034,14 @@ export class PnrBookingsService {
         include: [
           {
             model: User,
+          },
+          {
+            model: PnrServiceCharges,
+            include: [
+              {
+                model: CommissionCategories,
+              },
+            ],
           },
           {
             model: PnrDetail,
