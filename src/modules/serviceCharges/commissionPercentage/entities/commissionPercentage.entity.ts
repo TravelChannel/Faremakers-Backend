@@ -7,10 +7,10 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { Airline } from '../airline/index';
-import { FareClass } from '../fareClass/index';
+import { Airline } from '../../airline/index';
+import { FareClass } from '../../fareClass/index';
 // import { Destination } from '../destination/index';
-import { Sector } from '../sector/index';
+import { Sector } from '../../sector/index';
 
 @Table
 export class CommissionPercentage extends Model {
@@ -55,7 +55,12 @@ export class CommissionPercentage extends Model {
     onDelete: 'NO ACTION',
   })
   sectorId: number;
-
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: true,
+    allowNull: false,
+  })
+  isActive: boolean;
   // End
 
   @BelongsTo(() => Airline)

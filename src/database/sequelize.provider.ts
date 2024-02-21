@@ -29,7 +29,7 @@ import { Promotion } from '../modules/generalModules/promotions/entities/promoti
 import { CommissionCategories } from '../modules/serviceCharges/commissionCategories';
 import { PnrPayment } from '../modules//paymentModules/paymob/entities/pnrPayment.entity';
 import { PnrServiceCharges } from '../modules/serviceCharges/pnrServiceCharges';
-import { CommissionPercentage } from '../modules/serviceCharges/commissionPercentage';
+import { CommissionPercentage } from '../modules/serviceCharges/commissionPercentage/entities/commissionPercentage.entity';
 import { Airline } from '../modules/serviceCharges/airline';
 import { Sector } from '../modules/serviceCharges/sector';
 // import { Destination } from '../modules/serviceCharges/destination';

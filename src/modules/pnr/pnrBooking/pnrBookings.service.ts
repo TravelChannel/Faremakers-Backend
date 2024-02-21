@@ -35,7 +35,7 @@ import { Departure } from '../departure';
 import { Arrival } from '../arrival';
 import { Equipment } from '../equipment';
 import { PnrServiceCharges } from '../../serviceCharges/pnrServiceCharges';
-import { CommissionPercentage } from '../../serviceCharges/commissionPercentage';
+import { CommissionPercentage } from '../../serviceCharges/commissionPercentage/entities/commissionPercentage.entity';
 import { Destination } from '../../serviceCharges/destination';
 import { Sector } from '../../serviceCharges/sector';
 import { FareClass } from '../../serviceCharges/fareClass';
