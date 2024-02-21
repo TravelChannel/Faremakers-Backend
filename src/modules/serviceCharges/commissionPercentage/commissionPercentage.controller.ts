@@ -24,30 +24,30 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 @Roles(ADMIN_SUBJECT)
 export class CommissionPercentageController {
   constructor(
-    private readonly promotionsService: CommissionPercentageService,
+    private readonly commissionPercentageService: CommissionPercentageService,
   ) {}
 
   @Post()
   async create(
     @Body() createCommissionPercentageDto: CreateCommissionPercentageDto,
   ) {
-    return await this.promotionsService.create(createCommissionPercentageDto);
+    return await this.commissionPercentageService.create(
+      createCommissionPercentageDto,
+    );
   }
 
   @Get('dropdown')
-  // @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {
-    return this.promotionsService.getDropdown();
+    return this.rolesService.getDropdown();
   }
-
   @Get()
   findAll() {
-    return this.promotionsService.findAll();
+    return this.commissionPercentageService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.promotionsService.findOne(+id);
+    return this.commissionPercentageService.findOne(+id);
   }
 
   @Patch(':id')
@@ -55,18 +55,21 @@ export class CommissionPercentageController {
     @Param('id') id: string,
     @Body() updateCommissionPercentageDto: UpdateCommissionPercentageDto,
   ) {
-    return this.promotionsService.update(+id, updateCommissionPercentageDto);
+    return this.commissionPercentageService.update(
+      +id,
+      updateCommissionPercentageDto,
+    );
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.promotionsService.remove(+id);
+    return this.commissionPercentageService.remove(+id);
   }
   @Patch('toggleStatus/:id')
   toggleStatus(
     @Param('id') id: string,
     // @Body() toggleIsActiveDto: ToggleIsActiveDto,
   ) {
-    return this.promotionsService.toggleStatus(+id);
+    return this.commissionPercentageService.toggleStatus(+id);
   }
 }
