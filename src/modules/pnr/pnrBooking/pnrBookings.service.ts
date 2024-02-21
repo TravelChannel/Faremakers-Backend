@@ -1151,7 +1151,31 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment(callbackData: any, req, res): Promise<any> {
+  async processPayment(
+    callbackData: any,
+    req,
+    //  res
+  ): Promise<any> {
+    console.log('*****processPayment Endpoint Hit******');
+    console.log('*****processPayment Endpoint Hit******');
+
+    try {
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        callbackData,
+        'processPayment Endpoint Hit',
+      );
+    } catch (error) {
+      console.log('error:', error);
+
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error,
+      );
+    }
+  }
+  async processPayment2(callbackData: any, req, res): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
     console.log('*****processPayment Endpoint Hit******');
     console.log('*****processPayment Endpoint Hit******');
@@ -1161,11 +1185,15 @@ export class PnrBookingsService {
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         // pnr: callbackData.pnr,
-        // pnr: '1BXGMB',
+        pnr: '1BXGMB',
       },
       order: [['createdAt', 'DESC']],
     });
-    console.log('req.query *********** ', req.query);
+    return this.responseService.createResponse(
+      HttpStatus.OK,
+      null,
+      'processPayment Endpoint Hit',
+    );
     const viewETicketUrl = `http://localhost:3000/previewEticket?id=${pnrBooking.id}`;
     const errorRedirectUrl = `http://localhost:3000/bookingpayment`;
 
@@ -1173,7 +1201,7 @@ export class PnrBookingsService {
 
     try {
       callbackData = req.query;
-      console.log('callbackData *********** ', callbackData);
+      // console.log('callbackData *********** ', callbackData);
 
       const newPnrPayment = await PnrPayment.create(
         {

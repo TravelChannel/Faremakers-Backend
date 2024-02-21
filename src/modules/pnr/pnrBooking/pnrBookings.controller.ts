@@ -62,10 +62,15 @@ export class PnrBookingsController {
     @Body() callbackData: any,
     @Req() req: Request,
 
-    @Res() res: Response,
+    // @Res() res: Response,
   ): Promise<any> {
-    return await this.pnrBookingsService.processPayment(callbackData, req, res);
+    return await this.pnrBookingsService.processPayment(
+      callbackData,
+      req,
+      // res
+    );
   }
+
   @Get()
   // @SkipAuth()
   async findAll(
