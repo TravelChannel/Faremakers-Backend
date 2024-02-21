@@ -408,21 +408,6 @@ export class PnrBookingsService {
             break;
 
           case 2:
-            const fareClass = await FareClass.findOne({
-              where: { code: pnrServiceChargesCode },
-            });
-
-            if (fareClass) {
-              const commissionPercentage = await CommissionPercentage.findOne({
-                where: { fareClassId: fareClass.id },
-              });
-
-              if (commissionPercentage) {
-                pnrServiceChargesPercentage = commissionPercentage.percentage;
-              }
-            }
-            break;
-          case 3:
             const sector = await Sector.findOne({
               where: { code: pnrServiceChargesCode },
             });
@@ -430,6 +415,22 @@ export class PnrBookingsService {
             if (sector) {
               const commissionPercentage = await CommissionPercentage.findOne({
                 where: { sectorId: sector.id },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+
+            break;
+          case 3:
+            const fareClass = await FareClass.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (fareClass) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: { fareClassId: fareClass.id },
               });
 
               if (commissionPercentage) {

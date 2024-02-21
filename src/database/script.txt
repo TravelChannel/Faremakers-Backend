@@ -16,9 +16,49 @@ SET IDENTITY_INSERT [dbo].[Roles] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 GO
-INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber], [countryCode], [otp], [email], [dateOfBirth], [passportExpiryDate], [firstName], [lastName], [gender], [cnic], [passportNo], [refreshToken], [imgSrc], [password], [isActive], [createdAt], [updatedAt]) VALUES (2, 1, 0, NULL, N'3401523467', N'92', N'$2b$10$tPlXfChouTSDn6wTPjf7Z.tPNWfsRVb/h2ZAc0YQJ/7TS8U3Q2J9u', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:31:28.4180000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:31:28.4960000+00:00' AS DateTimeOffset))
+INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber], [countryCode], [otp], [email], [dateOfBirth], [passportExpiryDate], [firstName], [lastName], [gender], [cnic], [passportNo], [refreshToken], [imgSrc], [password], [isActive], [createdAt], [updatedAt]) VALUES (2, 1, 0, NULL, N'3401523467', N'92', N'$2b$10$SwVpDfg4GTmXCRQ4yMclB.sv698DhVJBkFSgSJTdBVkaFu2GBUNjq', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:31:28.4180000+00:00' AS DateTimeOffset), CAST(N'2024-02-21T05:07:26.7640000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
+GO
+SET IDENTITY_INSERT [dbo].[CommissionCategories] ON 
+GO
+INSERT [dbo].[CommissionCategories] ([id], [name], [description], [precedence], [createdAt], [updatedAt]) VALUES (1, N'Airline', N'Airline', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[CommissionCategories] ([id], [name], [description], [precedence], [createdAt], [updatedAt]) VALUES (2, N'Sector', N'Sector', 2, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[CommissionCategories] ([id], [name], [description], [precedence], [createdAt], [updatedAt]) VALUES (3, N'Fare Class', N'Fare Class', 3, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[CommissionCategories] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Airlines] ON 
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'EMIRATES', N'EMIRATES', N'EK', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (2, N'QATAR', N'QATAR', N'QR', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[Airlines] OFF
+GO
+SET IDENTITY_INSERT [dbo].[FareClasses] ON 
+GO
+INSERT [dbo].[FareClasses] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'Economy', N'Economy', N'Economy', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[FareClasses] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (2, N'Business', N'Business', N'Business', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[FareClasses] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Sectors] ON 
+GO
+INSERT [dbo].[Sectors] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'Dubai', N'Doha', N'DOH', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Sectors] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (2, N'Dubai', N'Dubai', N'DXB', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[Sectors] OFF
+GO
+SET IDENTITY_INSERT [dbo].[CommissionPercentages] ON 
+GO
+INSERT [dbo].[CommissionPercentages] ([id], [percentage], [airlineId], [fareClassId], [sectorId], [createdAt], [updatedAt]) VALUES (1, 10, NULL, NULL, NULL, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[CommissionPercentages] OFF
 GO
 SET IDENTITY_INSERT [dbo].[SEOAirlinesData] ON 
 GO
@@ -519,4 +559,12 @@ GO
 INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (74, 20, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.9780000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9780000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[TopCountries] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Blogs] ON 
+GO
+INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (1, N'jghjhj', N'jhjhjh', N'bjjhj', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (2, N'gg', N'ddd', N'dd', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[Blogs] OFF
 GO
