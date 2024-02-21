@@ -393,11 +393,16 @@ export class PnrBookingsService {
       });
 
       if (commissionCategory) {
+        console.log('***********commissionCategory3', commissionCategory.id);
+
         let pnrServiceChargesPercentage = 0;
         let pnrServiceChargesCode = 'unknownCode';
-
+        // let a = 1;
+        commissionCategory.id = 1;
         switch (commissionCategory.id) {
           case 1:
+            console.log('************case1', commissionCategory.id);
+
             pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
 
             const airline = await Airline.findOne({
@@ -412,7 +417,6 @@ export class PnrBookingsService {
                   sectorId: null,
                 },
               });
-
               if (commissionPercentage) {
                 pnrServiceChargesPercentage = commissionPercentage.percentage;
               }
@@ -463,6 +467,8 @@ export class PnrBookingsService {
             break;
 
           default:
+            console.log('***********default');
+
             pnrServiceChargesPercentage = 0;
             break;
         }
