@@ -48,7 +48,7 @@ SET IDENTITY_INSERT [dbo].[FareClasses] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Sectors] ON 
 GO
-INSERT [dbo].[Sectors] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'Dubai', N'Doha', N'DOH', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+INSERT [dbo].[Sectors] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'Doha', N'Doha', N'DOH', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
 GO
 INSERT [dbo].[Sectors] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (2, N'Dubai', N'Dubai', N'DXB', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
 GO
