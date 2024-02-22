@@ -19,7 +19,8 @@ export const databaseConfig = {
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_DEVELOPMENT,
     JWT_SECRET: process.env.JWT_SECRET_DEVELOPMENT,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET_DEVELOPMENT,
-    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
+    ALLOWED_ORIGINS:
+      process.env.ALLOWED_ORIGINS || 'http://www.localhost:3000/',
   },
   test: {
     dialect: 'mssql',
