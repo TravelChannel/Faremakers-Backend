@@ -85,7 +85,19 @@ export class CommissionPercentageService {
   async findOne(id: number) {
     try {
       const commissionPercentage =
-        await this.commissionPercentageRepository.findByPk(id, {});
+        await this.commissionPercentageRepository.findByPk(id, {
+          include: [
+            {
+              model: Airline,
+            },
+            {
+              model: Sector,
+            },
+            {
+              model: FareClass,
+            },
+          ],
+        });
       return this.responseService.createResponse(
         HttpStatus.OK,
         { ...commissionPercentage.toJSON() },
