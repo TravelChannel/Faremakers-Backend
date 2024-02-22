@@ -54,7 +54,19 @@ export class CommissionPercentageService {
   async findAll(): Promise<CommissionPercentage[]> {
     try {
       const commissionPercentage =
-        await this.commissionPercentageRepository.findAll();
+        await this.commissionPercentageRepository.findAll({
+          include: [
+            {
+              model: Airline,
+            },
+            {
+              model: Sector,
+            },
+            {
+              model: FareClass,
+            },
+          ],
+        });
       return this.responseService.createResponse(
         HttpStatus.OK,
         commissionPercentage,
