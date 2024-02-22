@@ -82,12 +82,12 @@ export class AuthController {
     @Res({ passthrough: true }) res,
   ) {
     try {
-      // const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
+      const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 
-      // const allowedOrigins = dbConfig.ALLOWED_ORIGINS
-      //   ? dbConfig.ALLOWED_ORIGINS.split(',')
-      //   : [];
-      // console.log('allowedOrigins***', allowedOrigins);
+      const allowedOrigins = dbConfig.ALLOWED_ORIGINS
+        ? dbConfig.ALLOWED_ORIGINS.split(',')
+        : [];
+      console.log('allowedOrigins***', allowedOrigins);
       const result = await this.authService.requestOtp(userLoginDto);
 
       if (result.status === 'SUCCESS') {
