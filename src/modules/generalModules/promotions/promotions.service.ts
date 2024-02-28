@@ -26,8 +26,8 @@ export class PromotionsService {
         {
           title: rest.title,
           description: rest.description,
-          startDate: rest.startDate,
-          endDate: rest.endDate,
+          startDate: rest.startDate ?? null,
+          endDate: rest.endDate ?? null,
         },
         { transaction: t },
       );
@@ -92,8 +92,8 @@ export class PromotionsService {
       if (promotion) {
         promotion.title = updatePromotionDto.title;
         promotion.description = updatePromotionDto.description;
-        promotion.startDate = updatePromotionDto.startDate;
-        promotion.endDate = updatePromotionDto.endDate;
+        promotion.startDate = updatePromotionDto.startDate ?? null;
+        promotion.endDate = updatePromotionDto.endDate ?? null;
         await promotion.save();
       } else {
         return this.responseService.createResponse(

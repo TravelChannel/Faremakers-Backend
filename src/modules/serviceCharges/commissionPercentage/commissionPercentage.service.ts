@@ -30,6 +30,9 @@ export class CommissionPercentageService {
           airlineId: createCommissionPercentageDto.airlineId ?? null,
           fareClassId: createCommissionPercentageDto.fareClassId ?? null,
           sectorId: createCommissionPercentageDto.sectorId ?? null,
+
+          startDate: createCommissionPercentageDto.startDate ?? null,
+          endDate: createCommissionPercentageDto.endDate ?? null,
         },
         { transaction: t },
       );

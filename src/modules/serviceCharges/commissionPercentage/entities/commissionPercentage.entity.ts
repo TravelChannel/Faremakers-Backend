@@ -56,6 +56,16 @@ export class CommissionPercentage extends Model {
   })
   sectorId: number;
   @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  startDate: Date;
+  @Column({
+    type: DataType.DATE,
+    allowNull: true,
+  })
+  endDate: Date;
+  @Column({
     type: DataType.BOOLEAN,
     defaultValue: true,
     allowNull: false,

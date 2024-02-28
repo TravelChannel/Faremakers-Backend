@@ -28,12 +28,12 @@ export class Promotion extends Model {
   description: string;
   @Column({
     type: DataType.DATE,
-    allowNull: false,
+    allowNull: true,
   })
   startDate: Date;
   @Column({
     type: DataType.DATE,
-    allowNull: false,
+    allowNull: true,
   })
   endDate: Date;
   @Column({

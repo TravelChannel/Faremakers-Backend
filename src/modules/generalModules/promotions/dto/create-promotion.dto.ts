@@ -2,7 +2,8 @@ import {
   IsNotEmpty,
   IsString,
   Length,
-  IsISO8601,
+  IsOptional,
+  // IsISO8601,
   // ArrayMinSize,
   // ArrayNotEmpty,
   // ValidateNested,
@@ -22,10 +23,14 @@ export class CreatePromotionDto {
     message: 'description must be between 3 and 50 characters.',
   })
   description: string;
-  @IsNotEmpty({ message: 'startDate is required.' })
-  @IsISO8601()
+  @IsOptional()
+
+  // @IsNotEmpty({ message: 'startDate is required.' })
+  // @IsISO8601()
   startDate: Date;
-  @IsNotEmpty({ message: 'endDate is required.' })
-  @IsISO8601()
+  @IsOptional()
+
+  // @IsNotEmpty({ message: 'endDate is required.' })
+  // @IsISO8601()
   endDate: Date;
 }

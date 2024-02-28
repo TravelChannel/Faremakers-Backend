@@ -2,6 +2,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  // IsISO8601,
   // ArrayMinSize,
   // ArrayNotEmpty,
   // ValidateNested,
@@ -23,4 +24,14 @@ export class CreateCommissionPercentageDto {
   // @IsNotEmpty({ message: 'sectorId is required.' })
   @IsOptional()
   sectorId: number;
+  @IsOptional()
+
+  // @IsNotEmpty({ message: 'startDate is required.' })
+  // @IsISO8601()
+  startDate: Date;
+  @IsOptional()
+
+  // @IsNotEmpty({ message: 'endDate is required.' })
+  // @IsISO8601()
+  endDate: Date;
 }
