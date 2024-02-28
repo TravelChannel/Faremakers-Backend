@@ -27,6 +27,16 @@ export class Promotion extends Model {
   })
   description: string;
   @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  startDate: Date;
+  @Column({
+    type: DataType.DATE,
+    allowNull: false,
+  })
+  endDate: Date;
+  @Column({
     type: DataType.BOOLEAN,
     defaultValue: true,
     allowNull: false,

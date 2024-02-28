@@ -2,6 +2,7 @@ import {
   IsNotEmpty,
   IsString,
   Length,
+  IsISO8601,
   // ArrayMinSize,
   // ArrayNotEmpty,
   // ValidateNested,
@@ -21,8 +22,10 @@ export class CreatePromotionDto {
     message: 'description must be between 3 and 50 characters.',
   })
   description: string;
-  // @ArrayNotEmpty({ message: 'Please provide at least one role.' })
-  // @ValidateNested({ each: true }) // Validate each item in the array
-  // @Type(() => Rights) // Specify the class type for validation
-  // rights: Rights[];
+  @IsNotEmpty({ message: 'startDate is required.' })
+  @IsISO8601()
+  startDate: Date;
+  @IsNotEmpty({ message: 'endDate is required.' })
+  @IsISO8601()
+  endDate: Date;
 }
