@@ -23,7 +23,12 @@ export class PromotionsService {
       const { ...rest } = createPromotionDto;
 
       const newRole = await this.promotionsRepository.create(
-        { title: rest.title, description: rest.description },
+        {
+          title: rest.title,
+          description: rest.description,
+          startDate: rest.startDate,
+          endDate: rest.endDate,
+        },
         { transaction: t },
       );
 
@@ -87,6 +92,8 @@ export class PromotionsService {
       if (promotion) {
         promotion.title = updatePromotionDto.title;
         promotion.description = updatePromotionDto.description;
+        promotion.startDate = updatePromotionDto.startDate;
+        promotion.endDate = updatePromotionDto.endDate;
         await promotion.save();
       } else {
         return this.responseService.createResponse(
