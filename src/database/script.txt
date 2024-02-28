@@ -20,6 +20,14 @@ INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber],
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
+SET IDENTITY_INSERT [dbo].[Blogs] ON 
+GO
+INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (1, N'jghjhj', N'jhjhjh', N'bjjhj', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (2, N'gg', N'ddd', N'dd', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[Blogs] OFF
+GO
 SET IDENTITY_INSERT [dbo].[CommissionCategories] ON 
 GO
 INSERT [dbo].[CommissionCategories] ([id], [name], [description], [precedence], [createdAt], [updatedAt]) VALUES (1, N'Airline', N'Airline', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
@@ -32,9 +40,77 @@ SET IDENTITY_INSERT [dbo].[CommissionCategories] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Airlines] ON 
 GO
-INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'EMIRATES', N'EMIRATES', N'EK', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (1, N'AZ', N'AZ', N'AZ', CAST(N'2024-02-28T12:11:29.6760000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6760000+00:00' AS DateTimeOffset))
 GO
-INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (2, N'QATAR', N'QATAR', N'QR', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (2, N'CA', N'CA', N'CA', CAST(N'2024-02-28T12:11:29.6760000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6760000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (3, N'CX', N'CX', N'CX', CAST(N'2024-02-28T12:11:29.6770000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6770000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (4, N'CZ', N'CZ', N'CZ', CAST(N'2024-02-28T12:11:29.6780000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6780000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (5, N'EK', N'EK', N'EK', CAST(N'2024-02-28T12:11:29.6780000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6780000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (6, N'OD', N'OD', N'OD', CAST(N'2024-02-28T12:11:29.6780000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6780000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (7, N'EY', N'EY', N'EY', CAST(N'2024-02-28T12:11:29.6790000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6790000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (8, N'GF', N'GF', N'GF', CAST(N'2024-02-28T12:11:29.6800000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6800000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (9, N'KL', N'KL', N'KL', CAST(N'2024-02-28T12:11:29.6800000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6800000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (10, N'KU', N'KU', N'KU', CAST(N'2024-02-28T12:11:29.6800000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6800000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (11, N'LX', N'LX', N'LX', CAST(N'2024-02-28T12:11:29.6810000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6810000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (12, N'PK', N'PK', N'PK', CAST(N'2024-02-28T12:11:29.6810000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6810000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (13, N'QR', N'QR', N'QR', CAST(N'2024-02-28T12:11:29.6820000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6820000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (14, N'SV', N'SV', N'SV', CAST(N'2024-02-28T12:11:29.6820000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6820000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (15, N'TG', N'TG', N'TG', CAST(N'2024-02-28T12:11:29.6820000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6820000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (16, N'TK', N'TK', N'TK', CAST(N'2024-02-28T12:11:29.6830000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6830000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (17, N'UL', N'UL', N'UL', CAST(N'2024-02-28T12:11:29.6830000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6830000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (18, N'6S', N'6S', N'6S', CAST(N'2024-02-28T12:11:29.6840000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6840000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (19, N'YO', N'YO', N'YO', CAST(N'2024-02-28T12:11:29.6840000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6840000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (20, N'FZ', N'FZ', N'FZ', CAST(N'2024-02-28T12:11:29.6840000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6840000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (21, N'HY', N'HY', N'HY', CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (22, N'LH', N'LH', N'LH', CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (23, N'WY', N'WY', N'WY', CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (24, N'PC', N'PC', N'PC', CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6850000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (25, N'BA', N'BA', N'BA', CAST(N'2024-02-28T12:11:29.6860000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6860000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (26, N'VS', N'VS', N'VS', CAST(N'2024-02-28T12:11:29.6860000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6860000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (27, N'KQ', N'KQ', N'KQ', CAST(N'2024-02-28T12:11:29.6860000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6860000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (28, N'AC', N'AC', N'AC', CAST(N'2024-02-28T12:11:29.6870000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6870000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (29, N'AF', N'AF', N'AF', CAST(N'2024-02-28T12:11:29.6880000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6880000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (30, N'SQ', N'SQ', N'SQ', CAST(N'2024-02-28T12:11:29.6890000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6890000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (31, N'DV', N'DV', N'DV', CAST(N'2024-02-28T12:11:29.6890000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6890000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (32, N'GP', N'GP', N'GP', CAST(N'2024-02-28T12:11:29.6900000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6900000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (33, N'ET', N'ET', N'ET', CAST(N'2024-02-28T12:11:29.6900000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6900000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (34, N'DL', N'DL', N'DL', CAST(N'2024-02-28T12:11:29.6900000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6900000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (35, N'AT', N'AT', N'AT', CAST(N'2024-02-28T12:11:29.6910000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6910000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[Airlines] ([id], [name], [description], [code], [createdAt], [updatedAt]) VALUES (36, N'J2', N'J2', N'J2', CAST(N'2024-02-28T12:11:29.6910000+00:00' AS DateTimeOffset), CAST(N'2024-02-28T12:11:29.6910000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[Airlines] OFF
 GO
@@ -56,7 +132,7 @@ SET IDENTITY_INSERT [dbo].[Sectors] OFF
 GO
 SET IDENTITY_INSERT [dbo].[CommissionPercentages] ON 
 GO
-INSERT [dbo].[CommissionPercentages] ([id], [percentage], [airlineId], [fareClassId], [sectorId], [createdAt], [updatedAt]) VALUES (1, 10, NULL, NULL, NULL, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+INSERT [dbo].[CommissionPercentages] ([id], [percentage], [airlineId], [fareClassId], [sectorId], [startDate], [endDate], [isActive], [createdAt], [updatedAt]) VALUES (1, 10, NULL, NULL, NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[CommissionPercentages] OFF
 GO
@@ -103,6 +179,158 @@ GO
 INSERT [dbo].[SEOAirlinesData] ([id], [flightname], [flightCode], [mainHeading], [heading1], [heading2], [heading3], [isActive], [createdAt], [updatedAt]) VALUES (20, N'british-airways-flights', N'BA', N'British Airways Top Destinations', NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:48:15.5150000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.5150000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[SEOAirlinesData] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TopCountries] ON 
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (1, 1, N'Flights to United Arab Emirates', CAST(N'2024-02-13T13:48:15.7070000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7070000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (2, 1, N'Flights to New Zealand', CAST(N'2024-02-13T13:48:15.7080000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7080000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (3, 1, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (4, 1, N'Flights to India', CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (5, 1, N'Flights to Canada', CAST(N'2024-02-13T13:48:15.7100000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7100000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (6, 2, N'Flights to New York', CAST(N'2024-02-13T13:48:15.7330000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7330000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (7, 2, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (8, 2, N'Flights to Miami', CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (9, 2, N'Flights to Washington', CAST(N'2024-02-13T13:48:15.7350000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7350000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (10, 2, N'Flights to Chicago', CAST(N'2024-02-13T13:48:15.7360000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7360000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (11, 3, N'Flights to New York', CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (12, 3, N'Flights to Washington DC', CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (13, 3, N'Flights to Miami', CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (14, 3, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (15, 4, N'Flights to Jeddah(JED)', CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (16, 4, N'Flights to Riyadh(RUH)', CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (17, 4, N'Flights to Madina(MED)', CAST(N'2024-02-13T13:48:15.7720000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7720000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (18, 4, N'Flights to Dammam(DMM)', CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (19, 4, N'Flights to Dharan(DHA)', CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (20, 5, N'Flights to Bangaladesh', CAST(N'2024-02-13T13:48:15.7880000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7880000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (21, 5, N'Flights to India', CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (22, 5, N'Flights to Pakistan', CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (23, 5, N'Flights to Nepal', CAST(N'2024-02-13T13:48:15.7900000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7900000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (24, 5, N'Flights to Srilanka', CAST(N'2024-02-13T13:48:15.7910000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7910000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (25, 6, N'Flights to United Arab Emirates', CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (26, 6, N'Flights to New Zealand', CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (27, 6, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (28, 6, N'Flights to India', CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (29, 6, N'Flights to Canada', CAST(N'2024-02-13T13:48:15.8100000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8100000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (30, 7, N'Flights to UAE', CAST(N'2024-02-13T13:48:15.8220000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8220000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (31, 7, N'Flights to UK', CAST(N'2024-02-13T13:48:15.8230000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8230000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (32, 7, N'Flights to Saudi Arabia', CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (33, 7, N'Flights to India', CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (34, 7, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.8250000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8250000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (35, 8, N'Flights to United Arab Emirates', CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (36, 8, N'Flights to Saudi Arabia', CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (37, 8, N'Flights to China', CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (38, 8, N'Flights to United Kingdom', CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (39, 8, N'Flights to Qatar', CAST(N'2024-02-13T13:48:15.8420000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8420000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (40, 9, N'Lahore(LHE)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8610000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8610000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (41, 9, N'Karachi(KHI)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (42, 9, N'Islamabad(ISB)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (43, 9, N'Multan(MUX)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (44, 9, N'Peshawar(PEW)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (45, 10, N'Flights to Islamabad', CAST(N'2024-02-13T13:48:15.8710000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8710000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (46, 10, N'Flight to Sialkot', CAST(N'2024-02-13T13:48:15.8720000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8720000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (47, 11, N'Flights to Birmingham', CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (48, 11, N'Flight to New York', CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (49, 11, N'Flights to Shanghai', CAST(N'2024-02-13T13:48:15.8840000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8840000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (50, 12, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.9050000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9050000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (51, 12, N'Flights to China', CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (52, 12, N'Flights to Pakistan', CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (53, 12, N'Flights to India', CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (54, 12, N'Flights to Germany', CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (55, 13, N'Flights to Islamabad', CAST(N'2024-02-13T13:48:15.9130000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9130000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (56, 13, N' Flights to Faisalabad', CAST(N'2024-02-13T13:48:15.9140000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9140000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (57, 14, N'Flights to Frankfurt', CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (58, 14, N'Flights to Istanbul', CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (59, 14, N'Flights to Rome', CAST(N'2024-02-13T13:48:15.9260000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9260000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (60, 15, N'Flights to Urumqi', CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (61, 15, N'Flights to Shanghai', CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (62, 15, N'Flights to Xian Xianyang', CAST(N'2024-02-13T13:48:15.9350000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9350000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (63, 16, N'Flights to Kuwait', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (64, 16, N'Flights to Paris', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (65, 16, N'Flights to New York', CAST(N'2024-02-13T13:48:15.9460000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9460000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (66, 17, N'Flights to Ras Al Khaimah', CAST(N'2024-02-13T13:48:15.9510000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9510000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (67, 17, N'Flights to Al Ain', CAST(N'2024-02-13T13:48:15.9520000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9520000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (68, 18, N'Flights to Hongkong', CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (69, 18, N'Flights to Korea', CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (70, 19, N'Flights to Melbourne', CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (71, 19, N'Flights to Colombo', CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (72, 20, N'Flights to Washington', CAST(N'2024-02-13T13:48:15.9760000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9760000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (73, 20, N'Flights to Chicago', CAST(N'2024-02-13T13:48:15.9770000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9770000+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (74, 20, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.9780000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9780000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[TopCountries] OFF
 GO
 SET IDENTITY_INSERT [dbo].[TopCities] ON 
 GO
@@ -407,164 +635,4 @@ GO
 INSERT [dbo].[TopPicks] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (74, 20, N'Flights to Toronto (YYZ)', CAST(N'2024-02-13T13:48:15.6840000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.6840000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[TopPicks] OFF
-GO
-SET IDENTITY_INSERT [dbo].[TopCountries] ON 
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (1, 1, N'Flights to United Arab Emirates', CAST(N'2024-02-13T13:48:15.7070000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7070000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (2, 1, N'Flights to New Zealand', CAST(N'2024-02-13T13:48:15.7080000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7080000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (3, 1, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (4, 1, N'Flights to India', CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7090000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (5, 1, N'Flights to Canada', CAST(N'2024-02-13T13:48:15.7100000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7100000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (6, 2, N'Flights to New York', CAST(N'2024-02-13T13:48:15.7330000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7330000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (7, 2, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (8, 2, N'Flights to Miami', CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7340000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (9, 2, N'Flights to Washington', CAST(N'2024-02-13T13:48:15.7350000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7350000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (10, 2, N'Flights to Chicago', CAST(N'2024-02-13T13:48:15.7360000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7360000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (11, 3, N'Flights to New York', CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (12, 3, N'Flights to Washington DC', CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7500000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (13, 3, N'Flights to Miami', CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (14, 3, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7510000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (15, 4, N'Flights to Jeddah(JED)', CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (16, 4, N'Flights to Riyadh(RUH)', CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7710000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (17, 4, N'Flights to Madina(MED)', CAST(N'2024-02-13T13:48:15.7720000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7720000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (18, 4, N'Flights to Dammam(DMM)', CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (19, 4, N'Flights to Dharan(DHA)', CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7730000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (20, 5, N'Flights to Bangaladesh', CAST(N'2024-02-13T13:48:15.7880000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7880000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (21, 5, N'Flights to India', CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (22, 5, N'Flights to Pakistan', CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7890000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (23, 5, N'Flights to Nepal', CAST(N'2024-02-13T13:48:15.7900000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7900000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (24, 5, N'Flights to Srilanka', CAST(N'2024-02-13T13:48:15.7910000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.7910000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (25, 6, N'Flights to United Arab Emirates', CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (26, 6, N'Flights to New Zealand', CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8080000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (27, 6, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (28, 6, N'Flights to India', CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8090000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (29, 6, N'Flights to Canada', CAST(N'2024-02-13T13:48:15.8100000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8100000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (30, 7, N'Flights to UAE', CAST(N'2024-02-13T13:48:15.8220000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8220000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (31, 7, N'Flights to UK', CAST(N'2024-02-13T13:48:15.8230000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8230000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (32, 7, N'Flights to Saudi Arabia', CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (33, 7, N'Flights to India', CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8240000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (34, 7, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.8250000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8250000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (35, 8, N'Flights to United Arab Emirates', CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (36, 8, N'Flights to Saudi Arabia', CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8400000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (37, 8, N'Flights to China', CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (38, 8, N'Flights to United Kingdom', CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8410000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (39, 8, N'Flights to Qatar', CAST(N'2024-02-13T13:48:15.8420000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8420000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (40, 9, N'Lahore(LHE)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8610000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8610000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (41, 9, N'Karachi(KHI)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (42, 9, N'Islamabad(ISB)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8620000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (43, 9, N'Multan(MUX)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (44, 9, N'Peshawar(PEW)-Jeddah(JED) Air Blue', CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8630000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (45, 10, N'Flights to Islamabad', CAST(N'2024-02-13T13:48:15.8710000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8710000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (46, 10, N'Flight to Sialkot', CAST(N'2024-02-13T13:48:15.8720000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8720000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (47, 11, N'Flights to Birmingham', CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (48, 11, N'Flight to New York', CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8830000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (49, 11, N'Flights to Shanghai', CAST(N'2024-02-13T13:48:15.8840000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.8840000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (50, 12, N'Flights to Australia', CAST(N'2024-02-13T13:48:15.9050000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9050000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (51, 12, N'Flights to China', CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (52, 12, N'Flights to Pakistan', CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9060000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (53, 12, N'Flights to India', CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (54, 12, N'Flights to Germany', CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9070000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (55, 13, N'Flights to Islamabad', CAST(N'2024-02-13T13:48:15.9130000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9130000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (56, 13, N' Flights to Faisalabad', CAST(N'2024-02-13T13:48:15.9140000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9140000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (57, 14, N'Flights to Frankfurt', CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (58, 14, N'Flights to Istanbul', CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9250000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (59, 14, N'Flights to Rome', CAST(N'2024-02-13T13:48:15.9260000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9260000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (60, 15, N'Flights to Urumqi', CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (61, 15, N'Flights to Shanghai', CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9340000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (62, 15, N'Flights to Xian Xianyang', CAST(N'2024-02-13T13:48:15.9350000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9350000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (63, 16, N'Flights to Kuwait', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (64, 16, N'Flights to Paris', CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (65, 16, N'Flights to New York', CAST(N'2024-02-13T13:48:15.9460000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9460000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (66, 17, N'Flights to Ras Al Khaimah', CAST(N'2024-02-13T13:48:15.9510000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9510000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (67, 17, N'Flights to Al Ain', CAST(N'2024-02-13T13:48:15.9520000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9520000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (68, 18, N'Flights to Hongkong', CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (69, 18, N'Flights to Korea', CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9590000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (70, 19, N'Flights to Melbourne', CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (71, 19, N'Flights to Colombo', CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9650000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (72, 20, N'Flights to Washington', CAST(N'2024-02-13T13:48:15.9760000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9760000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (73, 20, N'Flights to Chicago', CAST(N'2024-02-13T13:48:15.9770000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9770000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdAt], [updatedAt]) VALUES (74, 20, N'Flights to Boston', CAST(N'2024-02-13T13:48:15.9780000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9780000+00:00' AS DateTimeOffset))
-GO
-SET IDENTITY_INSERT [dbo].[TopCountries] OFF
-GO
-SET IDENTITY_INSERT [dbo].[Blogs] ON 
-GO
-INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (1, N'jghjhj', N'jhjhjh', N'bjjhj', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (2, N'gg', N'ddd', N'dd', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
-GO
-SET IDENTITY_INSERT [dbo].[Blogs] OFF
 GO
