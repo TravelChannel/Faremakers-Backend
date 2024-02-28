@@ -13,7 +13,7 @@ import {
 import { RatingsService } from './ratings.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
-import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
+import { ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -21,7 +21,7 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('ratings')
 @UseGuards(RolesGuard)
-@Roles(ADMIN_SUBJECT)
+@Roles(ADMIN_AND_USER_SUBJECT)
 export class RatingsController {
   constructor(private readonly ratingsService: RatingsService) {}
 
