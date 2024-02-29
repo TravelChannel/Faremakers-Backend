@@ -34,7 +34,7 @@ export class Rating extends Model {
 
   @Column({
     type: DataType.BOOLEAN,
-    defaultValue: true,
+    defaultValue: false,
     allowNull: false,
   })
   isActive: boolean;

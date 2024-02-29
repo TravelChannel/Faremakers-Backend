@@ -50,7 +50,11 @@ export class RatingsService {
 
   async findAll(): Promise<Rating[]> {
     try {
-      const rating = await this.ratingsRepository.findAll();
+      const rating = await this.ratingsRepository.findAll({
+        where: {
+          isActive: true,
+        },
+      });
       return this.responseService.createResponse(
         HttpStatus.OK,
         rating,
