@@ -4,7 +4,11 @@ import { CreateCommissionPercentageDto } from './dto/create-commissionPercentage
 import { UpdateCommissionPercentageDto } from './dto/update-commissionPercentage.dto';
 import { COMMISSION_PERCENTAGE_REPOSITORY } from '../../../shared/constants';
 import { CommissionPercentage } from './entities/commissionPercentage.entity';
-import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import {
+  Op,
+  sequelize,
+  Transaction,
+} from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
 import { Airline } from '../airline';
@@ -56,8 +60,19 @@ export class CommissionPercentageService {
 
   async findAll(): Promise<CommissionPercentage[]> {
     try {
+      const currentDate = new Date();
+
       const commissionPercentage =
         await this.commissionPercentageRepository.findAll({
+          where: {
+            isActive: true,
+            startDate: {
+              [Op.lte]: currentDate, // Less than or equal to the current date
+            },
+            endDate: {
+              [Op.gte]: currentDate, // Greater than or equal to the current date
+            },
+          },
           include: [
             {
               model: Airline,

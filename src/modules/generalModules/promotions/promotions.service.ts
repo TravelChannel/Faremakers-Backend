@@ -3,7 +3,11 @@ import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
 import { Promotion } from './entities/promotion.entity';
-import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import {
+  Op,
+  sequelize,
+  Transaction,
+} from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
@@ -51,9 +55,17 @@ export class PromotionsService {
 
   async findAll(): Promise<Promotion[]> {
     try {
+      const currentDate = new Date();
+
       const promotion = await this.promotionsRepository.findAll({
         where: {
           isActive: true,
+          startDate: {
+            [Op.lte]: currentDate, // Less than or equal to the current date
+          },
+          endDate: {
+            [Op.gte]: currentDate, // Greater than or equal to the current date
+          },
         },
       });
       return this.responseService.createResponse(
