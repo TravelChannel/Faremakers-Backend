@@ -51,7 +51,11 @@ export class PromotionsService {
 
   async findAll(): Promise<Promotion[]> {
     try {
-      const promotion = await this.promotionsRepository.findAll();
+      const promotion = await this.promotionsRepository.findAll({
+        where: {
+          isActive: true,
+        },
+      });
       return this.responseService.createResponse(
         HttpStatus.OK,
         promotion,
