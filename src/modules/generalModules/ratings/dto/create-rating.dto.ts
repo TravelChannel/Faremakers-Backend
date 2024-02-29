@@ -18,7 +18,7 @@ export class CreateRatingDto {
 
   @IsNotEmpty({ message: 'description is required.' })
   @IsString({ message: 'description must be a string.' })
-  @Length(3, 50, {
+  @Length(3, 500, {
     message: 'description must be between 3 and 50 characters.',
   })
   review: string;

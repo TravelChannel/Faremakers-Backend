@@ -19,8 +19,8 @@ export class CreatePromotionDto {
 
   @IsNotEmpty({ message: 'description is required.' })
   @IsString({ message: 'description must be a string.' })
-  @Length(3, 50, {
-    message: 'description must be between 3 and 50 characters.',
+  @Length(3, 500, {
+    message: 'description must be between 3 and 500 characters.',
   })
   description: string;
   @IsOptional()

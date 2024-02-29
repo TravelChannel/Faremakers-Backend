@@ -18,11 +18,15 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { createFileStorage } from '../../../common/utils/file-storage.util'; // Import the utility function
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { ADMIN_SUBJECT, ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
+import {
+  ADMIN_SUBJECT,
+  //  ADMIN_AND_USER_SUBJECT
+} from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 // Test commit
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -72,18 +76,21 @@ export class BlogsController {
   }
 
   @Get()
-  @Roles(ADMIN_AND_USER_SUBJECT)
+  @SkipAuth()
+  // @Roles(ADMIN_AND_USER_SUBJECT)
   findAll() {
     return this.blogsService.findAll();
   }
 
   @Get('/by')
-  @Roles(ADMIN_AND_USER_SUBJECT)
+  @SkipAuth()
+  // @Roles(ADMIN_AND_USER_SUBJECT)
   findOneBy(@Req() req: Request) {
     return this.blogsService.findOneBy(req);
   }
   @Get(':id')
-  @Roles(ADMIN_AND_USER_SUBJECT)
+  @SkipAuth()
+  // @Roles(ADMIN_AND_USER_SUBJECT)
   findOne(@Param('id') id: string) {
     return this.blogsService.findOne(+id);
   }

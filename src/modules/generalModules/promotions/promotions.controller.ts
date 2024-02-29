@@ -18,6 +18,7 @@ import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 @Controller('promotions')
 @UseGuards(RolesGuard)
@@ -37,11 +38,13 @@ export class PromotionsController {
   }
 
   @Get()
+  @SkipAuth()
   findAll() {
     return this.promotionsService.findAll();
   }
 
   @Get(':id')
+  @SkipAuth()
   findOne(@Param('id') id: string) {
     return this.promotionsService.findOne(+id);
   }

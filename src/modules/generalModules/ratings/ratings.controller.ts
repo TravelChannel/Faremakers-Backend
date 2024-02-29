@@ -15,6 +15,7 @@ import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
 import { ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
@@ -37,11 +38,13 @@ export class RatingsController {
   }
 
   @Get()
+  @SkipAuth()
   findAll() {
     return this.ratingsService.findAll();
   }
 
   @Get(':id')
+  @SkipAuth()
   findOne(@Param('id') id: string) {
     return this.ratingsService.findOne(+id);
   }

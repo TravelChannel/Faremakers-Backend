@@ -32,6 +32,7 @@ async function bootstrap() {
     origin: allowedOrigins, // Replace with your frontend URL
     // origin: 'http://www.localhost:3000/', // Replace with your frontend URL
     // origin: '*',
+    // origin: true,
     credentials: true,
   });
 
