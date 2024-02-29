@@ -163,6 +163,7 @@ export class AuthService {
     const hashedOtp = await bcrypt.hash(otp + OTP_SECRET, 10); // Hash the password with a salt of 10 rounds
     user.otp = hashedOtp;
 
+    console.log('***** hashedOtp********', otp);
     await user.save(); // Save the changes
   }
 

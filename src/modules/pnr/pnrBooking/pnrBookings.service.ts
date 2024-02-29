@@ -1205,7 +1205,6 @@ export class PnrBookingsService {
     //  res
   ): Promise<any> {
     console.log('*****processPayment Endpoint Hit*******');
-    console.log('*****processPayment Endpoint Hit******');
     console.log('*****callbackData Data******,', callbackData);
 
     try {
