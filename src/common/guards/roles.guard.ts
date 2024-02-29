@@ -16,6 +16,13 @@ export class RolesGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     console.log('-----------------user');
 
+    const skipAuth = this.reflector.get<boolean>(
+      'skipAuth',
+      context.getHandler(),
+    );
+    if (skipAuth) {
+      return true; // Skip authentication for routes decorated with @SkipAuth()
+    }
     let requiredGuardParams = this.reflector.get<any>(
       'guardParams',
       context.getHandler(),
@@ -28,6 +35,8 @@ export class RolesGuard implements CanActivate {
     if (!requiredGuardParams) {
       return true;
     }
+    console.log('***********1');
+
     const { user } = context.switchToHttp().getRequest();
     if (!user) {
       return false;
@@ -46,6 +55,7 @@ export class RolesGuard implements CanActivate {
       return false;
     });
 
+    console.log('hasRequiredRoles', hasRequiredRoles);
     return hasRequiredRoles;
     return true;
     // return requiredGuardParams.includes(user.role);

@@ -39,6 +39,7 @@ export class PromotionsController {
 
   @Get()
   @SkipAuth()
+  // @Roles(ADMIN_AND_USER_SUBJECT)
   findAll() {
     return this.promotionsService.findAll();
   }
