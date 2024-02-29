@@ -978,7 +978,86 @@ export class PnrBookingsService {
             model: PnrDetail,
             as: 'pnrDetail',
           },
+          {
+            model: FlightDetails,
+            include: [
+              {
+                model: ExtraBaggage,
+              },
+              {
+                model: BaggageAllowance,
+              },
+              {
+                model: BookingFlight,
+              },
+              {
+                model: Fare,
+                include: [
+                  {
+                    model: PassengerInfoList,
+                    include: [
+                      {
+                        model: PassengerInfo,
+                        include: [
+                          {
+                            model: CurrencyConversion,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    model: TotalFare,
+                  },
+                ],
+              },
+              {
+                model: GroupDescription,
+              },
+              {
+                model: SchedualDetGet,
+                attributes: ['id'],
+                include: [
+                  {
+                    model: InnerSchedualDetGet,
+                    include: [
+                      {
+                        model: Arrival,
+                      },
+                      {
+                        model: Departure,
+                      },
+                      {
+                        model: Carrier,
+                        include: [
+                          {
+                            model: Equipment,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              {
+                model: FlightSegments,
+              },
+            ],
+          },
         ],
+      }).then((rawData) => {
+        // console.log(rawData);
+        const plainObject = rawData.toJSON();
+        const arr = plainObject.flightDetails.schedualDetGet;
+        plainObject.flightDetails.schedualDetGet = [];
+        arr.map((data2) => {
+          plainObject.flightDetails.schedualDetGet.push(
+            data2.innerSchedualDetGet,
+          );
+        });
+
+        return plainObject;
       });
       if (pnrBookings) {
         return this.responseService.createResponse(
