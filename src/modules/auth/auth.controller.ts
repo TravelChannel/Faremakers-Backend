@@ -26,7 +26,6 @@ import { LocalAuthGuard } from '../../common/guards/local-auth.guard'; // Adjust
 // import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { LoginDto } from './dto/login.dto';
-import { databaseConfig } from 'src/database/config/default';
 
 @Controller('auth')
 export class AuthController {
@@ -82,12 +81,6 @@ export class AuthController {
     @Res({ passthrough: true }) res,
   ) {
     try {
-      const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
-
-      const allowedOrigins = dbConfig.ALLOWED_ORIGINS
-        ? dbConfig.ALLOWED_ORIGINS.split(',')
-        : [];
-      console.log('allowedOrigins***', allowedOrigins);
       const result = await this.authService.requestOtp(userLoginDto);
 
       if (result.status === 'SUCCESS') {
