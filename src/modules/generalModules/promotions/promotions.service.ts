@@ -60,14 +60,27 @@ export class PromotionsService {
       const promotion = await this.promotionsRepository.findAll({
         where: {
           isActive: true,
-          startDate: {
-            [Op.lte]: currentDate, // Less than or equal to the current date
-          },
-          endDate: {
-            [Op.gte]: currentDate, // Greater than or equal to the current date
-          },
+          [Op.and]: [
+            {
+              startDate: {
+                [Op.or]: {
+                  [Op.lte]: currentDate,
+                  [Op.is]: null, // Check for null start date
+                },
+              },
+            },
+            {
+              endDate: {
+                [Op.or]: {
+                  [Op.gte]: currentDate,
+                  [Op.is]: null, // Check for null end date
+                },
+              },
+            },
+          ],
         },
       });
+
       return this.responseService.createResponse(
         HttpStatus.OK,
         promotion,
