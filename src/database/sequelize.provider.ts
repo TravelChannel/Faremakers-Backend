@@ -108,7 +108,7 @@ sequelize
   })
   .catch((error) => {
     console.error('Error synchronizing the database:', error);
-    console.error('--------------------=-----------:', error.message);
+    console.error('-----------------------------:', error.message);
   });
 
 export { sequelize, Transaction, Op };
