@@ -54,10 +54,10 @@ async function bootstrap() {
       cookie: {
         // maxAge: 6 * 60 * 60 * 1000,
         maxAge: 21600000,
-        // sameSite: 'none',
+        sameSite: 'none',
         // maxAge: 10000,
         // maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
-        // httpOnly: true,
+        httpOnly: true,
         secure: true,
       },
     }),
