@@ -26,7 +26,10 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+          
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+    
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -45,7 +48,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
-      
+
+      - name: unzip artifact for deployment
+        run: unzip release.zip
+    
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
@@ -54,3 +60,25 @@ jobs:
           slot-name: 'fmnode-back'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5A3B7E66B40A4A73BB9D6887BC375E0D }}
+
+
+                      - name: Cache
+  uses: actions/cache@v4.0.1
+  with:
+    # A list of files, directories, and wildcard patterns to cache and restore
+    path: 
+    # An explicit key for restoring and saving the cache
+    key: 
+    # An ordered list of keys to use for restoring stale cache if no cache hit occurred for key. Note `cache-hit` returns false in this case.
+    restore-keys: # optional
+    # The chunk size used to split up large files during upload, in bytes
+    upload-chunk-size: # optional
+    # An optional boolean when enabled, allows windows runners to save or restore caches that can be restored or saved respectively on other platforms
+    enableCrossOsArchive: # optional, default is false
+    # Fail the workflow if cache entry is not found
+    fail-on-cache-miss: # optional, default is false
+    # Check if a cache entry exists for the given input(s) (key, restore-keys) without downloading the cache
+    lookup-only: # optional, default is false
+    # Run the post step to save the cache even if another step before fails
+    save-always: # optional, default is false
+          
