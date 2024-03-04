@@ -22,7 +22,7 @@ async function bootstrap() {
   const allowedOrigins = dbConfig.ALLOWED_ORIGINS
     ? dbConfig.ALLOWED_ORIGINS.split(',')
     : [];
-  console.log('****allowedOrigins(***', allowedOrigins);
+  console.log('****allowedOrigins(****', allowedOrigins);
   app.use(bodyParser.json({ limit: '1mb' }));
   app.use(bodyParser.urlencoded({ extended: true, limit: '1mb' }));
   app.use(cookieParser());
