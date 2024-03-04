@@ -1322,8 +1322,8 @@ export class PnrBookingsService {
       null,
       'processPayment Endpoint Hit',
     );
-    const viewETicketUrl = `http://localhost:3000/previewEticket?id=${pnrBooking.id}`;
-    const errorRedirectUrl = `http://localhost:3000/bookingpayment`;
+    const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
+    const errorRedirectUrl = `https://faremakersnode.azurewebsites.net/bookingpayment`;
 
     const t: Transaction = await sequelize.transaction();
 

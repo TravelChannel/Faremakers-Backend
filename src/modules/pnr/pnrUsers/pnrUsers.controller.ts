@@ -41,13 +41,13 @@ export class PnrUsersController {
       if (result.status === 'SUCCESS') {
         res.cookie('user_token', result.payload.accessToken, {
           // secure: true, // Set to true if serving over HTTPS
-          sameSite: 'strict', // Set to 'none' for cross-site requests
+          sameSite: 'none', // Set to 'none' for cross-site requests
           httpOnly: true, // Prevent JavaScript access to the cookie
           maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
         });
         res.cookie('refresh_token', result.payload.refreshToken, {
           // secure: true, // Set to true if serving over HTTPS
-          sameSite: 'strict', // Set to 'none' for cross-site requests
+          sameSite: 'none', // Set to 'none' for cross-site requests
           httpOnly: true, // Prevent JavaScript access to the cookie
         });
       }
@@ -72,13 +72,13 @@ export class PnrUsersController {
       if (result.status === 'SUCCESS') {
         res.cookie('user_token', result.payload.accessToken, {
           // secure: true, // Set to true if serving over HTTPS
-          sameSite: 'strict', // Set to 'none' for cross-site requests
+          sameSite: 'none', // Set to 'none' for cross-site requests
           httpOnly: true, // Prevent JavaScript access to the cookie
           maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
         });
         res.cookie('refresh_token', result.payload.refreshToken, {
           // secure: true, // Set to true if serving over HTTPS
-          sameSite: 'strict', // Set to 'none' for cross-site requests
+          sameSite: 'none', // Set to 'none' for cross-site requests
           httpOnly: true, // Prevent JavaScript access to the cookie
         });
       }
