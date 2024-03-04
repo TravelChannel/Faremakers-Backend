@@ -44,7 +44,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  // Configure sesssion middleware
+  //h Configure sesssion middleware
   app.use(
     session({
       name: 'NestJs_SESSION',
@@ -54,11 +54,11 @@ async function bootstrap() {
       cookie: {
         // maxAge: 6 * 60 * 60 * 1000,
         maxAge: 21600000,
-        sameSite: 'none',
+        // sameSite: 'none',
         // maxAge: 10000,
         // maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
-
-        secure: false,
+        // httpOnly: true,
+        secure: true,
       },
     }),
   );
