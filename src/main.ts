@@ -58,7 +58,7 @@ async function bootstrap() {
         // maxAge: 10000,
         // maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV != 'development' ? true : false,
       },
     }),
   );
