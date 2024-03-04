@@ -1,5 +1,7 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { createPool } from './database';
+import * as sql from 'mssql';
+
 @Injectable()
 export class ActivityService {
   async incomingCallLogs(inCallLog: any) {
@@ -30,16 +32,24 @@ export class ActivityService {
       const pool = await createPool();
       const result = await pool
         .request()
-        .input('AgentNum, ', 1223 /* provide value */)
-        .input('ClientNum', IncomingNumber /* provide value */)
+        .input('AgentNum', sql.NVarChar, '1223dsdx' /* provide value */)
+        .input('ClientNum', sql.NVarChar, IncomingNumber /* provide value */)
         // .input('callDateTime', callDateTime /* provide value */)
         // .input('callDateTime', '' /* provide value */)
-        .input('CallDatetime', '20220304120030' /* provide value */)
-        .input('Duration', CallDuration /* provide value */)
-        .input('Status', Status /* provide value */)
-        .input('Recording', Recording /* provide value */)
-        .input('IVR_Param_Vals', IVR_Param_Vals /* provide value */)
-        .input('Feedback_Val', Feedback_Val /* provide value */)
+        .input(
+          'CallDatetime',
+          sql.DateTime,
+          '20220304120030' /* provide value */,
+        )
+        .input('Duration', sql.NVarChar, CallDuration /* provide value */)
+        .input('Status', sql.NVarChar, Status /* provide value */)
+        .input('Recording', sql.NVarChar, Recording /* provide value */)
+        .input(
+          'IVR_Param_Vals',
+          sql.NVarChar,
+          IVR_Param_Vals /* provide value */,
+        )
+        .input('Feedback_Val', sql.NVarChar, Feedback_Val /* provide value */)
         .execute('InsertCallLogbyAPI_IVR_Params_Leads');
 
       return result;
