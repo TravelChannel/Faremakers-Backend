@@ -7,12 +7,12 @@ export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
   @Post('IncomingCallLogs')
   @SkipAuth()
-  async incomingCallLogs(@Body() data) {
-    return await this.activityService.incomingCallLogs(data);
+  async incomingCallLogs(@Body() inCallLog) {
+    return await this.activityService.incomingCallLogs(inCallLog);
   }
   @Post('OutgoingCallLogs')
   @SkipAuth()
-  async outgoingCallLogs(@Body() data) {
-    return await this.activityService.outgoingCallLogs(data);
+  async outgoingCallLogs(@Body() outCallLog) {
+    return await this.activityService.outgoingCallLogs(outCallLog);
   }
 }

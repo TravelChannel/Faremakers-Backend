@@ -35,6 +35,7 @@ export const databaseConfig = {
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_TEST,
     JWT_SECRET: process.env.JWT_SECRET_TEST,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET_TEST,
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   },
   production: {
     dialect: 'mssql',
@@ -49,5 +50,6 @@ export const databaseConfig = {
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_PRODUCTION,
     JWT_SECRET: process.env.JWT_SECRET_PRODUCTION,
     JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET_PRODUCTION,
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   },
 };

@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class ActivityService {
-  async incomingCallLogs(data: any) {
-    console.log('incomingCallLogs-', data);
+  async incomingCallLogs(inCallLog: any) {
+    console.log('incomingCallLogs-', inCallLog);
     // const t: Transaction = await sequelize.transaction();
   }
-  async outgoingCallLogs(data: any) {
-    console.log('outgoingCallLogs-', data);
+  async outgoingCallLogs(outCallLog: any) {
+    console.log('outgoingCallLogs-', outCallLog);
     // const t: Transaction = await sequelize.transaction();
   }
 }

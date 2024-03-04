@@ -18,7 +18,7 @@ async function bootstrap() {
 
   // Get the allowed origins from the environment
   const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
-
+  console.log('process.env.NODE_ENVsss', databaseConfig[process.env.NODE_ENV]);
   const allowedOrigins = dbConfig.ALLOWED_ORIGINS
     ? dbConfig.ALLOWED_ORIGINS.split(',')
     : [];
