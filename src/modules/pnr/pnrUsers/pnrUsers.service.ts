@@ -9,10 +9,6 @@ import { databaseConfig } from 'src/database/config/default';
 
 import { HttpService } from '@nestjs/axios';
 
-import {
-  generateAccessTokenOtpUser,
-  generateRefreshTokenOtpUser,
-} from '../../../common/utils/jwt.utils';
 import { UserLoginDto } from './dto/userLogin.dto';
 import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 import { AxiosResponse } from 'axios';
