@@ -26,10 +26,7 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-          
-      - name: Zip artifact for deployment
-        run: Compress-Archive -Path ./* -DestinationPath release.zip
-    
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -48,10 +45,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
-
-      - name: unzip artifact for deployment
-        run: unzip release.zip
-    
+      
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
@@ -60,5 +54,3 @@ jobs:
           slot-name: 'fmnode-back'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5A3B7E66B40A4A73BB9D6887BC375E0D }}
-
-    
