@@ -27,6 +27,7 @@ import { PnrPaymentModule } from './modules/paymentModules/paymob/pnrPayment.mod
 import { BlogsModule } from './modules/generalModules/blogs/blogs.module';
 import { RatingsModule } from './modules/generalModules/ratings/ratings.module';
 import { CommissionPercentageModule } from './modules/serviceCharges/commissionPercentage/commissionPercentage.module';
+import { ActivityModule } from './modules/callLogs/activity/activity.module';
 import { databaseConfig } from 'src/database/config/default';
 import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
 import { ResponseModule } from './common/utility/response/response.module';
@@ -53,6 +54,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     BlogsModule,
     RatingsModule,
     CommissionPercentageModule,
+    ActivityModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',
