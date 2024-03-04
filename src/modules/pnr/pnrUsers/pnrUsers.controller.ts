@@ -18,7 +18,6 @@ import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 
 import { PnrUsersService } from './pnrUsers.service';
 // import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
-// Test
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 import { OtpAuthGuard } from '../../../common/guards/otp-auth.guard'; // Adjust the import path
 
