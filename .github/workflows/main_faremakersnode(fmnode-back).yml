@@ -28,8 +28,7 @@ jobs:
           npm run test --if-present
 
       - name: Create a zip archive
-        run: |
-          zip -r node-app.zip .
+        run: Compress-Archive -Path * -DestinationPath node-app.zip
         if: success()
       
       - name: Upload artifact for deployment job
