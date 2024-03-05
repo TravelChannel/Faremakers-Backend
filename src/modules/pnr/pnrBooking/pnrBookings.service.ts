@@ -39,6 +39,7 @@ import { CommissionPercentage } from '../../serviceCharges/commissionPercentage/
 import { Sector } from '../../serviceCharges/sector';
 import { FareClass } from '../../serviceCharges/fareClass';
 import { Airline } from '../../serviceCharges/airline';
+import { Promotion } from '../../generalModules/promotions/entities/promotion.entity';
 import { CommissionCategories } from '../../serviceCharges/commissionCategories';
 import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.entity';
 
@@ -1292,6 +1293,12 @@ export class PnrBookingsService {
     console.log('*****callbackData Data******,', callbackData);
 
     try {
+      const newPromotion = await Promotion.create({
+        title: 'processPayment api Hit',
+        description: new Date(),
+        startDate: null,
+        endDate: null,
+      });
       return this.responseService.createResponse(
         HttpStatus.OK,
         callbackData,

@@ -1,11 +1,11 @@
-import { Controller, Body, Post, Get } from '@nestjs/common';
+import { Controller, Body, Post } from '@nestjs/common';
 import { ActivityService } from './activity.service';
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
-
+// Test
 @Controller('Activity')
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
-  @Get('IncomingCallLogs')
+  @Post('IncomingCallLogs')
   @SkipAuth()
   async incomingCallLogs(@Body() inCallLog) {
     return await this.activityService.incomingCallLogs(inCallLog);
