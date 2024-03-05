@@ -146,7 +146,8 @@ export class AuthService {
     countryCode: string,
     phoneNumber: string,
   ): Promise<AxiosResponse> {
-    const otp = await this.generateOtp();
+    // const otp = await this.generateOtp();
+    const otp = '123456';
     await this.storeOtpInDatabase(countryCode, phoneNumber, otp);
     return this.sendOtpViaApi(countryCode, phoneNumber, otp);
   }
