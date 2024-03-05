@@ -26,6 +26,11 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
+
+      - name: Create a zip archive
+        run: |
+          zip -r node-app.zip .
+        if: success()
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -45,7 +50,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: node-app
-      
+      - name: Extract zip archive
+        run: unzip -q node-app.zip
+        
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
