@@ -1293,9 +1293,10 @@ export class PnrBookingsService {
     console.log('*****callbackData Data******,', callbackData);
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const newPromotion = await Promotion.create({
         title: 'processPayment api Hit',
-        description: new Date(),
+        description: new Date().toISOString(),
         startDate: null,
         endDate: null,
       });
