@@ -8,6 +8,8 @@ export class PnrBookingDto {
   countryCode: string;
   @IsNotEmpty({ message: 'pnr is required.' })
   pnr: number;
+  @IsOptional()
+  OrderId: string;
 
   @ArrayNotEmpty({ message: 'Provide at least one pnrBookings' })
   pnrBookings: PnrBookingArrayDto[];

@@ -75,31 +75,13 @@ export class AuthController {
   @Post('requestOtp')
   // @UseGuards(LocalAuthGuard)
   @SkipAuth() // Apply the decorator here to exclude this route
-  async requestOtp(
-    @Body() userLoginDto: UserLoginDto,
-    @Session() session: Record<string, any>,
-    @Res({ passthrough: true }) res,
-  ) {
+  async requestOtp(@Body() userLoginDto: UserLoginDto) {
     try {
       const result = await this.authService.requestOtp(userLoginDto);
 
-      if (result.status === 'SUCCESS') {
-        res.cookie('user_token', result.payload.accessToken, {
-          secure: process.env.NODE_ENV != 'development' ? true : false,
-          sameSite: 'none', // Set to 'none' for cross-site requests
-          httpOnly: true, // Prevent JavaScript access to the cookie
-          maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
-        });
-        res.cookie('refresh_token', result.payload.refreshToken, {
-          secure: process.env.NODE_ENV != 'development' ? true : false,
-          sameSite: 'none', // Set to 'none' for cross-site requests
-          httpOnly: true, // Prevent JavaScript access to the cookie
-        });
-      }
-
       return result;
     } catch (error) {
-      throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Otp failed', HttpStatus.UNAUTHORIZED);
     }
   }
   @Post('refresh-token')

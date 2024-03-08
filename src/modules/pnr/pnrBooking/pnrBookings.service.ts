@@ -62,6 +62,7 @@ export class PnrBookingsService {
       const {
         pnrBookings,
         pnr,
+        OrderId,
         // phoneNumber,
         // countryCode,
         flightDetails,
@@ -86,6 +87,7 @@ export class PnrBookingsService {
         {
           userId: currentUserId,
           pnr: pnr,
+          orderId: OrderId,
         },
         { transaction: t },
       );
@@ -1284,7 +1286,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment(
+  async processPayment2(
     callbackData: any,
     // req,
     //  res
@@ -1315,30 +1317,26 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment2(callbackData: any, req, res): Promise<any> {
+  async processPayment(callbackData: any): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
 
     const pnrBooking = await this.pnrBookingRepository.findOne({
-      where: {
-        // pnr: callbackData.pnr,
-        pnr: '1BXGMB',
-      },
+      // where: {
+      // pnr: callbackData.pnr,
+      // pnr: '1BXGMB',
+      // },
       order: [['createdAt', 'DESC']],
     });
-    return this.responseService.createResponse(
-      HttpStatus.OK,
-      null,
-      'processPayment Endpoint Hit',
-    );
+
     const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
-    const errorRedirectUrl = `https://faremakersnode.azurewebsites.net/bookingpayment`;
+    // const errorRedirectUrl = `https://faremakersnode.azurewebsites.net/bookingpayment`;
 
     const t: Transaction = await sequelize.transaction();
 
     try {
-      callbackData = req.query;
-      // console.log('callbackData *********** ', callbackData);
+      console.log('callbackData *********** ', pnrBooking.id, callbackData);
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const newPnrPayment = await PnrPayment.create(
         {
           pnrBookingId: pnrBooking.id,
@@ -1355,7 +1353,7 @@ export class PnrBookingsService {
           integration_id: callbackData.integration_id,
           profile_id: callbackData.profile_id,
           has_parent_transaction: callbackData.has_parent_transaction,
-          order: callbackData.order,
+          // order: callbackData.order,
           created_at: callbackData.created_at,
           currency: callbackData.currency,
           merchant_commission: callbackData.merchant_commission,
@@ -1380,11 +1378,19 @@ export class PnrBookingsService {
         },
         { transaction: t },
       );
+
+      if (callbackData.success == true) {
+        pnrBooking.isPaid = true;
+        await pnrBooking.save();
+
+        // if()
+      }
       await t.commit();
 
-      console.log(newPnrPayment);
+      // console.log(newPnrPayment);
       console.log('payment inserted');
-      return res.redirect(HttpStatus.FOUND, viewETicketUrl);
+      return 1;
+      // return res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(viewETicketUrl);
       return { viewETicketUrl };
@@ -1393,7 +1399,8 @@ export class PnrBookingsService {
 
       await t.rollback();
 
-      return res.redirect(errorRedirectUrl);
+      // return res.redirect(errorRedirectUrl);
+      return 0;
       // return res.redirect(errorRedirectUrl);
 
       console.log('error:', error);

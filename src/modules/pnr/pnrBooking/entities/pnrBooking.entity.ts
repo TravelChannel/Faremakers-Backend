@@ -80,6 +80,12 @@ export class PnrBooking extends Model {
     },
   })
   pnr: string;
+  @Column({
+    type: DataType.STRING,
+
+    allowNull: true,
+  })
+  orderId: string;
   @BelongsTo(() => User)
   user: User;
   @HasMany(() => PnrDetail)
