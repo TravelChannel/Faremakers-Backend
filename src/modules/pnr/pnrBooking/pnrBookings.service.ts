@@ -1327,7 +1327,7 @@ export class PnrBookingsService {
       // order: [['createdAt', 'DESC']],
     });
 
-    const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
+    // const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
     // const errorRedirectUrl = `https://faremakersnode.azurewebsites.net/bookingpayment`;
 
     const t: Transaction = await sequelize.transaction();
@@ -1355,7 +1355,18 @@ export class PnrBookingsService {
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
 
-        // if()
+        //
+
+        // Airsial;
+        // if(extra_Bagg?.schedualDetGet?.[0]?.[0]?.carrier?.operating === "PF")
+        const type = 1;
+        let result: any = 0;
+        if (type == 1) {
+          result = this.callAirSialConfirmation();
+        } else {
+          result = this.callSabreConfirmation();
+        }
+        console.log('result', result);
       }
       await t.commit();
 
@@ -1365,7 +1376,7 @@ export class PnrBookingsService {
       // return res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(viewETicketUrl);
-      return { viewETicketUrl };
+      // return { viewETicketUrl };
     } catch (error) {
       console.log('error:', error);
 
@@ -1376,7 +1387,6 @@ export class PnrBookingsService {
       // return res.redirect(errorRedirectUrl);
 
       console.log('error:', error);
-      console.log('*****processPayment Endpoint Hit*******');
 
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -1385,4 +1395,6 @@ export class PnrBookingsService {
       );
     }
   }
+  async callSabreConfirmation(): Promise<any> {}
+  async callAirSialConfirmation(): Promise<any> {}
 }
