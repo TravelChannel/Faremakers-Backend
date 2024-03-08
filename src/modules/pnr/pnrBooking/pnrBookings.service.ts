@@ -1319,13 +1319,12 @@ export class PnrBookingsService {
   }
   async processPayment(callbackData: any): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
-
+    callbackData = callbackData.obj;
     const pnrBooking = await this.pnrBookingRepository.findOne({
-      // where: {
-      // pnr: callbackData.pnr,
-      // pnr: '1BXGMB',
-      // },
-      order: [['createdAt', 'DESC']],
+      where: {
+        orderId: callbackData.order.id,
+      },
+      // order: [['createdAt', 'DESC']],
     });
 
     const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
@@ -1344,36 +1343,9 @@ export class PnrBookingsService {
           pending: callbackData.pending,
           amount_cents: callbackData.amount_cents,
           success: callbackData.success,
-          is_auth: callbackData.is_auth,
-          is_capture: callbackData.is_capture,
-          is_standalone_payment: callbackData.is_standalone_payment,
-          is_voided: callbackData.is_voided,
-          is_refunded: callbackData.is_refunded,
-          is_3d_secure: callbackData.is_3d_secure,
-          integration_id: callbackData.integration_id,
-          profile_id: callbackData.profile_id,
-          has_parent_transaction: callbackData.has_parent_transaction,
-          // order: callbackData.order,
           created_at: callbackData.created_at,
           currency: callbackData.currency,
-          merchant_commission: callbackData.merchant_commission,
-          // discount_details: callbackData.discount_details,
-          is_void: callbackData.is_void,
-          is_refund: callbackData.is_refund,
-          error_occurred: callbackData.error_occurred,
-          refunded_amount_cents: callbackData.refunded_amount_cents,
-          captured_amount: callbackData.captured_amount,
-          updated_at: callbackData.updated_at,
-          is_settled: callbackData.is_settled,
-          bill_balanced: callbackData.bill_balanced,
-          is_bill: callbackData.is_bill,
-          owner: callbackData.owner,
-          data_message: callbackData.data?.message || '',
-          source_data_type: callbackData.source_data?.type,
-          source_data_pan: callbackData.source_data?.pan,
-          source_data_sub_type: callbackData.source_data?.sub_type,
-          acq_response_code: callbackData.acq_response_code,
-          txn_response_code: callbackData.txn_response_code,
+
           hmac: callbackData.hmac,
         },
         { transaction: t },
@@ -1381,7 +1353,7 @@ export class PnrBookingsService {
 
       if (callbackData.success == true) {
         pnrBooking.isPaid = true;
-        await pnrBooking.save();
+        await pnrBooking.save({ transaction: t });
 
         // if()
       }
