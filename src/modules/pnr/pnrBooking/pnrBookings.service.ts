@@ -1090,6 +1090,147 @@ export class PnrBookingsService {
       );
     }
   }
+  async findByOrderId(req): Promise<any> {
+    try {
+      const whereOptions: any = {};
+      if (req.query.orderId) {
+        whereOptions.orderId = req.query.orderId;
+      } else {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Please provide search parameter.',
+        );
+      }
+      // Test
+      let pnrBookings = await PnrBooking.findOne({
+        where: whereOptions,
+      });
+      if (pnrBookings) {
+        pnrBookings = await PnrBooking.findOne({
+          where: whereOptions,
+
+          include: [
+            {
+              model: User,
+            },
+            {
+              model: PnrServiceCharges,
+              include: [
+                {
+                  model: CommissionCategories,
+                },
+              ],
+            },
+            {
+              model: PnrDetail,
+              as: 'pnrDetail',
+            },
+            {
+              model: FlightDetails,
+              include: [
+                {
+                  model: ExtraBaggage,
+                },
+                {
+                  model: BaggageAllowance,
+                },
+                {
+                  model: BookingFlight,
+                },
+                {
+                  model: Fare,
+                  include: [
+                    {
+                      model: PassengerInfoList,
+                      include: [
+                        {
+                          model: PassengerInfo,
+                          include: [
+                            {
+                              model: CurrencyConversion,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      model: TotalFare,
+                    },
+                  ],
+                },
+                {
+                  model: GroupDescription,
+                },
+                {
+                  model: SchedualDetGet,
+                  attributes: ['id'],
+                  include: [
+                    {
+                      model: InnerSchedualDetGet,
+                      include: [
+                        {
+                          model: Arrival,
+                        },
+                        {
+                          model: Departure,
+                        },
+                        {
+                          model: Carrier,
+                          include: [
+                            {
+                              model: Equipment,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+
+                {
+                  model: FlightSegments,
+                },
+              ],
+            },
+          ],
+        }).then((rawData) => {
+          // console.log(rawData);
+          const plainObject = rawData.toJSON();
+          const arr = plainObject.flightDetails.schedualDetGet;
+          plainObject.flightDetails.schedualDetGet = [];
+          arr.map((data2) => {
+            plainObject.flightDetails.schedualDetGet.push(
+              data2.innerSchedualDetGet,
+            );
+          });
+
+          return plainObject;
+        });
+      } else {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Record Not Found',
+        );
+      }
+      if (pnrBookings) {
+        return this.responseService.createResponse(
+          HttpStatus.OK,
+          pnrBookings,
+          // { userFromSession, users },
+          GET_SUCCESS,
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async findBy(
     req,
     currentUserId: number,
@@ -1319,6 +1460,13 @@ export class PnrBookingsService {
   }
   async processPayment(callbackData: any): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const newPromotion = await Promotion.create({
+      title: `processPayment Updated ${callbackData?.type},${callbackData?.obj?.order?.id}`,
+      description: new Date().toISOString(),
+      startDate: null,
+      endDate: null,
+    });
     callbackData = callbackData.obj;
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {

@@ -112,6 +112,10 @@ export class PnrBookingsController {
   async findByPnr(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findByPnr(req);
   }
+  @Get('findByOrderId')
+  async findByOrderId(@Req() req: Request): Promise<any> {
+    return this.pnrBookingsService.findByOrderId(req);
+  }
 
   @Get(':id')
   async findOne(
