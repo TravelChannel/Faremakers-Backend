@@ -20,13 +20,7 @@ INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber],
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
-SET IDENTITY_INSERT [dbo].[Blogs] ON 
-GO
-INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (1, N'jghjhj', N'jhjhjh', N'bjjhj', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
-GO
-INSERT [dbo].[Blogs] ([id], [mainTitle], [description], [img], [isActive], [createdAt], [updatedAt]) VALUES (2, N'gg', N'ddd', N'dd', 1, CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.9450000+00:00' AS DateTimeOffset))
-GO
-SET IDENTITY_INSERT [dbo].[Blogs] OFF
+
 GO
 SET IDENTITY_INSERT [dbo].[CommissionCategories] ON 
 GO
