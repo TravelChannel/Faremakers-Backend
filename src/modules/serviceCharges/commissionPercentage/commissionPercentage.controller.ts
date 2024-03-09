@@ -36,6 +36,10 @@ export class CommissionPercentageController {
     );
   }
 
+  @Post('getServiceCharges')
+  getServiceCharges(@Body() majorInfo: any) {
+    return this.commissionPercentageService.getServiceCharges(majorInfo);
+  }
   @Get('getAirlineDropdown')
   getAirlineDropdown() {
     return this.commissionPercentageService.getAirlineDropdown();

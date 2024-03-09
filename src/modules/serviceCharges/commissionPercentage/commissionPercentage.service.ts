@@ -14,6 +14,7 @@ import { EXCEPTION } from '../../../shared/messages.constants';
 import { Airline } from '../airline';
 import { FareClass } from '../fareClass';
 import { Sector } from '../sector';
+import { CommissionCategories } from '../commissionCategories';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
@@ -129,7 +130,118 @@ export class CommissionPercentageService {
       );
     }
   }
+  async getServiceCharges(majorInfo) {
+    try {
+      const pnrServiceChargesPercentage = await this.calculateServiceCharges(
+        majorInfo,
+      );
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        pnrServiceChargesPercentage,
+        'Service Charges calculated successfully',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async calculateServiceCharges(MajorInfo) {
+    let pnrServiceChargesPercentage = 0;
+    let pnrServiceChargesPercentageDefault = 0;
+    const commissionCategory = await CommissionCategories.findOne({
+      order: [['precedence', 'ASC']],
+    });
 
+    if (commissionCategory) {
+      const commissionPercentage = await CommissionPercentage.findOne({
+        where: {
+          airlineId: null,
+          fareClassId: null,
+          sectorId: null,
+        },
+      });
+      if (commissionPercentage) {
+        pnrServiceChargesPercentageDefault = pnrServiceChargesPercentage =
+          commissionPercentage.percentage;
+      }
+      let pnrServiceChargesCode = 'default';
+      // let a = 1;
+
+      switch (Number(commissionCategory.id)) {
+        case 1:
+          pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
+
+          const airline = await Airline.findOne({
+            where: { code: pnrServiceChargesCode },
+          });
+
+          if (airline) {
+            const commissionPercentage = await CommissionPercentage.findOne({
+              where: {
+                airlineId: airline.id,
+                fareClassId: null,
+                sectorId: null,
+              },
+            });
+            if (commissionPercentage) {
+              pnrServiceChargesPercentage = commissionPercentage.percentage;
+            }
+          }
+          break;
+
+        case 2:
+          pnrServiceChargesCode = MajorInfo.Destinations[0] ?? null;
+          const sector = await Sector.findOne({
+            where: { code: pnrServiceChargesCode },
+          });
+
+          if (sector) {
+            const commissionPercentage = await CommissionPercentage.findOne({
+              where: {
+                sectorId: sector.id,
+                airlineId: null,
+                fareClassId: null,
+              },
+            });
+
+            if (commissionPercentage) {
+              pnrServiceChargesPercentage = commissionPercentage.percentage;
+            }
+          }
+
+          break;
+        case 3:
+          pnrServiceChargesCode = MajorInfo.ClassType[0] ?? null;
+
+          const fareClass = await FareClass.findOne({
+            where: { code: pnrServiceChargesCode },
+          });
+
+          if (fareClass) {
+            const commissionPercentage = await CommissionPercentage.findOne({
+              where: {
+                fareClassId: fareClass.id,
+                sectorId: null,
+                airlineId: null,
+              },
+            });
+
+            if (commissionPercentage) {
+              pnrServiceChargesPercentage = commissionPercentage.percentage;
+            }
+          }
+          break;
+
+        default:
+          pnrServiceChargesPercentage = pnrServiceChargesPercentageDefault;
+          break;
+      }
+    }
+    return pnrServiceChargesPercentage;
+  }
   async update(
     id: number,
     updateCommissionPercentageDto: UpdateCommissionPercentageDto,

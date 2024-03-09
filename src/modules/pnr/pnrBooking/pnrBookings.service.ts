@@ -396,6 +396,17 @@ export class PnrBookingsService {
 
       if (commissionCategory) {
         let pnrServiceChargesPercentage = 0;
+
+        const commissionPercentage = await CommissionPercentage.findOne({
+          where: {
+            airlineId: null,
+            fareClassId: null,
+            sectorId: null,
+          },
+        });
+        if (commissionPercentage) {
+          pnrServiceChargesPercentage = commissionPercentage.percentage;
+        }
         let pnrServiceChargesCode = 'unknownCode';
         // let a = 1;
 
