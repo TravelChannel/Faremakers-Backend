@@ -1472,13 +1472,14 @@ export class PnrBookingsService {
   async processPayment(callbackData: any): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    callbackData = callbackData.obj;
+
     const newPromotion = await Promotion.create({
-      title: `processPayment Updated ${callbackData?.type},${callbackData?.obj?.order?.id}`,
+      title: `processPayment Updated ,${callbackData?.order?.id}`,
       description: new Date().toISOString(),
       startDate: null,
       endDate: null,
     });
-    callbackData = callbackData.obj;
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         orderId: callbackData.order.id,
