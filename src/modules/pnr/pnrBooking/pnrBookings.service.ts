@@ -1518,11 +1518,9 @@ export class PnrBookingsService {
 
         //
 
-        // Airsial;
-        // if(extra_Bagg?.schedualDetGet?.[0]?.[0]?.carrier?.operating === "PF")
-        const type = 1;
-        let result: any = 0;
-        if (type == 1) {
+        const type = await this.findAirlineType(pnrBooking.id);
+        let result;
+        if (type == 0) {
           result = this.callAirSialConfirmation();
         } else {
           result = this.callSabreConfirmation();
@@ -1558,4 +1556,65 @@ export class PnrBookingsService {
   }
   async callSabreConfirmation(): Promise<any> {}
   async callAirSialConfirmation(): Promise<any> {}
+  async findAirlineType(id): Promise<any> {
+    const pnrBooking = await PnrBooking.findByPk(id, {
+      include: [
+        {
+          model: FlightDetails,
+          include: [
+            {
+              model: SchedualDetGet,
+              attributes: ['id'],
+              include: [
+                {
+                  model: InnerSchedualDetGet,
+                  include: [
+                    {
+                      model: Arrival,
+                    },
+                    {
+                      model: Departure,
+                    },
+                    {
+                      model: Carrier,
+                      include: [
+                        {
+                          model: Equipment,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+
+            {
+              model: FlightSegments,
+            },
+          ],
+        },
+      ],
+    }).then((rawData) => {
+      // console.log(rawData);
+      const plainObject = rawData.toJSON();
+      const arr = plainObject.flightDetails.schedualDetGet;
+      plainObject.flightDetails.schedualDetGet = [];
+      arr.map((data2) => {
+        plainObject.flightDetails.schedualDetGet.push(
+          data2.innerSchedualDetGet,
+        );
+      });
+
+      return plainObject;
+    });
+    // Airsial;
+    if (
+      pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating ===
+      'PF'
+    ) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
 }
