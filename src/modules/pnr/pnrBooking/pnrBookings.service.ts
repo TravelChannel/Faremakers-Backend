@@ -1474,8 +1474,9 @@ export class PnrBookingsService {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     callbackData = callbackData.obj;
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const newPromotion = await Promotion.create({
-      title: `processPayment Updated ,${callbackData?.order?.id}`,
+      title: `processPayment Updated ,${callbackData?.order?.id},status:${callbackData.success}`,
       description: new Date().toISOString(),
       startDate: null,
       endDate: null,
