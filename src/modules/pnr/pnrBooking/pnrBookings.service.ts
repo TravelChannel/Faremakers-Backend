@@ -1617,5 +1617,6 @@ export class PnrBookingsService {
     }
   }
   async callSabreConfirmation(): Promise<any> {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async callAirSialConfirmation(pnr): Promise<any> {}
 }
