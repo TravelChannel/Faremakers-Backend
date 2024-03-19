@@ -45,10 +45,7 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
-      - name: Delete old artifact
-        uses: actions/delete-artifact@v2
-        with:
-          name: node-app
+      
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
