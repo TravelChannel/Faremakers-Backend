@@ -106,6 +106,9 @@ export class BlogsService {
       if (req.query.mainTitle) {
         whereOptions.mainTitle = req.query.mainTitle;
       }
+      if (req.query.headerUrl) {
+        whereOptions.headerUrl = req.query.headerUrl;
+      }
       const blog = await this.blogsRepository.findOne({
         where: whereOptions,
 
@@ -115,11 +118,19 @@ export class BlogsService {
           },
         ],
       });
-      return this.responseService.createResponse(
-        HttpStatus.OK,
-        blog,
-        'blog retrieved successfully',
-      );
+      if (blog) {
+        return this.responseService.createResponse(
+          HttpStatus.OK,
+          blog,
+          'blog retrieved successfully',
+        );
+      } else {
+        return this.responseService.createResponse(
+          HttpStatus.OK,
+          null,
+          'no blog found',
+        );
+      }
     } catch (error) {
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
