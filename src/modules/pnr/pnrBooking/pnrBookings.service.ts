@@ -1427,7 +1427,7 @@ export class PnrBookingsService {
       return this.responseService.createResponse(
         HttpStatus.OK,
         null,
-        'Reissue Request Initiated Successfully ',
+        'Reissue Request Initiated Successfully',
       );
     } catch (error) {
       console.log(error);
@@ -1521,7 +1521,7 @@ export class PnrBookingsService {
         const type = await this.findAirlineType(pnrBooking.id);
         let result;
         if (type == 0) {
-          result = this.callAirSialConfirmation();
+          result = this.callAirSialConfirmation(pnrBooking.pnr);
         } else {
           result = this.callSabreConfirmation();
         }
@@ -1554,8 +1554,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async callSabreConfirmation(): Promise<any> {}
-  async callAirSialConfirmation(): Promise<any> {}
+
   async findAirlineType(id): Promise<any> {
     const pnrBooking = await PnrBooking.findByPk(id, {
       include: [
@@ -1617,4 +1616,6 @@ export class PnrBookingsService {
       return 1;
     }
   }
+  async callSabreConfirmation(): Promise<any> {}
+  async callAirSialConfirmation(pnr): Promise<any> {}
 }

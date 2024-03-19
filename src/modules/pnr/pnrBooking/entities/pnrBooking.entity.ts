@@ -52,13 +52,35 @@ export class PnrBooking extends Model {
 
     allowNull: false,
   })
+  isCancelled: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+
+    allowNull: false,
+  })
   isReqForRefund: boolean;
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+
+    allowNull: false,
+  })
+  isRefunded: boolean;
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: 0,
     allowNull: false,
   })
   isReqForReIssue: boolean;
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+
+    allowNull: false,
+  })
+  isReIssueed: boolean;
   @Column({
     type: DataType.STRING,
     allowNull: false,
