@@ -76,22 +76,42 @@ export class BlogsService {
     }
   }
 
-  async findAll(): Promise<Blog[]> {
+  async findAll(
+    pageNumber: number = 1,
+    pageSize: number = 10,
+  ): Promise<{ blogs: Blog[]; hasNextPage: boolean }> {
     try {
-      const blog = await this.blogsRepository.findAll({
+      const offset = (pageNumber - 1) * pageSize;
+      const blogs = await this.blogsRepository.findAll({
         include: [
           {
             model: BlogsDetails,
           },
         ],
+        order: [['publishDate', 'DESC']], // Assuming you want to order by publishDate descending
+        limit: pageSize,
+        offset: offset,
       });
+
+      const nextBlogs = await this.blogsRepository.findAll({
+        include: [
+          {
+            model: BlogsDetails,
+          },
+        ],
+        order: [['publishDate', 'DESC']],
+        limit: pageSize,
+        offset: offset + pageSize,
+      });
+
+      const hasNextPage = nextBlogs.length > 0;
+
       return this.responseService.createResponse(
         HttpStatus.OK,
-        blog,
-        'blog Fetched',
+        { blogs, hasNextPage },
+        'Blogs Fetched',
       );
     } catch (error) {
-      // await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,

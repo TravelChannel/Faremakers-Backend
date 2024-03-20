@@ -12,6 +12,7 @@ import {
   ParseFilePipeBuilder,
   UploadedFile,
   Req,
+  Query,
 
   // HttpException,
 } from '@nestjs/common';
@@ -77,11 +78,21 @@ export class BlogsController {
 
   @Get()
   @SkipAuth()
-  // @Roles(ADMIN_AND_USER_SUBJECT)
-  findAll() {
-    return this.blogsService.findAll();
+  findAll(
+    @Query('pageNumber') pageNumber?: string,
+    @Query('pageSize') pageSize?: string,
+  ) {
+    const parsedPageNumber = pageNumber ? parseInt(pageNumber, 10) : 1;
+    const parsedPageSize = pageSize ? parseInt(pageSize, 10) : 10;
+    console.log('parsedPageNumber', pageNumber);
+    console.log('parsedPageSize', pageSize);
+    return this.blogsService.findAll(parsedPageNumber, parsedPageSize);
   }
-
+  // @Get()
+  // @SkipAuth()
+  // findAll() {
+  //   return this.blogsService.findAll();
+  // }
   @Get('/by')
   @SkipAuth()
   // @Roles(ADMIN_AND_USER_SUBJECT)
