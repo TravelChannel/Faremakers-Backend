@@ -42,6 +42,7 @@ import { Airline } from '../../serviceCharges/airline';
 import { Promotion } from '../../generalModules/promotions/entities/promotion.entity';
 import { CommissionCategories } from '../../serviceCharges/commissionCategories';
 import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.entity';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class PnrBookingsService {
@@ -49,6 +50,7 @@ export class PnrBookingsService {
     @Inject(PNR_BOOKINGS_REPOSITORY)
     private pnrBookingRepository: typeof PnrBooking,
     private readonly responseService: ResponseService,
+    private readonly httpService: HttpService,
   ) {}
   async create(
     currentUserId: number,
@@ -112,6 +114,7 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
+            await this.addLead(pnrBooking);
           }),
         );
       }
@@ -509,6 +512,20 @@ export class PnrBookingsService {
     }
   }
 
+  async addLead(data): Promise<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      // Authorization: `Bearer ${tokenSabre}`,
+    };
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&from=LHE&to=KHI&name=
+    Mr Arman Ahmed&phone=${data.phoneNumber}&email=arman@faremakers.com&adult=1&child=0&infant=0&airline=PF&classtype
+    =Economy&TripTypeId=1&depDate=27-06-2024&retDate=01-01-190`;
+
+    const response = await this.httpService
+      .post(url, {}, { headers })
+      .toPromise();
+    const result = response.data;
+  }
   async findAll(
     req,
     currentUserId: number,
