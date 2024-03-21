@@ -114,7 +114,7 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
-            await this.addLead(pnrBooking);
+            await this.callLeadCreation(pnrBooking);
           }),
         );
       }
@@ -512,7 +512,7 @@ export class PnrBookingsService {
     }
   }
 
-  async addLead(data): Promise<any> {
+  async callLeadCreation(data): Promise<any> {
     const headers = {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
@@ -1533,6 +1533,7 @@ export class PnrBookingsService {
       );
 
       if (callbackData.success == true) {
+        await this.callPostPaymentApi(callbackData);
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
 
@@ -1636,6 +1637,22 @@ export class PnrBookingsService {
       return 1;
     }
   }
+  async callPostPaymentApi(data): Promise<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      // Authorization: `Bearer ${tokenSabre}`,
+    };
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=${data.unknown}&pnr=${data.unknown}
+    &paymentMethod=Pay-Mob&TotalAmount=${data.unknown}&ContactPersonName=${data.unknown}&IsPaid=true`;
+
+    const response = await this.httpService
+      .post(url, {}, { headers })
+      .toPromise();
+    const result = response.data;
+    console.log(result);
+    return result;
+  }
+
   async callSabreConfirmation(): Promise<any> {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async callAirSialConfirmation(pnr): Promise<any> {}
