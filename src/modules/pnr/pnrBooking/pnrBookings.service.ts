@@ -518,13 +518,16 @@ export class PnrBookingsService {
       // Authorization: `Bearer ${tokenSabre}`,
     };
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&from=LHE&to=KHI&name=
-    Mr Arman Ahmed&phone=${data.phoneNumber}&email=arman@faremakers.com&adult=1&child=0&infant=0&airline=PF&classtype
-    =Economy&TripTypeId=1&depDate=27-06-2024&retDate=01-01-190`;
+    ${data.firstName} ${data.lastName}    &phone=${data.phoneNumber}&email=${data.email}&adult=
+    ${data.adults}&child=${data.children}&infant=${data.infants}&airline=PF&classtype=
+    Economy&TripTypeId=1&depDate=27-06-2024&retDate=01-01-190`;
 
     const response = await this.httpService
       .post(url, {}, { headers })
       .toPromise();
     const result = response.data;
+    console.log(result);
+    return result;
   }
   async findAll(
     req,
