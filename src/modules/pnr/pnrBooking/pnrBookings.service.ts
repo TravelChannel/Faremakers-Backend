@@ -114,7 +114,8 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
-            await this.callLeadCreation(pnrBooking);
+            // await this.callLeadCreation(pnrBooking);
+            // external api
           }),
         );
       }
@@ -1533,7 +1534,8 @@ export class PnrBookingsService {
       );
 
       if (callbackData.success == true) {
-        await this.callPostPaymentApi(callbackData);
+        // await this.callPostPaymentApi(callbackData);
+        // external api
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
 
