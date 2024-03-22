@@ -189,7 +189,7 @@ export class AuthService {
     const headers = {
       headers: {
         Authorization:
-          'App c094e9214ea4e99fa31b84ab6c5c7883-4bca245d-a8b5-4959-baa8-a19c08ec8117',
+          'App ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f',
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
