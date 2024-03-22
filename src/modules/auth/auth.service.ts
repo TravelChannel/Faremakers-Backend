@@ -185,11 +185,15 @@ export class AuthService {
         },
       ],
     }; // Sabre API endpoint
-    const url = 'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
+    const url =
+      process.env.INFOBIP_URL ||
+      'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
     const headers = {
       headers: {
-        Authorization:
-          'App ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f',
+        Authorization: `App ${
+          process.env.INFOBIP_KEY ||
+          'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
+        }`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
