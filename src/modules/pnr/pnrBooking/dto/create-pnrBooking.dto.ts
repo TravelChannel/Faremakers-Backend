@@ -17,4 +17,6 @@ export class PnrBookingDto {
   flightDetails: any;
   @IsOptional()
   MajorInfo: any;
+  @IsOptional()
+  leadCreationData: any;
 }

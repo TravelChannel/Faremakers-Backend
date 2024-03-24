@@ -69,6 +69,7 @@ export class PnrBookingsService {
         // countryCode,
         flightDetails,
         MajorInfo,
+        leadCreationData,
       } = pnrBookingDto;
       // let newUser = await User.findOne({
       //   where: {
@@ -114,7 +115,7 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
-            // await this.callLeadCreation(pnrBooking);
+            await this.callLeadCreation(leadCreationData, pnrBooking);
             // external api
           }),
         );
@@ -513,15 +514,17 @@ export class PnrBookingsService {
     }
   }
 
-  async callLeadCreation(data): Promise<any> {
+  async callLeadCreation(leadCreationData, data): Promise<any> {
     const headers = {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
     };
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&from=LHE&to=KHI&name=
-    ${data.firstName} ${data.lastName}    &phone=${data.phoneNumber}&email=${data.email}&adult=
-    ${data.adults}&child=${data.children}&infant=${data.infants}&airline=PF&classtype=
-    Economy&TripTypeId=1&depDate=27-06-2024&retDate=01-01-190`;
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&from=${leadCreationData.depart}
+    &to=${leadCreationData.arrival}&name=
+    ${data.firstName} ${data.lastName}&phone=${leadCreationData.phoneNumber}&email=${data.email}&adult=
+    ${leadCreationData.adults}&child=${leadCreationData.children}&infant=${leadCreationData.infants}
+    &airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&TripTypeId=1&depDate=
+    ${leadCreationData.departDate}&retDate=${leadCreationData.returnDate}`;
 
     const response = await this.httpService
       .post(url, {}, { headers })
