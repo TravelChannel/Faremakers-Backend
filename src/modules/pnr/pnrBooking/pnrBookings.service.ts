@@ -526,9 +526,7 @@ export class PnrBookingsService {
     &airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&TripTypeId=1&depDate=
     ${leadCreationData.departDate}&retDate=${leadCreationData.returnDate}`;
 
-    const response = await this.httpService
-      .post(url, {}, { headers })
-      .toPromise();
+    const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
     console.log(result);
     return result;
@@ -1650,9 +1648,7 @@ export class PnrBookingsService {
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=${data.unknown}&pnr=${data.unknown}
     &paymentMethod=Pay-Mob&TotalAmount=${data.unknown}&ContactPersonName=${data.unknown}&IsPaid=true`;
 
-    const response = await this.httpService
-      .post(url, {}, { headers })
-      .toPromise();
+    const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
     console.log(result);
     return result;
