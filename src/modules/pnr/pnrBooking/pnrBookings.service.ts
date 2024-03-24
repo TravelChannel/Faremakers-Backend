@@ -1535,13 +1535,8 @@ export class PnrBookingsService {
       );
 
       if (callbackData.success == true) {
-        // await this.callPostPaymentApi(callbackData);
-        // external api
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-
-        //
-
         const type = await this.findAirlineType(pnrBooking.id);
         let result;
         if (type == 0) {
@@ -1550,6 +1545,8 @@ export class PnrBookingsService {
           result = this.callSabreConfirmation();
         }
         console.log('result', result);
+        // await this.callPostPaymentApi(callbackData);
+        // external api
       }
       await t.commit();
 
