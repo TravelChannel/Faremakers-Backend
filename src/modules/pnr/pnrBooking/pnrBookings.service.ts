@@ -1507,6 +1507,12 @@ export class PnrBookingsService {
       where: {
         orderId: callbackData.order.id,
       },
+      include: [
+        {
+          model: PnrDetail,
+          as: 'pnrDetail',
+        },
+      ],
       // order: [['createdAt', 'DESC']],
     });
 
@@ -1545,7 +1551,11 @@ export class PnrBookingsService {
           result = this.callSabreConfirmation();
         }
         console.log('result', result);
-        // await this.callPostPaymentApi(callbackData);
+        // await this.callPostPaymentApi(
+        //   pnrBooking.pnr,
+        //   pnrBooking.pnrDetail[0],
+        //   callbackData,
+        // );
         // external api
       }
       await t.commit();
@@ -1637,13 +1647,13 @@ export class PnrBookingsService {
       return 1;
     }
   }
-  async callPostPaymentApi(data): Promise<any> {
+  async callPostPaymentApi(pnr, pnrDetail, data): Promise<any> {
     const headers = {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
     };
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=${data.unknown}&pnr=${data.unknown}
-    &paymentMethod=Pay-Mob&TotalAmount=${data.unknown}&ContactPersonName=${data.unknown}&IsPaid=true`;
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=${pnrDetail.phoneNumber}&pnr=${pnr}
+    &paymentMethod=Pay-Mob&TotalAmount=${data.amount_cents}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=${data.success}`;
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
