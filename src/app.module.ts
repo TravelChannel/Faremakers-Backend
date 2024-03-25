@@ -25,6 +25,7 @@ import { PnrUsersModule } from './modules/pnr/pnrUsers/pnrUsers.module';
 import { PromotionsModule } from './modules/generalModules/promotions/promotions.module';
 import { PnrPaymentModule } from './modules/paymentModules/paymob/pnrPayment.module';
 import { BlogsModule } from './modules/generalModules/blogs/blogs.module';
+import { GeneralTasksModule } from './modules/generalModules/generalTasks/generalTasks.module';
 import { RatingsModule } from './modules/generalModules/ratings/ratings.module';
 import { CommissionPercentageModule } from './modules/serviceCharges/commissionPercentage/commissionPercentage.module';
 import { ActivityModule } from './modules/callLogs/activity/activity.module';
@@ -52,6 +53,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     PromotionsModule,
     PnrPaymentModule,
     BlogsModule,
+    GeneralTasksModule,
     RatingsModule,
     CommissionPercentageModule,
     ActivityModule,
