@@ -21,7 +21,7 @@ import {
 import * as xmlbuilder from 'xmlbuilder';
 
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
-
+import * as moment from 'moment';
 import { GeneralTasksService } from './generalTasks.service';
 import {
   ADMIN_SUBJECT,
@@ -54,7 +54,10 @@ export class GeneralTasksController {
           `${process.env.BASE_URL}:${process.env.PORT}/blogs/${blog.headerUrl}`,
         )
         .up()
-        .ele('lastmod', blog.updatedAt) // Assuming you want to use updatedAt for last modified date
+        .ele(
+          'lastmod',
+          moment(blog.updatedAt).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        ) // Format the date using moment
         .up()
         .ele('priority', '0.85'); // Priority can be set according to your logic
     });
