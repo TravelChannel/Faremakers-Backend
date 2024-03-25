@@ -52,7 +52,8 @@
     "sequelize": "^6.32.1",
     "sequelize-typescript": "^2.1.5",
     "tedious": "^16.4.0",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "xmlbuilder": "^15.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
