@@ -51,6 +51,11 @@ export class PnrDetail extends Model {
   })
   email: string;
   @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  ticketNo: string;
+  @Column({
     type: DataType.DATE,
   })
   dateOfBirth: Date;

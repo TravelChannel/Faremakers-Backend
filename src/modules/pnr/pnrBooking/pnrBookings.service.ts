@@ -1,7 +1,10 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 // import { PnrBookingArrayDto } from './dto/PnrBookingArray.dto';
+import * as qs from 'qs';
+
 // import { UpdateVoucherDto } from './dto/update-vouchers.dto';
+
 import {
   SAVED_SUCCESS,
   GET_SUCCESS,
@@ -47,6 +50,9 @@ import { GeneralTask } from '../../generalModules/generalTasks/entities/generalT
 
 @Injectable()
 export class PnrBookingsService {
+  private tokenSabre: string | null = null;
+  private tokenExpirationSabre: Date | null = null;
+  private keySabre = 'VmpFNk5UVTFOVG8wTTBWRU9rRkI6YzNOM2NtVnpPVGs9';
   constructor(
     @Inject(PNR_BOOKINGS_REPOSITORY)
     private pnrBookingRepository: typeof PnrBooking,
@@ -1552,7 +1558,10 @@ export class PnrBookingsService {
           const generalTask = await GeneralTask.findByPk(1, {});
 
           if (generalTask.isSabreCreateTicketAllowed) {
-            result = this.callSabreConfirmation();
+            result = this.callSabreConfirmation(
+              pnrBooking.pnr,
+              pnrBooking.pnrDetail,
+            );
           }
         }
         console.log('result', result);
@@ -1666,7 +1675,105 @@ export class PnrBookingsService {
     return result;
   }
 
-  async callSabreConfirmation(): Promise<any> {}
+  async callAirSialConfirmation(pnr): Promise<any> {
+    console.log('pnr', pnr);
+  }
+  async getAuthTokenSabre() {
+    if (
+      this.tokenSabre &&
+      this.tokenExpirationSabre &&
+      this.tokenExpirationSabre > new Date()
+    ) {
+      return this.tokenSabre;
+    }
+    const headers = {
+      Authorization: `Basic ${this.keySabre}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    const url = 'https://api.havail.sabre.com/v2/auth/token';
+    const data = qs.stringify({
+      grant_type: 'client_credentials',
+    });
+
+    try {
+      console.log('Getting New tokenSabre');
+      const response = await this.httpService
+        .post(url, data, { headers })
+        .toPromise();
+      this.tokenSabre = response.data.access_token;
+      this.tokenExpirationSabre = new Date(
+        new Date().getTime() + response.data.expires_in * 1000,
+      );
+      return this.tokenSabre;
+    } catch (error) {
+      console.log('tokenSabre Error');
+      throw new Error(`Error getting auth tokenSabre: ${error.message}`);
+    }
+  }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async callAirSialConfirmation(pnr): Promise<any> {}
+  async callSabreConfirmation(pnr, passengers: any): Promise<any> {
+    const token = await this.getAuthTokenSabre();
+
+    const snosArray = passengers.map(
+      (item, index) => `{ "Number": ${index + 1} }`,
+    );
+    const snos = snosArray.join(',');
+
+    const requestOptions = {
+      method: 'POST',
+      url: 'https://api.havail.sabre.com/v1.3.0/air/ticket',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: {
+        AirTicketRQ: {
+          version: '1.3.0',
+          targetCity: '43ED',
+          DesignatePrinter: {
+            Printers: {
+              Hardcopy: { LNIATA: 'B19DC5' },
+              Ticket: { CountryCode: 'PK' },
+            },
+          },
+          Itinerary: { ID: pnr },
+          Ticketing: [
+            { PricingQualifiers: { PriceQuote: [{ Record: snos }] } },
+          ],
+          PostProcessing: {
+            EndTransaction: { Source: { ReceivedFrom: 'FM WEB1' } },
+          },
+        },
+      },
+      json: true,
+    };
+    const response = await this.httpService
+      .post(requestOptions.url, requestOptions.body, {
+        headers: requestOptions.headers,
+      })
+      .toPromise();
+
+    // Update passengers' ticket numbers
+    // for (const doc of response.AirTicketRS.Summary) {
+    //   for (const passenger of passengers) {
+    //     if (
+    //       passenger.FirstName.trim().toLowerCase() ===
+    //         doc.FirstName.trim().toLowerCase() &&
+    //       passenger.LastName.trim().toLowerCase() ===
+    //         doc.LastName.trim().toLowerCase()
+    //     ) {
+    //       const passengerEntity = await this.passengerRepository.findOne({
+    //         where: { PassengerID: passenger.PassengerID },
+    //       });
+    //       if (passengerEntity) {
+    //         passengerEntity.TicketNo = doc.DocumentNumber;
+    //         await this.passengerRepository.save(passengerEntity);
+    //       }
+    //     }
+    //   }
+    // }
+    console.log('response', response);
+    return true;
+  }
 }
