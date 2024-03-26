@@ -43,6 +43,7 @@ import { Promotion } from '../../generalModules/promotions/entities/promotion.en
 import { CommissionCategories } from '../../serviceCharges/commissionCategories';
 import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.entity';
 import { HttpService } from '@nestjs/axios';
+import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
 
 @Injectable()
 export class PnrBookingsService {
@@ -1548,7 +1549,11 @@ export class PnrBookingsService {
         if (type == 0) {
           result = this.callAirSialConfirmation(pnrBooking.pnr);
         } else {
-          result = this.callSabreConfirmation();
+          const generalTask = await GeneralTask.findByPk(1, {});
+
+          if (generalTask.isSabreCreateTicketAllowed) {
+            result = this.callSabreConfirmation();
+          }
         }
         console.log('result', result);
         // await this.callPostPaymentApi(

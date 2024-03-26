@@ -42,6 +42,7 @@ import { FareClassLetters } from '../modules/serviceCharges/fareClassLetters';
 import { Blog } from '../modules/generalModules/blogs/entities/blog.entity';
 import { BlogTypes } from '../modules/generalModules/blogTypes/index';
 import { Rating } from '../modules/generalModules/ratings/entities/rating.entity';
+import { GeneralTask } from '../modules/generalModules/generalTasks/entities/generalTask.entity';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -95,6 +96,7 @@ sequelize.addModels([
   Blog,
   BlogTypes,
   Rating,
+  GeneralTask,
 ]);
 
 // Sync the models with the database, dropping and recreating tables

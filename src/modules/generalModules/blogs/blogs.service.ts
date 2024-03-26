@@ -132,7 +132,7 @@ export class BlogsService {
         return this.responseService.createResponse(
           HttpStatus.OK,
           null,
-          'no blog found',
+          'no blog found.',
         );
       }
     } catch (error) {
