@@ -79,6 +79,7 @@ export class BlogsController {
   @Get()
   @SkipAuth()
   findAll(
+    @Req() req: Request,
     @Query('pageNumber') pageNumber?: string,
     @Query('pageSize') pageSize?: string,
   ) {
@@ -86,7 +87,7 @@ export class BlogsController {
     const parsedPageSize = pageSize ? parseInt(pageSize, 10) : 10;
     console.log('parsedPageNumber', pageNumber);
     console.log('parsedPageSize', pageSize);
-    return this.blogsService.findAll(parsedPageNumber, parsedPageSize);
+    return this.blogsService.findAll(parsedPageNumber, parsedPageSize, req);
   }
   // @Get()
   // @SkipAuth()

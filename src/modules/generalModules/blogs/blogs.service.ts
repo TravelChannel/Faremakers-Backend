@@ -79,16 +79,25 @@ export class BlogsService {
   async findAll(
     pageNumber: number = 1,
     pageSize: number = 10,
+    req,
   ): Promise<{ blogs: Blog[]; hasNextPage: boolean }> {
     try {
+      const whereOptions: any = {};
+      if (req.query.blogTypeId) {
+        whereOptions.blogTypeId = req.query.blogTypeId;
+      }
       const offset = (pageNumber - 1) * pageSize;
       const blogs = await this.blogsRepository.findAll({
+        where: whereOptions,
+        attributes: { exclude: ['description'] },
         order: [['publishDate', 'DESC']], // Assuming you want to order by publishDate descending
         limit: pageSize,
         offset: offset,
       });
 
       const nextBlogs = await this.blogsRepository.findAll({
+        where: whereOptions,
+        attributes: { exclude: ['description'] },
         order: [['publishDate', 'DESC']],
         limit: pageSize,
         offset: offset + pageSize,
