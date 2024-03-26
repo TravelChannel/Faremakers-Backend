@@ -59,7 +59,7 @@ export class GeneralTasksController {
         .ele('url')
         .ele(
           'loc',
-          `${process.env.BASE_URL}:${process.env.PORT}/blogs/${blog.headerUrl}`,
+          `https://faremakersnode-fmnode-back.azurewebsites.net/blogs/${blog.headerUrl}`,
         )
         .up()
         .ele(
