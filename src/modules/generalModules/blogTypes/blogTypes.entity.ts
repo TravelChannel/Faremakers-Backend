@@ -8,7 +8,6 @@ import {
   // HasMany,
   // Index,
 } from 'sequelize-typescript';
-
 @Table
 export class BlogTypes extends Model {
   @Column({
