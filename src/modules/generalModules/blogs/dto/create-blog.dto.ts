@@ -24,7 +24,7 @@ export class CreateBlogDto {
   description: string;
   @IsNotEmpty({ message: 'shortDescription is required.' })
   @IsString({ message: 'shortDescription must be a string.' })
-  @Length(3, 500, {
+  @Length(3, 5000, {
     message: 'shortDescription must be between 3 and 500 characters.',
   })
   shortDescription: string;
