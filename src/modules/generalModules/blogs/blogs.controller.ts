@@ -70,10 +70,10 @@ export class BlogsController {
 
     return await this.blogsService.create(createBlogDto, imgFile);
   }
-
-  @Get('dropdown')
-  getDropdown() {
-    return this.blogsService.getDropdown();
+  @Get('getTypesDropdown')
+  @SkipAuth()
+  getTypesDropdown() {
+    return this.blogsService.getTypesDropdown();
   }
 
   @Get()

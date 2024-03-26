@@ -1,8 +1,6 @@
-import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, DataType } from 'sequelize-typescript';
 // import { User } from '../../users/entities/user.entity';
 import { Sequelize } from 'sequelize-typescript';
-
-import { BlogsDetails } from '../../blogsDetails/index';
 
 @Table
 export class Blog extends Model {
@@ -60,8 +58,6 @@ export class Blog extends Model {
     allowNull: false,
   })
   publishDate: Date;
-  @HasMany(() => BlogsDetails)
-  blogsDetails: BlogsDetails;
 }
 
 // You can define associations here if needed

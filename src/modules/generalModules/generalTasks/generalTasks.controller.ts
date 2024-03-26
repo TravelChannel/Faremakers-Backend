@@ -44,7 +44,15 @@ export class GeneralTasksController {
   async getXml2(@Res() res) {
     const blogs = await Blog.findAll(); // Assuming findAll is implemented in your service
 
-    const xml = xmlbuilder.create('urlset', {});
+    const xml = xmlbuilder.create('urlset');
+
+    // Set xmlns and xmlns:xsi attributes separately
+    xml.att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    xml.att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+    xml.att(
+      'xsi:schemaLocation',
+      'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd',
+    );
 
     blogs.forEach((blog) => {
       xml

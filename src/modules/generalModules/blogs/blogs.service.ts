@@ -8,7 +8,7 @@ import { ResponseService } from '../../../common/utility/response/response.servi
 import { EXCEPTION } from '../../../shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
-import { BlogsDetails } from '../blogsDetails/index';
+import { BlogTypes } from '../blogTypes/index';
 
 @Injectable()
 export class BlogsService {
@@ -45,20 +45,20 @@ export class BlogsService {
         { transaction: t },
       );
 
-      await Promise.all(
-        createBlogDto.content.map(async (element) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const newBlogsDetails = await BlogsDetails.create(
-            {
-              blogId: newBlog.id,
+      // await Promise.all(
+      //   createBlogDto.content.map(async (element) => {
+      //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      //     const newBlogsDetails = await BlogsDetails.create(
+      //       {
+      //         blogId: newBlog.id,
 
-              heading: element.heading,
-              summary: element.summary,
-            },
-            { transaction: t },
-          );
-        }),
-      );
+      //         heading: element.heading,
+      //         summary: element.summary,
+      //       },
+      //       { transaction: t },
+      //     );
+      //   }),
+      // );
       await t.commit();
 
       return this.responseService.createResponse(
@@ -83,22 +83,12 @@ export class BlogsService {
     try {
       const offset = (pageNumber - 1) * pageSize;
       const blogs = await this.blogsRepository.findAll({
-        include: [
-          {
-            model: BlogsDetails,
-          },
-        ],
         order: [['publishDate', 'DESC']], // Assuming you want to order by publishDate descending
         limit: pageSize,
         offset: offset,
       });
 
       const nextBlogs = await this.blogsRepository.findAll({
-        include: [
-          {
-            model: BlogsDetails,
-          },
-        ],
         order: [['publishDate', 'DESC']],
         limit: pageSize,
         offset: offset + pageSize,
@@ -131,12 +121,6 @@ export class BlogsService {
       }
       const blog = await this.blogsRepository.findOne({
         where: whereOptions,
-
-        include: [
-          {
-            model: BlogsDetails,
-          },
-        ],
       });
       if (blog) {
         return this.responseService.createResponse(
@@ -161,13 +145,7 @@ export class BlogsService {
   }
   async findOne(id: number) {
     try {
-      const blog = await this.blogsRepository.findByPk(id, {
-        include: [
-          {
-            model: BlogsDetails,
-          },
-        ],
-      });
+      const blog = await this.blogsRepository.findByPk(id, {});
       return this.responseService.createResponse(
         HttpStatus.OK,
         blog,
@@ -200,9 +178,8 @@ export class BlogsService {
           imgFile.filename;
         myImg = imagePath; // Store the file path in the user table
       }
-      const blogId = id;
       const existingBlog = await this.blogsRepository.findByPk(id, {
-        include: [{ model: BlogsDetails }],
+        // include: [{ model: BlogsDetails }],
       });
       if (!existingBlog) {
         return this.responseService.createResponse(
@@ -223,43 +200,43 @@ export class BlogsService {
       );
 
       // Steps 2 to 5: Handle blog details updates
-      const existingDetails = await BlogsDetails.findAll({
-        where: { blogId: blogId },
-        transaction: t,
-      });
+      // const existingDetails = await BlogsDetails.findAll({
+      //   where: { blogId: blogId },
+      //   transaction: t,
+      // });
 
       // Determine changes
-      const updateBlogDetailsIds = updateBlogDto.content
-        .map((detail) => detail.id)
-        .filter((id) => id !== undefined);
-      const newBlogDetails = updateBlogDto.content.filter(
-        (detail) => !detail.id,
-      );
-      const detailsToDelete = existingDetails.filter(
-        (detail) => !updateBlogDetailsIds.includes(detail.id),
-      );
-      const detailsToUpdate = updateBlogDto.content.filter(
-        (detail) => detail.id,
-      );
+      // const updateBlogDetailsIds = updateBlogDto.content
+      //   .map((detail) => detail.id)
+      //   .filter((id) => id !== undefined);
+      // const newBlogDetails = updateBlogDto.content.filter(
+      //   (detail) => !detail.id,
+      // );
+      // const detailsToDelete = existingDetails.filter(
+      //   (detail) => !updateBlogDetailsIds.includes(detail.id),
+      // );
+      // const detailsToUpdate = updateBlogDto.content.filter(
+      //   (detail) => detail.id,
+      // );
 
       // Delete, add, and update details as necessary
-      await Promise.all([
-        ...detailsToDelete.map((detail) =>
-          BlogsDetails.destroy({ where: { id: detail.id }, transaction: t }),
-        ),
-        ...newBlogDetails.map((element) =>
-          BlogsDetails.create(
-            { blogId: blogId, ...element },
-            { transaction: t },
-          ),
-        ),
-        ...detailsToUpdate.map((element) =>
-          BlogsDetails.update(
-            { ...element },
-            { where: { id: element.id }, transaction: t },
-          ),
-        ),
-      ]);
+      // await Promise.all([
+      //   ...detailsToDelete.map((detail) =>
+      //     BlogsDetails.destroy({ where: { id: detail.id }, transaction: t }),
+      //   ),
+      // ...newBlogDetails.map((element) =>
+      //   BlogsDetails.create(
+      //     { blogId: blogId, ...element },
+      //     { transaction: t },
+      //   ),
+      // ),
+      // ...detailsToUpdate.map((element) =>
+      //   BlogsDetails.update(
+      //     { ...element },
+      //     { where: { id: element.id }, transaction: t },
+      //   ),
+      // ),
+      // ]);
       await t.commit();
       return this.responseService.createResponse(
         HttpStatus.OK,
@@ -290,7 +267,6 @@ export class BlogsService {
           'blog not found.',
         );
       }
-      await BlogsDetails.destroy({ where: { blogId: id }, transaction: t });
 
       await blog.destroy({ transaction: t });
       await t.commit();
@@ -310,10 +286,10 @@ export class BlogsService {
       );
     }
   }
-  async getDropdown() {
+  async getTypesDropdown() {
     try {
-      const dropdownsArray = await this.blogsRepository.findAll({
-        attributes: ['id', 'mainTitle'],
+      const dropdownsArray = await BlogTypes.findAll({
+        attributes: ['id', 'name'],
         // include: [Right],
       });
       return this.responseService.createResponse(
