@@ -43,6 +43,8 @@ export class BlogsService {
           shortDescription: createBlogDto.shortDescription,
           headerUrl: createBlogDto.headerUrl,
           author: createBlogDto.author,
+          blogTypeId: createBlogDto.blogTypeId,
+
           img: myImg,
         },
         { transaction: t },
@@ -195,6 +197,8 @@ export class BlogsService {
           shortDescription: updateBlogDto.shortDescription,
           headerUrl: updateBlogDto.headerUrl,
           author: updateBlogDto.author,
+          blogTypeId: updateBlogDto.blogTypeId,
+
           img: myImg,
         },
         { transaction: t },
