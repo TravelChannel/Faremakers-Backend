@@ -1,6 +1,15 @@
-import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  BelongsTo,
+  ForeignKey,
+} from 'sequelize-typescript';
 // import { User } from '../../users/entities/user.entity';
 import { Sequelize } from 'sequelize-typescript';
+
+import { BlogTypes } from '../../blogTypes';
 
 @Table
 export class Blog extends Model {
@@ -10,7 +19,13 @@ export class Blog extends Model {
     autoIncrement: true,
   })
   id: number;
-
+  @ForeignKey(() => BlogTypes)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+    onDelete: 'NO ACTION',
+  })
+  blogTypeId: number;
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -58,6 +73,9 @@ export class Blog extends Model {
     allowNull: false,
   })
   publishDate: Date;
+
+  @BelongsTo(() => BlogTypes)
+  blogType: BlogTypes;
 }
 
 // You can define associations here if needed

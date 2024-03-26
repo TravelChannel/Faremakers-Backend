@@ -4,10 +4,12 @@ import {
   Model,
   DataType,
   Column,
-
-  // HasMany,
+  HasMany,
   // Index,
 } from 'sequelize-typescript';
+
+import { Blog } from '../blogs/entities/blog.entity';
+
 @Table
 export class BlogTypes extends Model {
   @Column({
@@ -21,4 +23,7 @@ export class BlogTypes extends Model {
   name: string;
   @Column(DataType.STRING)
   description: string;
+
+  @HasMany(() => Blog)
+  blogs: Blog[];
 }
