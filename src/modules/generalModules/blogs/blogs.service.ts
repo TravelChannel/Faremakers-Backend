@@ -40,25 +40,14 @@ export class BlogsService {
         {
           mainTitle: createBlogDto.mainTitle,
           description: createBlogDto.description,
+          shortDescription: createBlogDto.shortDescription,
+          headerUrl: createBlogDto.headerUrl,
+          author: createBlogDto.author,
           img: myImg,
         },
         { transaction: t },
       );
 
-      // await Promise.all(
-      //   createBlogDto.content.map(async (element) => {
-      //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      //     const newBlogsDetails = await BlogsDetails.create(
-      //       {
-      //         blogId: newBlog.id,
-
-      //         heading: element.heading,
-      //         summary: element.summary,
-      //       },
-      //       { transaction: t },
-      //     );
-      //   }),
-      // );
       await t.commit();
 
       return this.responseService.createResponse(
@@ -203,6 +192,9 @@ export class BlogsService {
         {
           mainTitle: updateBlogDto.mainTitle,
           description: updateBlogDto.description,
+          shortDescription: updateBlogDto.shortDescription,
+          headerUrl: updateBlogDto.headerUrl,
+          author: updateBlogDto.author,
           img: myImg,
         },
         { transaction: t },

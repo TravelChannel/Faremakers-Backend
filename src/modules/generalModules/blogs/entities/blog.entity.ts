@@ -32,7 +32,7 @@ export class Blog extends Model {
   })
   mainTitle: string;
   @Column({
-    type: DataType.TEXT,
+    type: DataType.STRING,
     allowNull: true,
   })
   shortDescription: string;
@@ -42,12 +42,12 @@ export class Blog extends Model {
   })
   description: string;
   @Column({
-    type: DataType.TEXT,
+    type: DataType.STRING,
     allowNull: true,
   })
   headerUrl: string;
   @Column({
-    type: DataType.TEXT,
+    type: DataType.STRING,
     allowNull: true,
   })
   author: string;

@@ -3,15 +3,13 @@ import {
   IsString,
   Length,
   // ArrayMinSize,
-  ArrayNotEmpty,
   // ValidateNested,
 } from 'class-validator';
 // import { Type } from 'class-transformer'; // You need to import Type from class-transformer
 
-import { BlogContentDto } from './blog-content.dto';
 export class CreateBlogDto {
   img: string;
-  @IsNotEmpty({ message: 'mainTitle is required.' })
+  @IsNotEmpty({ message: 'blogTypeId is required.' })
   blogTypeId: number;
   @IsNotEmpty({ message: 'mainTitle is required.' })
   @IsString({ message: 'mainTitle must be a string.' })
@@ -20,12 +18,29 @@ export class CreateBlogDto {
 
   @IsNotEmpty({ message: 'description is required.' })
   @IsString({ message: 'description must be a string.' })
-  @Length(3, 50, {
-    message: 'description must be between 3 and 50 characters.',
-  })
+  // @Length(3, 50, {
+  //   message: 'description must be between 3 and 50 characters.',
+  // })
   description: string;
-  @ArrayNotEmpty({ message: 'Please provide atleast one content .' })
-  content: BlogContentDto[];
+  @IsNotEmpty({ message: 'shortDescription is required.' })
+  @IsString({ message: 'shortDescription must be a string.' })
+  @Length(3, 500, {
+    message: 'shortDescription must be between 3 and 500 characters.',
+  })
+  shortDescription: string;
+  @IsNotEmpty({ message: 'headerUrl is required.' })
+  @IsString({ message: 'headerUrl must be a string.' })
+  @Length(3, 500, {
+    message: 'headerUrl must be between 3 and 500 characters.',
+  })
+  headerUrl: string;
+  @IsNotEmpty({ message: 'author is required.' })
+  @IsString({ message: 'author must be a string.' })
+  @Length(3, 100, {
+    message: 'author must be between 3 and 500 characters.',
+  })
+  author: string;
+
   // @ArrayNotEmpty({ message: 'Please provide at least one role.' })
   // @ValidateNested({ each: true }) // Validate each item in the array
   // @Type(() => Rights) // Specify the class type for validation
