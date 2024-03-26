@@ -500,6 +500,25 @@ INSERT [dbo].[TopCountries] ([id], [seoAirlinesDataId], [destination], [createdA
 GO
 SET IDENTITY_INSERT [dbo].[TopCountries] OFF
 GO
+
+SET IDENTITY_INSERT [dbo].[BlogTypes] ON 
+GO
+INSERT [dbo].[BlogTypes] ([id], [name], [description], [createdAt], [updatedAt]) VALUES (1, N'Adventure', N'Adventure', CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset), CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[BlogTypes] ([id], [name], [description], [createdAt], [updatedAt]) VALUES (2, N'Beach', N'Beach', CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset), CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[BlogTypes] ([id], [name], [description], [createdAt], [updatedAt]) VALUES (3, N'Family', N'Family', CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset), CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[BlogTypes] ([id], [name], [description], [createdAt], [updatedAt]) VALUES (4, N'Food and Drink', N'Food and Drink', CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset), CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[BlogTypes] ([id], [name], [description], [createdAt], [updatedAt]) VALUES (5, N'Short Breaks', N'Short Breaks', CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset), CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset))
+GO
+INSERT [dbo].[BlogTypes] ([id], [name], [description], [createdAt], [updatedAt]) VALUES (6, N'Specials', N'Specials', CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset), CAST(N'2024-03-19T14:16:25.3966667+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[BlogTypes] OFF
+GO
+
+
 SET IDENTITY_INSERT [dbo].[Blogs] ON 
 GO
 INSERT [dbo].[Blogs] ([id], [mainTitle], [shortDescription], [description], [headerUrl], [author], [img], [visits], [isActive], [publishDate], [createdAt], [updatedAt]) VALUES (1, N'Six Reasons Why You Should Visit To Kuwait This Year?', N'<div class="custShortContent">
