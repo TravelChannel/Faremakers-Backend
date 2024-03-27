@@ -6,6 +6,7 @@ import { Blog } from './entities/blog.entity';
 import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
+import { FirebaseService } from '../../../database/firebase/firebase.service';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { BlogTypes } from '../blogTypes/index';
@@ -16,6 +17,7 @@ export class BlogsService {
     @Inject(BLOGS_REPOSITORY)
     private blogsRepository: typeof Blog,
     private readonly responseService: ResponseService,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async create(
@@ -35,6 +37,8 @@ export class BlogsService {
           '/uploads/blogs/images/' +
           imgFile.filename;
         myImg = imagePath; // Store the file path in the user table
+
+        myImg = await this.firebaseService.uploadFile(imgFile, 'uploads');
       }
       const newBlog = await this.blogsRepository.create(
         {
