@@ -56,6 +56,11 @@ export class PnrDetail extends Model {
   })
   ticketNo: string;
   @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  ticketLocalIssueDateTime: string;
+  @Column({
     type: DataType.DATE,
   })
   dateOfBirth: Date;

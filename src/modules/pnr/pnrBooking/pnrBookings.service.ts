@@ -1748,31 +1748,32 @@ export class PnrBookingsService {
       },
       json: true,
     };
-    const response = await this.httpService
+    const response: any = await this.httpService
       .post(requestOptions.url, requestOptions.body, {
         headers: requestOptions.headers,
       })
       .toPromise();
 
     // Update passengers' ticket numbers
-    // for (const doc of response.AirTicketRS.Summary) {
-    //   for (const passenger of passengers) {
-    //     if (
-    //       passenger.FirstName.trim().toLowerCase() ===
-    //         doc.FirstName.trim().toLowerCase() &&
-    //       passenger.LastName.trim().toLowerCase() ===
-    //         doc.LastName.trim().toLowerCase()
-    //     ) {
-    //       const passengerEntity = await this.passengerRepository.findOne({
-    //         where: { PassengerID: passenger.PassengerID },
-    //       });
-    //       if (passengerEntity) {
-    //         passengerEntity.TicketNo = doc.DocumentNumber;
-    //         await this.passengerRepository.save(passengerEntity);
-    //       }
-    //     }
-    //   }
-    // }
+    for (const doc of response.AirTicketRS.Summary) {
+      for (const passenger of passengers) {
+        if (
+          passenger.FirstName.trim().toLowerCase() ===
+            doc.FirstName.trim().toLowerCase() &&
+          passenger.LastName.trim().toLowerCase() ===
+            doc.LastName.trim().toLowerCase()
+        ) {
+          const passengerEntity = await PnrDetail.findOne({
+            where: { id: passenger.id },
+          });
+          if (passengerEntity) {
+            passengerEntity.ticketNo = doc.DocumentNumber;
+            passengerEntity.ticketLocalIssueDateTime = doc.LocalIssueDateTime;
+            await passengerEntity.save();
+          }
+        }
+      }
+    }
     console.log('response', response);
     return true;
   }
