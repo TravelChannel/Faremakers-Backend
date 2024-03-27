@@ -67,6 +67,51 @@ export class BlogsService {
     }
   }
 
+  async findAllPaginated(req): Promise<{ blogs: Blog[] }> {
+    try {
+      const whereOptions: any = {};
+      if (req.query.blogTypeId) {
+        whereOptions.blogTypeId = req.query.blogTypeId;
+      }
+
+      // Pagination parameters
+      const page = parseInt(req.query.page, 10) || 1;
+      const pageSize = parseInt(req.query.pageSize, 10) || 10;
+
+      const { count, rows: blogs } = await this.blogsRepository.findAndCountAll(
+        {
+          where: whereOptions,
+          attributes: { exclude: ['description'] },
+          order: [['publishDate', 'DESC']],
+          limit: pageSize,
+          offset: (page - 1) * pageSize,
+        },
+      );
+
+      const totalPages = Math.ceil(count / pageSize);
+
+      const links = {
+        first: `/blogs?page=1&pageSize=${pageSize}`,
+        last: `/blogs?page=${totalPages}&pageSize=${pageSize}`,
+        prev: page > 1 ? `/blogs?page=${page - 1}&pageSize=${pageSize}` : null,
+        next:
+          page < totalPages
+            ? `/blogs?page=${page + 1}&pageSize=${pageSize}`
+            : null,
+      };
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        { count, blogs, links },
+        'Blogs Fetched',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
   async findAll(
     pageNumber: number = 1,
     pageSize: number = 10,

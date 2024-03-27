@@ -85,15 +85,13 @@ export class BlogsController {
   ) {
     const parsedPageNumber = pageNumber ? parseInt(pageNumber, 10) : 1;
     const parsedPageSize = pageSize ? parseInt(pageSize, 10) : 10;
-    console.log('parsedPageNumber', pageNumber);
-    console.log('parsedPageSize', pageSize);
     return this.blogsService.findAll(parsedPageNumber, parsedPageSize, req);
   }
-  // @Get()
-  // @SkipAuth()
-  // findAll() {
-  //   return this.blogsService.findAll();
-  // }
+  @Get('findAllPaginated')
+  @SkipAuth()
+  findAllPaginated(@Req() req: Request) {
+    return this.blogsService.findAllPaginated(req);
+  }
   @Get('/by')
   @SkipAuth()
   // @Roles(ADMIN_AND_USER_SUBJECT)
