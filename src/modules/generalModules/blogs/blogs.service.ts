@@ -38,7 +38,7 @@ export class BlogsService {
           imgFile.filename;
         myImg = imagePath; // Store the file path in the user table
 
-        myImg = await this.firebaseService.uploadFile(imgFile, 'uploads');
+        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
       }
       const newBlog = await this.blogsRepository.create(
         {
