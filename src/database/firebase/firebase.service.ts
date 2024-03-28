@@ -59,7 +59,10 @@ export class FirebaseService {
       });
 
       stream.on('finish', () => {
-        resolve(`https://storage.googleapis.com/${bucket.name}/${fileName}`);
+        //  https://firebasestorage.googleapis.com/v0/b/faremakers-connect.appspot.com/o/Faremakers-Web%2Fblogs%2F20240327121309609.png?alt=media&token=8fd1ca6e-9b81-4220-8ce8-4fd6b7b5bcac
+        resolve(
+          `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${fileName}`,
+        );
       });
 
       stream.end(file.buffer);
