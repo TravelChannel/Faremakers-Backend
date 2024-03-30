@@ -28,6 +28,7 @@ export class BlogsService {
     const t: Transaction = await sequelize.transaction();
 
     try {
+      console.log('imgFile', imgFile);
       let myImg = null;
       if (imgFile) {
         myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
@@ -71,7 +72,7 @@ export class BlogsService {
       }
 
       // Pagination parameters
-      const page = parseInt(req.query.page, 10) || 1;
+      const page = parseInt(req.query.pageNumber, 10) || 1;
       const pageSize = parseInt(req.query.pageSize, 10) || 10;
 
       const { count, rows: blogs } = await this.blogsRepository.findAndCountAll(

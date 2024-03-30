@@ -40,11 +40,7 @@ export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
   @Post()
-  @UseInterceptors(
-    FileInterceptor('imgFile', {
-      storage: createFileStorage('./uploads/blogs/images'),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('imgFile'))
   async create(
     @Body() payload: { data: string },
 

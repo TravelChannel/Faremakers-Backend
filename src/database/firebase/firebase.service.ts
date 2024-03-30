@@ -44,7 +44,8 @@ export class FirebaseService {
     folderName: string,
   ): Promise<string> {
     const bucket = this.storage.bucket();
-    const fileName = `Faremakers-Web/${folderName}/${file.filename}`;
+    // const fileName = `Faremakers-Web/${folderName}/${file.filename}`;
+    const fileName = `Faremakers-Web/${folderName}/${Date.now()}`;
     const fileUpload = bucket.file(fileName);
 
     const stream = fileUpload.createWriteStream({
