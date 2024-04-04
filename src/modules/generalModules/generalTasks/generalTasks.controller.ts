@@ -32,6 +32,7 @@ import {
 import { RolesGuard } from '../../../common/guards/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
 import { Blog } from '../blogs/entities/blog.entity';
+import { staticData } from './staticData';
 
 @Controller('generalTask')
 @UseGuards(RolesGuard)
@@ -54,13 +55,21 @@ export class GeneralTasksController {
       'http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd',
     );
 
+    // Add URLs from staticData
+    staticData.url.forEach((urlData) => {
+      xml
+        .ele('url')
+        .ele('loc', urlData.loc)
+        .up()
+        .ele('lastmod', urlData.lastmod)
+        .up()
+        .ele('priority', urlData.priority);
+    });
+    // Add URLs from blogs
     blogs.forEach((blog) => {
       xml
         .ele('url')
-        .ele(
-          'loc',
-          `https://faremakersnode-fmnode-back.azurewebsites.net/blogs/${blog.headerUrl}`,
-        )
+        .ele('loc', `https://faremakers.com/blogs/${blog.headerUrl}`)
         .up()
         .ele(
           'lastmod',
