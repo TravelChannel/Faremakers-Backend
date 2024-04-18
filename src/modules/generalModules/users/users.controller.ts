@@ -92,49 +92,49 @@ export class UsersController {
       storage: createFileStorage('./uploads/users/profiles'),
     }),
   )
+  // @Roles(ALL_USERS_SUBJECT)
+  // update(
+  //   @CurrentUserId() currentUserId: number,
+  //   @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  //   @Body() payload: UpdateUserDto,
+  // ) {
+  //   const updateUserDto: UpdateUserDto = payload;
+  //   return this.usersService.update(
+  //     currentUserId,
+  //     isCurrentUserAdmin,
+  //     updateUserDto,
+  //   );
+  // }
   @Roles(ALL_USERS_SUBJECT)
+  @UseInterceptors(FileInterceptor('imgFile'))
   update(
-    // @Param('id') id: string,
     @CurrentUserId() currentUserId: number,
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
-    // @Body() payload: { data: any },
-    @Body() payload: UpdateUserDto,
-    // @UploadedFile(
-    //   new ParseFilePipe({
-    //     validators: [
-    //       new FileTypeValidator({ fileType: '.(png|jpeg|jpg)' }),
-    //       new MaxFileSizeValidator({ maxSize: 1000000 }),
-    //     ],
-    //     fileIsRequired: false,
-    //   }),
-    // )
+    @Param('id') id: string,
+    @Body() payload: { data: string },
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg|png',
+        })
 
-    // Working code is below
-    // @UploadedFile(
-    //   new ParseFilePipeBuilder()
-    //     .addFileTypeValidator({
-    //       fileType: 'jpeg|png',
-    //     })
-
-    //     .addMaxSizeValidator({
-    //       maxSize: 5000000,
-    //       // errorMessage: 'File size should not exceed 1MB',
-    //     })
-    //     .build({
-    //       fileIsRequired: false,
-    //       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-    //     }),
-    // )
-    // imgFile?: Express.Multer.File | null | undefined,
+        .addMaxSizeValidator({
+          maxSize: 5000000,
+          // errorMessage: 'File size should not exceed 1MB',
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    imgFile?: Express.Multer.File | null | undefined,
   ) {
-    // const updateUserDto: UpdateUserDto = JSON.parse(payload.data);
-    const updateUserDto: UpdateUserDto = payload;
+    const updateUserDto: UpdateUserDto = JSON.parse(payload.data);
     return this.usersService.update(
       currentUserId,
       isCurrentUserAdmin,
-      // +id,
       updateUserDto,
-      // imgFile,
+      imgFile,
     );
   }
   // test

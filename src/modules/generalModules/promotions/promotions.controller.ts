@@ -76,12 +76,30 @@ export class PromotionsController {
     return this.promotionsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @UseInterceptors(FileInterceptor('imgFile'))
   update(
     @Param('id') id: string,
-    @Body() updatePromotionDto: UpdatePromotionDto,
+    @Body() payload: { data: string },
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg|png',
+        })
+
+        .addMaxSizeValidator({
+          maxSize: 5000000,
+          // errorMessage: 'File size should not exceed 1MB',
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    imgFile?: Express.Multer.File | null | undefined,
   ) {
-    return this.promotionsService.update(+id, updatePromotionDto);
+    const updatePromotionDto: UpdatePromotionDto = JSON.parse(payload.data);
+
+    return this.promotionsService.update(+id, updatePromotionDto, imgFile);
   }
 
   @Delete(':id')

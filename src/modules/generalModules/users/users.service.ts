@@ -5,6 +5,8 @@ import {
   //  Session
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FirebaseService } from '../../../database/firebase/firebase.service';
+
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { User } from './entities/user.entity';
@@ -42,6 +44,7 @@ export class UsersService {
     @Inject(USERS_REPOSITORY)
     private readonly userRepository: typeof User,
     private readonly responseService: ResponseService,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async create(
@@ -214,11 +217,11 @@ export class UsersService {
     // id: number,
 
     updateUserDto: UpdateUserDto,
-    // imgFile: Express.Multer.File,
+    imgFile: Express.Multer.File,
   ): Promise<any> {
     try {
       const whereOptions: any = {};
-
+      let myImg = updateUserDto.imgSrc;
       whereOptions.id = currentUserId;
       const user = await this.userRepository.findOne({
         where: whereOptions,
@@ -230,7 +233,12 @@ export class UsersService {
           'User not found',
         );
       }
-
+      if (imgFile) {
+        if (user.imgSrc) {
+          // await this.firebaseService.deleteFile(promotion.img);
+        }
+        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
+      }
       user.username = updateUserDto.username || user.username;
       user.email = updateUserDto.email || user.email;
       user.dateOfBirth = updateUserDto.dateOfBirth || user.dateOfBirth;
@@ -241,6 +249,8 @@ export class UsersService {
       user.gender = updateUserDto.gender || user.gender;
       user.cnic = updateUserDto.cnic || user.cnic;
       user.passportNo = updateUserDto.passportNo || user.passportNo;
+      user.imgSrc = myImg;
+
       // if (imgFile) {
       //   const imagePath =
       //     process.env.BASE_URL +

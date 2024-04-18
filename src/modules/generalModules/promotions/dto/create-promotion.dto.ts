@@ -12,6 +12,8 @@ import {
 
 // import { Rights } from './rights.dto';
 export class CreatePromotionDto {
+  img: string;
+
   @IsNotEmpty({ message: 'title is required.' })
   @IsString({ message: 'title must be a string.' })
   @Length(3, 50, { message: 'title must be between 3 and 25 characters.' })

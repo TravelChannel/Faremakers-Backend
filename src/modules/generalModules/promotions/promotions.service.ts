@@ -123,17 +123,28 @@ export class PromotionsService {
       );
     }
   }
-
-  async update(id: number, updatePromotionDto: UpdatePromotionDto) {
+  async update(
+    id: number,
+    updatePromotionDto: UpdatePromotionDto,
+    imgFile: Express.Multer.File,
+  ) {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
       const promotion = await this.promotionsRepository.findByPk(id);
+      let myImg = updatePromotionDto.img;
+      if (imgFile) {
+        if (promotion.img) {
+          // await this.firebaseService.deleteFile(promotion.img);
+        }
+        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
+      }
       if (promotion) {
         promotion.title = updatePromotionDto.title;
         promotion.description = updatePromotionDto.description;
         promotion.startDate = updatePromotionDto.startDate ?? null;
         promotion.endDate = updatePromotionDto.endDate ?? null;
+        promotion.img = myImg;
         await promotion.save();
       } else {
         return this.responseService.createResponse(
