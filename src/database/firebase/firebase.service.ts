@@ -44,7 +44,7 @@ export class FirebaseService {
     folderName: string,
   ): Promise<string> {
     const bucket = this.storage.bucket();
-    const fileName = `Faremakers-Web%2F${folderName}%2F${Date.now()}`;
+    const fileName = `Faremakers-Web/${folderName}/${Date.now()}`;
     const fileUpload = bucket.file(fileName);
 
     const stream = fileUpload.createWriteStream({
@@ -59,11 +59,10 @@ export class FirebaseService {
       });
 
       stream.on('finish', () => {
-        //  https://firebasestorage.googleapis.com/v0/b/faremakers-connect.appspot.com/o/Faremakers-Web%2Fblogs%2F20240327121309609.png?alt=media&token=8fd1ca6e-9b81-4220-8ce8-4fd6b7b5bcac
-        resolve(
-          `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${fileName}?alt=media`,
-          // `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/Faremakers-Web%2Fblogs%2F1713420206039?alt=media`,
-        );
+        const encodedFileName = encodeURIComponent(fileName);
+        // Construct the download URL
+        const downloadURL = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodedFileName}?alt=media`;
+        resolve(downloadURL);
       });
 
       stream.end(file.buffer);
