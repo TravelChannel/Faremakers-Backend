@@ -218,7 +218,6 @@ export class BlogsService {
         }
         myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
       }
-      const existingBlog = await this.blogsRepository.findByPk(id, {});
       if (!existingBlog) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
