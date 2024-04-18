@@ -264,7 +264,7 @@ export class UsersService {
 
       return this.responseService.createResponse(
         HttpStatus.OK,
-        { user },
+        user,
         'Updated',
       );
     } catch (error) {
