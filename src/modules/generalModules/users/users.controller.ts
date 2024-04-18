@@ -86,12 +86,12 @@ export class UsersController {
   }
 
   // @Patch(':id')
-  @Patch()
-  @UseInterceptors(
-    FileInterceptor('imgFile', {
-      storage: createFileStorage('./uploads/users/profiles'),
-    }),
-  )
+  // @Patch()
+  // @UseInterceptors(
+  //   FileInterceptor('imgFile', {
+  //     storage: createFileStorage('./uploads/users/profiles'),
+  //   }),
+  // )
   // @Roles(ALL_USERS_SUBJECT)
   // update(
   //   @CurrentUserId() currentUserId: number,
@@ -106,6 +106,7 @@ export class UsersController {
   //   );
   // }
   @Roles(ALL_USERS_SUBJECT)
+  @Patch()
   @UseInterceptors(FileInterceptor('imgFile'))
   update(
     @CurrentUserId() currentUserId: number,
@@ -130,6 +131,8 @@ export class UsersController {
     imgFile?: Express.Multer.File | null | undefined,
   ) {
     const updateUserDto: UpdateUserDto = JSON.parse(payload.data);
+    console.log('updateUserDto', updateUserDto);
+
     return this.usersService.update(
       currentUserId,
       isCurrentUserAdmin,

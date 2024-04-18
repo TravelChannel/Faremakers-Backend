@@ -264,10 +264,11 @@ export class UsersService {
 
       return this.responseService.createResponse(
         HttpStatus.OK,
-        { updateUserDto: updateUserDto },
+        { user },
         'Updated',
       );
     } catch (error) {
+      console.log('error', error);
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
