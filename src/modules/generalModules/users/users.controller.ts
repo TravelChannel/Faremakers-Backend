@@ -110,7 +110,7 @@ export class UsersController {
   update(
     @CurrentUserId() currentUserId: number,
     @IsCurrentUserAdmin() isCurrentUserAdmin: number,
-    @Param('id') id: string,
+    // @Param('id') id: string,
     @Body() payload: { data: string },
     @UploadedFile(
       new ParseFilePipeBuilder()
