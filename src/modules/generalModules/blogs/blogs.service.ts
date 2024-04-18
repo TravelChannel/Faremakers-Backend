@@ -28,7 +28,6 @@ export class BlogsService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      console.log('imgFile', imgFile);
       let myImg = null;
       if (imgFile) {
         myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
