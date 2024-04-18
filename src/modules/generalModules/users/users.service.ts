@@ -237,7 +237,7 @@ export class UsersService {
         if (user.imgSrc) {
           // await this.firebaseService.deleteFile(promotion.img);
         }
-        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
+        myImg = await this.firebaseService.uploadFile(imgFile, 'userProfiles');
       }
       user.username = updateUserDto.username || user.username;
       user.email = updateUserDto.email || user.email;

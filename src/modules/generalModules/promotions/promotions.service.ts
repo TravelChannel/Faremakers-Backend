@@ -34,7 +34,7 @@ export class PromotionsService {
       const { ...rest } = createPromotionDto;
       let myImg = null;
       if (imgFile) {
-        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
+        myImg = await this.firebaseService.uploadFile(imgFile, 'promotions');
       }
       const newRole = await this.promotionsRepository.create(
         {
@@ -137,7 +137,7 @@ export class PromotionsService {
         if (promotion.img) {
           // await this.firebaseService.deleteFile(promotion.img);
         }
-        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
+        myImg = await this.firebaseService.uploadFile(imgFile, 'promotions');
       }
       if (promotion) {
         promotion.title = updatePromotionDto.title;
