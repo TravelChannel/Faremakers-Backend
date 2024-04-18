@@ -209,6 +209,8 @@ export class BlogsService {
     const t = await sequelize.transaction(); // Start the transaction
 
     try {
+      const existingBlog = await this.blogsRepository.findByPk(id, {});
+
       let myImg = updateBlogDto.img;
       if (imgFile) {
         if (existingBlog.img) {
@@ -216,9 +218,7 @@ export class BlogsService {
         }
         myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
       }
-      const existingBlog = await this.blogsRepository.findByPk(id, {
-        // include: [{ model: BlogsDetails }],
-      });
+      const existingBlog = await this.blogsRepository.findByPk(id, {});
       if (!existingBlog) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
