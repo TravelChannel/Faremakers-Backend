@@ -42,6 +42,11 @@ export class Promotion extends Model {
     allowNull: false,
   })
   isActive: boolean;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  img: string;
 }
 
 // You can define associations here if needed

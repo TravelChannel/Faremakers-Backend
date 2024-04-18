@@ -3,6 +3,8 @@ import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
 import { Promotion } from './entities/promotion.entity';
+import { FirebaseService } from '../../../database/firebase/firebase.service';
+
 import {
   Op,
   sequelize,
@@ -18,20 +20,29 @@ export class PromotionsService {
     @Inject(PROMOTIONS_REPOSITORY)
     private promotionsRepository: typeof Promotion,
     private readonly responseService: ResponseService,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
-  async create(createPromotionDto: CreatePromotionDto) {
+  async create(
+    createPromotionDto: CreatePromotionDto,
+
+    imgFile: Express.Multer.File,
+  ) {
     const t: Transaction = await sequelize.transaction();
 
     try {
       const { ...rest } = createPromotionDto;
-
+      let myImg = null;
+      if (imgFile) {
+        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
+      }
       const newRole = await this.promotionsRepository.create(
         {
           title: rest.title,
           description: rest.description,
           startDate: rest.startDate ?? null,
           endDate: rest.endDate ?? null,
+          img: myImg,
         },
         { transaction: t },
       );

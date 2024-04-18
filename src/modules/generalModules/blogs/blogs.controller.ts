@@ -60,7 +60,6 @@ export class BlogsController {
     )
     imgFile?: Express.Multer.File | null | undefined,
   ) {
-    console.log('payload', payload);
     const createBlogDto: CreateBlogDto = JSON.parse(payload.data);
 
     return await this.blogsService.create(createBlogDto, imgFile);

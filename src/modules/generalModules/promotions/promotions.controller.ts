@@ -7,9 +7,15 @@ import {
   Param,
   Delete,
   UseGuards,
-  // HttpStatus,
+  HttpStatus,
+  ParseFilePipeBuilder,
+  UploadedFile,
+  UseInterceptors,
+
   // HttpException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+
 import { PromotionsService } from './promotions.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
@@ -27,10 +33,30 @@ export class PromotionsController {
   constructor(private readonly promotionsService: PromotionsService) {}
 
   @Post()
-  async create(@Body() createPromotionDto: CreatePromotionDto) {
-    return await this.promotionsService.create(createPromotionDto);
-  }
+  @UseInterceptors(FileInterceptor('imgFile'))
+  async create(
+    @Body() payload: { data: string },
 
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg|png',
+        })
+
+        .addMaxSizeValidator({
+          maxSize: 5000000,
+          // errorMessage: 'File size should not exceed 1MB',
+        })
+        .build({
+          fileIsRequired: false,
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    imgFile?: Express.Multer.File | null | undefined,
+  ) {
+    const createPromotionDto: CreatePromotionDto = JSON.parse(payload.data);
+    return await this.promotionsService.create(createPromotionDto, imgFile);
+  }
   @Get('dropdown')
   // @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {

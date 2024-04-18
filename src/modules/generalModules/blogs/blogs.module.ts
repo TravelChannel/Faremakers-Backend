@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { BlogsService } from './blogs.service';
 import { BlogsController } from './blogs.controller';
 import { blogsProviders } from './blogs.providers'; // Import the providers
-import { FirebaseService } from '../../../database/firebase/firebase.service';
+import { FirebaseModule } from '../../../database/firebase/firebase.module';
 
 @Module({
-  // imports: [FirebaseService], // Make sure UsersModule is imported here
+  imports: [FirebaseModule], // Import FirebaseModule
+
   controllers: [BlogsController],
-  providers: [BlogsService, FirebaseService, ...blogsProviders],
+  providers: [BlogsService, ...blogsProviders],
 })
 export class BlogsModule {}

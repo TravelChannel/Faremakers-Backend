@@ -34,6 +34,7 @@ import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
 import { ResponseModule } from './common/utility/response/response.module';
 import { HttpModule } from '@nestjs/axios';
 import { createFileStorage } from './common/utils/file-storage.util'; // Import the utility function
+import { FirebaseModule } from './database/firebase/firebase.module';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const JWT_SECRET = dbConfig.JWT_SECRET;
@@ -41,6 +42,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
 @Module({
   imports: [
     MulterModule.register({ storage: createFileStorage('./uploads/') }),
+    FirebaseModule, // Import FirebaseModule using the forRoot() method
     ResponseModule,
     DatabaseModule,
     UsersModule,
