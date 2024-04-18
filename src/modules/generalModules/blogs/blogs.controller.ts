@@ -18,7 +18,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { createFileStorage } from '../../../common/utils/file-storage.util'; // Import the utility function
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { BlogsService } from './blogs.service';
@@ -102,11 +101,7 @@ export class BlogsController {
   }
 
   @Patch(':id')
-  @UseInterceptors(
-    FileInterceptor('imgFile', {
-      storage: createFileStorage('./uploads/blogs/images'),
-    }),
-  )
+  @UseInterceptors(FileInterceptor('imgFile'))
   update(
     @Param('id') id: string,
     @Body() payload: { data: string },
