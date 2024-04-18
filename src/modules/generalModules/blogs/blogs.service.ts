@@ -211,13 +211,10 @@ export class BlogsService {
     try {
       let myImg = updateBlogDto.img;
       if (imgFile) {
-        const imagePath =
-          process.env.BASE_URL +
-          ':' +
-          process.env.PORT +
-          '/uploads/blogs/images/' +
-          imgFile.filename;
-        myImg = imagePath; // Store the file path in the user table
+        if (existingBlog.img) {
+          // await this.firebaseService.deleteFile(existingBlog.img);
+        }
+        myImg = await this.firebaseService.uploadFile(imgFile, 'blogs');
       }
       const existingBlog = await this.blogsRepository.findByPk(id, {
         // include: [{ model: BlogsDetails }],
