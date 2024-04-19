@@ -1,5 +1,14 @@
 USE [db_faremakers]
 GO
+
+SET IDENTITY_INSERT [dbo].[GeneralTasks] ON 
+GO
+INSERT [dbo].[GeneralTasks] ([id], [description], [isSabreCreateTicketAllowed], [createdAt], [updatedAt]) VALUES (2, N'Sabre Ticket Confirm Api Control Flag', 0, CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset), CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset))
+GO
+SET IDENTITY_INSERT [dbo].[GeneralTasks] OFF
+GO
+
+
 SET IDENTITY_INSERT [dbo].[SEOAirlinesData] ON 
 GO
 INSERT [dbo].[SEOAirlinesData] ([id], [flightname], [flightCode], [mainHeading], [heading1], [heading2], [heading3], [isActive], [createdAt], [updatedAt]) VALUES (1, N'Emirates-Airline', N'EK', N'Top Destinations of Emirates', N'Emirates Top Picks', N'Emirates Top Countries', N'Emirates Top Cities', 1, CAST(N'2024-02-13T13:48:15.5020000+00:00' AS DateTimeOffset), CAST(N'2024-02-13T13:48:15.5020000+00:00' AS DateTimeOffset))

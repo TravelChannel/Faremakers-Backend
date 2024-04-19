@@ -16,10 +16,15 @@ export class GeneralTask extends Model {
   })
   description: string;
   @Column({
-    type: DataType.TEXT,
-    allowNull: true,
+    type: DataType.STRING,
+    allowNull: false,
   })
-  seoData: string;
+  toggleApi: string;
+  // @Column({
+  //   type: DataType.TEXT,
+  //   allowNull: true,
+  // })
+  // seoData: string;
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
