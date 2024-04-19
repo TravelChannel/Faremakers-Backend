@@ -69,6 +69,27 @@ export class RatingsService {
       );
     }
   }
+  async findAllForAdmin(): Promise<Rating[]> {
+    try {
+      const rating = await this.ratingsRepository.findAll({
+        where: {
+          isActive: true,
+        },
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        rating,
+        'rating Fetched',
+      );
+    } catch (error) {
+      // await t.rollback();
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
 
   async findOne(id: number) {
     try {

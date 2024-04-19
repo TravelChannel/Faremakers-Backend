@@ -13,7 +13,7 @@ import {
 import { RatingsService } from './ratings.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
-import { ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
+import { ADMIN_AND_USER_SUBJECT, ADMIN_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
@@ -41,6 +41,12 @@ export class RatingsController {
   @SkipAuth()
   findAll() {
     return this.ratingsService.findAll();
+  }
+
+  @Get('allData')
+  @Roles(ADMIN_SUBJECT)
+  findAllForAdmin() {
+    return this.ratingsService.findAllForAdmin();
   }
 
   @Get(':id')
