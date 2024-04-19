@@ -97,11 +97,11 @@ export class GeneralTasksController {
   getAllControls() {
     return this.generalTaskService.getAllControls();
   }
-  @Patch('toggleStatusIsSabreCreateTicketAllowed')
-  toggleStatusIsSabreCreateTicketAllowed(
+  @Patch('toggleStatus')
+  toggleStatus(
     @Param('id') id: string,
     // @Body() toggleIsActiveDto: ToggleIsActiveDto,
   ) {
-    return this.generalTaskService.toggleStatusIsSabreCreateTicketAllowed(+id);
+    return this.generalTaskService.toggleStatus(+id);
   }
 }

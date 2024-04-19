@@ -44,7 +44,7 @@ export class GeneralTasksService {
           'Record not found',
         );
       }
-
+      // Test
       return this.responseService.createResponse(
         HttpStatus.OK,
         { data },
@@ -82,11 +82,11 @@ export class GeneralTasksService {
       );
     }
   }
-  async toggleStatusIsSabreCreateTicketAllowed(id: number): Promise<any> {
+  async toggleStatus(id: number): Promise<any> {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const data = await this.generalTasksRepository.findByPk(1);
+      const data = await this.generalTasksRepository.findByPk(id);
       if (!data) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
@@ -95,15 +95,15 @@ export class GeneralTasksService {
         );
       }
 
-      data.isSabreCreateTicketAllowed = !data.isSabreCreateTicketAllowed;
+      data.flag = !data.flag;
 
       await data.save({ transaction: t }); // Save the changes
       await t.commit();
       let message = '';
-      if (data.isSabreCreateTicketAllowed || false === false) {
-        message = 'isSabreCreateTicketAllowed de activated successfully';
+      if (data.flag || false === false) {
+        message = 'De activated successfully';
       } else {
-        message = 'isSabreCreateTicketAllowed activated successfully';
+        message = 'Activated successfully';
       }
       return this.responseService.createResponse(HttpStatus.OK, null, message);
     } catch (error) {

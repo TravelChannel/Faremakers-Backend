@@ -15,22 +15,19 @@ export class GeneralTask extends Model {
     allowNull: false,
   })
   description: string;
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  toggleApi: string;
-  // @Column({
-  //   type: DataType.TEXT,
-  //   allowNull: true,
-  // })
-  // seoData: string;
+
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   })
-  isSabreCreateTicketAllowed: boolean;
+  flag: boolean;
+  @Column({
+    type: DataType.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  })
+  isAdminControl: boolean;
 }
 
 // You can define associations here if needed

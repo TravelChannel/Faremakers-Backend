@@ -1680,7 +1680,7 @@ export class PnrBookingsService {
         } else {
           const generalTask = await GeneralTask.findByPk(1, {});
 
-          if (generalTask.isSabreCreateTicketAllowed) {
+          if (generalTask.flag) {
             result = this.callSabreConfirmation(
               pnrBooking.pnr,
               pnrBooking.pnrDetail,

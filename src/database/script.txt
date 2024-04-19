@@ -3,11 +3,10 @@ GO
 
 SET IDENTITY_INSERT [dbo].[GeneralTasks] ON 
 GO
-INSERT [dbo].[GeneralTasks] ([id], [description], [toggleApi], [isSabreCreateTicketAllowed], [createdAt], [updatedAt]) VALUES (1, N'toggleStatusIsSabreCreateTicketAllowed', N'toggleStatusIsSabreCreateTicketAllowed', 0, CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset), CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset))
+INSERT [dbo].[GeneralTasks] ([id], [description], [flag], [isAdminControl], [createdAt], [updatedAt]) VALUES (1, N'Admin Control for Sabre Ticket Confirmation Api', 1, 1, CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset), CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[GeneralTasks] OFF
 GO
-
 
 SET IDENTITY_INSERT [dbo].[SEOAirlinesData] ON 
 GO
@@ -543,7 +542,8 @@ SET IDENTITY_INSERT [dbo].[Roles] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 GO
-INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber], [countryCode], [otp], [email], [dateOfBirth], [passportExpiryDate], [firstName], [lastName], [gender], [cnic], [passportNo], [refreshToken], [imgSrc], [password], [isActive], [createdAt], [updatedAt]) VALUES (2, 1, 0, NULL, N'3401523467', N'92', N'$2b$10$a.j0SEYZ1./PYzKdp2GIjuaM244k./2AdTcQlXfF/h66CpMrEVDm6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:31:28.4180000+00:00' AS DateTimeOffset), CAST(N'2024-02-21T05:07:26.7640000+00:00' AS DateTimeOffset))
+INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber], [countryCode], [otp], [email], [dateOfBirth], [passportExpiryDate], [firstName], [lastName], [gender], [cnic], [passportNo], [refreshToken], [imgSrc], [password], [isActive], [createdAt], [updatedAt]) VALUES (1, 1, 0, NULL, N'3401523467', N'92', N'$2b$10$a.j0SEYZ1./PYzKdp2GIjuaM244k./2AdTcQlXfF/h66CpMrEVDm6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:31:28.4180000+00:00' AS DateTimeOffset), CAST(N'2024-02-21T05:07:26.7640000+00:00' AS DateTimeOffset))
+INSERT [dbo].[Users] ([id], [roleId], [isSuperAdmin], [username], [phoneNumber], [countryCode], [otp], [email], [dateOfBirth], [passportExpiryDate], [firstName], [lastName], [gender], [cnic], [passportNo], [refreshToken], [imgSrc], [password], [isActive], [createdAt], [updatedAt]) VALUES (2, 1, 0, NULL, N'3408922375', N'92', N'$2b$10$a.j0SEYZ1./PYzKdp2GIjuaM244k./2AdTcQlXfF/h66CpMrEVDm6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, CAST(N'2024-02-13T13:31:28.4180000+00:00' AS DateTimeOffset), CAST(N'2024-02-21T05:07:26.7640000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
