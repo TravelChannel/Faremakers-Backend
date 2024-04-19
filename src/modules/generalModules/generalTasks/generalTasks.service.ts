@@ -34,9 +34,9 @@ export class GeneralTasksService {
     }
   }
 
-  async getIsSabreCreateTicketAllowed(id: number): Promise<any> {
+  async getIsSabreCreateTicketAllowed(): Promise<any> {
     try {
-      const data = await this.generalTasksRepository.findAll(1);
+      const data = await this.generalTasksRepository.findByPk(1);
       if (!data) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
@@ -51,7 +51,6 @@ export class GeneralTasksService {
         'Success',
       );
     } catch (error) {
-      await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
@@ -63,7 +62,7 @@ export class GeneralTasksService {
     const t: Transaction = await sequelize.transaction();
 
     try {
-      const data = await this.generalTasksRepository.findAll(1);
+      const data = await this.generalTasksRepository.findByPk(1);
       if (!data) {
         return this.responseService.createResponse(
           HttpStatus.NOT_FOUND,
