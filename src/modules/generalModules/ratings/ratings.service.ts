@@ -72,9 +72,9 @@ export class RatingsService {
   async findAllForAdmin(): Promise<Rating[]> {
     try {
       const rating = await this.ratingsRepository.findAll({
-        where: {
-          isActive: true,
-        },
+        // where: {
+        //   isActive: true,
+        // },
       });
       return this.responseService.createResponse(
         HttpStatus.OK,
