@@ -3,7 +3,7 @@ GO
 
 SET IDENTITY_INSERT [dbo].[GeneralTasks] ON 
 GO
-INSERT [dbo].[GeneralTasks] ([id], [description], [isSabreCreateTicketAllowed], [createdAt], [updatedAt]) VALUES (2, N'Sabre Ticket Confirm Api Control Flag', 0, CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset), CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset))
+INSERT [dbo].[GeneralTasks] ([id], [description], [toggleApi], [isSabreCreateTicketAllowed], [createdAt], [updatedAt]) VALUES (1, N'toggleStatusIsSabreCreateTicketAllowed', N'toggleStatusIsSabreCreateTicketAllowed', 0, CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset), CAST(N'2024-04-01T09:05:03.1200000+00:00' AS DateTimeOffset))
 GO
 SET IDENTITY_INSERT [dbo].[GeneralTasks] OFF
 GO

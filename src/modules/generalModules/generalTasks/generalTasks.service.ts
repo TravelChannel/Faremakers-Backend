@@ -34,6 +34,30 @@ export class GeneralTasksService {
     }
   }
 
+  async getAllControls(): Promise<any> {
+    try {
+      const data = await this.generalTasksRepository.findAll();
+      if (!data) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Record not found',
+        );
+      }
+
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        { data },
+        'Success',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async getIsSabreCreateTicketAllowed(): Promise<any> {
     try {
       const data = await this.generalTasksRepository.findByPk(1);
