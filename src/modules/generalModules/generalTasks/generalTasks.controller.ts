@@ -42,7 +42,7 @@ export class GeneralTasksController {
 
   @SkipAuth()
   @Get('')
-  async getXml2(@Res() res) {
+  async getXml(@Res() res) {
     const blogs = await Blog.findAll(); // Assuming findAll is implemented in your service
 
     const xml = xmlbuilder.create('urlset');
@@ -84,19 +84,20 @@ export class GeneralTasksController {
     res.set('Content-Type', 'application/xml');
     res.send(xmlString);
   }
-  @Get('iii')
-  async getXml(@Res() res) {
-    const blogs = await Blog.findAll({});
-    const xml = xmlbuilder
-      .create('response')
-      .ele('message', 'Hello, XML!')
-      .end({ pretty: true });
 
-    res.set('Content-Type', 'application/xml');
-    res.send(xml);
-  }
   @Get('dropdown')
   getDropdown() {
     return this.generalTaskService.getDropdown();
+  }
+  @Get('getIsSabreCreateTicketAllowed')
+  getIsSabreCreateTicketAllowed() {
+    return this.blogsService.getIsSabreCreateTicketAllowed();
+  }
+  @Patch('toggleStatusIsSabreCreateTicketAllowed')
+  toggleStatusIsSabreCreateTicketAllowed(
+    @Param('id') id: string,
+    // @Body() toggleIsActiveDto: ToggleIsActiveDto,
+  ) {
+    return this.blogsService.toggleStatusIsSabreCreateTicketAllowed(+id);
   }
 }

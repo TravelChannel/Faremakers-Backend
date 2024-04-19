@@ -33,4 +33,63 @@ export class GeneralTasksService {
       );
     }
   }
+
+  async getIsSabreCreateTicketAllowed(id: number): Promise<any> {
+    try {
+      const data = await this.generalTasksRepository.findAll(1);
+      if (!data) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Record not found',
+        );
+      }
+
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        { data },
+        'Success',
+      );
+    } catch (error) {
+      await t.rollback();
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async toggleStatusIsSabreCreateTicketAllowed(id: number): Promise<any> {
+    const t: Transaction = await sequelize.transaction();
+
+    try {
+      const data = await this.generalTasksRepository.findAll(1);
+      if (!data) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'Record not found',
+        );
+      }
+
+      data.isSabreCreateTicketAllowed = !data.isSabreCreateTicketAllowed;
+
+      await data.save({ transaction: t }); // Save the changes
+      await t.commit();
+      let message = '';
+      if (data.isSabreCreateTicketAllowed || false === false) {
+        message = 'isSabreCreateTicketAllowed de activated successfully';
+      } else {
+        message = 'isSabreCreateTicketAllowed activated successfully';
+      }
+      return this.responseService.createResponse(HttpStatus.OK, null, message);
+    } catch (error) {
+      await t.rollback();
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
 }
