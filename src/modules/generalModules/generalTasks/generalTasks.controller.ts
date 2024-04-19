@@ -91,13 +91,13 @@ export class GeneralTasksController {
   }
   @Get('getIsSabreCreateTicketAllowed')
   getIsSabreCreateTicketAllowed() {
-    return this.blogsService.getIsSabreCreateTicketAllowed();
+    return this.generalTaskService.getIsSabreCreateTicketAllowed();
   }
   @Patch('toggleStatusIsSabreCreateTicketAllowed')
   toggleStatusIsSabreCreateTicketAllowed(
     @Param('id') id: string,
     // @Body() toggleIsActiveDto: ToggleIsActiveDto,
   ) {
-    return this.blogsService.toggleStatusIsSabreCreateTicketAllowed(+id);
+    return this.generalTaskService.toggleStatusIsSabreCreateTicketAllowed(+id);
   }
 }
