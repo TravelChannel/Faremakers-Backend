@@ -1467,6 +1467,129 @@ export class PnrBookingsService {
       );
     }
   }
+  async doneCancellation(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      if (pnrBooking.isReqForRefund || pnrBooking.isReqForReIssue) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, another request in process',
+        );
+      }
+      if (!pnrBooking.isReqForCancellation) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, Not requested',
+        );
+      }
+      pnrBooking.isCancelled = true;
+
+      await pnrBooking.save();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Cancellation Request Initiated Successfully ',
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async doneRefund(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      if (pnrBooking.isReqForCancellation || pnrBooking.isReqForReIssue) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, another request in process',
+        );
+      }
+      if (!pnrBooking.isReqForRefund) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, Not requested',
+        );
+      }
+      pnrBooking.isRefunded = true;
+
+      await pnrBooking.save();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Refund Request Initiated Successfully ',
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+  async doneReIssue(id: number): Promise<void> {
+    try {
+      const pnrBooking = await this.pnrBookingRepository.findByPk(id);
+      if (!pnrBooking) {
+        return this.responseService.createResponse(
+          HttpStatus.NOT_FOUND,
+          null,
+          'pnrBooking not found',
+        );
+      }
+      if (pnrBooking.isReqForCancellation || pnrBooking.isReqForRefund) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, another request in process',
+        );
+      }
+      if (!pnrBooking.isReqForReIssue) {
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          null,
+          'Request Failed, Not requested',
+        );
+      }
+      pnrBooking.isReIssueed = true;
+
+      await pnrBooking.save();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        null,
+        'Reissue Request Initiated Successfully',
+      );
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async processPayment2(
     callbackData: any,
     // req,

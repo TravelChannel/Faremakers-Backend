@@ -143,6 +143,19 @@ export class PnrBookingsController {
     return this.pnrBookingsService.reqForReIssue(+id);
   }
 
+  @Patch('doneCancellation/:id')
+  doneCancellation(@Param('id') id: string) {
+    return this.pnrBookingsService.doneCancellation(+id);
+  }
+  @Patch('doneRefund/:id')
+  doneRefund(@Param('id') id: string) {
+    return this.pnrBookingsService.doneRefund(+id);
+  }
+  @Patch('doneReIssue/:id')
+  doneReIssue(@Param('id') id: string) {
+    return this.pnrBookingsService.doneReIssue(+id);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.pnrBookingsService.remove(+id);
