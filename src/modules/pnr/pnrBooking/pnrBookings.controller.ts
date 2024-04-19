@@ -39,6 +39,7 @@ import { SessionData } from 'express-session';
 import {
   ADMIN_AND_USER_SUBJECT,
   PARTIAL_ADMIN_SUBJECT,
+  ALL_ADMINS,
 } from 'src/common/aclSubjects';
 
 @Controller('pnrBooking')
@@ -144,14 +145,20 @@ export class PnrBookingsController {
   }
 
   @Patch('doneCancellation/:id')
+  @UseGuards(RolesGuard)
+  @Roles(ALL_ADMINS)
   doneCancellation(@Param('id') id: string) {
     return this.pnrBookingsService.doneCancellation(+id);
   }
   @Patch('doneRefund/:id')
+  @UseGuards(RolesGuard)
+  @Roles(ALL_ADMINS)
   doneRefund(@Param('id') id: string) {
     return this.pnrBookingsService.doneRefund(+id);
   }
   @Patch('doneReIssue/:id')
+  @UseGuards(RolesGuard)
+  @Roles(ALL_ADMINS)
   doneReIssue(@Param('id') id: string) {
     return this.pnrBookingsService.doneReIssue(+id);
   }

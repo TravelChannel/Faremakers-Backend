@@ -13,3 +13,6 @@ export const ADMIN_AND_USER_SUBJECT = {
 export const ALL_USERS_SUBJECT = {
   roles: [1, 2, 3, 4, 5],
 };
+export const ALL_ADMINS = {
+  roles: [1, 3, 4, 5],
+};
