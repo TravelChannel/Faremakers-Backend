@@ -17,13 +17,11 @@ import { UserLoginDto } from './dto/userLogin.dto';
 import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 
 import { PnrUsersService } from './pnrUsers.service';
-// import { SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT } from 'src/common/aclSubjects';
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 import { OtpAuthGuard } from '../../../common/guards/otp-auth.guard'; // Adjust the import path
 
 @Controller('pnrUsers')
 // @UseGuards(RolesGuard)
-// @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
 export class PnrUsersController {
   constructor(private readonly pnrUsersService: PnrUsersService) {}
 

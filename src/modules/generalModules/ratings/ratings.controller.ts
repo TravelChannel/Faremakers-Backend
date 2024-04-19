@@ -32,7 +32,6 @@ export class RatingsController {
   }
 
   @Get('dropdown')
-  // @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {
     return this.ratingsService.getDropdown();
   }

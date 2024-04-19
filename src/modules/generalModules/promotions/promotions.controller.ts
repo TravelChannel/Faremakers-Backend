@@ -58,7 +58,6 @@ export class PromotionsController {
     return await this.promotionsService.create(createPromotionDto, imgFile);
   }
   @Get('dropdown')
-  // @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {
     return this.promotionsService.getDropdown();
   }

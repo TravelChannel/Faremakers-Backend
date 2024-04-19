@@ -34,7 +34,6 @@ export class SEOAirlinesDataController {
   }
 
   @Get('dropdown')
-  // @Roles(SUPERADMIN_ALL_COMPANIES_ADMIN_SUBJECT)
   getDropdown() {
     return this.seoAirlinesDataService.getDropdown();
   }
