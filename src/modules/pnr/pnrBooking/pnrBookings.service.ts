@@ -994,8 +994,97 @@ export class PnrBookingsService {
   }
   async testConfirm(): Promise<any> {
     try {
-      const message = `Hello Hashim,\nYour ticket reservation is confirmed!\nThank you for choosing Faremakers.\nIf you have any questions or need assistance, feel free to reach out.\nWe look forward to hosting you! Best regards,\n  Faremakers`;
-      const message2 = `First line\nSecond line\nThird line`;
+      const message2 = `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ticket Reservation Confirmation</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+          }
+          h1, h2, h3 {
+            color: #333;
+          }
+          p {
+            margin-bottom: 10px;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+          .link {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Ticket Reservation Confirmation</h2>
+          <p>Hello [Client's Name],</p>
+          <p>Your ticket reservation is confirmed! Thank you for choosing [Your Company Name].</p>
+          <table>
+            <tr>
+              <th>Event</th>
+              <td>[Event Name]</td>
+            </tr>
+            <tr>
+              <th>Date</th>
+              <td>[Date]</td>
+            </tr>
+            <tr>
+              <th>Time</th>
+              <td>[Time]</td>
+            </tr>
+          </table>
+          <p>Your registered information for this booking:</p>
+          <ul>
+            <li>Email: [Client's Email]</li>
+            <li>Contact Number: [Client's Phone Number]</li>
+          </ul>
+          <div>
+            <h3>Payment Details:</h3>
+            <table>
+              <tr>
+                <th>Method</th>
+                <td>[Payment Method]</td>
+              </tr>
+              <tr>
+                <th>Total Amount</th>
+                <td>[Total Amount]</td>
+              </tr>
+            </table>
+          </div>
+          <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>
+          <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
+          <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
+        </div>
+      </body>
+      </html>
+      `;
+      const message = 'Hello Ticket Confirm';
       const resultSms = await this.sendSmsConfirmation(
         { phoneNumber: '3401523467', countryCode: 92 },
         message,
@@ -1011,7 +1100,7 @@ export class PnrBookingsService {
       ];
       const bccAddresses = ['hashimalone1@gmail.com'];
       const mailSubject = 'Ticket Confirmation';
-      const htmlBody = `<p> ${message} </p>`;
+      const htmlBody = `${message2}`;
       const resultEmail = await this.sendEmailConfirmation(
         toAddresses,
         bccAddresses,
@@ -1711,18 +1800,105 @@ export class PnrBookingsService {
         //   pnrBooking.pnrDetail[0],
         //   callbackData,
         // );
-        const message = `Hello ${
+        const message2 = `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Ticket Reservation Confirmation</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+            }
+            .container {
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              border: 1px solid #ccc;
+            }
+            h1, h2, h3 {
+              color: #333;
+            }
+            p {
+              margin-bottom: 10px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 20px;
+            }
+            th, td {
+              border: 1px solid #ddd;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+            }
+            .link {
+              display: inline-block;
+              margin-top: 20px;
+              background-color: #007bff;
+              color: #fff;
+              text-decoration: none;
+              padding: 10px 20px;
+              border-radius: 5px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h2>Ticket Reservation Confirmation</h2>
+            <p>Hello ${pnrBooking.user.phoneNumber},</p>
+            <p>Your ticket reservation is confirmed! Thank you for choosing faremakers.</p>
+            <table>
+              <tr>
+                <th>Event</th>
+                <td>[Event Name]</td>
+              </tr>
+              <tr>
+                <th>Date</th>
+                <td>[Date]</td>
+              </tr>
+              <tr>
+                <th>Time</th>
+                <td>[Time]</td>
+              </tr>
+            </table>
+            <p>Your registered information for this booking:</p>
+            <ul>
+              <li>Email: [Client's Email]</li>
+              <li>Contact Number: ${pnrBooking.user.phoneNumber}</li>
+            </ul>
+            <div>
+              <h3>Payment Details:</h3>
+              <table>
+                <tr>
+                  <th>Method</th>
+                  <td>[Payment Method]</td>
+                </tr>
+                <tr>
+                  <th>Total Amount</th>
+                  <td>[Total Amount]</td>
+                </tr>
+              </table>
+            </div>
+            <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>
+            <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
+            <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
+          </div>
+        </body>
+        </html>
+        `;
+        const message = 'Hello Ticket Confirm';
+
+        const messageTemp = `Hello ${
           pnrBooking.user.firstName && pnrBooking.user.firstName
         } ${pnrBooking.user.lastName && pnrBooking.user.lastName} ${
           !pnrBooking.user.firstName &&
           !pnrBooking.user.lastName &&
           pnrBooking.user.countryCode + pnrBooking.user.phoneNumber
-        },
-        Your ticket reservation is confirmed! 🎟️ Thank you for choosing Faremakers. 
-         If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!
-        
-        Best regards,
-        Faremakers`;
+        }, Your ticket reservation is confirmed!\nFaremakers`;
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
           'hashamkhancust@gmail.com',
@@ -1730,7 +1906,7 @@ export class PnrBookingsService {
         ];
         const bccAddresses = ['hashimalone1@gmail.com'];
         const mailSubject = 'Ticket Confirmation';
-        const htmlBody = `<p> ${message} </p>`;
+        const htmlBody = `${message2}`;
         const resultEmail = await this.sendEmailConfirmation(
           toAddresses,
           bccAddresses,
@@ -1864,7 +2040,7 @@ export class PnrBookingsService {
           destinations: [
             { to: `${userData.countryCode}${userData.phoneNumber}` },
           ],
-          text: `${message}`,
+          text: message,
           // text: `Hello </br> HI`,
         },
       ],
