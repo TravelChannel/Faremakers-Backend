@@ -24,7 +24,7 @@ export class CommissionPercentageService {
     private commissionPercentageRepository: typeof CommissionPercentage,
     private readonly responseService: ResponseService,
   ) {}
-
+  // Test
   async create(createCommissionPercentageDto: CreateCommissionPercentageDto) {
     const t: Transaction = await sequelize.transaction();
 
