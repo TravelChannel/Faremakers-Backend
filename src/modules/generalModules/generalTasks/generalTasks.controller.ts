@@ -97,7 +97,7 @@ export class GeneralTasksController {
   getAllControls() {
     return this.generalTaskService.getAllControls();
   }
-  @Patch('toggleStatus')
+  @Patch('toggleStatus/:id')
   toggleStatus(
     @Param('id') id: string,
     // @Body() toggleIsActiveDto: ToggleIsActiveDto,

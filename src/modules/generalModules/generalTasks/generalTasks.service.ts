@@ -100,8 +100,8 @@ export class GeneralTasksService {
       await data.save({ transaction: t }); // Save the changes
       await t.commit();
       let message = '';
-      if (data.flag || false === false) {
-        message = 'De activated successfully';
+      if (data.flag === false) {
+        message = `Deactivated successfully `;
       } else {
         message = 'Activated successfully';
       }

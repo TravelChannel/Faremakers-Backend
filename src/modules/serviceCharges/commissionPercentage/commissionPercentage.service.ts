@@ -154,7 +154,7 @@ export class CommissionPercentageService {
     const commissionCategory = await CommissionCategories.findOne({
       order: [['precedence', 'ASC']],
     });
-
+    console.log('commissionCategory', commissionCategory);
     if (commissionCategory) {
       const commissionPercentage = await CommissionPercentage.findOne({
         where: {
@@ -169,17 +169,21 @@ export class CommissionPercentageService {
       }
       let pnrServiceChargesCode = 'default';
       // let a = 1;
-
+      console.log(
+        'pnrServiceChargesPercentageDefault',
+        pnrServiceChargesPercentageDefault,
+      );
+      console.log('commissionCategory.id', commissionCategory.id);
       switch (Number(commissionCategory.id)) {
         case 1:
           pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
-
+          console.log('pnrServiceChargesCode', pnrServiceChargesCode);
           const airline = await Airline.findOne({
             where: { code: pnrServiceChargesCode },
           });
 
           if (airline) {
-            const commissionPercentage = await CommissionPercentage.findOne({
+            let commissionPercentage = await CommissionPercentage.findOne({
               where: {
                 airlineId: airline.id,
                 fareClassId: null,
@@ -188,7 +192,17 @@ export class CommissionPercentageService {
             });
             if (commissionPercentage) {
               pnrServiceChargesPercentage = commissionPercentage.percentage;
+            } else {
+              commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  airlineId: airline.id,
+                },
+              });
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
             }
+            console.log('commissionPercentage', commissionPercentage);
           }
           break;
 
@@ -209,6 +223,15 @@ export class CommissionPercentageService {
 
             if (commissionPercentage) {
               pnrServiceChargesPercentage = commissionPercentage.percentage;
+            } else {
+              commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  sectorId: sector.id,
+                },
+              });
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
             }
           }
 
@@ -231,6 +254,15 @@ export class CommissionPercentageService {
 
             if (commissionPercentage) {
               pnrServiceChargesPercentage = commissionPercentage.percentage;
+            } else {
+              commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  fareClassId: fareClass.id,
+                },
+              });
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
             }
           }
           break;

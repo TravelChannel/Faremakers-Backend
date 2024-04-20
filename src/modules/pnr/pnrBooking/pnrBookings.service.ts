@@ -1780,9 +1780,12 @@ export class PnrBookingsService {
         await pnrBooking.save({ transaction: t });
         const type = await this.findAirlineType(pnrBooking.id);
         let result;
+        // AirSial
         if (type == 0) {
           result = this.callAirSialConfirmation(pnrBooking.pnr);
+          // Sabre
         } else {
+          // Check Admin flag for Sabre COnfirmation Api
           const generalTask = await GeneralTask.findByPk(1, {});
 
           if (generalTask.flag) {
@@ -1923,7 +1926,7 @@ export class PnrBookingsService {
 
       // console.log(newPnrPayment);
       console.log('payment inserted');
-      return 1;
+      return this.responseService.createResponse(HttpStatus.OK, {}, 'SUCCESS');
       // return res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(HttpStatus.FOUND, viewETicketUrl);
       // res.redirect(viewETicketUrl);
