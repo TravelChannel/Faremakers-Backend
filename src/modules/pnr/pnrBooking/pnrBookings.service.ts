@@ -1,5 +1,8 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
+import { AxiosResponse } from 'axios';
+import * as mailgun from 'mailgun-js';
+
 // import { PnrBookingArrayDto } from './dto/PnrBookingArray.dto';
 import * as qs from 'qs';
 
@@ -1612,6 +1615,9 @@ export class PnrBookingsService {
           model: PnrDetail,
           as: 'pnrDetail',
         },
+        {
+          model: User,
+        },
       ],
       // order: [['createdAt', 'DESC']],
     });
@@ -1658,12 +1664,44 @@ export class PnrBookingsService {
           }
         }
         console.log('result', result);
+        // external api
+
         // await this.callPostPaymentApi(
         //   pnrBooking.pnr,
         //   pnrBooking.pnrDetail[0],
         //   callbackData,
         // );
-        // external api
+        const message = `Hello ${
+          pnrBooking.user.firstName && pnrBooking.user.firstName
+        } ${pnrBooking.user.lastName && pnrBooking.user.lastName} ${
+          !pnrBooking.user.firstName &&
+          !pnrBooking.user.lastName &&
+          pnrBooking.user.countryCode + pnrBooking.user.phoneNumber
+        },
+        Your ticket reservation is confirmed! 🎟️ Thank you for choosing Faremakers. 
+         If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!
+        
+        Best regards,
+        Faremakers`;
+        await this.sendSmsConfirmation(pnrBooking.user, message);
+        const toAddresses = [
+          'hashamkhancust@gmail.com',
+          // 'recipient2@example.com',
+        ];
+        const bccAddresses = ['hashimalone1@gmail.com'];
+        const mailSubject = 'Your Subject';
+        const htmlBody = '<p> ${message} </p>';
+        const resultEmail = await this.sendEmailConfirmation(
+          toAddresses,
+          bccAddresses,
+          mailSubject,
+          htmlBody,
+        );
+        if (resultEmail) {
+          console.log('Email sent successfully');
+        } else {
+          console.error('Failed to send email');
+        }
       }
       await t.commit();
 
@@ -1770,6 +1808,75 @@ export class PnrBookingsService {
 
   async callAirSialConfirmation(pnr): Promise<any> {
     console.log('pnr', pnr);
+  }
+
+  private async sendSmsConfirmation(
+    userData: any,
+    message: string,
+  ): Promise<AxiosResponse> {
+    // Implement your OTP sending logic here
+    // Use Axios or any other HTTP client library to make the API request
+    // Make sure to replace the following placeholders with your actual API details
+    const payload = {
+      messages: [
+        {
+          from: 'Faremaker',
+          destinations: [
+            { to: `${userData.countryCode}${userData.phoneNumber}` },
+          ],
+          text: message,
+        },
+      ],
+    }; // Sabre API endpoint
+    const url =
+      process.env.INFOBIP_URL ||
+      'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
+    const headers = {
+      headers: {
+        Authorization: `App ${
+          process.env.INFOBIP_KEY ||
+          'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
+        }`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+    const response = await this.httpService
+      .post(url, payload, headers)
+      .toPromise();
+
+    return response;
+  }
+
+  private async sendEmailConfirmation(
+    toAddresses: string[],
+    bccAddresses: string[],
+    mailSubject: string,
+    htmlBody: string,
+  ): Promise<boolean> {
+    try {
+      const mg = mailgun({
+        apiKey: process.env.MAILGUN_API,
+        domain: process.env.MAILGUN_DOMAIN,
+      });
+
+      const data = {
+        from: process.env.MAILGUN_FROM,
+        to: toAddresses.join(','),
+        subject: mailSubject,
+        html: htmlBody,
+      };
+
+      if (bccAddresses && bccAddresses.length > 0) {
+        data['bcc'] = bccAddresses.join(',');
+      }
+
+      await mg.messages().send(data);
+      return true;
+    } catch (error) {
+      console.error('Error sending email:', error);
+      return false;
+    }
   }
   async getAuthTokenSabre() {
     if (
