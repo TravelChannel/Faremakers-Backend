@@ -213,7 +213,7 @@ export class CommissionPercentageService {
           });
 
           if (sector) {
-            const commissionPercentage = await CommissionPercentage.findOne({
+            let commissionPercentage = await CommissionPercentage.findOne({
               where: {
                 sectorId: sector.id,
                 airlineId: null,
@@ -244,7 +244,7 @@ export class CommissionPercentageService {
           });
 
           if (fareClass) {
-            const commissionPercentage = await CommissionPercentage.findOne({
+            let commissionPercentage = await CommissionPercentage.findOne({
               where: {
                 fareClassId: fareClass.id,
                 sectorId: null,
