@@ -994,9 +994,8 @@ export class PnrBookingsService {
   }
   async testConfirm(): Promise<any> {
     try {
-      const message = `Hello Hashim,
-      Your ticket reservation is confirmed!`;
-      const message2 = `Hello Hashim, How are you`;
+      const message = `Hello Hashim,\nYour ticket reservation is confirmed!\nThank you for choosing Faremakers.\nIf you have any questions or need assistance, feel free to reach out.\nWe look forward to hosting you! Best regards,\n  Faremakers`;
+      const message2 = `First line\nSecond line\nThird line`;
       const resultSms = await this.sendSmsConfirmation(
         { phoneNumber: '3401523467', countryCode: 92 },
         message,
@@ -1011,8 +1010,8 @@ export class PnrBookingsService {
         // 'recipient2@example.com',
       ];
       const bccAddresses = ['hashimalone1@gmail.com'];
-      const mailSubject = 'Your Subject';
-      const htmlBody = '<p> ${message} </p>';
+      const mailSubject = 'Ticket Confirmation';
+      const htmlBody = `<p> ${message} </p>`;
       const resultEmail = await this.sendEmailConfirmation(
         toAddresses,
         bccAddresses,
@@ -1730,7 +1729,7 @@ export class PnrBookingsService {
           // 'recipient2@example.com',
         ];
         const bccAddresses = ['hashimalone1@gmail.com'];
-        const mailSubject = 'Your Subject';
+        const mailSubject = 'Ticket Confirmation';
         const htmlBody = `<p> ${message} </p>`;
         const resultEmail = await this.sendEmailConfirmation(
           toAddresses,
