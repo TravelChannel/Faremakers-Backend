@@ -122,7 +122,7 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
-            await this.callLeadCreation(leadCreationData, pnrBooking);
+            // await this.callLeadCreation(leadCreationData, pnrBooking);
             // external api
           }),
         );
@@ -1590,49 +1590,19 @@ export class PnrBookingsService {
       );
     }
   }
-  async processPayment2(
-    callbackData: any,
-    // req,
-    //  res
-  ): Promise<any> {
-    console.log('*****processPayment Endpoint Hit*******');
-    console.log('*****callbackData Data******,', callbackData);
 
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const newPromotion = await Promotion.create({
-        title: 'processPayment api Hit',
-        description: new Date().toISOString(),
-        startDate: null,
-        endDate: null,
-      });
-      return this.responseService.createResponse(
-        HttpStatus.OK,
-        callbackData,
-        'processPayment Endpoint Hit',
-      );
-    } catch (error) {
-      console.log('error:', error);
-
-      return this.responseService.createResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        error,
-      );
-    }
-  }
   async processPayment(callbackData: any): Promise<any> {
     console.log('*****processPayment Endpoint Hit******');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     callbackData = callbackData.obj;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    // const newPromotion = await Promotion.create({
-    //   title: `processPayment Updated ,${callbackData?.order?.id},status:${callbackData.success}`,
-    //   description: new Date().toISOString(),
-    //   startDate: null,
-    //   endDate: null,
-    // });
+    const newPromotion = await Promotion.create({
+      title: `processPayment Updated ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
+      description: new Date().toISOString(),
+      startDate: null,
+      endDate: null,
+    });
     const pnrBooking = await this.pnrBookingRepository.findOne({
       where: {
         orderId: callbackData.order.id,
