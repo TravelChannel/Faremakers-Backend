@@ -113,6 +113,11 @@ export class PnrBookingsController {
   async findByPnr(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findByPnr(req);
   }
+  @SkipAuth()
+  @Get('testConfirm')
+  async testConfirm(): Promise<any> {
+    return this.pnrBookingsService.testConfirm();
+  }
   @Get('findByOrderId')
   async findByOrderId(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findByOrderId(req);

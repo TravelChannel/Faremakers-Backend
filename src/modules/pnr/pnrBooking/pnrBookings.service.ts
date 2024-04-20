@@ -992,6 +992,47 @@ export class PnrBookingsService {
       );
     }
   }
+  async testConfirm(): Promise<any> {
+    try {
+      const message = `Hello Hashim,
+      Your ticket reservation is confirmed!`;
+      const message2 = `Hello Hashim, How are you`;
+      const resultSms = await this.sendSmsConfirmation(
+        { phoneNumber: '3401523467', countryCode: 92 },
+        message,
+      );
+      if (resultSms) {
+        console.log('SMS sent successfully');
+      } else {
+        console.error('Failed to send SMS');
+      }
+      const toAddresses = [
+        'hashamkhancust@gmail.com',
+        // 'recipient2@example.com',
+      ];
+      const bccAddresses = ['hashimalone1@gmail.com'];
+      const mailSubject = 'Your Subject';
+      const htmlBody = '<p> ${message} </p>';
+      const resultEmail = await this.sendEmailConfirmation(
+        toAddresses,
+        bccAddresses,
+        mailSubject,
+        htmlBody,
+      );
+      if (resultEmail) {
+        console.log('Email sent successfully', resultEmail);
+      } else {
+        console.error('Failed to send email');
+      }
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async findByPnr(req): Promise<any> {
     try {
       const whereOptions: any = {};
@@ -1690,7 +1731,7 @@ export class PnrBookingsService {
         ];
         const bccAddresses = ['hashimalone1@gmail.com'];
         const mailSubject = 'Your Subject';
-        const htmlBody = '<p> ${message} </p>';
+        const htmlBody = `<p> ${message} </p>`;
         const resultEmail = await this.sendEmailConfirmation(
           toAddresses,
           bccAddresses,
@@ -1824,13 +1865,14 @@ export class PnrBookingsService {
           destinations: [
             { to: `${userData.countryCode}${userData.phoneNumber}` },
           ],
-          text: message,
+          text: `${message}`,
+          // text: `Hello </br> HI`,
         },
       ],
-    }; // Sabre API endpoint
+    };
     const url =
       process.env.INFOBIP_URL ||
-      'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
+      'https://qgm2rw.api.infobip.com/sms/2/text/advanced';
     const headers = {
       headers: {
         Authorization: `App ${
@@ -1844,7 +1886,6 @@ export class PnrBookingsService {
     const response = await this.httpService
       .post(url, payload, headers)
       .toPromise();
-
     return response;
   }
 
