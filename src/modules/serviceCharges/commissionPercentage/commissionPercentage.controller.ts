@@ -10,10 +10,12 @@ import {
   // HttpStatus,
   // HttpException,
 } from '@nestjs/common';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
+
 import { CommissionPercentageService } from './commissionPercentage.service';
 import { CreateCommissionPercentageDto } from './dto/create-commissionPercentage.dto';
 import { UpdateCommissionPercentageDto } from './dto/update-commissionPercentage.dto';
-import { ADMIN_SUBJECT, ADMIN_AND_USER_SUBJECT } from 'src/common/aclSubjects';
+import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -37,8 +39,7 @@ export class CommissionPercentageController {
   }
 
   @Post('getServiceCharges')
-  @UseGuards(RolesGuard)
-  @Roles(ADMIN_AND_USER_SUBJECT)
+  @SkipAuth()
   getServiceCharges(@Body() majorInfo: any) {
     return this.commissionPercentageService.getServiceCharges(majorInfo);
   }
