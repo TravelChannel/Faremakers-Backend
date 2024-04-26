@@ -82,6 +82,29 @@ export class PnrBooking extends Model {
   })
   isReIssueed: boolean;
   @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+
+    allowNull: false,
+  })
+  sendSmsCod: boolean;
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: 0,
+
+    allowNull: false,
+  })
+  sendSmsBranch: boolean;
+  @Column({
+    type: DataType.STRING,
+  })
+  branchLabel: string;
+  @Column({
+    type: DataType.STRING,
+  })
+  userLocation: string;
+
+  @Column({
     type: DataType.STRING,
     allowNull: false,
     unique: {

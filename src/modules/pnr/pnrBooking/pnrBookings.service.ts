@@ -78,30 +78,25 @@ export class PnrBookingsService {
         OrderId,
         // phoneNumber,
         // countryCode,
+
         flightDetails,
         MajorInfo,
-        leadCreationData,
+        // leadCreationData,
+        sendSmsBranch,
+        sendSmsCod,
+        branchLabel,
+        userLocation,
       } = pnrBookingDto;
-      // let newUser = await User.findOne({
-      //   where: {
-      //     phoneNumber: phoneNumber,
-      //     countryCode,
-      //   },
-      // });
-      // if (!newUser) {
-      //   newUser = await User.create(
-      //     {
-      //       phoneNumber: phoneNumber,
-      //       countryCode,
-      //     },
-      //     { transaction: t },
-      //   );
-      // }
+
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           userId: currentUserId,
           pnr: pnr,
           orderId: OrderId,
+          sendSmsBranch: sendSmsBranch || false,
+          sendSmsCod: sendSmsCod || false,
+          branchLabel: branchLabel || '',
+          userLocation: userLocation || '',
         },
         { transaction: t },
       );
@@ -509,6 +504,35 @@ export class PnrBookingsService {
       }
 
       await t.commit();
+
+      const user = await User.findByPk(currentUserId);
+      if (user) {
+        if (sendSmsBranch) {
+          const message = 'Hello Ticket Pay by branch';
+          const resultSms = await this.sendSmsConfirmation(
+            { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
+            message,
+          );
+          if (resultSms) {
+            console.log('SMS sent successfully');
+          } else {
+            console.error('Failed to send SMS');
+          }
+        }
+        if (sendSmsCod) {
+          const message = 'Hello Ticket Pay by COD';
+          const resultSms = await this.sendSmsConfirmation(
+            { phoneNumber: '3401523467', countryCode: 92 },
+            message,
+          );
+          if (resultSms) {
+            console.log('SMS sent successfully');
+          } else {
+            console.error('Failed to send SMS');
+          }
+        }
+      }
+
       return this.responseService.createResponse(
         HttpStatus.OK,
         newPnrBookingRepository,

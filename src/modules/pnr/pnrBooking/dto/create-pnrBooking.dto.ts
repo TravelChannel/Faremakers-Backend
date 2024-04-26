@@ -19,4 +19,12 @@ export class PnrBookingDto {
   MajorInfo: any;
   @IsOptional()
   leadCreationData: any;
+  @IsOptional()
+  sendSmsBranch: any;
+  @IsOptional()
+  sendSmsCod: any;
+  @IsOptional()
+  branchLabel: any;
+  @IsOptional()
+  userLocation: any;
 }
