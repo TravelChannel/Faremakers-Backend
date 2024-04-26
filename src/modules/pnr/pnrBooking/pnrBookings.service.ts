@@ -529,13 +529,8 @@ export class PnrBookingsService {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
     };
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&from=${leadCreationData.depart}
-    &to=${leadCreationData.arrival}&name=
-    ${data.firstName} ${data.lastName}&phone=${leadCreationData.phoneNumber}&email=${data.email}&adult=
-    ${leadCreationData.adults}&child=${leadCreationData.children}&infant=${leadCreationData.infants}
-    &airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&TripTypeId=1&depDate=
-    ${leadCreationData.departDate}&retDate=${leadCreationData.returnDate}`;
-
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&TripTypeId=1&depDate=${leadCreationData.departDate}&retDate=${leadCreationData.returnDate}`;
+    console.log('url', url);
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
     console.log('here', result);
@@ -694,6 +689,8 @@ export class PnrBookingsService {
   async createLeadCrm(body: any): Promise<any> {
     try {
       const { leadData, userData } = body;
+      console.log('leadData', leadData);
+      console.log('userData', userData);
       const leadIds = [];
       await Promise.all(
         userData.map(async (user) => {
@@ -701,6 +698,7 @@ export class PnrBookingsService {
           leadIds.push(result);
         }),
       );
+
       return this.responseService.createResponse(
         HttpStatus.OK,
         leadIds,
