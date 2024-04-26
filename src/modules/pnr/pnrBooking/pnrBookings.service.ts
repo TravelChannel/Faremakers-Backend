@@ -539,12 +539,12 @@ export class PnrBookingsService {
         SAVED_SUCCESS,
       );
     } catch (error) {
-      console.log('Error', error);
+      console.log('Error', error.message);
       await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         null,
-        error.message,
+        error,
       );
     }
   }
