@@ -693,8 +693,17 @@ export class PnrBookingsService {
   }
   async createLeadCrm(leadData: any): Promise<any> {
     try {
-      const { leadCreationData, userData } = leadData;
-      await this.callLeadCreation(leadCreationData, userData);
+      const { rest, userData } = leadData;
+      const leadIds = [];
+      userData.map(async (user) => {
+        const result = await this.callLeadCreation(rest, user);
+        leadIds.push(result);
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        leadIds,
+        SAVED_SUCCESS,
+      );
     } catch (error) {
       console.log(error);
       return this.responseService.createResponse(
