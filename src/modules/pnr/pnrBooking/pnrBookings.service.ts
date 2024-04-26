@@ -691,6 +691,19 @@ export class PnrBookingsService {
       );
     }
   }
+  async createLeadCrm(leadData: any): Promise<any> {
+    try {
+      const { leadCreationData, userData } = leadData;
+      await this.callLeadCreation(leadCreationData, userData);
+    } catch (error) {
+      console.log(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async findAllWithPayment(
     req,
     currentUserId: number,

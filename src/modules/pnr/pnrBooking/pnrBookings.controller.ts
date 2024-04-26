@@ -14,6 +14,7 @@ import {
   Req,
   Query,
   Res,
+  Put,
 } from '@nestjs/common';
 import { Response } from 'express';
 
@@ -108,6 +109,10 @@ export class PnrBookingsController {
       currentUserId,
       isCurrentUserAdmin,
     );
+  }
+  @Put('createLeadCrm')
+  async createLeadCrm(@Body() leadData: any): Promise<any> {
+    return this.pnrBookingsService.createLeadCrm(leadData);
   }
   @Get('findByPnr')
   async findByPnr(@Req() req: Request): Promise<any> {
