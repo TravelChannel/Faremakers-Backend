@@ -704,7 +704,7 @@ export class PnrBookingsService {
       return this.responseService.createResponse(
         HttpStatus.OK,
         leadIds,
-        SAVED_SUCCESS,
+        'Success',
       );
     } catch (error) {
       console.log(error);
