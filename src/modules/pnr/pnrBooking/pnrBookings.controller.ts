@@ -110,9 +110,10 @@ export class PnrBookingsController {
       isCurrentUserAdmin,
     );
   }
+  @SkipAuth()
   @Put('createLeadCrm')
-  async createLeadCrm(@Body() leadData: any): Promise<any> {
-    return this.pnrBookingsService.createLeadCrm(leadData);
+  async createLeadCrm(@Body() body: any): Promise<any> {
+    return this.pnrBookingsService.createLeadCrm(body);
   }
   @Get('findByPnr')
   async findByPnr(@Req() req: Request): Promise<any> {

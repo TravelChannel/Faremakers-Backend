@@ -538,7 +538,7 @@ export class PnrBookingsService {
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
-    console.log(result);
+    console.log('here', result);
     return result;
   }
   async findAll(
@@ -691,14 +691,16 @@ export class PnrBookingsService {
       );
     }
   }
-  async createLeadCrm(leadData: any): Promise<any> {
+  async createLeadCrm(body: any): Promise<any> {
     try {
-      const { rest, userData } = leadData;
+      const { leadData, userData } = body;
       const leadIds = [];
-      userData.map(async (user) => {
-        const result = await this.callLeadCreation(rest, user);
-        leadIds.push(result);
-      });
+      await Promise.all(
+        userData.map(async (user) => {
+          const result = await this.callLeadCreation(leadData, user);
+          leadIds.push(result);
+        }),
+      );
       return this.responseService.createResponse(
         HttpStatus.OK,
         leadIds,
