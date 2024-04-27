@@ -52,17 +52,17 @@ export class AuthController {
       const result = await this.authService.login(loginDto);
 
       if (result.status === 'SUCCESS') {
-        res.cookie('user_token', result.payload.accessToken, {
-          secure: true,
-          sameSite: 'none', // Set to 'none' for cross-site requests
-          httpOnly: true, // Prevent JavaScript access to the cookie
-          maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
-        });
-        res.cookie('refresh_token', result.payload.refreshToken, {
-          secure: true,
-          sameSite: 'none', // Set to 'none' for cross-site requests
-          httpOnly: true, // Prevent JavaScript access to the cookie
-        });
+        // res.cookie('user_token', result.payload.accessToken, {
+        //   secure: true,
+        //   sameSite: 'none', // Set to 'none' for cross-site requests
+        //   httpOnly: true, // Prevent JavaScript access to the cookie
+        //   maxAge: process.env.TOKEN_COOKIE_MAX_AGE,
+        // });
+        // res.cookie('refresh_token', result.payload.refreshToken, {
+        //   secure: true,
+        //   sameSite: 'none', // Set to 'none' for cross-site requests
+        //   httpOnly: true, // Prevent JavaScript access to the cookie
+        // });
       }
 
       return result;

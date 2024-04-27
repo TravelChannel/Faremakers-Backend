@@ -22,12 +22,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
   private static extractJWT(req: RequestType): string | null {
-    if (
-      req.cookies &&
-      'user_token' in req.cookies &&
-      req.cookies.user_token.length > 0
-    ) {
-      return req.cookies.user_token;
+    // if (
+    //   req.cookies &&
+    //   'user_token' in req.cookies &&
+    //   req.cookies.user_token.length > 0
+    // ) {
+    //   return req.cookies.user_token;
+    // }
+    const authorizationHeader = req.headers['authorization'];
+
+    if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
+      // Extract the token part after 'Bearer '
+      const token = authorizationHeader.substring(7);
+      return token;
     }
     return null;
   }
