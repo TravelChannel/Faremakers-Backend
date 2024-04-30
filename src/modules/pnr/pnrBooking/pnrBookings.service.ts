@@ -1843,11 +1843,11 @@ export class PnrBookingsService {
         console.log('result', result);
         // external api
 
-        // await this.callPostPaymentApi(
-        //   pnrBooking.pnr,
-        //   pnrBooking.pnrDetail[0],
-        //   callbackData,
-        // );
+        await this.callPostPaymentApi(
+          pnrBooking.pnr,
+          pnrBooking.pnrDetail[0],
+          callbackData,
+        );
         const message2 = `<!DOCTYPE html>
         <html lang="en">
         <head>
