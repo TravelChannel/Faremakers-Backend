@@ -508,7 +508,7 @@ export class PnrBookingsService {
       const user = await User.findByPk(currentUserId);
       if (user) {
         if (sendSmsBranch) {
-          const message = 'Hello Ticket Pay by branch';
+          const message = 'Hello Ticket Pay by branch (Testing)';
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -520,9 +520,9 @@ export class PnrBookingsService {
           }
         }
         if (sendSmsCod) {
-          const message = 'Hello Ticket Pay by COD';
+          const message = 'Hello Ticket Pay by COD  (Testing)';
           const resultSms = await this.sendSmsConfirmation(
-            { phoneNumber: '3401523467', countryCode: 92 },
+            { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
           );
           if (resultSms) {
@@ -1044,7 +1044,7 @@ export class PnrBookingsService {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ticket Reservation Confirmation</title>
+        <title>(Testing)Ticket Reservation Confirmation</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -1087,23 +1087,10 @@ export class PnrBookingsService {
       </head>
       <body>
         <div class="container">
-          <h2>Ticket Reservation Confirmation</h2>
+        <h2>(Testing)Ticket Reservation Confirmation</h2>
           <p>Hello [Client's Name],</p>
           <p>Your ticket reservation is confirmed! Thank you for choosing [Your Company Name].</p>
-          <table>
-            <tr>
-              <th>Event</th>
-              <td>[Event Name]</td>
-            </tr>
-            <tr>
-              <th>Date</th>
-              <td>[Date]</td>
-            </tr>
-            <tr>
-              <th>Time</th>
-              <td>[Time]</td>
-            </tr>
-          </table>
+        
           <p>Your registered information for this booking:</p>
           <ul>
             <li>Email: [Client's Email]</li>
@@ -1122,14 +1109,14 @@ export class PnrBookingsService {
               </tr>
             </table>
           </div>
-          <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>
+          <! --  <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>--> 
           <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
           <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
         </div>
       </body>
       </html>
       `;
-      const message = 'Hello Ticket Confirm';
+      const message = '(Testing) Hello Ticket Confirm';
       const resultSms = await this.sendSmsConfirmation(
         { phoneNumber: '3401523467', countryCode: 92 },
         message,
@@ -1143,8 +1130,11 @@ export class PnrBookingsService {
         'hashamkhancust@gmail.com',
         // 'recipient2@example.com',
       ];
-      const bccAddresses = ['hashimalone1@gmail.com'];
-      const mailSubject = 'Ticket Confirmation';
+      const bccAddresses = [
+        // 'bilal.tariq@faremakers.com',
+        'arman@faremakers.com',
+      ];
+      const mailSubject = '(Testing) Ticket Confirmation';
       const htmlBody = `${message2}`;
       const resultEmail = await this.sendEmailConfirmation(
         toAddresses,
@@ -1853,7 +1843,7 @@ export class PnrBookingsService {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Ticket Reservation Confirmation</title>
+          <title>(Testing)Ticket Reservation Confirmation</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -1896,23 +1886,13 @@ export class PnrBookingsService {
         </head>
         <body>
           <div class="container">
-            <h2>Ticket Reservation Confirmation</h2>
-            <p>Hello ${pnrBooking.user.phoneNumber},</p>
-            <p>Your ticket reservation is confirmed! Thank you for choosing faremakers.</p>
-            <table>
-              <tr>
-                <th>Event</th>
-                <td>[Event Name]</td>
-              </tr>
-              <tr>
-                <th>Date</th>
-                <td>[Date]</td>
-              </tr>
-              <tr>
-                <th>Time</th>
-                <td>[Time]</td>
-              </tr>
-            </table>
+            <h2>(Testing)Ticket Reservation Confirmation</h2>
+            <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
+            <p>PNR is generated. PNR number is ${pnrBooking.pnr}. Please check details in the following link. </p>
+            <br>Your registered information for this booking are following:
+            <br>Email:  ${pnrBooking.user.phoneNumber} 
+            <br>Contact Number:  ${pnrBooking.user.phoneNumber} 
+            <br>
             <p>Your registered information for this booking:</p>
             <ul>
               <li>Email: [Client's Email]</li>
@@ -1931,6 +1911,24 @@ export class PnrBookingsService {
                 </tr>
               </table>
             </div>
+            <div style='margin-top:20px;margin-bottom:20px;'><h3>Payment Details: </h3><table style='border-collapse: collapse;width:300px;'>" +
+                     "<tr>" +
+                     "<th style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
+                     "Method" +
+                     "</th>" +
+                     "<td style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
+                     "" + method +
+                     "</td>" +
+                     "</tr>" +
+                          "<tr>" +
+                     "<th style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
+                     "Total Amount" +
+                     "</th>" +
+                     "<td style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
+                     "" + amount +
+                     "</td>" +
+                     "</tr>" +
+                     "</table></div>
             <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>
             <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
             <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
@@ -1938,7 +1936,7 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = 'Hello Ticket Confirm';
+        const message = '(Testing) Hello Ticket Confirm';
 
         const messageTemp = `Hello ${
           pnrBooking.user.firstName && pnrBooking.user.firstName
@@ -1950,10 +1948,14 @@ export class PnrBookingsService {
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
           'hashamkhancust@gmail.com',
+          `${pnrBooking.user.email}`,
           // 'recipient2@example.com',
         ];
-        const bccAddresses = ['hashimalone1@gmail.com'];
-        const mailSubject = 'Ticket Confirmation';
+        const bccAddresses = [
+          // 'bilal.tariq@faremakers.com',
+          'arman@faremakers.com',
+        ];
+        const mailSubject = '(Testing) Ticket Confirmation';
         const htmlBody = `${message2}`;
         const resultEmail = await this.sendEmailConfirmation(
           toAddresses,
