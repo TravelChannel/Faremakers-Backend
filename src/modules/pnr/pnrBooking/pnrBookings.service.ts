@@ -508,7 +508,7 @@ export class PnrBookingsService {
       const user = await User.findByPk(currentUserId);
       if (user) {
         if (sendSmsBranch) {
-          const message = 'Hello Ticket Pay by branch (Testing)';
+          const message = `Hello Ticket Pay by branch (Testing). PNR generated: ${pnr}`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -520,7 +520,7 @@ export class PnrBookingsService {
           }
         }
         if (sendSmsCod) {
-          const message = 'Hello Ticket Pay by COD  (Testing)';
+          const message = `Hello Ticket Pay by COD  (Testing). PNR generated: ${pnr}`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -1116,7 +1116,8 @@ export class PnrBookingsService {
       </body>
       </html>
       `;
-      const message = '(Testing) Hello Ticket Confirm';
+      const message =
+        '(Testing) Hi!  ${pnrBooking.user.phoneNumber} PNR is generated. PNR number is ${pnrBooking.pnr}.';
       const resultSms = await this.sendSmsConfirmation(
         { phoneNumber: '3401523467', countryCode: 92 },
         message,
@@ -1886,11 +1887,11 @@ export class PnrBookingsService {
         </head>
         <body>
           <div class="container">
-            <h2>(Testing)Ticket Reservation Confirmation</h2>
+            <h2>(Testing)Ticket Reservation Confirmation, PNR: ${pnrBooking.pnr}</h2>
             <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
             <p>PNR is generated. PNR number is ${pnrBooking.pnr}. Please check details in the following link. </p>
             <br>Your registered information for this booking are following:
-            <br>Email:  ${pnrBooking.user.phoneNumber} 
+            <br>Email:  ${pnrBooking.user.email} 
             <br>Contact Number:  ${pnrBooking.user.phoneNumber} 
             <br>
             <p>Your registered information for this booking:</p>
@@ -1929,8 +1930,8 @@ export class PnrBookingsService {
                      "</td>" +
                      "</tr>" +
                      "</table></div>
-            <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>
-            <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
+                     <! --  <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>--> 
+                     <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
             <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
           </div>
         </body>
