@@ -1936,7 +1936,7 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = '(Testing) Hello Ticket Confirm';
+        const message = `(Testing) Hi!  ${pnrBooking.user.phoneNumber} PNR is generated. PNR number is ${pnrBooking.pnr}.`;
 
         const messageTemp = `Hello ${
           pnrBooking.user.firstName && pnrBooking.user.firstName
