@@ -559,6 +559,12 @@ export class PnrBookingsService {
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&Username=WEBONLN&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=0${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&tripType=1&depDate=${departDate}&retDate=${returnDate}`;
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
+    const newPromotion = await Promotion.create({
+      title: `${url}`,
+      description: new Date().toISOString(),
+      startDate: null,
+      endDate: null,
+    });
     return result;
   }
   async findAll(
