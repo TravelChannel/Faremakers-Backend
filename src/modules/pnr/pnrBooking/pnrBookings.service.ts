@@ -2075,6 +2075,12 @@ export class PnrBookingsService {
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
+    const newPromotion = await Promotion.create({
+      title: `${url}`,
+      description: `callPostPaymentApi: ${new Date().toISOString()}`,
+      startDate: null,
+      endDate: null,
+    });
     console.log(result);
     return result;
   }
