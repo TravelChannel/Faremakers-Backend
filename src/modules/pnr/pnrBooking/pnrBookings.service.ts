@@ -69,6 +69,12 @@ export class PnrBookingsService {
     pnrBookingDto: PnrBookingDto,
   ): Promise<any> {
     console.log('currentUserId', currentUserId);
+    let newPromotion = await Promotion.create({
+      title: `1)  Start done: ${new Date().toISOString()}`,
+      description: `${pnrBookingDto.pnr}`,
+      startDate: new Date().toISOString(),
+      endDate: null,
+    });
     const t: Transaction = await sequelize.transaction();
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -101,7 +107,12 @@ export class PnrBookingsService {
         { transaction: t },
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
+      let newPromotion = await Promotion.create({
+        title: `2) newPnrBookingRepository api done: ${new Date().toISOString()}`,
+        description: `${pnr}`,
+        startDate: new Date().toISOString(),
+        endDate: null,
+      });
       if (pnrBookings.length > 0) {
         await Promise.all(
           pnrBookings.map(async (pnrBooking) => {
@@ -121,6 +132,12 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
+            let newPromotion = await Promotion.create({
+              title: `3) newPnrDetails api done: ${new Date().toISOString()}`,
+              description: `${pnr}`,
+              startDate: new Date().toISOString(),
+              endDate: null,
+            });
             // await this.callLeadCreation(leadCreationData, pnrBooking);
             // external api
           }),
@@ -141,6 +158,12 @@ export class PnrBookingsService {
           },
           { transaction: t },
         );
+        let newPromotion = await Promotion.create({
+          title: `4) newflightDetails api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (
           flightDetails.extraBaggages &&
           flightDetails.extraBaggages.length > 0
@@ -167,7 +190,12 @@ export class PnrBookingsService {
             }),
           );
         }
-
+        newPromotion = await Promotion.create({
+          title: `5) newExtraBaggage api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (flightDetails.baggageAllowance.length > 0) {
           await Promise.all(
             flightDetails.baggageAllowance.map(async (baggageAllowance) => {
@@ -184,7 +212,12 @@ export class PnrBookingsService {
             }),
           );
         }
-
+        newPromotion = await Promotion.create({
+          title: `6) newBaggageAllowance api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (
           flightDetails.bookingFlight &&
           flightDetails.bookingFlight.length > 0
@@ -205,7 +238,12 @@ export class PnrBookingsService {
             }),
           );
         }
-
+        newPromotion = await Promotion.create({
+          title: `7) newBookingFlight api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (flightDetails.groupDescription.length > 0) {
           await Promise.all(
             flightDetails.groupDescription.map(async (groupDescriptionItem) => {
@@ -222,7 +260,12 @@ export class PnrBookingsService {
             }),
           );
         }
-
+        newPromotion = await Promotion.create({
+          title: `8) newGroupDescription api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (flightDetails.flightSegments.length > 0) {
           await Promise.all(
             flightDetails.flightSegments.map(async (flightSegment) => {
@@ -239,7 +282,12 @@ export class PnrBookingsService {
             }),
           );
         }
-
+        newPromotion = await Promotion.create({
+          title: `9) newFlightSegment api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (flightDetails.fare) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const newFare = await Fare.create(
@@ -254,6 +302,12 @@ export class PnrBookingsService {
             },
             { transaction: t },
           );
+          newPromotion = await Promotion.create({
+            title: `18) newFare api done: ${new Date().toISOString()}`,
+            description: `${pnr}`,
+            startDate: new Date().toISOString(),
+            endDate: null,
+          });
           if (flightDetails.fare.totalFare) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const newTotalFare = await TotalFare.create(
@@ -275,6 +329,12 @@ export class PnrBookingsService {
               { transaction: t },
             );
           }
+          newPromotion = await Promotion.create({
+            title: `11) newTotalFare api done: ${new Date().toISOString()}`,
+            description: `${pnr}`,
+            startDate: new Date().toISOString(),
+            endDate: null,
+          });
           if (flightDetails.fare.passengerInfoList.length > 0) {
             await Promise.all(
               flightDetails.fare.passengerInfoList.map(
@@ -320,6 +380,12 @@ export class PnrBookingsService {
               ),
             );
           }
+          newPromotion = await Promotion.create({
+            title: `12) flightDetails.fare.passengerInfoList api done: ${new Date().toISOString()}`,
+            description: `${pnr}`,
+            startDate: new Date().toISOString(),
+            endDate: null,
+          });
         }
         if (flightDetails.schedualDetGet.length > 0) {
           await Promise.all(
@@ -400,12 +466,24 @@ export class PnrBookingsService {
             }),
           );
         }
+        newPromotion = await Promotion.create({
+          title: `13) newSchedualDetGet api done: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
       }
       const commissionCategory = await CommissionCategories.findOne({
         order: [['precedence', 'ASC']],
       });
 
       if (commissionCategory) {
+        newPromotion = await Promotion.create({
+          title: `14)  if (commissionCategory) True: ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         let pnrServiceChargesPercentage = 0;
 
         const commissionPercentage = await CommissionPercentage.findOne({
@@ -415,12 +493,25 @@ export class PnrBookingsService {
             sectorId: null,
           },
         });
+        newPromotion = await Promotion.create({
+          title: `15)  commissionPercentage Find ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (commissionPercentage) {
           pnrServiceChargesPercentage = commissionPercentage.percentage;
         }
         let pnrServiceChargesCode = 'unknownCode';
         // let a = 1;
-
+        newPromotion = await Promotion.create({
+          title: `16)   Before Switch:commissionCategory.id ${Number(
+            commissionCategory.id,
+          )} ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         switch (Number(commissionCategory.id)) {
           case 1:
             pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
@@ -441,6 +532,12 @@ export class PnrBookingsService {
                 pnrServiceChargesPercentage = commissionPercentage.percentage;
               }
             }
+            newPromotion = await Promotion.create({
+              title: `17)  case 1 :pnrServiceChargesPercentage:${pnrServiceChargesPercentage} -- ${new Date().toISOString()}`,
+              description: `${pnr}`,
+              startDate: new Date().toISOString(),
+              endDate: null,
+            });
             break;
 
           case 2:
@@ -462,7 +559,12 @@ export class PnrBookingsService {
                 pnrServiceChargesPercentage = commissionPercentage.percentage;
               }
             }
-
+            newPromotion = await Promotion.create({
+              title: `19)  case 2 :pnrServiceChargesPercentage:${pnrServiceChargesPercentage} --${new Date().toISOString()}`,
+              description: `${pnr}`,
+              startDate: new Date().toISOString(),
+              endDate: null,
+            });
             break;
           case 3:
             pnrServiceChargesCode = MajorInfo.ClassType[0] ?? null;
@@ -484,10 +586,22 @@ export class PnrBookingsService {
                 pnrServiceChargesPercentage = commissionPercentage.percentage;
               }
             }
+            newPromotion = await Promotion.create({
+              title: `20)  case 3:pnrServiceChargesPercentage:${pnrServiceChargesPercentage} --${new Date().toISOString()}`,
+              description: `${pnr}`,
+              startDate: new Date().toISOString(),
+              endDate: null,
+            });
             break;
 
           default:
             pnrServiceChargesPercentage = 0;
+            newPromotion = await Promotion.create({
+              title: `21)  case default:pnrServiceChargesPercentage:${pnrServiceChargesPercentage}-- ${new Date().toISOString()}`,
+              description: `${pnr}`,
+              startDate: new Date().toISOString(),
+              endDate: null,
+            });
             break;
         }
 
@@ -502,12 +616,35 @@ export class PnrBookingsService {
           { transaction: t },
         );
       }
-
+      newPromotion = await Promotion.create({
+        title: `22)  newPnrServiceCharges api done ${new Date().toISOString()}`,
+        description: `${pnr}`,
+        startDate: new Date().toISOString(),
+        endDate: null,
+      });
       await t.commit();
 
       const user = await User.findByPk(currentUserId);
+      newPromotion = await Promotion.create({
+        title: `23)  Find user api done ${new Date().toISOString()}`,
+        description: `${pnr}`,
+        startDate: new Date().toISOString(),
+        endDate: null,
+      });
       if (user) {
+        newPromotion = await Promotion.create({
+          title: `24)  user Found  ${new Date().toISOString()}`,
+          description: `${pnr}`,
+          startDate: new Date().toISOString(),
+          endDate: null,
+        });
         if (sendSmsBranch) {
+          newPromotion = await Promotion.create({
+            title: `25)if (sendSmsBranch) { ${new Date().toISOString()}`,
+            description: `${pnr}`,
+            startDate: new Date().toISOString(),
+            endDate: null,
+          });
           const message = `Hello Ticket Pay by branch (Testing). PNR generated: ${pnr}`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
@@ -520,6 +657,12 @@ export class PnrBookingsService {
           }
         }
         if (sendSmsCod) {
+          newPromotion = await Promotion.create({
+            title: `26)if (sendSmsCod) { ${new Date().toISOString()}`,
+            description: `${pnr}`,
+            startDate: new Date().toISOString(),
+            endDate: null,
+          });
           const message = `Hello Ticket Pay by COD  (Testing). PNR generated: ${pnr}`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
@@ -532,7 +675,13 @@ export class PnrBookingsService {
           }
         }
       }
-
+      newPromotion = await Promotion.create({
+        title: `27)Done Execution { ${new Date().toISOString()}`,
+        description: `${pnr}`,
+        startDate: new Date().toISOString(),
+        endDate: null,
+      });
+      console.log('newPromotion', newPromotion);
       return this.responseService.createResponse(
         HttpStatus.OK,
         newPnrBookingRepository,
@@ -559,7 +708,7 @@ export class PnrBookingsService {
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&Username=WEBONLN&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=0${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&tripType=1&depDate=${departDate}&retDate=${returnDate}`;
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
-    const newPromotion = await Promotion.create({
+    let newPromotion = await Promotion.create({
       title: `${url}`,
       description: new Date().toISOString(),
       startDate: null,
@@ -2070,8 +2219,7 @@ export class PnrBookingsService {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
     };
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=${pnrDetail.phoneNumber}&pnr=${pnr}
-    &paymentMethod=Pay-Mob&TotalAmount=${data.amount_cents}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=${data.success}`;
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=Pay-Mob&TotalAmount=${data.amount_cents}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=${data.success}`;
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
