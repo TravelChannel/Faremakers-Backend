@@ -27,4 +27,6 @@ export class PnrBookingDto {
   branchLabel: any;
   @IsOptional()
   userLocation: any;
+  @IsOptional()
+  Amount: any;
 }

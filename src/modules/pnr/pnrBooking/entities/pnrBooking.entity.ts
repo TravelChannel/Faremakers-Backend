@@ -105,6 +105,37 @@ export class PnrBooking extends Model {
   userLocation: string;
 
   @Column({
+    type: DataType.DOUBLE,
+    defaultValue: 0,
+    allowNull: false,
+  })
+  BaseFare: boolean;
+  @Column({
+    type: DataType.DOUBLE,
+    defaultValue: 0,
+    allowNull: false,
+  })
+  ServiceCharges: boolean;
+  @Column({
+    type: DataType.DOUBLE,
+    defaultValue: 0,
+    allowNull: false,
+  })
+  pnrPaymentAmount: boolean;
+  @Column({
+    type: DataType.DOUBLE,
+    defaultValue: 0,
+    allowNull: false,
+  })
+  taxAmount: boolean;
+  @Column({
+    type: DataType.DOUBLE,
+    defaultValue: 0,
+    allowNull: false,
+  })
+  totalTicketPrice: boolean;
+
+  @Column({
     type: DataType.STRING,
     allowNull: false,
     unique: {

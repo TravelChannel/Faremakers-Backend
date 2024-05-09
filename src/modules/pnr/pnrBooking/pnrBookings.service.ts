@@ -85,7 +85,7 @@ export class PnrBookingsService {
         OrderId,
         // phoneNumber,
         // countryCode,
-
+        Amount,
         flightDetails,
         MajorInfo,
         // leadCreationData,
@@ -103,7 +103,11 @@ export class PnrBookingsService {
           sendSmsBranch: sendSmsBranch || false,
           sendSmsCod: sendSmsCod || false,
           branchLabel: branchLabel || '',
-          userLocation: userLocation || '',
+          BaseFare: Amount.BaseFare || 0,
+          ServiceCharges: Amount.ServiceCharges || 0,
+          pnrPayment2: Amount.pnrPayment || 0,
+          taxAmount: Amount.taxAmount || 0,
+          totalTicketPrice: Amount.totalTicketPrice || 0,
         },
         { transaction: t },
       );
