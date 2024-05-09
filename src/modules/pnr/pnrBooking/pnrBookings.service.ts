@@ -645,7 +645,10 @@ export class PnrBookingsService {
             startDate: new Date().toISOString(),
             endDate: null,
           });
-          const message = `Hello Ticket Pay by branch (Testing). PNR generated: ${pnr}`;
+          const message = `Hello Ticket Pay by branch (Testing). {!sendSmsCod && !sendSmsBranch && 'PNR generated: ${pnr}'}
+          
+          
+          `;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -663,7 +666,7 @@ export class PnrBookingsService {
             startDate: new Date().toISOString(),
             endDate: null,
           });
-          const message = `Hello Ticket Pay by COD  (Testing). PNR generated: ${pnr}`;
+          const message = `Hello Ticket Pay by COD  (Testing). {!sendSmsCod && !sendSmsBranch && 'PNR generated: ${pnr}`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -2042,16 +2045,20 @@ export class PnrBookingsService {
         </head>
         <body>
           <div class="container">
-            <h2>(Testing)Ticket Reservation Confirmation, PNR: ${pnrBooking.pnr}</h2>
+            <h2>(Testing)Ticket Reservation Confirmation,  ${
+              !pnrBooking.sendSmsCod &&
+              !pnrBooking.sendSmsBranch &&
+              `PNR: ${pnrBooking.pnr}`
+            }</h2>
             <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
-            <p>PNR is generated. PNR number is ${pnrBooking.pnr}. Please check details in the following link. </p>
+            <p>PNR is generated. Please check details in the following link. </p>
             <br>Your registered information for this booking are following:
             <br>Email:  ${pnrBooking.user.email} 
             <br>Contact Number:  ${pnrBooking.user.phoneNumber} 
             <br>
             <p>Your registered information for this booking:</p>
             <ul>
-              <li>Email: [Client's Email]</li>
+              <li>Email: ${pnrBooking.user?.email}</li>
               <li>Contact Number: ${pnrBooking.user.phoneNumber}</li>
             </ul>
             <div>
@@ -2059,7 +2066,23 @@ export class PnrBookingsService {
               <table>
                 <tr>
                   <th>Method</th>
-                  <td>[Payment Method]</td>
+                  <td>
+                  ${
+                    !pnrBooking.sendSmsCod &&
+                    !pnrBooking.sendSmsBranch &&
+                    'Card Payment'
+                  }
+                    ${
+                      pnrBooking.sendSmsCod &&
+                      !pnrBooking.sendSmsBranch &&
+                      'Cash On Delivery'
+                    }
+                    ${
+                      !pnrBooking.sendSmsCod &&
+                      pnrBooking.sendSmsBranch &&
+                      'Pay at Branch'
+                    }
+                    </td>
                 </tr>
                 <tr>
                   <th>Total Amount</th>
@@ -2067,32 +2090,18 @@ export class PnrBookingsService {
                 </tr>
               </table>
             </div>
-            <div style='margin-top:20px;margin-bottom:20px;'><h3>Payment Details: </h3><table style='border-collapse: collapse;width:300px;'>" +
-                     "<tr>" +
-                     "<th style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
-                     "Method" +
-                     "</th>" +
-                     "<td style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
-                     "" + method +
-                     "</td>" +
-                     "</tr>" +
-                          "<tr>" +
-                     "<th style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
-                     "Total Amount" +
-                     "</th>" +
-                     "<td style='text-align:left !important;border: 1px solid #ddd;padding: 8px;'>" +
-                     "" + amount +
-                     "</td>" +
-                     "</tr>" +
-                     "</table></div>
-                     <! --  <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>--> 
-                     <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
-            <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
+                    <p>Best regards,<br>[Your Name]<br>faremakers</p>
           </div>
         </body>
         </html>
         `;
-        const message = `(Testing) Hi!  ${pnrBooking.user.phoneNumber} PNR is generated. PNR number is ${pnrBooking.pnr}.`;
+        const message = `(Testing) Hi!  ${
+          pnrBooking.user.phoneNumber
+        } PNR is generated. ${
+          !pnrBooking.sendSmsCod &&
+          !pnrBooking.sendSmsBranch &&
+          'PNR generated: ${pnr}'
+        } `;
 
         const messageTemp = `Hello ${
           pnrBooking.user.firstName && pnrBooking.user.firstName
