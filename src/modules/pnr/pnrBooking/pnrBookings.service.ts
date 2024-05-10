@@ -680,10 +680,9 @@ export class PnrBookingsService {
             startDate: new Date().toISOString(),
             endDate: null,
           });
-          const message = `Hello Ticket Pay by branch (Testing). {!sendSmsCod && !sendSmsBranch && 'PNR generated: ${pnr}'}
-          
-          
-          `;
+          const message = `Hello Ticket Pay by branch (Testing).${
+            !sendSmsCod && !sendSmsBranch ? 'PNR generated: ${pnr}' : ''
+          }`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -702,7 +701,9 @@ export class PnrBookingsService {
             startDate: new Date().toISOString(),
             endDate: null,
           });
-          const message = `Hello Ticket Pay by COD  (Testing). {!sendSmsCod && !sendSmsBranch && 'PNR generated: ${pnr}`;
+          const message = `Hello Ticket Pay by COD (Testing).${
+            !sendSmsCod && !sendSmsBranch ? 'PNR generated: ${pnr}' : ''
+          }`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -2091,9 +2092,9 @@ export class PnrBookingsService {
         <body>
           <div class="container">
             <h2>(Testing)Ticket Reservation Confirmation,  ${
-              !pnrBooking.sendSmsCod &&
-              !pnrBooking.sendSmsBranch &&
-              `PNR: ${pnrBooking.pnr}`
+              !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                ? `PNR: ${pnrBooking.pnr}`
+                : ''
             }</h2>
             <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
             <p>PNR is generated. Please check details in the following link. </p>
@@ -2113,19 +2114,19 @@ export class PnrBookingsService {
                   <th>Method</th>
                   <td>
                   ${
-                    !pnrBooking.sendSmsCod &&
-                    !pnrBooking.sendSmsBranch &&
-                    'Card Payment'
+                    !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                      ? 'Card Payment'
+                      : ''
                   }
                     ${
-                      pnrBooking.sendSmsCod &&
-                      !pnrBooking.sendSmsBranch &&
-                      'Cash On Delivery'
+                      pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                        ? 'Cash On Delivery'
+                        : ''
                     }
                     ${
-                      !pnrBooking.sendSmsCod &&
-                      pnrBooking.sendSmsBranch &&
-                      'Pay at Branch'
+                      !pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
+                        ? 'Pay at Branch'
+                        : ''
                     }
                     </td>
                 </tr>
@@ -2143,10 +2144,10 @@ export class PnrBookingsService {
         const message = `(Testing) Hi!  ${
           pnrBooking.user.phoneNumber
         } PNR is generated. ${
-          !pnrBooking.sendSmsCod &&
-          !pnrBooking.sendSmsBranch &&
-          'PNR generated: ${pnr}'
-        } `;
+          !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+            ? 'PNR generated: ${pnr}'
+            : ''
+        }`;
 
         const messageTemp = `Hello ${
           pnrBooking.user.firstName && pnrBooking.user.firstName
