@@ -2131,7 +2131,7 @@ export class PnrBookingsService {
                 </tr>
                 <tr>
                   <th>Total Amount</th>
-                  <td>[Total Amount]</td>
+                  <td>${pnrBooking.totalTicketPrice}</td>
                 </tr>
               </table>
             </div>
