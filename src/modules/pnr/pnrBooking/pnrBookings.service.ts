@@ -85,7 +85,7 @@ export class PnrBookingsService {
         OrderId,
         // phoneNumber,
         // countryCode,
-        Amount,
+        // Amount,
         flightDetails,
         MajorInfo,
         // leadCreationData,
@@ -94,16 +94,16 @@ export class PnrBookingsService {
         branchLabel,
         userLocation,
       } = pnrBookingDto;
-      const tolerance = 0.001; // Define your tolerance threshold here
-      const baseFare =
-        typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
-      const taxAmount =
-        typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
-      const pnrPayment =
-        typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
+      // const tolerance = 0.001; // Define your tolerance threshold here
+      // const baseFare =
+      //   typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
+      // const taxAmount =
+      //   typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
+      // const pnrPayment =
+      //   typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
 
-      const isAmountEqual =
-        Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
+      // const isAmountEqual =
+      //   Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           userId: currentUserId,
@@ -112,11 +112,11 @@ export class PnrBookingsService {
           sendSmsBranch: sendSmsBranch || false,
           sendSmsCod: sendSmsCod || false,
           branchLabel: branchLabel || '',
-          BaseFare: Amount.BaseFare || 0,
-          ServiceCharges: Amount.ServiceCharges || 0,
-          pnrPaymentAmount: Amount.pnrPayment || 0,
-          taxAmount: Amount.taxAmount || 0,
-          totalTicketPrice: Amount.totalTicketPrice || 0,
+          // BaseFare: Amount.BaseFare || 0,
+          // ServiceCharges: Amount.ServiceCharges || 0,
+          // pnrPaymentAmount: Amount.pnrPayment || 0,
+          // taxAmount: Amount.taxAmount || 0,
+          // totalTicketPrice: Amount.totalTicketPrice || 0,
         },
         { transaction: t },
       );
@@ -728,8 +728,8 @@ export class PnrBookingsService {
       console.log('newPromotion', newPromotion);
       return this.responseService.createResponse(
         HttpStatus.OK,
-        // {},
-        { isAmountEqual, newPnrBookingRepository },
+        {},
+        // { isAmountEqual, newPnrBookingRepository },
         SAVED_SUCCESS,
       );
     } catch (error) {
