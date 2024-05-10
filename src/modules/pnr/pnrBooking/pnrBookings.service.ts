@@ -94,7 +94,13 @@ export class PnrBookingsService {
         branchLabel,
         userLocation,
       } = pnrBookingDto;
+      const tolerance = 0.001; // Define your tolerance threshold here
+      const baseFare = parseFloat(Amount.BaseFare);
+      const taxAmount = parseFloat(Amount.taxAmount);
+      const pnrPayment = parseFloat(Amount.pnrPayment);
 
+      const isAmountEqual =
+        Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           userId: currentUserId,
@@ -105,7 +111,7 @@ export class PnrBookingsService {
           branchLabel: branchLabel || '',
           BaseFare: Amount.BaseFare || 0,
           ServiceCharges: Amount.ServiceCharges || 0,
-          pnrPayment2: Amount.pnrPayment || 0,
+          pnrPaymentAmount: Amount.pnrPayment || 0,
           taxAmount: Amount.taxAmount || 0,
           totalTicketPrice: Amount.totalTicketPrice || 0,
         },
@@ -718,7 +724,7 @@ export class PnrBookingsService {
       console.log('newPromotion', newPromotion);
       return this.responseService.createResponse(
         HttpStatus.OK,
-        newPnrBookingRepository,
+        { isAmountEqual, newPnrBookingRepository },
         SAVED_SUCCESS,
       );
     } catch (error) {
@@ -734,7 +740,7 @@ export class PnrBookingsService {
       });
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
+        { isAmountEqual: false },
         error,
       );
     }
