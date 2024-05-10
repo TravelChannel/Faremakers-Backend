@@ -95,9 +95,12 @@ export class PnrBookingsService {
         userLocation,
       } = pnrBookingDto;
       const tolerance = 0.001; // Define your tolerance threshold here
-      const baseFare = parseFloat(Amount.BaseFare || 0);
-      const taxAmount = parseFloat(Amount.taxAmount || 0);
-      const pnrPayment = parseFloat(Amount.pnrPayment || 0);
+      const baseFare =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
+      const taxAmount =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
+      const pnrPayment =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
 
       const isAmountEqual =
         Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
