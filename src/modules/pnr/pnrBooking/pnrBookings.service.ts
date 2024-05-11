@@ -85,7 +85,7 @@ export class PnrBookingsService {
         OrderId,
         // phoneNumber,
         // countryCode,
-        // Amount,
+        Amount,
         flightDetails,
         MajorInfo,
         // leadCreationData,
@@ -94,16 +94,16 @@ export class PnrBookingsService {
         branchLabel,
         userLocation,
       } = pnrBookingDto;
-      // const tolerance = 0.001; // Define your tolerance threshold here
-      // const baseFare =
-      //   typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
-      // const taxAmount =
-      //   typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
-      // const pnrPayment =
-      //   typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
+      const tolerance = 0.001; // Define your tolerance threshold here
+      const baseFare =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
+      const taxAmount =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
+      const pnrPayment =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
 
-      // const isAmountEqual =
-      //   Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
+      const isAmountEqual =
+        Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
       const newPnrBookingRepository = await this.pnrBookingRepository.create(
         {
           userId: currentUserId,
@@ -112,11 +112,11 @@ export class PnrBookingsService {
           sendSmsBranch: sendSmsBranch || false,
           sendSmsCod: sendSmsCod || false,
           branchLabel: branchLabel || '',
-          // BaseFare: Amount.BaseFare || 0,
-          // ServiceCharges: Amount.ServiceCharges || 0,
-          // pnrPaymentAmount: Amount.pnrPayment || 0,
-          // taxAmount: Amount.taxAmount || 0,
-          // totalTicketPrice: Amount.totalTicketPrice || 0,
+          BaseFare: Amount.BaseFare || 0,
+          ServiceCharges: Amount.ServiceCharges || 0,
+          pnrPaymentAmount: Amount.pnrPayment || 0,
+          taxAmount: Amount.taxAmount || 0,
+          totalTicketPrice: Amount.totalTicketPrice || 0,
         },
         { transaction: t },
       );
@@ -728,8 +728,8 @@ export class PnrBookingsService {
       console.log('newPromotion', newPromotion);
       return this.responseService.createResponse(
         HttpStatus.OK,
-        {},
-        // { isAmountEqual, newPnrBookingRepository },
+        // {},
+        { isAmountEqual, newPnrBookingRepository },
         SAVED_SUCCESS,
       );
     } catch (error) {
@@ -1245,126 +1245,7 @@ export class PnrBookingsService {
       );
     }
   }
-  async testConfirm(): Promise<any> {
-    try {
-      const message2 = `<!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>(Testing)Ticket Reservation Confirmation</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-          }
-          .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-          }
-          h1, h2, h3 {
-            color: #333;
-          }
-          p {
-            margin-bottom: 10px;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-          }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-          }
-          th {
-            background-color: #f2f2f2;
-          }
-          .link {
-            display: inline-block;
-            margin-top: 20px;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-        <h2>(Testing)Ticket Reservation Confirmation</h2>
-          <p>Hello [Client's Name],</p>
-          <p>Your ticket reservation is confirmed! Thank you for choosing [Your Company Name].</p>
-        
-          <p>Your registered information for this booking:</p>
-          <ul>
-            <li>Email: [Client's Email]</li>
-            <li>Contact Number: [Client's Phone Number]</li>
-          </ul>
-          <div>
-            <h3>Payment Details:</h3>
-            <table>
-              <tr>
-                <th>Method</th>
-                <td>[Payment Method]</td>
-              </tr>
-              <tr>
-                <th>Total Amount</th>
-                <td>[Total Amount]</td>
-              </tr>
-            </table>
-          </div>
-          <! --  <a href="[Link to Payment Confirmation]" class="link">Complete Payment</a>--> 
-          <p>If you have any questions or need assistance, feel free to reach out. We look forward to hosting you!</p>
-          <p>Best regards,<br>[Your Name]<br>[Your Company Name]</p>
-        </div>
-      </body>
-      </html>
-      `;
-      const message =
-        '(Testing) Hi!  ${pnrBooking.user.phoneNumber} PNR is generated. PNR number is ${pnrBooking.pnr}.';
-      const resultSms = await this.sendSmsConfirmation(
-        { phoneNumber: '3401523467', countryCode: 92 },
-        message,
-      );
-      if (resultSms) {
-        console.log('SMS sent successfully');
-      } else {
-        console.error('Failed to send SMS');
-      }
-      const toAddresses = [
-        'hashamkhancust@gmail.com',
-        // 'recipient2@example.com',
-      ];
-      const bccAddresses = [
-        // 'bilal.tariq@faremakers.com',
-        'arman@faremakers.com',
-      ];
-      const mailSubject = '(Testing) Ticket Confirmation';
-      const htmlBody = `${message2}`;
-      const resultEmail = await this.sendEmailConfirmation(
-        toAddresses,
-        bccAddresses,
-        mailSubject,
-        htmlBody,
-      );
-      if (resultEmail) {
-        console.log('Email sent successfully', resultEmail);
-      } else {
-        console.error('Failed to send email');
-      }
-    } catch (error) {
-      console.log(error);
-      return this.responseService.createResponse(
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
-        error.message,
-      );
-    }
-  }
+
   async findByPnr(req): Promise<any> {
     try {
       const whereOptions: any = {};
@@ -2136,7 +2017,7 @@ export class PnrBookingsService {
                 </tr>
                 <tr>
                   <th>Total Amount</th>
-                  <td>{pnrBooking.totalTicketPrice}</td>
+                  <td>${pnrBooking.totalTicketPrice}</td>
                 </tr>
               </table>
             </div>
