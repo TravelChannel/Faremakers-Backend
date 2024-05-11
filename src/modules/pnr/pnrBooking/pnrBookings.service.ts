@@ -1907,8 +1907,8 @@ export class PnrBookingsService {
 
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-        const type = await this.findAirlineType(pnrBooking.id);
-        // const type = 0;
+        // const type = await this.findAirlineType(pnrBooking.id);
+        const type = 0;
         // console.log('type', type);
         let result;
         console.log('5');
@@ -1916,7 +1916,7 @@ export class PnrBookingsService {
 
         // AirSial
         if (type == 0) {
-          console.log('6');
+          console.log('66');
 
           result = await this.callAirSialConfirmation(pnrBooking.pnr);
           // Sabre
@@ -2293,7 +2293,7 @@ export class PnrBookingsService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async callSabreConfirmation(pnr, passengers: any): Promise<any> {
     const token = await this.getAuthTokenSabre();
-
+    console.log('token', token);
     const snosArray = passengers.map(
       (item, index) => `{ "Number": ${index + 1} }`,
     );
