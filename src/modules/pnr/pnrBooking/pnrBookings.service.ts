@@ -1855,7 +1855,7 @@ export class PnrBookingsService {
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const newPromotion = await Promotion.create({
-      title: `processPayment Updated ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
+      title: `--processPayment Updated ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
       description: new Date().toISOString(),
       startDate: null,
       endDate: null,
@@ -1878,11 +1878,12 @@ export class PnrBookingsService {
 
     // const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
     // const errorRedirectUrl = `https://faremakersnode.azurewebsites.net/bookingpayment`;
-
+    console.log('2');
     const t: Transaction = await sequelize.transaction();
-
+    let log = '';
     try {
-      console.log('callbackData *********** ', pnrBooking.id, callbackData);
+      console.log('callbackData ***********--', pnrBooking.id, callbackData);
+      console.log('3');
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const newPnrPayment = await PnrPayment.create(
@@ -1899,27 +1900,42 @@ export class PnrBookingsService {
         },
         { transaction: t },
       );
+      console.log('4');
 
       if (callbackData.success == true) {
+        console.log('44');
+
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-        const type = await this.findAirlineType(pnrBooking.id);
+        // const type = await this.findAirlineType(pnrBooking.id);
+        const type = 0;
+        console.log('type', type);
         let result;
+        console.log('5');
+
         // AirSial
         if (type == 0) {
+          console.log('6');
+
           result = this.callAirSialConfirmation(pnrBooking.pnr);
           // Sabre
         } else {
+          console.log('7');
+
           // Check Admin flag for Sabre COnfirmation Api
           const generalTask = await GeneralTask.findByPk(1, {});
 
           if (generalTask.flag) {
+            console.log('8');
+
             result = this.callSabreConfirmation(
               pnrBooking.pnr,
               pnrBooking.pnrDetail,
             );
           }
         }
+        console.log('9');
+
         console.log('result', result);
         // external api
 
@@ -1928,6 +1944,8 @@ export class PnrBookingsService {
           pnrBooking.pnrDetail[0],
           callbackData,
         );
+        console.log('10');
+
         const message2 = `<!DOCTYPE html>
         <html lang="en">
         <head>
@@ -2034,23 +2052,17 @@ export class PnrBookingsService {
             : ''
         }`;
 
-        const messageTemp = `Hello ${
-          pnrBooking.user.firstName && pnrBooking.user.firstName
-        } ${pnrBooking.user.lastName && pnrBooking.user.lastName} ${
-          !pnrBooking.user.firstName &&
-          !pnrBooking.user.lastName &&
-          pnrBooking.user.countryCode + pnrBooking.user.phoneNumber
-        }, Your ticket reservation is confirmed!\nFaremakers`;
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
           'hashamkhancust@gmail.com',
-          `${pnrBooking.user.email}`,
+          `${pnrBooking.user?.email || ''}`,
           // 'recipient2@example.com',
         ];
         const bccAddresses = [
           // 'bilal.tariq@faremakers.com',
           'arman@faremakers.com',
         ];
+        log = message2;
         const mailSubject = '(Testing) Ticket Confirmation';
         const htmlBody = `${message2}`;
         const resultEmail = await this.sendEmailConfirmation(
@@ -2080,14 +2092,14 @@ export class PnrBookingsService {
       await t.rollback();
 
       // return res.redirect(errorRedirectUrl);
-      return 0;
+
       // return res.redirect(errorRedirectUrl);
 
       console.log('error:', error);
 
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
+        log,
         error,
       );
     }
@@ -2132,6 +2144,8 @@ export class PnrBookingsService {
         },
       ],
     }).then((rawData) => {
+      console.log('444');
+
       // console.log(rawData);
       const plainObject = rawData.toJSON();
       const arr = plainObject.flightDetails.schedualDetGet;
@@ -2141,6 +2155,7 @@ export class PnrBookingsService {
           data2.innerSchedualDetGet,
         );
       });
+      console.log('4444');
 
       return plainObject;
     });
