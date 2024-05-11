@@ -120,6 +120,13 @@ export class PnrBookingsService {
         },
         { transaction: t },
       );
+
+      const userUpdateEmail = await User.findByPk(currentUserId);
+      if (userUpdateEmail) {
+        userUpdateEmail.email =
+          pnrBookings[0].userEmail || userUpdateEmail.email;
+        await userUpdateEmail.save({ transaction: t });
+      }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       MessageLog = `2) newPnrBookingRepository api done: ${new Date().toISOString()}`;
       let newPromotion = await Promotion.create({
@@ -2054,6 +2061,7 @@ export class PnrBookingsService {
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
           'hashamkhancust@gmail.com',
+
           `${pnrBooking.user?.email || ''}`,
           // 'recipient2@example.com',
         ];

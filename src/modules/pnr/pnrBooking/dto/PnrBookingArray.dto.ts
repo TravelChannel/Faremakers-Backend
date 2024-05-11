@@ -29,6 +29,8 @@ export class PnrBookingArrayDto {
   cnic: string;
   @IsOptional()
   passportNo?: string;
+  @IsOptional()
+  userEmail?: string;
 
   @IsNotEmpty({ message: 'PNR is required.' })
   ispnr: string;
