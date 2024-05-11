@@ -770,7 +770,8 @@ export class PnrBookingsService {
     const result = response.data;
     let newPromotion = await Promotion.create({
       title: `${url}`,
-      description: new Date().toISOString(),
+      description: `callLeadCreation: ${new Date().toISOString()}`,
+
       startDate: null,
       endDate: null,
     });
