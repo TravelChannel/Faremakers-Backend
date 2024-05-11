@@ -1907,17 +1907,18 @@ export class PnrBookingsService {
 
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-        // const type = await this.findAirlineType(pnrBooking.id);
-        const type = 0;
-        console.log('type', type);
+        const type = await this.findAirlineType(pnrBooking.id);
+        // const type = 0;
+        // console.log('type', type);
         let result;
         console.log('5');
+        console.log('type', type);
 
         // AirSial
         if (type == 0) {
           console.log('6');
 
-          result = this.callAirSialConfirmation(pnrBooking.pnr);
+          result = await this.callAirSialConfirmation(pnrBooking.pnr);
           // Sabre
         } else {
           console.log('7');
@@ -1928,7 +1929,7 @@ export class PnrBookingsService {
           if (generalTask.flag) {
             console.log('8');
 
-            result = this.callSabreConfirmation(
+            result = await this.callSabreConfirmation(
               pnrBooking.pnr,
               pnrBooking.pnrDetail,
             );
@@ -2044,13 +2045,11 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = `(Testing) Hi!  ${
-          pnrBooking.user.phoneNumber
-        } PNR is generated. ${
+        const message = `(Testing) Hi!  ${pnrBooking.user.phoneNumber}${
           !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-            ? `PNR generated: ${pnrBooking.pnr}`
+            ? `\nPNR generated: ${pnrBooking.pnr}`
             : ''
-        }`;
+        }\nTotal Amount: ${pnrBooking.totalTicketPrice}`;
 
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
@@ -2059,7 +2058,7 @@ export class PnrBookingsService {
           // 'recipient2@example.com',
         ];
         const bccAddresses = [
-          // 'bilal.tariq@faremakers.com',
+          'bilal.tariq@faremakers.com',
           'arman@faremakers.com',
         ];
         log = message2;
@@ -2087,15 +2086,13 @@ export class PnrBookingsService {
       // res.redirect(viewETicketUrl);
       // return { viewETicketUrl };
     } catch (error) {
-      console.log('error:', error);
+      console.log('error222:', error);
 
       await t.rollback();
 
       // return res.redirect(errorRedirectUrl);
 
       // return res.redirect(errorRedirectUrl);
-
-      console.log('error:', error);
 
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -2356,7 +2353,7 @@ export class PnrBookingsService {
         }
       }
     }
-    console.log('response', response);
+    // console.log('response', response);
     return true;
   }
 }
