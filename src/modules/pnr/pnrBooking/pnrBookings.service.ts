@@ -1876,6 +1876,14 @@ export class PnrBookingsService {
 
       include: [
         {
+          model: PnrDetail,
+          as: 'pnrDetail',
+        },
+        {
+          model: User,
+        },
+
+        {
           model: FlightDetails,
           include: [
             {
@@ -1892,7 +1900,6 @@ export class PnrBookingsService {
     const t: Transaction = await sequelize.transaction();
     let log = '';
     try {
-      console.log('callbackData ***********--', pnrBooking.id, callbackData);
       console.log('3');
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -1917,8 +1924,8 @@ export class PnrBookingsService {
 
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-        const type = await this.findAirlineType(pnrBooking.id);
-        // const type = 0;
+        // const type = await this.findAirlineType(pnrBooking.id);
+        const type = 0;
         // console.log('type', type);
         let result;
         console.log('5');
@@ -1943,15 +1950,18 @@ export class PnrBookingsService {
         }
 
         console.log('result', result);
-        console.log('type**************', type);
+        console.log(
+          'type**************',
+          pnrBooking.flightDetails.groupDescription[0],
+        );
 
         // external api
 
-        // await this.callPostPaymentApi(
-        //   pnrBooking.pnr,
-        //   pnrBooking.pnrDetail[0],
-        //   callbackData,
-        // );
+        await this.callPostPaymentApi(
+          pnrBooking.pnr,
+          pnrBooking.pnrDetail[0],
+          callbackData,
+        );
 
         const message2 = `<!DOCTYPE html>
         <html lang="en">
