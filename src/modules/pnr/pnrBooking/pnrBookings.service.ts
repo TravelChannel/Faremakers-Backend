@@ -1968,7 +1968,7 @@ export class PnrBookingsService {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>(Testing)Ticket Reservation Confirmation</title>
+          <title>Booking Confirmation - Faremakers</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -2011,7 +2011,7 @@ export class PnrBookingsService {
         </head>
         <body>
           <div class="container">
-            <h2>(Testing)Ticket Reservation Confirmation,  ${
+            <h2>Ticket Reservation Confirmation,  ${
               !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
                 ? `PNR: ${pnrBooking.pnr}`
                 : ''
@@ -2056,7 +2056,7 @@ export class PnrBookingsService {
                 </tr>
               </table>
             </div>
-                    <p>Best regards,<br>[Your Name]<br>faremakers</p>
+                    <p>Best regards,<br>faremakers</p>
           </div>
         </body>
         </html>
@@ -2065,7 +2065,7 @@ export class PnrBookingsService {
           .groupDescription[0]?.departureLocation}-${pnrBooking.flightDetails
           .groupDescription[0]?.arrivalLocation}, Ref# ${
           pnrBooking.id
-        }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit.`;
+        }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
