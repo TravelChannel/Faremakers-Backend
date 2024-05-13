@@ -691,9 +691,9 @@ export class PnrBookingsService {
             startDate: new Date().toISOString(),
             endDate: null,
           });
-          const message = `Hello Ticket Pay by branch (Testing).${
-            !sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
-          }`;
+          const message = `Your booking for ${flightDetails.groupDescription[0]
+            ?.departureLocation}-${flightDetails.groupDescription[0]
+            ?.arrivalLocation} priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -1869,20 +1869,21 @@ export class PnrBookingsService {
       startDate: null,
       endDate: null,
     });
-    const pnrBooking = await this.pnrBookingRepository.findOne({
+    const pnrBooking = await PnrBooking.findOne({
       where: {
         orderId: callbackData.order.id,
       },
+
       include: [
         {
-          model: PnrDetail,
-          as: 'pnrDetail',
-        },
-        {
-          model: User,
+          model: FlightDetails,
+          include: [
+            {
+              model: GroupDescription,
+            },
+          ],
         },
       ],
-      // order: [['createdAt', 'DESC']],
     });
 
     // const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
@@ -2041,7 +2042,7 @@ export class PnrBookingsService {
                 </tr>
                 <tr>
                   <th>Total Amount</th>
-                  <td>${pnrBooking.totalTicketPrice}</td>
+                  <td>${pnrBooking.totalTicketPrice.toLocaleString()}</td>
                 </tr>
               </table>
             </div>
@@ -2050,11 +2051,11 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = `(Testing) Hi!  ${pnrBooking.user.phoneNumber}${
-          !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-            ? `\nPNR generated: ${pnrBooking.pnr}`
-            : ''
-        }\nTotal Amount: ${pnrBooking.totalTicketPrice}`;
+        const message = `Your booking for ${pnrBooking.flightDetails
+          .groupDescription[0]?.departureLocation}-${pnrBooking.flightDetails
+          .groupDescription[0]?.arrivalLocation}, Ref# ${
+          pnrBooking.id
+        }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit.`;
 
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = [
@@ -2068,7 +2069,7 @@ export class PnrBookingsService {
           'arman@faremakers.com',
         ];
         log = message2;
-        const mailSubject = '(Testing) Ticket Confirmation';
+        const mailSubject = 'Booking Confirmation - Faremakers';
         const htmlBody = `${message2}`;
         const resultEmail = await this.sendEmailConfirmation(
           toAddresses,
