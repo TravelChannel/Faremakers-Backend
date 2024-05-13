@@ -56,7 +56,8 @@ import { GeneralTask } from '../../generalModules/generalTasks/entities/generalT
 export class PnrBookingsService {
   private tokenSabre: string | null = null;
   private tokenExpirationSabre: Date | null = null;
-  private keySabre = 'VmpFNk5UVTFOVG8wTTBWRU9rRkI6YzNOM2NtVnpPVGs9';
+  private keySabre =
+    process.env.KEY_SABRE || 'VmpFNk5UVTFOVG8wTTBWRU9rRkI6YzNOM2NtVnpPVGs9';
   constructor(
     @Inject(PNR_BOOKINGS_REPOSITORY)
     private pnrBookingRepository: typeof PnrBooking,
@@ -1915,12 +1916,12 @@ export class PnrBookingsService {
 
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-        // const type = await this.findAirlineType(pnrBooking.id);
-        const type = 0;
+        const type = await this.findAirlineType(pnrBooking.id);
+        // const type = 0;
         // console.log('type', type);
         let result;
         console.log('5');
-        console.log('type', type);
+        console.log('type**************', type);
 
         // AirSial
         if (type == 0) {
@@ -1929,31 +1930,27 @@ export class PnrBookingsService {
           result = await this.callAirSialConfirmation(pnrBooking.pnr);
           // Sabre
         } else {
-          console.log('7');
-
           // Check Admin flag for Sabre COnfirmation Api
           const generalTask = await GeneralTask.findByPk(1, {});
 
           if (generalTask.flag) {
-            console.log('8');
-
             result = await this.callSabreConfirmation(
               pnrBooking.pnr,
               pnrBooking.pnrDetail,
             );
           }
         }
-        console.log('9');
 
         console.log('result', result);
+        console.log('type**************', type);
+
         // external api
 
-        await this.callPostPaymentApi(
-          pnrBooking.pnr,
-          pnrBooking.pnrDetail[0],
-          callbackData,
-        );
-        console.log('10');
+        // await this.callPostPaymentApi(
+        //   pnrBooking.pnr,
+        //   pnrBooking.pnrDetail[0],
+        //   callbackData,
+        // );
 
         const message2 = `<!DOCTYPE html>
         <html lang="en">
@@ -2150,22 +2147,27 @@ export class PnrBookingsService {
         },
       ],
     }).then((rawData) => {
-      console.log('444');
+      // console.log('444', rawData);
 
       // console.log(rawData);
       const plainObject = rawData.toJSON();
       const arr = plainObject.flightDetails.schedualDetGet;
       plainObject.flightDetails.schedualDetGet = [];
       arr.map((data2) => {
+        console.log('------------', data2);
         plainObject.flightDetails.schedualDetGet.push(
           data2.innerSchedualDetGet,
         );
       });
-      console.log('4444');
+      console.log('4444 plainObject', plainObject);
 
       return plainObject;
     });
     // Airsial;
+    console.log(
+      '**************',
+      pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating,
+    );
     if (
       pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating ===
       'PF'
@@ -2279,7 +2281,9 @@ export class PnrBookingsService {
       'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    const url = 'https://api.havail.sabre.com/v2/auth/token';
+    const url =
+      process.env.AUTH_TOKEN_SABRE_ENDPOINT ||
+      'https://api.havail.sabre.com/v2/auth/token';
     const data = qs.stringify({
       grant_type: 'client_credentials',
     });
