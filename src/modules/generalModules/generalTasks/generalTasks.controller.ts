@@ -99,6 +99,11 @@ export class GeneralTasksController {
     return this.generalTaskService.getAllControls();
   }
   @SkipAuth()
+  @Get('flightSearch')
+  getFlightSearch(@Body() payload: any) {
+    return this.generalTaskService.getFlightSearch();
+  }
+  @SkipAuth()
   @Put('flightSearch')
   flightSearch(@Body() payload: any) {
     return this.generalTaskService.flightSearch(payload);

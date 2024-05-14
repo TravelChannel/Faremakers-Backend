@@ -36,6 +36,28 @@ export class GeneralTasksService {
     }
   }
 
+  async getFlightSearch(): Promise<any> {
+    try {
+      const flightSearches = await FlightSearches.findAll({
+        include: [
+          {
+            model: FlightSearchesDetail,
+          },
+        ],
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        flightSearches,
+        'Success',
+      );
+    } catch (error) {
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
   async flightSearch(payload: any): Promise<any> {
     const t: Transaction = await sequelize.transaction();
 
