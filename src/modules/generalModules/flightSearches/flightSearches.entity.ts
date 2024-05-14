@@ -30,10 +30,28 @@ export class FlightSearches extends Model {
   })
   loggedInUserId: number;
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: true,
   })
-  tripType: number;
+  tripType: string;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  })
+  adults: number;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  })
+  children: number;
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  })
+  infants: number;
   @Column({
     type: DataType.STRING,
     allowNull: true,
@@ -44,6 +62,11 @@ export class FlightSearches extends Model {
     allowNull: true,
   })
   countryName: string;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  classtype: string;
   @Column({
     type: DataType.STRING,
     allowNull: true,

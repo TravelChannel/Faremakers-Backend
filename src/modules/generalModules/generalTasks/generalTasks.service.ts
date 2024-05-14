@@ -6,6 +6,8 @@ import { sequelize, Transaction } from '../../../database/sequelize.provider'; /
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
+import { FlightSearches } from '../flightSearches';
+import { FlightSearchesDetail } from '../flightSearchesDetail';
 
 @Injectable()
 export class GeneralTasksService {
@@ -34,6 +36,51 @@ export class GeneralTasksService {
     }
   }
 
+  async flightSearch(payload: any): Promise<any> {
+    const t: Transaction = await sequelize.transaction();
+
+    try {
+      const newFlightSearch = await FlightSearches.create(
+        {
+          tripType: payload.tripType,
+          adults: payload.adults,
+          children: payload.children,
+          infants: payload.infants,
+          classtype: payload.classtype,
+        },
+        { transaction: t },
+      );
+
+      await Promise.all(
+        payload.departure.map(async (element, index) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const newFlightSearchesDetail = await FlightSearchesDetail.create(
+            {
+              flightSearchesId: newFlightSearch.id,
+              cityFrom: element,
+              cityTo: payload.arrival[index],
+              departureDate: payload.date[index],
+            },
+            { transaction: t },
+          );
+        }),
+      );
+      await t.commit();
+
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        newFlightSearch,
+        'newFlightSearch Added',
+      );
+    } catch (error) {
+      await t.rollback();
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
   async getAllControls(): Promise<any> {
     try {
       const data = await this.generalTasksRepository.findAll();

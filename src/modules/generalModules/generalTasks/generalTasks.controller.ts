@@ -14,6 +14,7 @@ import {
   UploadedFile,
   Req,
   Query,
+  Put,
   Res,
   // Test Commit
   // HttpException,
@@ -96,6 +97,11 @@ export class GeneralTasksController {
   @Get('getAllControls')
   getAllControls() {
     return this.generalTaskService.getAllControls();
+  }
+  @SkipAuth()
+  @Put('flightSearch')
+  flightSearch(@Body() payload: any) {
+    return this.generalTaskService.flightSearch(payload);
   }
   @Patch('toggleStatus/:id')
   toggleStatus(
