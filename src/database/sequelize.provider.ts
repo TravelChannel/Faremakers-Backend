@@ -44,6 +44,8 @@ import { BlogTypes } from '../modules/generalModules/blogTypes/index';
 import { Rating } from '../modules/generalModules/ratings/entities/rating.entity';
 import { GeneralTask } from '../modules/generalModules/generalTasks/entities/generalTask.entity';
 import { Log } from '../modules/generalModules/systemLogs/entities/Log.entity';
+import { FlightSearches } from '../modules/generalModules/flightSearches';
+import { FlightSearchesDetail } from '../modules/generalModules/flightSearchesDetail';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -99,14 +101,16 @@ sequelize.addModels([
   Rating,
   GeneralTask,
   Log,
+  FlightSearches,
+  FlightSearchesDetail,
 ]);
 // Test
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  // .sync()
   .then(() => {
     console.log('Database synchronized...');
   })

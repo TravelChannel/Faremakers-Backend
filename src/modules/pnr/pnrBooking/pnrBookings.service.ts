@@ -1924,8 +1924,8 @@ export class PnrBookingsService {
 
         pnrBooking.isPaid = true;
         await pnrBooking.save({ transaction: t });
-        // const type = await this.findAirlineType(pnrBooking.id);
-        const type = 0;
+        const type = await this.findAirlineType(pnrBooking.id);
+        // const type = 0;
         // console.log('type', type);
         let result;
         console.log('5');
@@ -1950,10 +1950,6 @@ export class PnrBookingsService {
         }
 
         console.log('result', result);
-        console.log(
-          'type**************',
-          pnrBooking.flightDetails.groupDescription[0],
-        );
 
         // external api
 
