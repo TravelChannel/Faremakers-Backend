@@ -794,6 +794,12 @@ export class PnrBookingsService {
       if (req.query.isReqForReIssue) {
         whereOptions.isReqForReIssue = req.query.isReqForReIssue;
       }
+      if (req.query.id) {
+        whereOptions.id = req.query.id;
+      }
+      if (req.query.pnr) {
+        whereOptions.pnr = req.query.pnr;
+      }
       const pnrBookings = await PnrBooking.findAll({
         where: whereOptions,
         include: [
