@@ -772,13 +772,7 @@ export class PnrBookingsService {
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&Username=WEBONLN&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=0${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&tripType=1&depDate=${departDate}&retDate=${returnDate}`;
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
-    let newPromotion = await Promotion.create({
-      title: `${url}`,
-      description: `callLeadCreation: ${new Date().toISOString()}`,
 
-      startDate: null,
-      endDate: null,
-    });
     return result;
   }
   async findAll(
@@ -1866,12 +1860,7 @@ export class PnrBookingsService {
     callbackData = callbackData.obj;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const newPromotion = await Promotion.create({
-      title: `--processPayment Updated ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
-      description: new Date().toISOString(),
-      startDate: null,
-      endDate: null,
-    });
+
     const pnrBooking = await PnrBooking.findOne({
       where: {
         orderId: callbackData.order.id,
@@ -1896,7 +1885,13 @@ export class PnrBookingsService {
         },
       ],
     });
+    const newLog = await Log.create({
+      level: '2',
+      message: `--processPayment Updated ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
 
+      meta: `${pnrBooking.pnr}`,
+      timestamp: new Date().toISOString(),
+    });
     // const viewETicketUrl = `https://faremakersnode.azurewebsites.net/previewEticket?id=${pnrBooking.id}`;
     // const errorRedirectUrl = `https://faremakersnode.azurewebsites.net/bookingpayment`;
     console.log('2');
@@ -2196,12 +2191,7 @@ export class PnrBookingsService {
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
-    const newPromotion = await Promotion.create({
-      title: `${url}`,
-      description: `callPostPaymentApi: ${new Date().toISOString()}`,
-      startDate: null,
-      endDate: null,
-    });
+
     console.log(result);
     return result;
   }
