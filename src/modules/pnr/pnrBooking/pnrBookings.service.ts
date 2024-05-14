@@ -19,7 +19,7 @@ import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
 import { User } from '../..//generalModules/users/entities/user.entity';
 import {
-  // Op,
+  Op,
   sequelize,
   Transaction,
 } from '../../../database/sequelize.provider'; // Adjust the path accordingly
@@ -800,6 +800,22 @@ export class PnrBookingsService {
       if (req.query.pnr) {
         whereOptions.pnr = req.query.pnr;
       }
+      if (req.query.startDate && req.query.endDate) {
+        // Both startDate and endDate provided
+        whereOptions.createdAt = {
+          [Op.between]: [req.query.startDate, req.query.endDate],
+        };
+      } else if (req.query.startDate) {
+        // Only startDate provided
+        whereOptions.createdAt = {
+          [Op.gte]: req.query.startDate,
+        };
+      } else if (req.query.endDate) {
+        // Only endDate provided
+        whereOptions.createdAt = {
+          [Op.lte]: req.query.endDate,
+        };
+      }
       const pnrBookings = await PnrBooking.findAll({
         where: whereOptions,
         include: [
@@ -976,6 +992,28 @@ export class PnrBookingsService {
       }
       if (req.query.isReqForReIssue) {
         whereOptions.isReqForReIssue = req.query.isReqForReIssue;
+      }
+      if (req.query.id) {
+        whereOptions.id = req.query.id;
+      }
+      if (req.query.pnr) {
+        whereOptions.pnr = req.query.pnr;
+      }
+      if (req.query.startDate && req.query.endDate) {
+        // Both startDate and endDate provided
+        whereOptions.createdAt = {
+          [Op.between]: [req.query.startDate, req.query.endDate],
+        };
+      } else if (req.query.startDate) {
+        // Only startDate provided
+        whereOptions.createdAt = {
+          [Op.gte]: req.query.startDate,
+        };
+      } else if (req.query.endDate) {
+        // Only endDate provided
+        whereOptions.createdAt = {
+          [Op.lte]: req.query.endDate,
+        };
       }
       const pnrBookings = await PnrBooking.findAll({
         where: whereOptions,
