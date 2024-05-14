@@ -56,6 +56,7 @@ const sequelize = new Sequelize({
   password: dbConfig.password,
   database: dbConfig.database,
   dialectOptions: dbConfig.dialectOptions,
+  logging: false,
 });
 
 sequelize.addModels([

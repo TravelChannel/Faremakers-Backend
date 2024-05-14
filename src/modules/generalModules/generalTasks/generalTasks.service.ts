@@ -40,6 +40,17 @@ export class GeneralTasksService {
     const t: Transaction = await sequelize.transaction();
 
     try {
+      if (
+        payload.departure.length !== payload.arrival.length ||
+        payload.departure.length !== payload.date.length ||
+        payload.arrival.length !== payload.date.length
+      ) {
+        return this.responseService.createResponse(
+          HttpStatus.BAD_REQUEST,
+          null,
+          'Lengths of departure, arrival, and date arrays do not match..',
+        );
+      }
       const newFlightSearch = await FlightSearches.create(
         {
           tripType: payload.tripType,
@@ -53,6 +64,7 @@ export class GeneralTasksService {
 
       await Promise.all(
         payload.departure.map(async (element, index) => {
+          console.log('index', index);
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const newFlightSearchesDetail = await FlightSearchesDetail.create(
             {
