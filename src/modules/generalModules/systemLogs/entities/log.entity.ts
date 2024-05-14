@@ -18,28 +18,28 @@ export class Log extends Model {
 
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    allowNull: true,
   })
   level: string;
   @Column({
     type: DataType.TEXT,
-    allowNull: false,
+    allowNull: true,
   })
   message: string;
   @Column({
     type: DataType.TEXT,
-    allowNull: false,
+    allowNull: true,
   })
   meta: string;
   @Column({
     type: DataType.DATE,
-    allowNull: false,
+    allowNull: true,
   })
   timestamp: Date;
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: true,
-    allowNull: false,
+    allowNull: true,
   })
   isActive: boolean;
 }

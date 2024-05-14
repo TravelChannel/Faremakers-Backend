@@ -52,6 +52,8 @@ import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.enti
 import { HttpService } from '@nestjs/axios';
 import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
 
+import { Log } from '../../generalModules/systemLogs/entities/Log.entity';
+
 @Injectable()
 export class PnrBookingsService {
   private tokenSabre: string | null = null;
@@ -71,6 +73,7 @@ export class PnrBookingsService {
   ): Promise<any> {
     let MessageLog = `1)  Start done: ${new Date().toISOString()}`;
     console.log('currentUserId', currentUserId);
+
     let newPromotion = await Promotion.create({
       title: MessageLog,
       description: `${pnrBookingDto.pnr}`,
