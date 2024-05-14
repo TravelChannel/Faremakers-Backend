@@ -107,10 +107,10 @@ sequelize.addModels([
 // Test
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  .sync({
-    force: true,
-  })
-  // .sync()
+  // .sync({
+  //   force: true,
+  // })
+  .sync()
   .then(() => {
     console.log('Database synchronized...');
   })
