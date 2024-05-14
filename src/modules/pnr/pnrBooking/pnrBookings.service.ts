@@ -73,13 +73,13 @@ export class PnrBookingsService {
   ): Promise<any> {
     let MessageLog = `1)  Start done: ${new Date().toISOString()}`;
     console.log('currentUserId', currentUserId);
-
-    let newPromotion = await Promotion.create({
-      title: MessageLog,
-      description: `${pnrBookingDto.pnr}`,
-      startDate: new Date().toISOString(),
-      endDate: null,
+    let newLog = await Log.create({
+      level: '1',
+      message: MessageLog,
+      meta: `${pnrBookingDto.pnr}`,
+      timestamp: new Date().toISOString(),
     });
+
     const t: Transaction = await sequelize.transaction();
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -133,12 +133,13 @@ export class PnrBookingsService {
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       MessageLog = `2) newPnrBookingRepository api done: ${new Date().toISOString()}`;
-      let newPromotion = await Promotion.create({
-        title: MessageLog,
-        description: `${pnr}`,
-        startDate: new Date().toISOString(),
-        endDate: null,
+      let newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
       });
+
       if (pnrBookings.length > 0) {
         await Promise.all(
           pnrBookings.map(async (pnrBooking) => {
@@ -159,11 +160,11 @@ export class PnrBookingsService {
               { transaction: t },
             );
             MessageLog = `3) newPnrDetails api done: ${new Date().toISOString()}`;
-            let newPromotion = await Promotion.create({
-              title: MessageLog,
-              description: `${pnr}`,
-              startDate: new Date().toISOString(),
-              endDate: null,
+            let newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
             });
             // await this.callLeadCreation(leadCreationData, pnrBooking);
             // external api
@@ -186,11 +187,11 @@ export class PnrBookingsService {
           { transaction: t },
         );
         MessageLog = `4) newflightDetails api done: ${new Date().toISOString()}`;
-        let newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        let newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (
           flightDetails.extraBaggages &&
@@ -219,11 +220,11 @@ export class PnrBookingsService {
           );
         }
         MessageLog = `5) newExtraBaggage api done: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (flightDetails.baggageAllowance.length > 0) {
           await Promise.all(
@@ -242,11 +243,11 @@ export class PnrBookingsService {
           );
         }
         MessageLog = `6) newBaggageAllowance api done: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
 
         if (
@@ -270,11 +271,11 @@ export class PnrBookingsService {
           );
         }
         MessageLog = `7) newBookingFlight api done: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (flightDetails.groupDescription.length > 0) {
           await Promise.all(
@@ -293,11 +294,11 @@ export class PnrBookingsService {
           );
         }
         MessageLog = `8) newGroupDescription api done: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (flightDetails.flightSegments.length > 0) {
           await Promise.all(
@@ -316,11 +317,11 @@ export class PnrBookingsService {
           );
         }
         MessageLog = `9) newFlightSegment api done: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (flightDetails.fare) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -337,11 +338,11 @@ export class PnrBookingsService {
             { transaction: t },
           );
           MessageLog = `10) newFare api done: ${new Date().toISOString()}`;
-          newPromotion = await Promotion.create({
-            title: MessageLog,
-            description: `${pnr}`,
-            startDate: new Date().toISOString(),
-            endDate: null,
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
           });
           if (flightDetails.fare.totalFare) {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -365,11 +366,11 @@ export class PnrBookingsService {
             );
           }
           MessageLog = `11) newTotalFare api done: ${new Date().toISOString()}`;
-          newPromotion = await Promotion.create({
-            title: MessageLog,
-            description: `${pnr}`,
-            startDate: new Date().toISOString(),
-            endDate: null,
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
           });
           if (flightDetails.fare.passengerInfoList.length > 0) {
             await Promise.all(
@@ -417,11 +418,11 @@ export class PnrBookingsService {
             );
           }
           MessageLog = `12) flightDetails.fare.passengerInfoList api done: ${new Date().toISOString()}`;
-          newPromotion = await Promotion.create({
-            title: MessageLog,
-            description: `${pnr}`,
-            startDate: new Date().toISOString(),
-            endDate: null,
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
           });
         }
         if (flightDetails.schedualDetGet.length > 0) {
@@ -504,11 +505,11 @@ export class PnrBookingsService {
           );
         }
         MessageLog = `13) newSchedualDetGet api done: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
       }
       const commissionCategory = await CommissionCategories.findOne({
@@ -517,11 +518,11 @@ export class PnrBookingsService {
 
       if (commissionCategory) {
         MessageLog = `14)  if (commissionCategory) True: ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: `14)  if (commissionCategory) True: ${new Date().toISOString()}`,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         let pnrServiceChargesPercentage = 0;
 
@@ -533,11 +534,11 @@ export class PnrBookingsService {
           },
         });
         MessageLog = `15)  commissionPercentage Find ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (commissionPercentage) {
           pnrServiceChargesPercentage = commissionPercentage.percentage;
@@ -547,11 +548,11 @@ export class PnrBookingsService {
         MessageLog = `16)   Before Switch:commissionCategory.id ${Number(
           commissionCategory.id,
         )} ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         switch (Number(commissionCategory.id)) {
           case 1:
@@ -574,11 +575,11 @@ export class PnrBookingsService {
               }
             }
             MessageLog = `17)  case 1 :pnrServiceChargesPercentage:${pnrServiceChargesPercentage} -- ${new Date().toISOString()}`;
-            newPromotion = await Promotion.create({
-              title: MessageLog,
-              description: `${pnr}`,
-              startDate: new Date().toISOString(),
-              endDate: null,
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
             });
             break;
 
@@ -602,11 +603,11 @@ export class PnrBookingsService {
               }
             }
             MessageLog = `19)  case 2 :pnrServiceChargesPercentage:${pnrServiceChargesPercentage} --${new Date().toISOString()}`;
-            newPromotion = await Promotion.create({
-              title: MessageLog,
-              description: `${pnr}`,
-              startDate: new Date().toISOString(),
-              endDate: null,
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
             });
             break;
           case 3:
@@ -630,22 +631,22 @@ export class PnrBookingsService {
               }
             }
             MessageLog = `20)  case 3:pnrServiceChargesPercentage:${pnrServiceChargesPercentage} --${new Date().toISOString()}`;
-            newPromotion = await Promotion.create({
-              title: MessageLog,
-              description: `${pnr}`,
-              startDate: new Date().toISOString(),
-              endDate: null,
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
             });
             break;
 
           default:
             pnrServiceChargesPercentage = 0;
             MessageLog = `21)  case default:pnrServiceChargesPercentage:${pnrServiceChargesPercentage}-- ${new Date().toISOString()}`;
-            newPromotion = await Promotion.create({
-              title: MessageLog,
-              description: `${pnr}`,
-              startDate: new Date().toISOString(),
-              endDate: null,
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
             });
             break;
         }
@@ -662,37 +663,37 @@ export class PnrBookingsService {
         );
       }
       MessageLog = `22)  newPnrServiceCharges api done ${new Date().toISOString()}`;
-      newPromotion = await Promotion.create({
-        title: MessageLog,
-        description: `${pnr}`,
-        startDate: new Date().toISOString(),
-        endDate: null,
+      newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
       });
       await t.commit();
 
       const user = await User.findByPk(currentUserId);
       MessageLog = `23)  Find user api done ${new Date().toISOString()}`;
-      newPromotion = await Promotion.create({
-        title: MessageLog,
-        description: `${pnr}`,
-        startDate: new Date().toISOString(),
-        endDate: null,
+      newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
       });
       if (user) {
         MessageLog = `24)  user Found  ${new Date().toISOString()}`;
-        newPromotion = await Promotion.create({
-          title: MessageLog,
-          description: `${pnr}`,
-          startDate: new Date().toISOString(),
-          endDate: null,
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
         });
         if (sendSmsBranch) {
           MessageLog = `25)if (sendSmsBranch) { ${new Date().toISOString()}`;
-          newPromotion = await Promotion.create({
-            title: MessageLog,
-            description: `${pnr}`,
-            startDate: new Date().toISOString(),
-            endDate: null,
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
           });
           const message = `Your booking for ${flightDetails.groupDescription[0]
             ?.departureLocation}-${flightDetails.groupDescription[0]
@@ -709,11 +710,11 @@ export class PnrBookingsService {
         }
         if (sendSmsCod) {
           MessageLog = `26)if (sendSmsCod) { ${new Date().toISOString()}`;
-          newPromotion = await Promotion.create({
-            title: MessageLog,
-            description: `${pnr}`,
-            startDate: new Date().toISOString(),
-            endDate: null,
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
           });
           const message = `Hello Ticket Pay by COD (Testing).${
             !sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
@@ -730,13 +731,12 @@ export class PnrBookingsService {
         }
       }
       MessageLog = `27)Done Execution { ${new Date().toISOString()}`;
-      newPromotion = await Promotion.create({
-        title: MessageLog,
-        description: `${pnr}`,
-        startDate: new Date().toISOString(),
-        endDate: null,
+      newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
       });
-      console.log('newPromotion', newPromotion);
       return this.responseService.createResponse(
         HttpStatus.OK,
         // {},
@@ -746,13 +746,13 @@ export class PnrBookingsService {
     } catch (error) {
       console.log('Error', error.message);
       await t.rollback();
-      let newPromotion = await Promotion.create({
-        title: `28)  INTERNAL_SERVER_ERROR Caught: --------${MessageLog}----  ${new Date().toISOString()},- ${
+      let newLog = await Log.create({
+        level: '5',
+        message: `28)  INTERNAL_SERVER_ERROR Caught: --------${MessageLog}----  ${new Date().toISOString()},- ${
           error.message
         }`,
-        description: `${pnrBookingDto.pnr}`,
-        startDate: new Date().toISOString(),
-        endDate: null,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
       });
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
