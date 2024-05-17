@@ -77,17 +77,23 @@ export class GeneralTasksService {
           order: [
             ['createdAt', 'DESC'], // Replace 'createdAt' with the column you want to sort by
           ],
+          distinct: true,
           limit: pageSize,
           offset: (page - 1) * pageSize,
         });
+      console.log('count', count);
+      console.log('page', page);
+      console.log('pageSize', pageSize);
+      console.log('limit', pageSize);
+      console.log('offset', (page - 1) * pageSize);
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const moment = require('moment-timezone');
 
-      flightSearches.forEach((search) => {
-        search.searchDate = moment(search.searchDate)
-          .tz('+05:00')
-          .format('YYYY-MM-DD HH:mm:ss Z');
-      });
+      // flightSearches.forEach((search) => {
+      //   search.searchDate = moment(search.searchDate)
+      //     .tz('+05:00')
+      //     .format('YYYY-MM-DD HH:mm:ss Z');
+      // });
 
       const totalPages = Math.ceil(count / pageSize);
 
