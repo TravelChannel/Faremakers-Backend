@@ -730,6 +730,13 @@ export class PnrBookingsService {
           }
         }
       }
+      // Email to client Start
+      await this.sendBookingEmail(
+        pnrBookingDto,
+        userUpdateEmail,
+        newPnrBookingRepository.id,
+      );
+      // Email to client End
       MessageLog = `27)Done Execution { ${new Date().toISOString()}`;
       newLog = await Log.create({
         level: '1',
@@ -762,6 +769,120 @@ export class PnrBookingsService {
     }
   }
 
+  async sendBookingEmail(bookingData, user, referenceNumber): Promise<any> {
+    const message2 = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Booking Confirmation - Faremakers</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          border: 1px solid #ccc;
+        }
+        h1, h2, h3 {
+          color: #333;
+        }
+        p {
+          margin-bottom: 10px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+        }
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+        .link {
+          display: inline-block;
+          margin-top: 20px;
+          background-color: #007bff;
+          color: #fff;
+          text-decoration: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2>Ticket Reservation (Awaiting Payment), Reference # ${referenceNumber} </h2>
+        <p>Hi!  ${user.phoneNumber},</p>
+        <p>Please check details in the following link. </p>
+        <br>Your registered information for this booking are following:
+        <br>Email:  ${user.email} 
+        <br>Contact Number:  ${user.phoneNumber} 
+        <br>
+        <p>Your registered information for this booking:</p>
+        <ul>
+          <li>Email: ${user?.email}</li>
+          <li>Contact Number: ${user.phoneNumber}</li>
+        </ul>
+        <div>
+          <h3>Amount Due:</h3>
+          <table>
+            <tr>
+              <th>Method</th>
+              <td>
+              ${
+                !bookingData.sendSmsCod && !bookingData.sendSmsBranch
+                  ? 'Card Payment'
+                  : ''
+              }
+                ${
+                  bookingData.sendSmsCod && !bookingData.sendSmsBranch
+                    ? 'Cash On Delivery'
+                    : ''
+                }
+                ${
+                  !bookingData.sendSmsCod && bookingData.sendSmsBranch
+                    ? 'Pay at Branch'
+                    : ''
+                }
+                </td>
+            </tr>
+            <tr>
+              <th>Total Amount Due</th>
+              <td>${bookingData.Amount.totalTicketPrice.toLocaleString()}</td>
+            </tr>
+          </table>
+        </div>
+                <p>Best regards,<br>faremakers</p>
+      </div>
+    </body>
+    </html>
+    `;
+    const toAddresses = ['hashamkhancust@gmail.com'];
+    if (user?.email) {
+      toAddresses.push(user.email);
+    }
+    const bccAddresses = ['bilal.tariq@faremakers.com', 'arman@faremakers.com'];
+    const mailSubject = 'Booking Confirmation - Faremakers';
+    const htmlBody = `${message2}`;
+    const resultEmail = await this.sendEmailConfirmation(
+      toAddresses,
+      bccAddresses,
+      mailSubject,
+      htmlBody,
+    );
+    if (resultEmail) {
+      console.log('Email sent successfully');
+    } else {
+      console.error('Failed to send email');
+    }
+  }
   async callLeadCreation(leadCreationData, data): Promise<any> {
     const headers = {
       'Content-Type': 'application/json',
@@ -2108,12 +2229,10 @@ export class PnrBookingsService {
         }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
         await this.sendSmsConfirmation(pnrBooking.user, message);
-        const toAddresses = [
-          'hashamkhancust@gmail.com',
-
-          `${pnrBooking.user?.email || ''}`,
-          // 'recipient2@example.com',
-        ];
+        const toAddresses = ['hashamkhancust@gmail.com'];
+        if (pnrBooking.user?.email) {
+          toAddresses.push(pnrBooking.user.email);
+        }
         const bccAddresses = [
           'bilal.tariq@faremakers.com',
           'arman@faremakers.com',
