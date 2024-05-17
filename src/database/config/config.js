@@ -22,6 +22,12 @@ module.exports = {
     database: process.env.DB_NAME,
     dialectOptions: {
       bigNumberStrings: true,
+      options: {
+        // Set the request timeout (in milliseconds) to a higher value
+        requestTimeout: 60000000, // 30 seconds (adjust as needed)
+        useUTC: false, // Disable UTC for MSSQL
+        timezone: '+05:00', // Set Pakistan timezone
+      },
     },
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_DEVELOPMENT,
     JWT_SECRET: process.env.JWT_SECRET_DEVELOPMENT,
@@ -37,6 +43,12 @@ module.exports = {
     database: process.env.DB_NAME_TEST,
     dialectOptions: {
       bigNumberStrings: true,
+      options: {
+        // Set the request timeout (in milliseconds) to a higher value
+        requestTimeout: 60000000, // 30 seconds (adjust as needed)
+        useUTC: false, // Disable UTC for MSSQL
+        timezone: '+05:00', // Set Pakistan timezone
+      },
     },
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_TEST,
     JWT_SECRET: process.env.JWT_SECRET_TEST,
@@ -51,6 +63,12 @@ module.exports = {
     database: process.env.DB_NAME_PRODUCTION,
     dialectOptions: {
       bigNumberStrings: true,
+      options: {
+        // Set the request timeout (in milliseconds) to a higher value
+        requestTimeout: 60000000, // 30 seconds (adjust as needed)
+        useUTC: false, // Disable UTC for MSSQL
+        timezone: '+05:00', // Set Pakistan timezone
+      },
     },
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_PRODUCTION,
     JWT_SECRET: process.env.JWT_SECRET_PRODUCTION,

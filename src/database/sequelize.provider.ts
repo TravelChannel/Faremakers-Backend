@@ -55,8 +55,10 @@ const sequelize = new Sequelize({
   username: dbConfig.username,
   password: dbConfig.password,
   database: dbConfig.database,
-  dialectOptions: dbConfig.dialectOptions,
+  // dialectOptions: dbConfig.dialectOptions,
   logging: false,
+  dialectOptions: { useUTC: false },
+  timezone: '+05:00',
 });
 
 sequelize.addModels([
@@ -113,6 +115,8 @@ sequelize
   // })
   .sync()
   .then(() => {
+    console.log('----dbConfig', dbConfig);
+
     console.log('Database synchronized...');
   })
   .catch((error) => {

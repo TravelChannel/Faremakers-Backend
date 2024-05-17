@@ -49,17 +49,17 @@ export class GeneralTasksService {
       // }
       if (req.query.startDate && req.query.endDate) {
         // Both startDate and endDate provided
-        whereOptions.createdAt = {
+        whereOptions.searchDate = {
           [Op.between]: [req.query.startDate, req.query.endDate],
         };
       } else if (req.query.startDate) {
         // Only startDate provided
-        whereOptions.createdAt = {
+        whereOptions.searchDate = {
           [Op.gte]: req.query.startDate,
         };
       } else if (req.query.endDate) {
         // Only endDate provided
-        whereOptions.createdAt = {
+        whereOptions.searchDate = {
           [Op.lte]: req.query.endDate,
         };
       }
@@ -80,6 +80,15 @@ export class GeneralTasksService {
           limit: pageSize,
           offset: (page - 1) * pageSize,
         });
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const moment = require('moment-timezone');
+
+      flightSearches.forEach((search) => {
+        search.searchDate = moment(search.searchDate)
+          .tz('+05:00')
+          .format('YYYY-MM-DD HH:mm:ss Z');
+      });
+
       const totalPages = Math.ceil(count / pageSize);
 
       const links = {
@@ -124,12 +133,16 @@ export class GeneralTasksService {
         );
       }
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      // const moment = require('moment-timezone');
+      const moment = require('moment-timezone');
 
-      // const currentTimeInPakistan = moment
-      //   .tz('Asia/Karachi')
-      //   .format('YYYY-MM-DD HH:mm:ss');
+      const currentDateTimeGmt5 = moment()
+        .tz('+05:00')
+        .format('YYYY-MM-DD HH:mm:ss Z');
 
+      // const currentDateTimeGmt5 = moment.tz('Asia/Karachi');
+      // .format('YYYY-MM-DD HH:mm:ss');
+      console.log('---currentDateTimeGmt5', currentDateTimeGmt5);
+      // const timeZone = 'Asia/Karachi'; // Pakistan Standard Time
       const newFlightSearch = await FlightSearches.create(
         {
           tripType: payload.tripType,
@@ -137,7 +150,9 @@ export class GeneralTasksService {
           children: payload.children,
           infants: payload.infants,
           classtype: payload.classtype,
-          // searchDate: currentTimeInPakistan,
+          searchDate: currentDateTimeGmt5,
+          // searchDate: new Date(),
+          // searchDate: moment().tz(timeZone).toDate(),
         },
         { transaction: t },
       );

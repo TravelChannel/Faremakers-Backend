@@ -9,6 +9,8 @@ export const databaseConfig = {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    timezone: '+05:00', // Set Pakistan timezone
+
     dialectOptions: {
       bigNumberStrings: true,
       options: {
@@ -31,6 +33,12 @@ export const databaseConfig = {
     database: process.env.DB_NAME_TEST,
     dialectOptions: {
       bigNumberStrings: true,
+      options: {
+        // Set the request timeout (in milliseconds) to a higher value
+        requestTimeout: 60000000, // 30 seconds (adjust as needed)
+        useUTC: false, // Disable UTC for MSSQL
+        timezone: '+05:00', // Set Pakistan timezone
+      },
     },
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_TEST,
     JWT_SECRET: process.env.JWT_SECRET_TEST,
@@ -46,6 +54,12 @@ export const databaseConfig = {
     database: process.env.DB_NAME_PRODUCTION,
     dialectOptions: {
       bigNumberStrings: true,
+      options: {
+        // Set the request timeout (in milliseconds) to a higher value
+        requestTimeout: 60000000, // 30 seconds (adjust as needed)
+        useUTC: false, // Disable UTC for MSSQL
+        timezone: '+05:00', // Set Pakistan timezone
+      },
     },
     PASSWORD_SECRET: process.env.PASSWORD_SECRET_PRODUCTION,
     JWT_SECRET: process.env.JWT_SECRET_PRODUCTION,
