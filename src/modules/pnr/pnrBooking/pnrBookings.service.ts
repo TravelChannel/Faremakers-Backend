@@ -912,6 +912,7 @@ export class PnrBookingsService {
             ],
           },
         ],
+        order: [['createdAt', 'DESC']],
       })
         .then((rawData) => {
           const plainObjects = rawData.map((instance) => instance.toJSON());
@@ -1123,6 +1124,7 @@ export class PnrBookingsService {
             ],
           },
         ],
+        order: [['createdAt', 'DESC']],
       })
         .then((rawData) => {
           const plainObjects = rawData.map((instance) => instance.toJSON());
