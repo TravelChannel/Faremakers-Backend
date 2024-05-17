@@ -775,7 +775,7 @@ export class PnrBookingsService {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Booking Confirmation - Faremakers</title>
+      <title>Ticket Reservation (Awaiting Payment) - Faremakers</title>
       <style>
         body {
           font-family: Arial, sans-serif;
@@ -818,7 +818,12 @@ export class PnrBookingsService {
     </head>
     <body>
       <div class="container">
-        <h2>Ticket Reservation (Awaiting Payment), Reference # ${referenceNumber} </h2>
+        <h2> 
+        Your booking for Reference # ${referenceNumber} ( ${bookingData
+          .flightDetails.groupDescription[0]?.departureLocation}-${bookingData
+          .flightDetails.groupDescription[0]
+          ?.arrivalLocation} ) is Awaiting Payment.
+        </h2>
         <p>Hi!  ${user.phoneNumber},</p>
         <p>Please check details in the following link. </p>
         <br>Your registered information for this booking are following:
@@ -869,7 +874,7 @@ export class PnrBookingsService {
       toAddresses.push(user.email);
     }
     const bccAddresses = ['bilal.tariq@faremakers.com', 'arman@faremakers.com'];
-    const mailSubject = 'Booking Confirmation - Faremakers';
+    const mailSubject = 'Ticket Reservation (Awaiting Payment) - Faremakers';
     const htmlBody = `${message2}`;
     const resultEmail = await this.sendEmailConfirmation(
       toAddresses,
