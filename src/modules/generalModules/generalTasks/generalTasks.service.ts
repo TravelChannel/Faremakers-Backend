@@ -2,7 +2,11 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { GENERAL_TASKS_REPOSITORY } from '../../../shared/constants';
 import { GeneralTask } from './entities/generalTask.entity';
-import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import {
+  Op,
+  sequelize,
+  Transaction,
+} from '../../../database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from '../../../common/utility/response/response.service';
 import { EXCEPTION } from '../../../shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
@@ -36,18 +40,63 @@ export class GeneralTasksService {
     }
   }
 
-  async getFlightSearch(): Promise<any> {
+  async getFlightSearch(req): Promise<any> {
     try {
-      const flightSearches = await FlightSearches.findAll({
-        include: [
-          {
-            model: FlightSearchesDetail,
-          },
-        ],
-      });
+      const whereOptions: any = {};
+      // if (req.query.blogTypeId) {
+      //   whereOptions.blogTypeId = req.query.blogTypeId;
+      // }
+      if (req.query.startDate && req.query.endDate) {
+        // Both startDate and endDate provided
+        whereOptions.createdAt = {
+          [Op.between]: [req.query.startDate, req.query.endDate],
+        };
+      } else if (req.query.startDate) {
+        // Only startDate provided
+        whereOptions.createdAt = {
+          [Op.gte]: req.query.startDate,
+        };
+      } else if (req.query.endDate) {
+        // Only endDate provided
+        whereOptions.createdAt = {
+          [Op.lte]: req.query.endDate,
+        };
+      }
+      // Pagination parameters
+      const page = parseInt(req.query.pageNumber, 10) || 1;
+      const pageSize = parseInt(req.query.pageSize, 10) || 10;
+      const { count, rows: flightSearches } =
+        await FlightSearches.findAndCountAll({
+          where: whereOptions,
+          include: [
+            {
+              model: FlightSearchesDetail,
+            },
+          ],
+          order: [
+            ['createdAt', 'DESC'], // Replace 'createdAt' with the column you want to sort by
+          ],
+          limit: pageSize,
+          offset: (page - 1) * pageSize,
+        });
+      const totalPages = Math.ceil(count / pageSize);
+
+      const links = {
+        first: `/generalTask/flightSearch?page=1&pageSize=${pageSize}`,
+        last: `/generalTask/flightSearch?page=${totalPages}&pageSize=${pageSize}`,
+        prev:
+          page > 1
+            ? `/generalTask/flightSearch?page=${page - 1}&pageSize=${pageSize}`
+            : null,
+        next:
+          page < totalPages
+            ? `/generalTask/flightSearch?page=${page + 1}&pageSize=${pageSize}`
+            : null,
+      };
+
       return this.responseService.createResponse(
         HttpStatus.OK,
-        flightSearches,
+        { count, data: flightSearches, links },
         'Success',
       );
     } catch (error) {

@@ -100,8 +100,8 @@ export class GeneralTasksController {
   }
   @SkipAuth()
   @Get('flightSearch')
-  getFlightSearch(@Body() payload: any) {
-    return this.generalTaskService.getFlightSearch();
+  getFlightSearch(@Req() req: Request) {
+    return this.generalTaskService.getFlightSearch(req);
   }
   @SkipAuth()
   @Put('flightSearch')
