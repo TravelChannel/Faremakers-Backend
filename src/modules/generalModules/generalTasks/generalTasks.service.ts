@@ -2,6 +2,7 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { GENERAL_TASKS_REPOSITORY } from '../../../shared/constants';
 import { GeneralTask } from './entities/generalTask.entity';
+
 import {
   Op,
   sequelize,
@@ -122,6 +123,13 @@ export class GeneralTasksService {
           'Lengths of departure, arrival, and date arrays do not match..',
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      // const moment = require('moment-timezone');
+
+      // const currentTimeInPakistan = moment
+      //   .tz('Asia/Karachi')
+      //   .format('YYYY-MM-DD HH:mm:ss');
+
       const newFlightSearch = await FlightSearches.create(
         {
           tripType: payload.tripType,
@@ -129,6 +137,7 @@ export class GeneralTasksService {
           children: payload.children,
           infants: payload.infants,
           classtype: payload.classtype,
+          // searchDate: currentTimeInPakistan,
         },
         { transaction: t },
       );
