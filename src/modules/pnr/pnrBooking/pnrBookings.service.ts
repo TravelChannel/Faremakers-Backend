@@ -825,7 +825,7 @@ export class PnrBookingsService {
           ?.arrivalLocation} ) is Awaiting Payment.
         </h2>
         <p>Hi!  ${user.phoneNumber},</p>
-        <p>Please check details in the following link. </p>
+        <p>Please check details in the following link.  </p>
         <br>Your registered information for this booking are following:
         <br>Email:  ${user.email} 
         <br>Contact Number:  ${user.phoneNumber} 
