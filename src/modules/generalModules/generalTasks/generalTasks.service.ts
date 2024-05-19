@@ -195,6 +195,14 @@ export class GeneralTasksService {
         'newFlightSearch Added',
       );
     } catch (error) {
+      const newLog = await Log.create({
+        level: '3',
+        message: `INTERNAL_SERVER_ERROR Exception in generalTask/flightSearch POST Api, Error: ${
+          error?.message || 'undefined'
+        }`,
+        meta: `generalTask/flightSearch POST Api`,
+        timestamp: new Date().toISOString(),
+      });
       await t.rollback();
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
