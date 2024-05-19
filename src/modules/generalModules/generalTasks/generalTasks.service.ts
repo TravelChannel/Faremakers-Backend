@@ -2,6 +2,7 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { GENERAL_TASKS_REPOSITORY } from '../../../shared/constants';
 import { GeneralTask } from './entities/generalTask.entity';
+import { Log } from '../../generalModules/systemLogs/entities/Log.entity';
 
 import {
   Op,
@@ -116,9 +117,17 @@ export class GeneralTasksService {
         'Success',
       );
     } catch (error) {
+      const newLog = await Log.create({
+        level: '3',
+        message: `INTERNAL_SERVER_ERROR Exception in generalTask/flightSearch GET Api, Error: ${
+          error?.message || 'undefined'
+        }`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
-        null,
+        error?.message || 'undefined',
         EXCEPTION,
       );
     }
