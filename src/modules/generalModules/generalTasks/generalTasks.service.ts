@@ -99,21 +99,100 @@ export class GeneralTasksService {
       const totalPages = Math.ceil(count / pageSize);
 
       const links = {
-        first: `/generalTask/flightSearch?page=1&pageSize=${pageSize}`,
-        last: `/generalTask/flightSearch?page=${totalPages}&pageSize=${pageSize}`,
+        first: `/generalTask/flightSearch?pageNumber=1&pageSize=${pageSize}`,
+        last: `/generalTask/flightSearch?pageNumber=${totalPages}&pageSize=${pageSize}`,
         prev:
           page > 1
-            ? `/generalTask/flightSearch?page=${page - 1}&pageSize=${pageSize}`
+            ? `/generalTask/flightSearch?pageNumber=${
+                page - 1
+              }&pageSize=${pageSize}`
             : null,
         next:
           page < totalPages
-            ? `/generalTask/flightSearch?page=${page + 1}&pageSize=${pageSize}`
+            ? `/generalTask/flightSearch?pageNumber=${
+                page + 1
+              }&pageSize=${pageSize}`
             : null,
       };
 
       return this.responseService.createResponse(
         HttpStatus.OK,
         { count, data: flightSearches, links },
+        'Success',
+      );
+    } catch (error) {
+      const newLog = await Log.create({
+        level: '3',
+        message: `INTERNAL_SERVER_ERROR Exception in generalTask/flightSearch GET Api, Error: ${
+          error?.message || 'undefined'
+        }`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error?.message || 'undefined',
+        EXCEPTION,
+      );
+    }
+  }
+  async getLogs(req): Promise<any> {
+    try {
+      const whereOptions: any = {};
+      if (req.query.level) {
+        whereOptions.level = req.query.level;
+      }
+      if (req.query.startDate && req.query.endDate) {
+        // Both startDate and endDate provided
+        whereOptions.createdAt = {
+          [Op.between]: [req.query.startDate, req.query.endDate],
+        };
+      } else if (req.query.startDate) {
+        // Only startDate provided
+        whereOptions.createdAt = {
+          [Op.gte]: req.query.startDate,
+        };
+      } else if (req.query.endDate) {
+        // Only endDate provided
+        whereOptions.createdAt = {
+          [Op.lte]: req.query.endDate,
+        };
+      }
+      // Pagination parameters
+      const page = parseInt(req.query.pageNumber, 10) || 1;
+      const pageSize = parseInt(req.query.pageSize, 10) || 10;
+      const { count, rows: data } = await Log.findAndCountAll({
+        where: whereOptions,
+
+        order: [
+          ['createdAt', 'DESC'], // Replace 'createdAt' with the column you want to sort by
+        ],
+        distinct: true,
+        limit: pageSize,
+        offset: (page - 1) * pageSize,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const moment = require('moment-timezone');
+
+      const totalPages = Math.ceil(count / pageSize);
+
+      const links = {
+        first: `/generalTask/getLogs?pageNumber=1&pageSize=${pageSize}`,
+        last: `/generalTask/getLogs?pageNumber=${totalPages}&pageSize=${pageSize}`,
+        prev:
+          page > 1
+            ? `/generalTask/getLogs?pageNumber=${page - 1}&pageSize=${pageSize}`
+            : null,
+        next:
+          page < totalPages
+            ? `/generalTask/getLogs?pageNumber=${page + 1}&pageSize=${pageSize}`
+            : null,
+      };
+
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        { count, data: data, links },
         'Success',
       );
     } catch (error) {

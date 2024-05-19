@@ -87,12 +87,15 @@ export class BlogsService {
       const totalPages = Math.ceil(count / pageSize);
 
       const links = {
-        first: `/blogs?page=1&pageSize=${pageSize}`,
-        last: `/blogs?page=${totalPages}&pageSize=${pageSize}`,
-        prev: page > 1 ? `/blogs?page=${page - 1}&pageSize=${pageSize}` : null,
+        first: `/blogs?pageNumber=1&pageSize=${pageSize}`,
+        last: `/blogs?pageNumber=${totalPages}&pageSize=${pageSize}`,
+        prev:
+          page > 1
+            ? `/blogs?pageNumber=${page - 1}&pageSize=${pageSize}`
+            : null,
         next:
           page < totalPages
-            ? `/blogs?page=${page + 1}&pageSize=${pageSize}`
+            ? `/blogs?pageNumber=${page + 1}&pageSize=${pageSize}`
             : null,
       };
       return this.responseService.createResponse(
