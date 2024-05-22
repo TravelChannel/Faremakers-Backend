@@ -136,6 +136,128 @@ export class GeneralTasksService {
       );
     }
   }
+  async getFlightSearchTemp(req): Promise<any> {
+    try {
+      let newLog = await Log.create({
+        level: '3',
+        message: `1) step generalTask/flightSearch GET Api,`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      const whereOptions: any = {};
+      // if (req.query.blogTypeId) {
+      //   whereOptions.blogTypeId = req.query.blogTypeId;
+      // }
+      if (req.query.startDate && req.query.endDate) {
+        // Both startDate and endDate provided
+        whereOptions.searchDate = {
+          [Op.between]: [req.query.startDate, req.query.endDate],
+        };
+      } else if (req.query.startDate) {
+        // Only startDate provided
+        whereOptions.searchDate = {
+          [Op.gte]: req.query.startDate,
+        };
+      } else if (req.query.endDate) {
+        // Only endDate provided
+        whereOptions.searchDate = {
+          [Op.lte]: req.query.endDate,
+        };
+      }
+      newLog = await Log.create({
+        level: '3',
+        message: `2) step generalTask/flightSearch GET Api,`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      // Pagination parameters
+      const page = parseInt(req.query.pageNumber, 10) || 1;
+      const pageSize = parseInt(req.query.pageSize, 10) || 10;
+      const { count, rows: flightSearches } =
+        await FlightSearches.findAndCountAll({
+          where: whereOptions,
+          include: [
+            {
+              model: FlightSearchesDetail,
+            },
+          ],
+          order: [
+            ['createdAt', 'DESC'], // Replace 'createdAt' with the column you want to sort by
+          ],
+          distinct: true,
+          limit: pageSize,
+          offset: (page - 1) * pageSize,
+        });
+      newLog = await Log.create({
+        level: '3',
+        message: `3) step generalTask/flightSearch GET Api,`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      console.log('count', count);
+      console.log('page', page);
+      console.log('pageSize', pageSize);
+      console.log('limit', pageSize);
+      console.log('offset', (page - 1) * pageSize);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const moment = require('moment-timezone');
+
+      // flightSearches.forEach((search) => {
+      //   search.searchDate = moment(search.searchDate)
+      //     .tz('+05:00')
+      //     .format('YYYY-MM-DD HH:mm:ss Z');
+      // });
+      newLog = await Log.create({
+        level: '3',
+        message: `4) step generalTask/flightSearch GET Api,`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      const totalPages = Math.ceil(count / pageSize);
+
+      const links = {
+        first: `/generalTask/flightSearch?pageNumber=1&pageSize=${pageSize}`,
+        last: `/generalTask/flightSearch?pageNumber=${totalPages}&pageSize=${pageSize}`,
+        prev:
+          page > 1
+            ? `/generalTask/flightSearch?pageNumber=${
+                page - 1
+              }&pageSize=${pageSize}`
+            : null,
+        next:
+          page < totalPages
+            ? `/generalTask/flightSearch?pageNumber=${
+                page + 1
+              }&pageSize=${pageSize}`
+            : null,
+      };
+      newLog = await Log.create({
+        level: '3',
+        message: `5) step generalTask/flightSearch GET Api,`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        { count, data: flightSearches, links },
+        'Success',
+      );
+    } catch (error) {
+      const newLog = await Log.create({
+        level: '3',
+        message: `INTERNAL_SERVER_ERROR Exception in generalTask/flightSearch GET Api, Error: ${
+          error?.message || 'undefined'
+        }`,
+        meta: `generalTask/flightSearch GET Api`,
+        timestamp: new Date().toISOString(),
+      });
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        error?.message || 'undefined',
+        EXCEPTION,
+      );
+    }
+  }
   async getLogs(req): Promise<any> {
     try {
       const whereOptions: any = {};
