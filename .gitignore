@@ -3,6 +3,7 @@
 /node_modules
 /build
 .env
+# Ignore YAML workflow files
 .github/workflows/*.yml
 .github/workflows/*.yaml
 
