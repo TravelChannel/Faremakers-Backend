@@ -79,17 +79,7 @@ export class PnrBookingsService {
       meta: `${pnrBookingDto.pnr}`,
       timestamp: new Date().toISOString(),
     });
-    newLog = await Log.create({
-      level: '5',
-      message: `29)PNR  API Blocked, Returned Exception : ------------  ${new Date().toISOString()},- `,
-      meta: `${pnrBookingDto.pnr}`,
-      timestamp: new Date().toISOString(),
-    });
-    return this.responseService.createResponse(
-      HttpStatus.INTERNAL_SERVER_ERROR,
-      { isAmountEqual: false },
-      '29)PNR  API Blocked, Returned Exception',
-    );
+
     const t: Transaction = await sequelize.transaction();
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -169,17 +159,18 @@ export class PnrBookingsService {
               },
               { transaction: t },
             );
-            MessageLog = `3) newPnrDetails api done: ${new Date().toISOString()}`;
-            let newLog = await Log.create({
-              level: '1',
-              message: MessageLog,
-              meta: `${pnrBookingDto.pnr}`,
-              timestamp: new Date().toISOString(),
-            });
+
             // await this.callLeadCreation(leadCreationData, pnrBooking);
             // external api
           }),
         );
+        MessageLog = `3) newPnrDetails api done: ${new Date().toISOString()}`;
+        let newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
       }
 
       if (flightDetails) {
