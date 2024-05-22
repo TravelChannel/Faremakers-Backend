@@ -3,7 +3,8 @@
 /node_modules
 /build
 .env
-.github
+.github/workflows/*.yml
+.github/workflows/*.yaml
 
 # Logs
 logs
