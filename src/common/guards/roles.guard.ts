@@ -42,6 +42,8 @@ export class RolesGuard implements CanActivate {
       return false;
     }
     // const userId = user.id;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const hasRequiredRoles = requiredGuardParams.roles.some((role) => {
       return user.roleId === role;
 
