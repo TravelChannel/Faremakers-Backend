@@ -12,8 +12,8 @@ import {
 import { User } from 'src/modules/generalModules/users/entities/user.entity';
 import { PnrDetail } from '../../PnrDetails';
 import { FlightDetails } from '../../flightDetails';
-import { PnrServiceCharges } from '../../../serviceCharges/pnrServiceCharges';
-import { PnrPayment } from '../../../paymentModules/paymob/entities/pnrPayment.entity';
+import { PnrServiceCharges } from 'src/modules/serviceCharges/pnrServiceCharges';
+import { PnrPayment } from 'src/modules/paymentModules/paymob/entities/pnrPayment.entity';
 
 @Table
 export class PnrBooking extends Model {

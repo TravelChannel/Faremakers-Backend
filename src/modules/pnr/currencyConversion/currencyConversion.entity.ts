@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { PassengerInfo } from '../../pnr/passengerInfo';
+import { PassengerInfo } from 'src/modules/pnr/passengerInfo';
 
 @Table
 export class CurrencyConversion extends Model {

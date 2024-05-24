@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { InnerSchedualDetGet } from '../../pnr/innerSchedualDetGet';
+import { InnerSchedualDetGet } from 'src/modules/pnr/innerSchedualDetGet';
 
 @Table
 export class Arrival extends Model {

@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { FlightDetails } from '../../pnr/flightDetails';
+import { FlightDetails } from 'src/modules/pnr/flightDetails';
 
 @Table
 export class GroupDescription extends Model {

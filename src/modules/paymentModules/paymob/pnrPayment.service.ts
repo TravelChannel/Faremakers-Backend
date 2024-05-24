@@ -4,7 +4,7 @@ import { PnrPayment } from './entities/pnrPayment.entity';
 import { sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from 'src/common/utility/response/response.service';
 import { EXCEPTION } from 'src/shared/messages.constants';
-import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { PnrBooking } from 'src/modules/pnr/pnrBooking/entities/pnrBooking.entity';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()

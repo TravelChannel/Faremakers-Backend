@@ -26,7 +26,7 @@ import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.dec
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 
-import { getUserCompanyId } from '../../auth/getUserDecodedData';
+import { getUserCompanyId } from 'src/modules/auth/getUserDecodedData';
 import { PnrBooking } from './entities/pnrBooking.entity';
 
 import { RolesGuard } from 'src/common/guards/roles.guard';

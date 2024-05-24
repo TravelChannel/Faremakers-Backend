@@ -6,10 +6,10 @@ import { SEOAirlinesData } from './entities/seoAirlinesData.entity';
 import { sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
 import { ResponseService } from 'src/common/utility/response/response.service';
 import { EXCEPTION } from 'src/shared/messages.constants';
-// import { TopPicks } from '../../seo/topPicks';
-// import { TopCountries } from '../../seo/topCountries';
-// import { TopCities } from '../../seo/topCities';
-import { Airline } from '../../serviceCharges/airline/airline.entity';
+// import { TopPicks } from 'src/modules/seo/topPicks';
+// import { TopCountries } from 'src/modules/seo/topCountries';
+// import { TopCities } from 'src/modules/seo/topCities';
+import { Airline } from 'src/modules/serviceCharges/airline/airline.entity';
 
 @Injectable()
 export class SEOAirlinesDataService {

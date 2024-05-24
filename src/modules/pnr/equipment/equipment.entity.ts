@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { Carrier } from '../../pnr/carrier';
+import { Carrier } from 'src/modules/pnr/carrier';
 
 @Table
 export class Equipment extends Model {

@@ -8,8 +8,8 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 
-import { FlightDetails } from '../../pnr/flightDetails';
-import { InnerSchedualDetGet } from '../../pnr/innerSchedualDetGet';
+import { FlightDetails } from 'src/modules/pnr/flightDetails';
+import { InnerSchedualDetGet } from 'src/modules/pnr/innerSchedualDetGet';
 
 @Table
 export class SchedualDetGet extends Model {

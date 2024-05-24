@@ -7,7 +7,7 @@ import {
   BelongsTo,
   ForeignKey,
 } from 'sequelize-typescript';
-import { PnrBooking } from '../../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { PnrBooking } from 'src/modules/pnr/pnrBooking/entities/pnrBooking.entity';
 import { Role } from '../../roles/entities/role.entity';
 
 @Table
