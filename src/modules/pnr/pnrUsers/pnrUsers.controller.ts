@@ -11,14 +11,14 @@ import {
 } from '@nestjs/common';
 // import { Express } from 'express';
 // import { SessionData } from 'express-session';
-// import { RolesGuard } from 'src/common/guards/roles.guard';
-// import { Roles } from 'src/common/decorators/roles.decorator';
+// import { RolesGuard } from 'common/guards/roles.guard';
+// import { Roles } from 'common/decorators/roles.decorator';
 import { UserLoginDto } from './dto/userLogin.dto';
 import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 
 import { PnrUsersService } from './pnrUsers.service';
-import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
-import { OtpAuthGuard } from 'src/common/guards/otp-auth.guard'; // Adjust the import path
+import { SkipAuth } from 'common/decorators/skip-auth.decorator';
+import { OtpAuthGuard } from 'common/guards/otp-auth.guard'; // Adjust the import path
 
 @Controller('pnrUsers')
 // @UseGuards(RolesGuard)

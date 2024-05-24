@@ -1,5 +1,5 @@
 import { User } from './entities/user.entity';
-import { USERS_REPOSITORY } from 'src/shared/constants';
+import { USERS_REPOSITORY } from 'shared/constants';
 
 export const usersProviders = [
   {

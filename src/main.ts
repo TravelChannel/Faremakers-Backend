@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import * as dotenv from 'dotenv';
 import * as session from 'express-session';
 import { ValidationPipe } from '@nestjs/common';
-import { databaseConfig } from 'src/database/config/default';
+import { databaseConfig } from 'database/config/default';
 
 import * as cookieParser from 'cookie-parser';
 import * as passport from 'passport';

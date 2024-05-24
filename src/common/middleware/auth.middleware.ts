@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt.utils';
-import { databaseConfig } from 'src/database/config/default'; // Import the database configuration
+import { databaseConfig } from 'database/config/default'; // Import the database configuration
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const JWT_SECRET = dbConfig.JWT_SECRET;

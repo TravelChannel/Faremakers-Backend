@@ -8,10 +8,10 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { Arrival } from 'src/modules/pnr/arrival';
-import { Departure } from 'src/modules/pnr/departure';
-import { Carrier } from 'src/modules/pnr/carrier';
-import { SchedualDetGet } from 'src/modules/pnr/schedualDetGet';
+import { Arrival } from 'modules/pnr/arrival';
+import { Departure } from 'modules/pnr/departure';
+import { Carrier } from 'modules/pnr/carrier';
+import { SchedualDetGet } from 'modules/pnr/schedualDetGet';
 
 @Table
 export class InnerSchedualDetGet extends Model {

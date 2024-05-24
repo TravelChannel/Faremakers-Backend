@@ -1,5 +1,5 @@
 import { PnrPayment } from './entities/pnrPayment.entity';
-import { PNRPAYMENT_REPOSITORY } from 'src/shared/constants';
+import { PNRPAYMENT_REPOSITORY } from 'shared/constants';
 
 export const pnrPaymentProviders = [
   {

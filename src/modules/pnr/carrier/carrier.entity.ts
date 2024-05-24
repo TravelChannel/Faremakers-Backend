@@ -8,8 +8,8 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { InnerSchedualDetGet } from 'src/modules/pnr/innerSchedualDetGet';
-import { Equipment } from 'src/modules/pnr/equipment';
+import { InnerSchedualDetGet } from 'modules/pnr/innerSchedualDetGet';
+import { Equipment } from 'modules/pnr/equipment';
 
 @Table
 export class Carrier extends Model {

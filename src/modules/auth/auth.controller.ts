@@ -12,18 +12,18 @@ import {
 } from '@nestjs/common';
 import { UserLoginDto } from './dto/userLogin.dto';
 
-import { ResponseService } from 'src/common/utility/response/response.service';
+import { ResponseService } from 'common/utility/response/response.service';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { EXCEPTION, LOGOUT_SUCCESS } from 'src/shared/messages.constants';
+import { EXCEPTION, LOGOUT_SUCCESS } from 'shared/messages.constants';
 import { AuthService } from './auth.service';
-import { UsersService } from 'src/modules/generalModules/users/users.service';
+import { UsersService } from 'modules/generalModules/users/users.service';
 
-import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
-import { LocalAuthGuard } from 'src/common/guards/local-auth.guard'; // Adjust the import path
+import { SkipAuth } from 'common/decorators/skip-auth.decorator';
+import { LocalAuthGuard } from 'common/guards/local-auth.guard'; // Adjust the import path
 
-// import { AuthGuard } from 'src/common/guards/auth.guard';
-// import { RolesGuard } from 'src/common/guards/roles.guard';
+// import { AuthGuard } from 'common/guards/auth.guard';
+// import { RolesGuard } from 'common/guards/roles.guard';
 
 import { LoginDto } from './dto/login.dto';
 

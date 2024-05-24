@@ -19,22 +19,22 @@ import {
   UseGuards,
   // Session,
 } from '@nestjs/common';
-import { createFileStorage } from 'src/common/utils/file-storage.util'; // Import the utility function
+import { createFileStorage } from 'common/utils/file-storage.util'; // Import the utility function
 import { extname } from 'path';
 import { diskStorage } from 'multer';
-import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
-import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
+import { CurrentUserId } from 'common/decorators/currentUserId.decorator';
+import { IsCurrentUserAdmin } from 'common/decorators/isCurrentUserAdmin.decorator';
 // import { Express } from 'express';
 // import { SessionData } from 'express-session';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
+import { SkipAuth } from 'common/decorators/skip-auth.decorator';
 
-import { AuthGuard } from 'src/common/guards/auth.guard';
+import { AuthGuard } from 'common/guards/auth.guard';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { AssignRolesToUserDto } from './dto/assignRolesToUser.dto';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
-import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
+import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
 
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -42,9 +42,9 @@ import {
   ADMIN_SUBJECT,
   ADMIN_AND_USER_SUBJECT,
   ALL_USERS_SUBJECT,
-} from 'src/common/aclSubjects';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { RolesGuard } from 'src/common/guards/roles.guard';
+} from 'common/aclSubjects';
+import { Roles } from 'common/decorators/roles.decorator';
+import { RolesGuard } from 'common/guards/roles.guard';
 
 @Controller('users')
 @UseGuards(RolesGuard)

@@ -13,13 +13,13 @@ import {
   SAVED_SUCCESS,
   GET_SUCCESS,
   AUTHENTICATION_ERROR,
-} from 'src/shared/messages.constants';
-import { PNR_BOOKINGS_REPOSITORY } from 'src/shared/constants';
+} from 'shared/messages.constants';
+import { PNR_BOOKINGS_REPOSITORY } from 'shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
 import { User } from '../..//generalModules/users/entities/user.entity';
-import { Op, sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'src/common/utility/response/response.service';
+import { Op, sequelize, Transaction } from 'database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from 'common/utility/response/response.service';
 import { FlightDetails } from '../flightDetails';
 import { ExtraBaggage } from '../extraBaggage';
 import { BaggageAllowance } from '../baggageAllowance';
@@ -37,18 +37,18 @@ import { Carrier } from '../carrier';
 import { Departure } from '../departure';
 import { Arrival } from '../arrival';
 import { Equipment } from '../equipment';
-import { PnrServiceCharges } from 'src/modules/serviceCharges/pnrServiceCharges';
-import { CommissionPercentage } from 'src/modules/serviceCharges/commissionPercentage/entities/commissionPercentage.entity';
-import { Sector } from 'src/modules/serviceCharges/sector';
-import { FareClass } from 'src/modules/serviceCharges/fareClass';
-import { Airline } from 'src/modules/serviceCharges/airline';
-import { Promotion } from 'src/modules/generalModules/promotions/entities/promotion.entity';
-import { CommissionCategories } from 'src/modules/serviceCharges/commissionCategories';
-import { PnrPayment } from 'src/modules/paymentModules/paymob/entities/pnrPayment.entity';
+import { PnrServiceCharges } from 'modules/serviceCharges/pnrServiceCharges';
+import { CommissionPercentage } from 'modules/serviceCharges/commissionPercentage/entities/commissionPercentage.entity';
+import { Sector } from 'modules/serviceCharges/sector';
+import { FareClass } from 'modules/serviceCharges/fareClass';
+import { Airline } from 'modules/serviceCharges/airline';
+import { Promotion } from 'modules/generalModules/promotions/entities/promotion.entity';
+import { CommissionCategories } from 'modules/serviceCharges/commissionCategories';
+import { PnrPayment } from 'modules/paymentModules/paymob/entities/pnrPayment.entity';
 import { HttpService } from '@nestjs/axios';
-import { GeneralTask } from 'src/modules/generalModules/generalTasks/entities/generalTask.entity';
+import { GeneralTask } from 'modules/generalModules/generalTasks/entities/generalTask.entity';
 
-import { Log } from 'src/modules/generalModules/systemLogs/entities/Log.entity';
+import { Log } from 'modules/generalModules/systemLogs/entities/Log.entity';
 
 @Injectable()
 export class PnrBookingsService {

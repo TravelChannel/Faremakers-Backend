@@ -1,5 +1,5 @@
 import { GeneralTask } from './entities/generalTask.entity';
-import { GENERAL_TASKS_REPOSITORY } from 'src/shared/constants';
+import { GENERAL_TASKS_REPOSITORY } from 'shared/constants';
 
 export const generalTasksProviders = [
   {

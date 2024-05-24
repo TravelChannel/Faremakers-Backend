@@ -18,21 +18,21 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
-import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
+import { CurrentUserId } from 'common/decorators/currentUserId.decorator';
 
-import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
+import { SkipAuth } from 'common/decorators/skip-auth.decorator';
 
-import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
-import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
+import { IsCurrentUserAdmin } from 'common/decorators/isCurrentUserAdmin.decorator';
+import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
 import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 
-import { getUserCompanyId } from 'src/modules/auth/getUserDecodedData';
+import { getUserCompanyId } from 'modules/auth/getUserDecodedData';
 import { PnrBooking } from './entities/pnrBooking.entity';
 
-import { RolesGuard } from 'src/common/guards/roles.guard';
+import { RolesGuard } from 'common/guards/roles.guard';
 
-// import { AuthGuard } from 'src/common/guards/auth.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
+// import { AuthGuard } from 'common/guards/auth.guard';
+import { Roles } from 'common/decorators/roles.decorator';
 
 import { PnrBookingsService } from './pnrBookings.service';
 
@@ -41,7 +41,7 @@ import {
   ADMIN_AND_USER_SUBJECT,
   PARTIAL_ADMIN_SUBJECT,
   ALL_ADMINS,
-} from 'src/common/aclSubjects';
+} from 'common/aclSubjects';
 
 @Controller('pnrBooking')
 export class PnrBookingsController {

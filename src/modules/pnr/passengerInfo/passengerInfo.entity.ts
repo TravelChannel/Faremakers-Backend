@@ -8,8 +8,8 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { PassengerInfoList } from 'src/modules/pnr/passengerInfoList';
-import { CurrencyConversion } from 'src/modules/pnr/currencyConversion';
+import { PassengerInfoList } from 'modules/pnr/passengerInfoList';
+import { CurrencyConversion } from 'modules/pnr/currencyConversion';
 
 @Table
 export class PassengerInfo extends Model {

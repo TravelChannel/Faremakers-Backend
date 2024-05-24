@@ -9,7 +9,7 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -18,7 +18,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "src/*": ["src/*"]
-    }
+      // "src/*": ["src/*"]
+      "*": ["*"] // Allow any relative path to be resolved from the baseUrl
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules"]
   }
 }
