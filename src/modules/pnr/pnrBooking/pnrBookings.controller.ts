@@ -20,7 +20,7 @@ import { Response } from 'express';
 
 import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
 
-import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
+import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 
 import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
@@ -29,10 +29,10 @@ import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 import { getUserCompanyId } from '../../auth/getUserDecodedData';
 import { PnrBooking } from './entities/pnrBooking.entity';
 
-import { RolesGuard } from '../../../common/guards/roles.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 
-// import { AuthGuard } from '../../../common/guards/auth.guard';
-import { Roles } from '../../../common/decorators/roles.decorator';
+// import { AuthGuard } from 'src/common/guards/auth.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 import { PnrBookingsService } from './pnrBookings.service';
 

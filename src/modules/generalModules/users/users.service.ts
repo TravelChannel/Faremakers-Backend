@@ -5,12 +5,12 @@ import {
   //  Session
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FirebaseService } from '../../../database/firebase/firebase.service';
+import { FirebaseService } from 'src/database/firebase/firebase.service';
 
 import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { User } from './entities/user.entity';
-import { USERS_REPOSITORY } from '../../../shared/constants';
+import { USERS_REPOSITORY } from 'src/shared/constants';
 import * as bcrypt from 'bcrypt';
 import { databaseConfig } from 'src/database/config/default';
 
@@ -21,14 +21,14 @@ import {
   Transaction,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Op,
-} from '../../../database/sequelize.provider';
+} from 'src/database/sequelize.provider';
 
-import { ResponseService } from '../../../common/utility/response/response.service';
+import { ResponseService } from 'src/common/utility/response/response.service';
 import {
   EXCEPTION,
   GET_SUCCESS,
   SAVED_SUCCESS,
-} from '../../../shared/messages.constants';
+} from 'src/shared/messages.constants';
 import { UpdateUserDto } from './dto/UpdateUser.dto';
 import { UserProfile } from './entities/userProfile.entity';
 

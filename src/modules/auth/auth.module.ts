@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { SessionSerializer } from './sessionSerializer';
-import { UsersModule } from '../generalModules/users/users.module';
+import { UsersModule } from 'src/modules/generalModules/users/users.module';
 import { LocalStrategy } from './local.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { HttpModule } from '@nestjs/axios';

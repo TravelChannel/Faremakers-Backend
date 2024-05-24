@@ -18,7 +18,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
+import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 
 import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
@@ -29,8 +29,8 @@ import {
 } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 // Test commit
-import { RolesGuard } from '../../../common/guards/roles.guard';
-import { Roles } from '../../../common/decorators/roles.decorator';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('blogs')
 @UseGuards(RolesGuard)

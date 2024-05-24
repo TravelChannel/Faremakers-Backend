@@ -13,17 +13,13 @@ import {
   SAVED_SUCCESS,
   GET_SUCCESS,
   AUTHENTICATION_ERROR,
-} from '../../../shared/messages.constants';
-import { PNR_BOOKINGS_REPOSITORY } from '../../../shared/constants';
+} from 'src/shared/messages.constants';
+import { PNR_BOOKINGS_REPOSITORY } from 'src/shared/constants';
 import { PnrBooking } from './entities/pnrBooking.entity';
 import { PnrDetail } from '../pnrDetails';
 import { User } from '../..//generalModules/users/entities/user.entity';
-import {
-  Op,
-  sequelize,
-  Transaction,
-} from '../../../database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from '../../../common/utility/response/response.service';
+import { Op, sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from 'src/common/utility/response/response.service';
 import { FlightDetails } from '../flightDetails';
 import { ExtraBaggage } from '../extraBaggage';
 import { BaggageAllowance } from '../baggageAllowance';
@@ -46,13 +42,13 @@ import { CommissionPercentage } from '../../serviceCharges/commissionPercentage/
 import { Sector } from '../../serviceCharges/sector';
 import { FareClass } from '../../serviceCharges/fareClass';
 import { Airline } from '../../serviceCharges/airline';
-import { Promotion } from '../../generalModules/promotions/entities/promotion.entity';
+import { Promotion } from 'src/modules/generalModules/promotions/entities/promotion.entity';
 import { CommissionCategories } from '../../serviceCharges/commissionCategories';
 import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.entity';
 import { HttpService } from '@nestjs/axios';
-import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
+import { GeneralTask } from 'src/modules/generalModules/generalTasks/entities/generalTask.entity';
 
-import { Log } from '../../generalModules/systemLogs/entities/Log.entity';
+import { Log } from 'src/modules/generalModules/systemLogs/entities/Log.entity';
 
 @Injectable()
 export class PnrBookingsService {
@@ -696,9 +692,11 @@ export class PnrBookingsService {
             meta: `${pnrBookingDto.pnr}`,
             timestamp: new Date().toISOString(),
           });
-          const message = `Your booking for ${flightDetails.groupDescription[0]
-            ?.departureLocation}-${flightDetails.groupDescription[0]
-            ?.arrivalLocation} priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
+          const message = `Your booking for ${
+            flightDetails.groupDescription[0]?.departureLocation
+          }-${
+            flightDetails.groupDescription[0]?.arrivalLocation
+          } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -820,10 +818,11 @@ export class PnrBookingsService {
     <body>
       <div class="container">
         <h2> 
-        Your booking for Reference # ${referenceNumber} ( ${bookingData
-          .flightDetails.groupDescription[0]?.departureLocation}-${bookingData
-          .flightDetails.groupDescription[0]
-          ?.arrivalLocation} ) is Awaiting Payment.
+        Your booking for Reference # ${referenceNumber} ( ${
+          bookingData.flightDetails.groupDescription[0]?.departureLocation
+        }-${
+          bookingData.flightDetails.groupDescription[0]?.arrivalLocation
+        } ) is Awaiting Payment.
         </h2>
         <p>Hi!  ${user.phoneNumber},</p>
         <p>Please check details in the following link.  </p>
@@ -1165,20 +1164,20 @@ export class PnrBookingsService {
                 },
               ]
             : isPaid === 0
-            ? [
-                {
-                  model: PnrPayment,
-                  required: false,
-                  where: {
-                    id: null,
+              ? [
+                  {
+                    model: PnrPayment,
+                    required: false,
+                    where: {
+                      id: null,
+                    },
                   },
-                },
-              ]
-            : [
-                {
-                  model: PnrPayment,
-                },
-              ]),
+                ]
+              : [
+                  {
+                    model: PnrPayment,
+                  },
+                ]),
           {
             model: PnrDetail,
             as: 'pnrDetail',
@@ -2228,9 +2227,11 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = `Your booking for ${pnrBooking.flightDetails
-          .groupDescription[0]?.departureLocation}-${pnrBooking.flightDetails
-          .groupDescription[0]?.arrivalLocation}, Ref# ${
+        const message = `Your booking for ${
+          pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+        }-${
+          pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+        }, Ref# ${
           pnrBooking.id
         }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 

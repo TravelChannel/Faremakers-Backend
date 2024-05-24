@@ -1,12 +1,12 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
-import { BLOGS_REPOSITORY } from '../../../shared/constants';
+import { BLOGS_REPOSITORY } from 'src/shared/constants';
 import { Blog } from './entities/blog.entity';
-import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from '../../../common/utility/response/response.service';
-import { EXCEPTION } from '../../../shared/messages.constants';
-import { FirebaseService } from '../../../database/firebase/firebase.service';
+import { sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from 'src/common/utility/response/response.service';
+import { EXCEPTION } from 'src/shared/messages.constants';
+import { FirebaseService } from 'src/database/firebase/firebase.service';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { BlogTypes } from '../blogTypes/index';

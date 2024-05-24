@@ -1,8 +1,8 @@
 // session.serializer.ts
 import { Injectable } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
-import { UsersService } from '../../modules/generalModules/users/users.service'; // Adjust the path based on your project structure
-import { User } from '../../modules/generalModules/users/entities/user.entity'; // Adjust the path based on your project structure
+import { UsersService } from 'src/modules/generalModules/users/users.service'; // Adjust the path based on your project structure
+import { User } from 'src/modules/generalModules/users/entities/user.entity'; // Adjust the path based on your project structure
 
 @Injectable()
 export class SessionSerializer extends PassportSerializer {

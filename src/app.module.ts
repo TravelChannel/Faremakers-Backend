@@ -1,40 +1,40 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
-import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { LoggerMiddleware } from 'src/common/middleware/logger.middleware';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { AuthModule } from './modules/auth/auth.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './modules/auth/jwt.strategy'; // Import your JwtStrategy
-import { AuthService } from './modules/auth/auth.service';
-import { AuthMiddleware } from './common/middleware/auth.middleware';
+import { JwtStrategy } from 'src/modules/auth/jwt.strategy'; // Import your JwtStrategy
+import { AuthService } from 'src/modules/auth/auth.service';
+import { AuthMiddleware } from 'src/common/middleware/auth.middleware';
 
-import { UsersModule } from './modules/generalModules/users/users.module';
-// import { RolesGuard } from './common/guards/roles.guard';
-import { AuthGuard } from './common/guards/auth.guard';
+import { UsersModule } from 'src/modules/generalModules/users/users.module';
+// import { RolesGuard } from 'src/common/guards/roles.guard';
+import { AuthGuard } from 'src/common/guards/auth.guard';
 
-import { DatabaseModule } from './database/database.module';
-import { RolesModule } from './modules/generalModules/roles/roles.module';
-import { SEOAirlinesDataModule } from './modules/seo/seoAirlines/seoAirlinesData.module';
-import { PnrBookingsModule } from './modules/pnr/pnrBooking/pnrBookings.module';
-import { PnrUsersModule } from './modules/pnr/pnrUsers/pnrUsers.module';
-import { PromotionsModule } from './modules/generalModules/promotions/promotions.module';
-import { PnrPaymentModule } from './modules/paymentModules/paymob/pnrPayment.module';
-import { BlogsModule } from './modules/generalModules/blogs/blogs.module';
-import { GeneralTasksModule } from './modules/generalModules/generalTasks/generalTasks.module';
-import { RatingsModule } from './modules/generalModules/ratings/ratings.module';
-import { CommissionPercentageModule } from './modules/serviceCharges/commissionPercentage/commissionPercentage.module';
-import { ActivityModule } from './modules/callLogs/activity/activity.module';
+import { DatabaseModule } from 'src/database/database.module';
+import { RolesModule } from 'src/modules/generalModules/roles/roles.module';
+import { SEOAirlinesDataModule } from 'src/modules/seo/seoAirlines/seoAirlinesData.module';
+import { PnrBookingsModule } from 'src/modules/pnr/pnrBooking/pnrBookings.module';
+import { PnrUsersModule } from 'src/modules/pnr/pnrUsers/pnrUsers.module';
+import { PromotionsModule } from 'src/modules/generalModules/promotions/promotions.module';
+import { PnrPaymentModule } from 'src/modules/paymentModules/paymob/pnrPayment.module';
+import { BlogsModule } from 'src/modules/generalModules/blogs/blogs.module';
+import { GeneralTasksModule } from 'src/modules/generalModules/generalTasks/generalTasks.module';
+import { RatingsModule } from 'src/modules/generalModules/ratings/ratings.module';
+import { CommissionPercentageModule } from 'src/modules/serviceCharges/commissionPercentage/commissionPercentage.module';
+import { ActivityModule } from 'src/modules/callLogs/activity/activity.module';
 import { databaseConfig } from 'src/database/config/default';
 import { APP_GUARD } from '@nestjs/core'; // Import APP_GUARD
-import { ResponseModule } from './common/utility/response/response.module';
+import { ResponseModule } from 'src/common/utility/response/response.module';
 import { HttpModule } from '@nestjs/axios';
-import { createFileStorage } from './common/utils/file-storage.util'; // Import the utility function
-import { FirebaseModule } from './database/firebase/firebase.module';
+import { createFileStorage } from 'src/common/utils/file-storage.util'; // Import the utility function
+import { FirebaseModule } from 'src/database/firebase/firebase.module';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const JWT_SECRET = dbConfig.JWT_SECRET;

@@ -1,5 +1,5 @@
 import { Promotion } from './entities/promotion.entity';
-import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
+import { PROMOTIONS_REPOSITORY } from 'src/shared/constants';
 
 export const promotionsProviders = [
   {
