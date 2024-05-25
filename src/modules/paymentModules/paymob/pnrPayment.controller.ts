@@ -9,11 +9,11 @@ import {
   // HttpException,
 } from '@nestjs/common';
 import { PnrPaymentService } from './pnrPayment.service';
-import { ADMIN_SUBJECT } from 'common/aclSubjects';
-// import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
+import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
-import { RolesGuard } from 'common/guards/roles.guard';
-import { Roles } from 'common/decorators/roles.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('pnrPayment')
 @UseGuards(RolesGuard)

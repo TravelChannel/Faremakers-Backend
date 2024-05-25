@@ -9,14 +9,14 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { PnrBooking } from 'modules/pnr/pnrBooking/entities/pnrBooking.entity';
-import { ExtraBaggage } from 'modules/pnr/extraBaggage';
-import { BaggageAllowance } from 'modules/pnr/baggageAllowance';
-import { BookingFlight } from 'modules/pnr/bookingFlight';
-import { Fare } from 'modules/pnr/fare';
-import { GroupDescription } from 'modules/pnr/groupDescription';
-import { SchedualDetGet } from 'modules/pnr/schedualDetGet';
-import { FlightSegments } from 'modules/pnr/flightSegments';
+import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+import { ExtraBaggage } from '../../pnr/extraBaggage';
+import { BaggageAllowance } from '../../pnr/baggageAllowance';
+import { BookingFlight } from '../../pnr/bookingFlight';
+import { Fare } from '../../pnr/fare';
+import { GroupDescription } from '../../pnr/groupDescription';
+import { SchedualDetGet } from '../../pnr/schedualDetGet';
+import { FlightSegments } from '../../pnr/flightSegments';
 
 @Table
 export class FlightDetails extends Model {

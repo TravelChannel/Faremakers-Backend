@@ -1,6 +1,6 @@
 import { Controller, Body, Post } from '@nestjs/common';
 import { ActivityService } from './activity.service';
-import { SkipAuth } from 'common/decorators/skip-auth.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 // Test
 @Controller('Activity')
 export class ActivityController {

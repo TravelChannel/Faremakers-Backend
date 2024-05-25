@@ -1,12 +1,12 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
-import { RATINGS_REPOSITORY } from 'shared/constants';
+import { RATINGS_REPOSITORY } from '../../../shared/constants';
 import { Rating } from './entities/rating.entity';
-import { sequelize, Transaction } from 'database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'common/utility/response/response.service';
-import { EXCEPTION } from 'shared/messages.constants';
-// import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
+import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from '../../../common/utility/response/response.service';
+import { EXCEPTION } from '../../../shared/messages.constants';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
 export class RatingsService {

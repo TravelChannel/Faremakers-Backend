@@ -1,5 +1,5 @@
 import { SEOAirlinesData } from './entities/seoAirlinesData.entity';
-import { SEO_AIRLINES_DATA_REPOSITORY } from 'shared/constants';
+import { SEO_AIRLINES_DATA_REPOSITORY } from '../../../shared/constants';
 
 export const seoAirlinesDataProviders = [
   {

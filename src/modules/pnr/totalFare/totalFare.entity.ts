@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { Fare } from 'modules/pnr/fare';
+import { Fare } from '../../pnr/fare';
 
 @Table
 export class TotalFare extends Model {

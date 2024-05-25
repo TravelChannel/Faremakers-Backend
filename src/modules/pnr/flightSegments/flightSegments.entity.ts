@@ -7,7 +7,7 @@ import {
   BelongsTo,
 } from 'sequelize-typescript';
 
-import { FlightDetails } from 'modules/pnr/flightDetails';
+import { FlightDetails } from '../../pnr/flightDetails';
 
 @Table
 export class FlightSegments extends Model {

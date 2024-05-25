@@ -1,11 +1,11 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { ROLES_REPOSITORY } from 'shared/constants';
+import { ROLES_REPOSITORY } from '../../../shared/constants';
 import { Role } from './entities/role.entity';
-import { sequelize, Transaction } from 'database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'common/utility/response/response.service';
-import { EXCEPTION } from 'shared/messages.constants';
+import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from '../../../common/utility/response/response.service';
+import { EXCEPTION } from '../../../shared/messages.constants';
 @Injectable()
 export class RolesService {
   constructor(

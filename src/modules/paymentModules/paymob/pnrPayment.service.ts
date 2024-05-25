@@ -1,11 +1,11 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
-import { PNRPAYMENT_REPOSITORY } from 'shared/constants';
+import { PNRPAYMENT_REPOSITORY } from '../../../shared/constants';
 import { PnrPayment } from './entities/pnrPayment.entity';
-import { sequelize, Transaction } from 'database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'common/utility/response/response.service';
-import { EXCEPTION } from 'shared/messages.constants';
-import { PnrBooking } from 'modules/pnr/pnrBooking/entities/pnrBooking.entity';
-// import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
+import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from '../../../common/utility/response/response.service';
+import { EXCEPTION } from '../../../shared/messages.constants';
+import { PnrBooking } from '../../pnr/pnrBooking/entities/pnrBooking.entity';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
 export class PnrPaymentService {

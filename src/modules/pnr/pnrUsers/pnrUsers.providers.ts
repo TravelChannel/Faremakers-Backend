@@ -1,5 +1,5 @@
 import { PnrUser } from './entities/pnrUsers.entity';
-import { PNR_USERS_REPOSITORY } from 'shared/constants';
+import { PNR_USERS_REPOSITORY } from '../../../shared/constants';
 
 export const PnrUsersProviders = [
   {

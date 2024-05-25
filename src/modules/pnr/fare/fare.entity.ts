@@ -9,9 +9,9 @@ import {
   HasMany,
 } from 'sequelize-typescript';
 
-import { FlightDetails } from 'modules/pnr/flightDetails';
-import { TotalFare } from 'modules/pnr/totalFare';
-import { PassengerInfoList } from 'modules/pnr/passengerInfoList';
+import { FlightDetails } from '../../pnr/flightDetails';
+import { TotalFare } from '../../pnr/totalFare';
+import { PassengerInfoList } from '../../pnr/passengerInfoList';
 
 @Table
 export class Fare extends Model {

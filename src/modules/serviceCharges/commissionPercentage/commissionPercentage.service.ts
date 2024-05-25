@@ -2,16 +2,20 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreateCommissionPercentageDto } from './dto/create-commissionPercentage.dto';
 import { UpdateCommissionPercentageDto } from './dto/update-commissionPercentage.dto';
-import { COMMISSION_PERCENTAGE_REPOSITORY } from 'shared/constants';
+import { COMMISSION_PERCENTAGE_REPOSITORY } from '../../../shared/constants';
 import { CommissionPercentage } from './entities/commissionPercentage.entity';
-import { Op, sequelize, Transaction } from 'database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'common/utility/response/response.service';
-import { EXCEPTION } from 'shared/messages.constants';
+import {
+  Op,
+  sequelize,
+  Transaction,
+} from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from '../../../common/utility/response/response.service';
+import { EXCEPTION } from '../../../shared/messages.constants';
 import { Airline } from '../airline';
 import { FareClass } from '../fareClass';
 import { Sector } from '../sector';
-import { CommissionCategories } from '../commissionCategories';
-// import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
+import { CommissionCategories } from '../CommissionCategories';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()
 export class CommissionPercentageService {
@@ -128,8 +132,9 @@ export class CommissionPercentageService {
   }
   async getServiceCharges(majorInfo) {
     try {
-      const pnrServiceChargesPercentage =
-        await this.calculateServiceCharges(majorInfo);
+      const pnrServiceChargesPercentage = await this.calculateServiceCharges(
+        majorInfo,
+      );
       return this.responseService.createResponse(
         HttpStatus.OK,
         pnrServiceChargesPercentage,

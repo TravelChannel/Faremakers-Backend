@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PnrUsersController } from './pnrUsers.controller';
-// import { SessionSerializer } from 'database/sessionSerializer';
+// import { SessionSerializer } from 'src/database/sessionSerializer';
 import { PassportModule } from '@nestjs/passport';
 
 import { PnrUsersService } from './pnrUsers.service';

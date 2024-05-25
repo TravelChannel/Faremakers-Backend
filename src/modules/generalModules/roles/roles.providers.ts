@@ -1,5 +1,5 @@
 import { Role } from './entities/role.entity';
-import { ROLES_REPOSITORY } from 'shared/constants';
+import { ROLES_REPOSITORY } from '../../../shared/constants';
 
 export const rolesProviders = [
   {

@@ -10,16 +10,16 @@ import {
   // HttpStatus,
   // HttpException,
 } from '@nestjs/common';
-import { SkipAuth } from 'common/decorators/skip-auth.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 import { CommissionPercentageService } from './commissionPercentage.service';
 import { CreateCommissionPercentageDto } from './dto/create-commissionPercentage.dto';
 import { UpdateCommissionPercentageDto } from './dto/update-commissionPercentage.dto';
-import { ADMIN_SUBJECT } from 'common/aclSubjects';
-// import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
+import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
-import { RolesGuard } from 'common/guards/roles.guard';
-import { Roles } from 'common/decorators/roles.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('commissionPercentage')
 @UseGuards(RolesGuard)

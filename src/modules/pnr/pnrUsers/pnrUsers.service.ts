@@ -5,7 +5,7 @@ import {
   //  Session
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { databaseConfig } from 'database/config/default';
+import { databaseConfig } from 'src/database/config/default';
 
 import { HttpService } from '@nestjs/axios';
 
@@ -14,18 +14,18 @@ import { UserLoginOtpDto } from './dto/userLoginOtp.dto';
 import { AxiosResponse } from 'axios';
 
 import { PnrUser } from './entities/pnrUsers.entity';
-import { PNR_USERS_REPOSITORY } from 'shared/constants';
+import { PNR_USERS_REPOSITORY } from '../../../shared/constants';
 import {
   OTP_SENT_SUCCESS,
   OTP_VALIDATION_FAILS,
   OTP_VALIDATED,
   EXCEPTION,
   AUTHENTICATION_ERROR,
-} from 'shared/messages.constants';
+} from '../../../shared/messages.constants';
 
 // import { SessionData } from 'express-session';
 
-import { ResponseService } from 'common/utility/response/response.service';
+import { ResponseService } from '../../../common/utility/response/response.service';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 

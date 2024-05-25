@@ -9,11 +9,11 @@ import {
   HasOne,
 } from 'sequelize-typescript';
 
-import { User } from 'modules/generalModules/users/entities/user.entity';
-import { PnrDetail } from '../../PnrDetails';
+import { User } from '../../../generalModules/users/entities/user.entity';
+import { PnrDetail } from '../../pnrDetails';
 import { FlightDetails } from '../../flightDetails';
-import { PnrServiceCharges } from 'modules/serviceCharges/pnrServiceCharges';
-import { PnrPayment } from 'modules/paymentModules/paymob/entities/pnrPayment.entity';
+import { PnrServiceCharges } from '../../../serviceCharges/pnrServiceCharges';
+import { PnrPayment } from '../../../paymentModules/paymob/entities/pnrPayment.entity';
 
 @Table
 export class PnrBooking extends Model {

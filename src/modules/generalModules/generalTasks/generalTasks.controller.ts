@@ -21,17 +21,17 @@ import {
 } from '@nestjs/common';
 import * as xmlbuilder from 'xmlbuilder';
 
-import { SkipAuth } from 'common/decorators/skip-auth.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 import * as moment from 'moment';
 import { GeneralTasksService } from './generalTasks.service';
 import {
   ADMIN_SUBJECT,
   //  ADMIN_AND_USER_SUBJECT
-} from 'common/aclSubjects';
-// import { ToggleIsActiveDto } from 'shared/dtos/toggleIsActive.dto';
+} from 'src/common/aclSubjects';
+// import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 // Test commit
-import { RolesGuard } from 'common/guards/roles.guard';
-import { Roles } from 'common/decorators/roles.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import { Blog } from '../blogs/entities/blog.entity';
 import { staticData } from './staticData';
 
