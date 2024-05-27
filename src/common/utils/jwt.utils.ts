@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import { User } from 'src/modules/generalModules/users/entities/user.entity';
+import { User } from '../../modules/generalModules/users/entities/user.entity';
 import { databaseConfig } from 'src/database/config/default';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment

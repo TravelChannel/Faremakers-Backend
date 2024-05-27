@@ -12,8 +12,8 @@ import { PnrPaymentService } from './pnrPayment.service';
 import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('pnrPayment')
 @UseGuards(RolesGuard)

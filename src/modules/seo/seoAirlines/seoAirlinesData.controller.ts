@@ -15,9 +15,9 @@ import { SEOAirlinesDataService } from './seoAirlinesData.service';
 import { UpdateSEOAirlinesDataDto } from './dto/update-seoAirlinesData.dto';
 import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-// import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
+// import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 @Controller('seoAirlinesData')
 @UseGuards(RolesGuard)

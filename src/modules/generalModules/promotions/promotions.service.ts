@@ -1,13 +1,17 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
-import { PROMOTIONS_REPOSITORY } from 'src/shared/constants';
+import { PROMOTIONS_REPOSITORY } from '../../../shared/constants';
 import { Promotion } from './entities/promotion.entity';
-import { FirebaseService } from 'src/database/firebase/firebase.service';
+import { FirebaseService } from '../../../database/firebase/firebase.service';
 
-import { Op, sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'src/common/utility/response/response.service';
-import { EXCEPTION } from 'src/shared/messages.constants';
+import {
+  Op,
+  sequelize,
+  Transaction,
+} from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from '../../../common/utility/response/response.service';
+import { EXCEPTION } from '../../../shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 @Injectable()

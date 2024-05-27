@@ -1,5 +1,5 @@
 import { Rating } from './entities/rating.entity';
-import { RATINGS_REPOSITORY } from 'src/shared/constants';
+import { RATINGS_REPOSITORY } from '../../../shared/constants';
 
 export const ratingsProviders = [
   {

@@ -1,5 +1,5 @@
 import { CommissionPercentage } from './entities/commissionPercentage.entity';
-import { COMMISSION_PERCENTAGE_REPOSITORY } from 'src/shared/constants';
+import { COMMISSION_PERCENTAGE_REPOSITORY } from '../../../shared/constants';
 
 export const commissionPercentageProviders = [
   {

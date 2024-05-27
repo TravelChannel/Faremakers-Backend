@@ -3,7 +3,7 @@ import { UsersController } from './users.controller';
 
 import { UsersService } from './users.service';
 import { usersProviders } from './users.providers';
-import { FirebaseModule } from 'src/database/firebase/firebase.module';
+import { FirebaseModule } from '../../../database/firebase/firebase.module';
 
 @Module({
   imports: [FirebaseModule], // Import FirebaseModule

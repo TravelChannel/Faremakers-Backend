@@ -21,7 +21,7 @@ import {
 } from '@nestjs/common';
 import * as xmlbuilder from 'xmlbuilder';
 
-import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 import * as moment from 'moment';
 import { GeneralTasksService } from './generalTasks.service';
 import {
@@ -30,8 +30,8 @@ import {
 } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 // Test commit
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import { Blog } from '../blogs/entities/blog.entity';
 import { staticData } from './staticData';
 

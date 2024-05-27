@@ -12,16 +12,16 @@ import { HttpService } from '@nestjs/axios';
 
 // import { Request } from 'express'; // Import the Request object
 
-import { UsersService } from 'src/modules/generalModules/users/users.service'; // Adjust the path based on your project structure
+import { UsersService } from '../../modules/generalModules/users/users.service'; // Adjust the path based on your project structure
 import * as bcrypt from 'bcrypt';
 import {
   generateAccessTokenOtpUser,
   generateRefreshTokenOtpUser,
   verifyToken,
-} from 'src/common/utils/jwt.utils';
+} from '../../common/utils/jwt.utils';
 import { databaseConfig } from 'src/database/config/default';
 
-import { ResponseService } from 'src/common/utility/response/response.service';
+import { ResponseService } from '../../common/utility/response/response.service';
 import {
   AUTHENTICATION_ERROR,
   OTP_SENT_SUCCESS,
@@ -31,7 +31,7 @@ import {
   // LOGOUT_SUCCESS,
   USER_NOT_FOUND,
   INVALID_REFRESH_TOKEN,
-} from 'src/shared/messages.constants';
+} from '../../shared/messages.constants';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 

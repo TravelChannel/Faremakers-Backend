@@ -1,15 +1,15 @@
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
 // import { CreateSEOAirlinesDataDto } from './dto/create-seoAirlinesData.dto';
 import { UpdateSEOAirlinesDataDto } from './dto/update-seoAirlinesData.dto';
-import { SEO_AIRLINES_DATA_REPOSITORY } from 'src/shared/constants';
+import { SEO_AIRLINES_DATA_REPOSITORY } from '../../../shared/constants';
 import { SEOAirlinesData } from './entities/seoAirlinesData.entity';
-import { sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from 'src/common/utility/response/response.service';
-import { EXCEPTION } from 'src/shared/messages.constants';
-// import { TopPicks } from 'src/modules/seo/topPicks';
-// import { TopCountries } from 'src/modules/seo/topCountries';
-// import { TopCities } from 'src/modules/seo/topCities';
-import { Airline } from 'src/modules/serviceCharges/airline/airline.entity';
+import { sequelize, Transaction } from '../../../database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from '../../../common/utility/response/response.service';
+import { EXCEPTION } from '../../../shared/messages.constants';
+// import { TopPicks } from '../../seo/topPicks';
+// import { TopCountries } from '../../seo/topCountries';
+// import { TopCities } from '../../seo/topCities';
+import { Airline } from '../../serviceCharges/airline/airline.entity';
 
 @Injectable()
 export class SEOAirlinesDataService {

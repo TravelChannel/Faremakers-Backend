@@ -22,9 +22,9 @@ import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
-import { RolesGuard } from 'src/common/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
-import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
+import { RolesGuard } from '../../../common/guards/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
+import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 @Controller('promotions')
 @UseGuards(RolesGuard)

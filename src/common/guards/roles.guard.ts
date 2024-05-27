@@ -1,9 +1,9 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { ResponseService } from 'src/common/utility/response/response.service';
+import { ResponseService } from '../../common/utility/response/response.service';
 
 import { Reflector } from '@nestjs/core';
 
-// import { CompanyBranchDepartment } from 'src/modules/generalModules/company-branch-department';
+// import { CompanyBranchDepartment } from '../../modules/generalModules/company-branch-department';
 // import { Request } from 'express';
 
 @Injectable()
