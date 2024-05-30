@@ -19,7 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { PromotionsService } from './promotions.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
-import { ADMIN_SUBJECT } from 'src/common/aclSubjects';
+import { ADMIN_AND_PARTIAL_ADMIN_SUBJECT } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 
 import { RolesGuard } from '../../../common/guards/roles.guard';
@@ -28,7 +28,7 @@ import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
 @Controller('promotions')
 @UseGuards(RolesGuard)
-@Roles(ADMIN_SUBJECT)
+@Roles(ADMIN_AND_PARTIAL_ADMIN_SUBJECT)
 export class PromotionsController {
   constructor(private readonly promotionsService: PromotionsService) {}
 

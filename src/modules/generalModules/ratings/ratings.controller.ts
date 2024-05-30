@@ -13,7 +13,10 @@ import {
 import { RatingsService } from './ratings.service';
 import { CreateRatingDto } from './dto/create-rating.dto';
 import { UpdateRatingDto } from './dto/update-rating.dto';
-import { ADMIN_AND_USER_SUBJECT, ADMIN_SUBJECT } from 'src/common/aclSubjects';
+import {
+  ADMIN_USER_AND_PARTIAL_ADMIN_SUBJECT,
+  ADMIN_AND_PARTIAL_ADMIN_SUBJECT,
+} from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 import { SkipAuth } from '../../../common/decorators/skip-auth.decorator';
 
@@ -22,7 +25,7 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('ratings')
 @UseGuards(RolesGuard)
-@Roles(ADMIN_AND_USER_SUBJECT)
+@Roles(ADMIN_USER_AND_PARTIAL_ADMIN_SUBJECT)
 export class RatingsController {
   constructor(private readonly ratingsService: RatingsService) {}
 
@@ -43,7 +46,7 @@ export class RatingsController {
   }
 
   @Get('allData')
-  @Roles(ADMIN_SUBJECT)
+  @Roles(ADMIN_AND_PARTIAL_ADMIN_SUBJECT)
   findAllForAdmin() {
     return this.ratingsService.findAllForAdmin();
   }
