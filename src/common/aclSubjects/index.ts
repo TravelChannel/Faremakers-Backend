@@ -10,6 +10,12 @@ export const PARTIAL_ADMIN_SUBJECT = {
 export const ADMIN_AND_USER_SUBJECT = {
   roles: [1, 2],
 };
+export const ADMIN_USER_AND_PARTIAL_ADMIN_SUBJECT = {
+  roles: [1, 2, 3],
+};
+export const ADMIN_AND_PARTIAL_ADMIN_SUBJECT = {
+  roles: [1, 3],
+};
 export const ALL_USERS_SUBJECT = {
   roles: [1, 2, 3, 4, 5],
 };
