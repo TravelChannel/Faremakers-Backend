@@ -132,9 +132,8 @@ export class CommissionPercentageService {
   }
   async getServiceCharges(majorInfo) {
     try {
-      const pnrServiceChargesPercentage = await this.calculateServiceCharges(
-        majorInfo,
-      );
+      const pnrServiceChargesPercentage =
+        await this.calculateServiceCharges(majorInfo);
       return this.responseService.createResponse(
         HttpStatus.OK,
         pnrServiceChargesPercentage,
