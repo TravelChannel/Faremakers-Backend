@@ -744,6 +744,7 @@ export class PnrBookingsService {
         pnrBookingDto,
         userUpdateEmail,
         newPnrBookingRepository.id,
+        pnr,
       );
       // Email to client End
       MessageLog = `27)Done Execution { ${new Date().toISOString()}`;
@@ -790,7 +791,12 @@ export class PnrBookingsService {
     }
   }
 
-  async sendBookingEmail(bookingData, user, referenceNumber): Promise<any> {
+  async sendBookingEmail(
+    bookingData,
+    user,
+    referenceNumber,
+    pnr,
+  ): Promise<any> {
     const message2 = `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -903,6 +909,7 @@ export class PnrBookingsService {
       bccAddresses,
       mailSubject,
       htmlBody,
+      pnr,
     );
     if (resultEmail) {
       console.log('Email sent successfully');
@@ -2274,6 +2281,7 @@ export class PnrBookingsService {
           bccAddresses,
           mailSubject,
           htmlBody,
+          pnrBooking.pnr,
         );
         if (resultEmail) {
           console.log('Email sent successfully');
@@ -2447,13 +2455,13 @@ export class PnrBookingsService {
     bccAddresses: string[],
     mailSubject: string,
     htmlBody: string,
+    pnr: string,
   ): Promise<boolean> {
     try {
       const mg = mailgun({
         apiKey: process.env.MAILGUN_API,
         domain: process.env.MAILGUN_DOMAIN,
       });
-      console.log('------', toAddresses);
       const data = {
         from: process.env.MAILGUN_FROM,
         to: toAddresses.join(','),
@@ -2469,6 +2477,12 @@ export class PnrBookingsService {
       return true;
     } catch (error) {
       console.error('Error sending email:', error);
+      await Log.create({
+        level: '6',
+        message: `Error sending email:sendEmailConfirmation: ${mailSubject}: ${new Date().toISOString()},- ${error.message}`,
+        meta: `${pnr}`,
+        timestamp: new Date().toISOString(),
+      });
       return false;
     }
   }
