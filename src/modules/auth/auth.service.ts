@@ -168,7 +168,7 @@ export class AuthService {
     await user.save(); // Save the changes
   }
 
-  private async sendOtpViaApi(
+  private async sendOtpViaApiBK(
     countryCode: string,
     phoneNumber: string,
     otp: string,
@@ -203,6 +203,57 @@ export class AuthService {
       .toPromise();
 
     return response;
+  }
+
+  private async sendOtpViaApi(
+    countryCode: string,
+    phoneNumber: string,
+    otp: string,
+  ): Promise<AxiosResponse> {
+    // Implement your OTP sending logic here
+    // Use Axios or any other HTTP client library to make the API request
+    // Make sure to replace the following placeholders with your actual API details
+    const payload = {
+      messages: [
+        {
+          from: 'Faremaker',
+          destinations: [{ to: `${countryCode}${phoneNumber}` }],
+          text: `Your Pin: ${otp}`,
+        },
+      ],
+    }; // Sabre API endpoint
+    const url =
+      process.env.INFOBIP_URL ||
+      'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
+    const headers = {
+      headers: {
+        Authorization: `App ${
+          process.env.INFOBIP_KEY ||
+          'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
+        }`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+    try {
+      const response = await this.httpService
+        .post(url, payload, headers)
+        .toPromise();
+      return response;
+    } catch (error) {
+      if (error.response) {
+        // The request was made and the server responded with a status code that falls out of the range of 2xx
+        console.error('Response error:', error.response.data);
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('No response received:', error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error:', error.message);
+      }
+      // Return undefined or throw an error depending on how you want to handle it
+      return undefined;
+    }
   }
   private async generateOtp(): Promise<string> {
     // Implement your OTP generation logic here

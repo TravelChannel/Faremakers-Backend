@@ -149,8 +149,14 @@ export class PnrBookingsService {
                 pnrBookingId: newPnrBookingRepository.id,
                 phoneNumber: pnrBooking.phoneNumber,
                 email: pnrBooking.email,
-                dateOfBirth: pnrBooking.dateOfBirth,
-                passportExpiryDate: pnrBooking.passportExpiryDate,
+                dateOfBirth: moment(
+                  pnrBooking.dateOfBirth,
+                  'DD-MM-YYYY',
+                ).format('yyyy-MM-DD'),
+                passportExpiryDate: moment(
+                  pnrBooking.passportExpiryDate,
+                  'DD-MM-YYYY',
+                ).format('yyyy-MM-DD'),
                 firstName: pnrBooking.firstName,
                 lastName: pnrBooking.lastName,
                 gender: pnrBooking.gender,
@@ -696,9 +702,11 @@ export class PnrBookingsService {
             meta: `${pnrBookingDto.pnr}`,
             timestamp: new Date().toISOString(),
           });
-          const message = `Your booking for ${flightDetails.groupDescription[0]
-            ?.departureLocation}-${flightDetails.groupDescription[0]
-            ?.arrivalLocation} priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
+          const message = `Your booking for ${
+            flightDetails.groupDescription[0]?.departureLocation
+          }-${
+            flightDetails.groupDescription[0]?.arrivalLocation
+          } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -736,6 +744,7 @@ export class PnrBookingsService {
         pnrBookingDto,
         userUpdateEmail,
         newPnrBookingRepository.id,
+        pnr,
       );
       // Email to client End
       MessageLog = `27)Done Execution { ${new Date().toISOString()}`;
@@ -753,24 +762,41 @@ export class PnrBookingsService {
       );
     } catch (error) {
       console.log('Error', error.message);
-      await t.rollback();
-      let newLog = await Log.create({
-        level: '5',
-        message: `28)  INTERNAL_SERVER_ERROR Caught: --------${MessageLog}----  ${new Date().toISOString()},- ${
-          error.message
-        }`,
-        meta: `${pnrBookingDto.pnr}`,
-        timestamp: new Date().toISOString(),
-      });
+      // Log the error
+      try {
+        await Log.create({
+          level: '5',
+          message: `28) INTERNAL_SERVER_ERROR Caught: --------${MessageLog}---- ${new Date().toISOString()},- ${error.message}`,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+      } catch (logError) {
+        console.error('Logging error:', logError.message);
+      }
+
+      // Attempt to rollback the transaction if it was started
+      // if (t.finished !== 'commit') {
+      try {
+        await t.rollback();
+      } catch (rollbackError) {
+        console.error('Rollback error:', rollbackError.message);
+      }
+      // }
+
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         { isAmountEqual: false },
-        error,
+        error.message,
       );
     }
   }
 
-  async sendBookingEmail(bookingData, user, referenceNumber): Promise<any> {
+  async sendBookingEmail(
+    bookingData,
+    user,
+    referenceNumber,
+    pnr,
+  ): Promise<any> {
     const message2 = `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -820,10 +846,11 @@ export class PnrBookingsService {
     <body>
       <div class="container">
         <h2> 
-        Your booking for Reference # ${referenceNumber} ( ${bookingData
-          .flightDetails.groupDescription[0]?.departureLocation}-${bookingData
-          .flightDetails.groupDescription[0]
-          ?.arrivalLocation} ) is Awaiting Payment.
+        Your booking for Reference # ${referenceNumber} ( ${
+          bookingData.flightDetails.groupDescription[0]?.departureLocation
+        }-${
+          bookingData.flightDetails.groupDescription[0]?.arrivalLocation
+        } ) is Awaiting Payment.
         </h2>
         <p>Hi!  ${user.phoneNumber},</p>
         <p>Please check details in the following link.  </p>
@@ -882,6 +909,7 @@ export class PnrBookingsService {
       bccAddresses,
       mailSubject,
       htmlBody,
+      pnr,
     );
     if (resultEmail) {
       console.log('Email sent successfully');
@@ -1165,20 +1193,20 @@ export class PnrBookingsService {
                 },
               ]
             : isPaid === 0
-            ? [
-                {
-                  model: PnrPayment,
-                  required: false,
-                  where: {
-                    id: null,
+              ? [
+                  {
+                    model: PnrPayment,
+                    required: false,
+                    where: {
+                      id: null,
+                    },
                   },
-                },
-              ]
-            : [
-                {
-                  model: PnrPayment,
-                },
-              ]),
+                ]
+              : [
+                  {
+                    model: PnrPayment,
+                  },
+                ]),
           {
             model: PnrDetail,
             as: 'pnrDetail',
@@ -2228,9 +2256,11 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = `Your booking for ${pnrBooking.flightDetails
-          .groupDescription[0]?.departureLocation}-${pnrBooking.flightDetails
-          .groupDescription[0]?.arrivalLocation}, Ref# ${
+        const message = `Your booking for ${
+          pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+        }-${
+          pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+        }, Ref# ${
           pnrBooking.id
         }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
@@ -2251,6 +2281,7 @@ export class PnrBookingsService {
           bccAddresses,
           mailSubject,
           htmlBody,
+          pnrBooking.pnr,
         );
         if (resultEmail) {
           console.log('Email sent successfully');
@@ -2270,12 +2301,22 @@ export class PnrBookingsService {
     } catch (error) {
       console.log('error222:', error);
 
-      await t.rollback();
+      try {
+        await t.rollback();
+      } catch (rollbackError) {
+        console.error('Rollback error:', rollbackError.message);
+      }
 
       // return res.redirect(errorRedirectUrl);
 
       // return res.redirect(errorRedirectUrl);
+      const newLog = await Log.create({
+        level: '2',
+        message: `INTERNAL_SERVER_ERROR Caught: processPayment:  ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
 
+        meta: `${pnrBooking.pnr}`,
+        timestamp: new Date().toISOString(),
+      });
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
         log,
@@ -2414,13 +2455,13 @@ export class PnrBookingsService {
     bccAddresses: string[],
     mailSubject: string,
     htmlBody: string,
+    pnr: string,
   ): Promise<boolean> {
     try {
       const mg = mailgun({
         apiKey: process.env.MAILGUN_API,
         domain: process.env.MAILGUN_DOMAIN,
       });
-
       const data = {
         from: process.env.MAILGUN_FROM,
         to: toAddresses.join(','),
@@ -2436,6 +2477,12 @@ export class PnrBookingsService {
       return true;
     } catch (error) {
       console.error('Error sending email:', error);
+      await Log.create({
+        level: '6',
+        message: `Error sending email:sendEmailConfirmation: ${mailSubject}: ${new Date().toISOString()},- ${error.message}`,
+        meta: `${pnr}`,
+        timestamp: new Date().toISOString(),
+      });
       return false;
     }
   }
