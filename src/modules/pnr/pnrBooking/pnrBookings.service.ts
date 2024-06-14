@@ -97,6 +97,7 @@ export class PnrBookingsService {
         sendSmsCod,
         branchLabel,
         userLocation,
+        CheckSum
       } = pnrBookingDto;
       const tolerance = 0.001; // Define your tolerance threshold here
       const baseFare =
@@ -113,6 +114,7 @@ export class PnrBookingsService {
           userId: currentUserId,
           pnr: pnr,
           orderId: OrderId,
+          checkSum: CheckSum,
           sendSmsBranch: sendSmsBranch || false,
           sendSmsCod: sendSmsCod || false,
           branchLabel: branchLabel || '',

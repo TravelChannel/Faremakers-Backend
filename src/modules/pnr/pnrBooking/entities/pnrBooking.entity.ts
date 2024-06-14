@@ -162,6 +162,11 @@ export class PnrBooking extends Model {
     allowNull: true,
   })
   orderId: string;
+  @Column({
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  CheckSum: string;
   @BelongsTo(() => User)
   user: User;
   @HasMany(() => PnrDetail)
