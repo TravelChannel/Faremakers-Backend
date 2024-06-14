@@ -24,7 +24,7 @@ import { BlogsService } from './blogs.service';
 import { CreateBlogDto } from './dto/create-blog.dto';
 import { UpdateBlogDto } from './dto/update-blog.dto';
 import {
-  ADMIN_SUBJECT,
+  ADMIN_AND_PARTIAL_ADMIN_SUBJECT,
   //  ADMIN_AND_USER_SUBJECT
 } from 'src/common/aclSubjects';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
@@ -34,7 +34,7 @@ import { Roles } from '../../../common/decorators/roles.decorator';
 
 @Controller('blogs')
 @UseGuards(RolesGuard)
-@Roles(ADMIN_SUBJECT)
+@Roles(ADMIN_AND_PARTIAL_ADMIN_SUBJECT)
 export class BlogsController {
   constructor(private readonly blogsService: BlogsService) {}
 
