@@ -1039,6 +1039,7 @@ export class PnrBookingsService {
             ],
           },
         ],
+        limit: 100,
         order: [['createdAt', 'DESC']],
       })
         .then((rawData) => {
