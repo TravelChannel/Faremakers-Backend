@@ -897,7 +897,7 @@ export class PnrBookingsService {
     </body>
     </html>
     `;
-    const toAddresses = ['hashamkhancust@gmail.com'];
+    const toAddresses = ['travelchannel786@hotmail.com'];
     if (user?.email) {
       toAddresses.push(user.email);
     }
