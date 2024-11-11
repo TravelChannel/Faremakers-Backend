@@ -2333,7 +2333,10 @@ export class PnrBookingsService {
     console.log(callbackData);
     console.log(callbackData.pp_ResponseCode);
 
-    if (callbackData.pp_ResponseCode === '199') {
+    if (
+      callbackData.pp_ResponseCode === '000' ||
+      callbackData.pp_ResponseCode === '121'
+    ) {
       const pnrBooking = await PnrBooking.findOne({
         where: {
           orderId: callbackData.ppmpf_1,
@@ -2365,7 +2368,10 @@ export class PnrBookingsService {
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         let success = '';
-        if (callbackData.pp_ResponseCode === '199') {
+        if (
+          callbackData.pp_ResponseCode === '000' ||
+          callbackData.pp_ResponseCode === '121'
+        ) {
           success = 'Approved';
         }
 
@@ -2398,7 +2404,10 @@ export class PnrBookingsService {
         // );
         console.log('4');
 
-        if (callbackData.pp_ResponseCode === '199') {
+        if (
+          callbackData.pp_ResponseCode === '000' ||
+          callbackData.pp_ResponseCode === '121'
+        ) {
           console.log('44');
 
           pnrBooking.isPaid = true;
