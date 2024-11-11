@@ -83,7 +83,7 @@ export class PnrBookingsController {
     await this.pnrBookingsService.processPaymentJazzCash(callbackData);
     // Perform the redirect after processing
     res.redirect(
-      `http://localhost:3000/previewEticket?order=${encodeURIComponent(callbackData.ppmpf_1)}`,
+      `https://www.faremakers.com/previewEticket?order=${encodeURIComponent(callbackData.ppmpf_1)}`,
     );
   }
 
