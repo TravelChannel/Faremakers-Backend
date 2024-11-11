@@ -73,6 +73,20 @@ export class PnrBookingsController {
     );
   }
 
+  @Post('processPaymentJazzCash')
+  @SkipAuth()
+  async processPaymentJazzCash(
+    @Body() callbackData: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {
+    await this.pnrBookingsService.processPaymentJazzCash(callbackData);
+    // Perform the redirect after processing
+    res.redirect(
+      `http://localhost:3000/previewEticket?order=${encodeURIComponent(callbackData.ppmpf_1)}`,
+    );
+  }
+
   @Get()
   // @SkipAuth()
   async findAll(

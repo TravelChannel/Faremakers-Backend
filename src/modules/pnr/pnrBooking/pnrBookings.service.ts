@@ -3,6 +3,7 @@ import { PnrBookingDto } from './dto/create-pnrBooking.dto';
 import { AxiosResponse } from 'axios';
 import * as mailgun from 'mailgun-js';
 import * as moment from 'moment';
+import * as momenttimezone from 'moment-timezone';
 // Test COmmit
 // import { PnrBookingArrayDto } from './dto/PnrBookingArray.dto';
 import * as qs from 'qs';
@@ -2111,7 +2112,6 @@ export class PnrBookingsService {
           success: callbackData.success,
           created_at: callbackData.created_at,
           currency: callbackData.currency,
-
           hmac: callbackData.hmac,
         },
         { transaction: t },
@@ -2325,6 +2325,295 @@ export class PnrBookingsService {
     }
   }
 
+  async processPaymentJazzCash(callbackData: any): Promise<any> {
+    console.log('*****processPayment Endpoint Hit******');
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    callbackData = callbackData;
+    console.log('callback response');
+    console.log(callbackData);
+    console.log(callbackData.pp_ResponseCode);
+
+    if (callbackData.pp_ResponseCode === '199') {
+      const pnrBooking = await PnrBooking.findOne({
+        where: {
+          orderId: callbackData.ppmpf_1,
+        },
+
+        include: [
+          {
+            model: PnrDetail,
+            as: 'pnrDetail',
+          },
+          {
+            model: User,
+          },
+
+          {
+            model: FlightDetails,
+            include: [
+              {
+                model: GroupDescription,
+              },
+            ],
+          },
+        ],
+      });
+      const t: Transaction = await sequelize.transaction();
+      let log = '';
+      try {
+        console.log('3');
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let success = '';
+        if (callbackData.pp_ResponseCode === '199') {
+          success = 'Approved';
+        }
+
+        const newPnrPayment = await PnrPayment.create(
+          {
+            pnrBookingId: pnrBooking.id,
+            id: callbackData.ppmpf_1,
+            pending: 0,
+            amount_cents: callbackData.pp_Amount / 100,
+            success: 1,
+            created_at: Date.now(),
+            currency: 'PKR',
+            hmac: '',
+          },
+          { transaction: t },
+        );
+
+        // const newPnrPayment = await PnrPayment.create(
+        //   {
+        //     pnrBookingId: pnrBooking.id,
+        //     id: callbackData.id,
+        //     pending: callbackData.pending,
+        //     amount_cents: callbackData.amount_cents,
+        //     success: callbackData.success,
+        //     created_at: callbackData.created_at,
+        //     currency: callbackData.currency,
+        //     hmac: callbackData.hmac,
+        //   },
+        //   { transaction: t },
+        // );
+        console.log('4');
+
+        if (callbackData.pp_ResponseCode === '199') {
+          console.log('44');
+
+          pnrBooking.isPaid = true;
+          await pnrBooking.save({ transaction: t });
+          const type = await this.findAirlineType(pnrBooking.id);
+          // const type = 0;
+          // console.log('type', type);
+          let result;
+          console.log('5');
+          console.log('type**************', type);
+
+          // AirSial
+          if (type == 0) {
+            console.log('66');
+
+            result = await this.callAirSialConfirmation(pnrBooking.pnr);
+            // Sabre
+          } else {
+            // Check Admin flag for Sabre COnfirmation Api
+            const generalTask = await GeneralTask.findByPk(1, {});
+
+            if (generalTask.flag) {
+              result = await this.callSabreConfirmation(
+                pnrBooking.pnr,
+                pnrBooking.pnrDetail,
+              );
+            }
+          }
+
+          console.log('result', result);
+
+          // external api
+
+          await this.callPostPaymentApiJazz(
+            pnrBooking.pnr,
+            pnrBooking.pnrDetail[0],
+            callbackData,
+          );
+
+          const message2 = `<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Booking Confirmation - Faremakers</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+              }
+              .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+              }
+              h1, h2, h3 {
+                color: #333;
+              }
+              p {
+                margin-bottom: 10px;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+              }
+              th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+              }
+              th {
+                background-color: #f2f2f2;
+              }
+              .link {
+                display: inline-block;
+                margin-top: 20px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h2>Ticket Reservation Confirmation,  ${
+                !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                  ? `PNR: ${pnrBooking.pnr}`
+                  : ''
+              }</h2>
+              <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
+              <p>PNR is generated. Please check details in the following link. </p>
+              <br>Your registered information for this booking are following:
+              <br>Email:  ${pnrBooking.user.email} 
+              <br>Contact Number:  ${pnrBooking.user.phoneNumber} 
+              <br>
+              <p>Your registered information for this booking:</p>
+              <ul>
+                <li>Email: ${pnrBooking.user?.email}</li>
+                <li>Contact Number: ${pnrBooking.user.phoneNumber}</li>
+              </ul>
+              <div>
+                <h3>Payment Details:</h3>
+                <table>
+                  <tr>
+                    <th>Method</th>
+                    <td>
+                    ${
+                      !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                        ? 'Card Payment'
+                        : ''
+                    }
+                      ${
+                        pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                          ? 'Cash On Delivery'
+                          : ''
+                      }
+                      ${
+                        !pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
+                          ? 'Pay at Branch'
+                          : ''
+                      }
+                      </td>
+                  </tr>
+                  <tr>
+                    <th>Total Amount</th>
+                    <td>${pnrBooking.totalTicketPrice.toLocaleString()}</td>
+                  </tr>
+                </table>
+              </div>
+                      <p>Best regards,<br>faremakers</p>
+            </div>
+          </body>
+          </html>
+          `;
+          const message = `Your booking for ${
+            pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+          }-${
+            pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+          }, Ref# ${
+            pnrBooking.id
+          }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
+
+          await this.sendSmsConfirmation(pnrBooking.user, message);
+          const toAddresses = ['arman@faremakers.com'];
+          if (pnrBooking.user?.email) {
+            toAddresses.push(pnrBooking.user.email);
+          }
+          const bccAddresses = ['bilal.tariq@faremakers.com'];
+          log = message2;
+          const mailSubject = 'Booking Confirmation - Faremakers';
+          const htmlBody = `${message2}`;
+          const resultEmail = await this.sendEmailConfirmation(
+            toAddresses,
+            bccAddresses,
+            mailSubject,
+            htmlBody,
+            pnrBooking.pnr,
+          );
+          if (resultEmail) {
+            console.log('Email sent successfully');
+          } else {
+            console.error('Failed to send email');
+          }
+        }
+        await t.commit();
+
+        // console.log(newPnrPayment);
+        console.log('payment inserted');
+        return this.responseService.createResponse(
+          HttpStatus.OK,
+          {},
+          'SUCCESS',
+        );
+        // return res.redirect(HttpStatus.FOUND, viewETicketUrl);
+        // res.redirect(HttpStatus.FOUND, viewETicketUrl);
+        // res.redirect(viewETicketUrl);
+        // return { viewETicketUrl };
+      } catch (error) {
+        console.log('error222:', error);
+
+        try {
+          await t.rollback();
+        } catch (rollbackError) {
+          console.error('Rollback error:', rollbackError.message);
+        }
+
+        // return res.redirect(errorRedirectUrl);
+
+        // return res.redirect(errorRedirectUrl);
+        const newLog = await Log.create({
+          level: '2',
+          message: `INTERNAL_SERVER_ERROR Caught: processPayment:  ,order ID:${callbackData?.order?.id},status:${callbackData.success}`,
+
+          meta: `${pnrBooking.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        return this.responseService.createResponse(
+          HttpStatus.INTERNAL_SERVER_ERROR,
+          log,
+          error,
+        );
+      }
+    } else {
+    }
+  }
+
+  getCurrentDateTime(): string {
+    return momenttimezone()
+      .tz('Asia/Karachi')
+      .format('YYYY-MM-DD HH:mm:ss.SSSZZ');
+  }
+
   async findAirlineType(id): Promise<any> {
     const pnrBooking = await PnrBooking.findByPk(id, {
       include: [
@@ -2400,6 +2689,20 @@ export class PnrBookingsService {
       // Authorization: `Bearer ${tokenSabre}`,
     };
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=Pay-Mob&TotalAmount=${data.amount_cents}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=${data.success}`;
+
+    const response = await this.httpService.get(url, { headers }).toPromise();
+    const result = response.data;
+
+    console.log(result);
+    return result;
+  }
+
+  async callPostPaymentApiJazz(pnr, pnrDetail, data): Promise<any> {
+    const headers = {
+      'Content-Type': 'application/json',
+      // Authorization: `Bearer ${tokenSabre}`,
+    };
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=JazzCash&TotalAmount=${data.pp_Amount / 100}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=true`;
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
