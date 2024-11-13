@@ -48,10 +48,11 @@ export class PaymentService {
         ? config.CommissionMWALLET
         : config.CommissionOTC;
 
-    // Calculate commissions and total amount to pay
-    // const JazzCommissions = (txnAmount * commPecVal) / 100;
-    // const JazzTotalAmountToPay = txnAmount + JazzCommissions;
-    let JazzAmount = (100 * pp_Amount).toString();
+    // Calculate the total amount including commPecVal percentage
+    const JazzTotalAmountToPay = pp_Amount * (1 + commPecVal / 100);
+
+    let JazzAmount = Math.floor(100 * JazzTotalAmountToPay).toString();
+    console.log(JazzAmount);
     if (pp_CustomerMobile === '3238864614') {
       JazzAmount = '1000';
     }
