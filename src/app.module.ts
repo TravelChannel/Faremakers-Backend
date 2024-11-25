@@ -37,6 +37,8 @@ import { createFileStorage } from './common/utils/file-storage.util'; // Import 
 import { FirebaseModule } from './database/firebase/firebase.module';
 import { MasterPriceModule } from './modules/masterPriceTravelBoard/masterprice.module';
 import { JazzCashModule } from './modules/jazzcashModule/jazzcash.module';
+import { SoapHeaderUtil } from './common/utility/amadeus/soap-header.util';
+// import { SoapHeaderInterceptor } from './common/interceptors/amadeusheader.interceptor';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const JWT_SECRET = dbConfig.JWT_SECRET;
@@ -90,7 +92,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
   providers: [
     JwtStrategy,
     AuthService,
-
+    SoapHeaderUtil,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard, // Use the RolesGuard as a global guard
@@ -99,7 +101,12 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
       provide: APP_GUARD,
       useClass: AuthGuard, // Use the RolesGuard as a global guard
     },
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: SoapHeaderInterceptor, // Register SoapHeaderInterceptor as a global interceptor
+    // },
   ],
+  exports: [SoapHeaderUtil],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
