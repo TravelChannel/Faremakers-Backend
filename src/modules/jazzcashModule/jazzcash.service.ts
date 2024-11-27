@@ -52,7 +52,7 @@ export class PaymentService {
     const JazzTotalAmountToPay = pp_Amount * (1 + commPecVal / 100);
 
     let JazzAmount = Math.floor(100 * JazzTotalAmountToPay).toString();
-    console.log(JazzAmount);
+
     if (pp_CustomerMobile === '3238864614') {
       JazzAmount = '1000';
     }

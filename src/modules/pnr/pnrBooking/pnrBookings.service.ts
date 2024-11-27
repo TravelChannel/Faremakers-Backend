@@ -54,6 +54,7 @@ import { HttpService } from '@nestjs/axios';
 import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
 
 import { Log } from '../../generalModules/systemLogs/entities/log.entity';
+require('dotenv').config();
 
 @Injectable()
 export class PnrBookingsService {
@@ -2883,12 +2884,48 @@ export class PnrBookingsService {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
     };
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=JazzCash&TotalAmount=${data.pp_Amount / 100}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=true`;
+
+    const test_config = {
+      MerchantID: process.env.SANDBOX_JAZZ_MERCHANT_ID,
+      Password: process.env.SANDBOX_JAZZ_PASSWORD,
+      ReturnURL: process.env.SANDBOX_JAZZ_RETURN_URL,
+      Environment: process.env.SANDBOX_JAZZ_ENVIRONMENT,
+      CommissionMWALLET: parseInt(process.env.SANDBOX_COMMISSION_MWALLET, 10),
+      CommissionOTC: parseInt(process.env.SANDBOX_COMMISSION_OTC, 10),
+      TestPaymentEmail: process.env.SANDBOX_TEST_PAYMENT_EMAIL,
+    };
+
+    const live_config = {
+      MerchantID: process.env.JAZZ_MERCHANT_ID,
+      Password: process.env.JAZZ_PASSWORD,
+      ReturnURL: process.env.JAZZ_RETURN_URL,
+      Environment: process.env.JAZZ_ENVIRONMENT,
+      CommissionMWALLET: parseInt(process.env.MALL_COMMISSION_MWALLET, 10),
+      CommissionOTC: parseInt(process.env.MALL_COMMISSION_OTC, 10),
+      TestPaymentEmail: process.env.MALL_TEST_PAYMENT_EMAIL,
+    };
+
+    const config =
+      live_config.Environment === 'Live' ? live_config : test_config;
+
+    // Set the transaction amount from the request body
+    //const txnAmount = pp_Amount; // Use the amount passed from the request body
+    const commPecVal =
+      data.pp_TxnType === 'MWALLET'
+        ? config.CommissionMWALLET
+        : config.CommissionOTC;
+
+    // Step 1: Convert JazzAmount back to the total amount with decimals
+    const JazzTotalAmountToPay = data.pp_Amount;
+
+    // Step 2: Reverse the formula to calculate pp_Amount
+    let pp_Amount = JazzTotalAmountToPay / (1 + commPecVal / 100);
+    console.log(`nabeel_testing_value${pp_Amount}`);
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=JazzCash&TotalAmount=${pp_Amount / 100}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=true`;
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
 
-    console.log(result);
     return result;
   }
 
