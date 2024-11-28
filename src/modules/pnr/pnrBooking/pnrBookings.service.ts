@@ -52,7 +52,7 @@ import { CommissionCategories } from '../../serviceCharges/CommissionCategories'
 import { PnrPayment } from '../../paymentModules/paymob/entities/pnrPayment.entity';
 import { HttpService } from '@nestjs/axios';
 import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
-
+require('dotenv').config();
 import { Log } from '../../generalModules/systemLogs/entities/log.entity';
 
 @Injectable()
@@ -2883,7 +2883,20 @@ export class PnrBookingsService {
       'Content-Type': 'application/json',
       // Authorization: `Bearer ${tokenSabre}`,
     };
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=JazzCash&TotalAmount=${data.pp_Amount / 100}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=true`;
+
+    let invoiceAmount = data.pp_Amount / 100;
+    let comissionPerc = '2.32';
+    try {
+      if (data.pp_TxnType === 'MWALLET') {
+        comissionPerc = process.env.COMMISSION_MWALLET;
+      } else {
+        comissionPerc = process.env.COMMISSION_OTC;
+      }
+    } catch (error) {}
+
+    invoiceAmount = invoiceAmount * (1 - parseInt(comissionPerc, 10) / 100);
+
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=JazzCash&TotalAmount=${invoiceAmount}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=true`;
 
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;

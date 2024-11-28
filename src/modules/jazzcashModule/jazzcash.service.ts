@@ -23,6 +23,7 @@ export class PaymentService {
       Password: process.env.SANDBOX_JAZZ_PASSWORD,
       ReturnURL: process.env.SANDBOX_JAZZ_RETURN_URL,
       Environment: process.env.SANDBOX_JAZZ_ENVIRONMENT,
+      JAZZ_HASH: process.env.SANDBOX_JAZZ_HASH,
       CommissionMWALLET: parseInt(process.env.SANDBOX_COMMISSION_MWALLET, 10),
       CommissionOTC: parseInt(process.env.SANDBOX_COMMISSION_OTC, 10),
       TestPaymentEmail: process.env.SANDBOX_TEST_PAYMENT_EMAIL,
@@ -33,8 +34,9 @@ export class PaymentService {
       Password: process.env.JAZZ_PASSWORD,
       ReturnURL: process.env.JAZZ_RETURN_URL,
       Environment: process.env.JAZZ_ENVIRONMENT,
-      CommissionMWALLET: parseInt(process.env.MALL_COMMISSION_MWALLET, 10),
-      CommissionOTC: parseInt(process.env.MALL_COMMISSION_OTC, 10),
+      JAZZ_HASH: process.env.JAZZ_HASH,
+      CommissionMWALLET: parseInt(process.env.COMMISSION_MWALLET, 10),
+      CommissionOTC: parseInt(process.env.COMMISSION_OTC, 10),
       TestPaymentEmail: process.env.MALL_TEST_PAYMENT_EMAIL,
     };
 
@@ -128,7 +130,7 @@ export class PaymentService {
     };
 
     // Generate secure hash
-    params.pp_SecureHash = this.calculateSecureHash(params, '18v9xxvuu9'); // live: 18v9xxvuu9 //Sandbox: x7wx5bu393
+    params.pp_SecureHash = this.calculateSecureHash(params, config.JAZZ_HASH); // live: 18v9xxvuu9 //Sandbox: x7wx5bu393
     // Generate form HTML
     const formHtml = this.generateFormHtml(PostURL, params);
 
