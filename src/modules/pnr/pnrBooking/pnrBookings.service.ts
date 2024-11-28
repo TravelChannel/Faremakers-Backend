@@ -2884,17 +2884,18 @@ export class PnrBookingsService {
       // Authorization: `Bearer ${tokenSabre}`,
     };
 
-    let invoiceAmount = data.pp_Amount / 100;
-    let comissionPerc = '2.32';
+    let invoiceAmount = data.pp_Amount / 100; // Convert amount to main currency unit
+    let comissionPerc = 2.32; // Default commission percentage
     try {
+      // Use the appropriate commission based on transaction type
       if (data.pp_TxnType === 'MWALLET') {
-        comissionPerc = process.env.COMMISSION_MWALLET;
+        comissionPerc = parseFloat(process.env.COMMISSION_MWALLET);
       } else {
-        comissionPerc = process.env.COMMISSION_OTC;
+        comissionPerc = parseFloat(process.env.COMMISSION_OTC);
       }
     } catch (error) {}
 
-    invoiceAmount = invoiceAmount * (1 - parseInt(comissionPerc, 10) / 100);
+    invoiceAmount = invoiceAmount * (1 - comissionPerc / 100);
 
     const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=90&phone=0${pnrDetail.phoneNumber}&pnr=${pnr}&paymentMethod=JazzCash&TotalAmount=${invoiceAmount}&ContactPersonName=${pnrDetail.firstName} ${pnrDetail.lastName}&IsPaid=true`;
 
