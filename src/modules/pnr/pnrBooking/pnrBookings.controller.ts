@@ -42,6 +42,7 @@ import {
   PARTIAL_ADMIN_SUBJECT,
   ALL_ADMINS,
 } from 'src/common/aclSubjects';
+require('dotenv').config();
 
 @Controller('pnrBooking')
 export class PnrBookingsController {
@@ -70,6 +71,39 @@ export class PnrBookingsController {
       callbackData,
       // req,
       // res
+    );
+  }
+
+  @Get('TEST_CODE')
+  @SkipAuth()
+  async TestCode() {
+    let pp_TxnType = 'MIGS';
+
+    let invoiceAmount = 1000 / 100; // Convert amount to main currency unit
+    let comissionPerc = 2.32; // Default commission percentage
+
+    // Use the appropriate commission based on transaction type
+    if (pp_TxnType === 'MWALLET') {
+      comissionPerc = parseFloat(process.env.COMMISSION_MWALLET);
+    } else {
+      comissionPerc = parseFloat(process.env.COMMISSION_OTC);
+    }
+
+    invoiceAmount = invoiceAmount * (1 - comissionPerc / 100);
+    return invoiceAmount;
+  }
+
+  @Post('processPaymentJazzCash')
+  @SkipAuth()
+  async processPaymentJazzCash(
+    @Body() callbackData: any,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<any> {
+    await this.pnrBookingsService.processPaymentJazzCash(callbackData);
+    // Perform the redirect after processing
+    res.redirect(
+      `https://www.faremakers.com/previewEticket?order=${encodeURIComponent(callbackData.ppmpf_1)}`,
     );
   }
 
