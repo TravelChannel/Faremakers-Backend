@@ -1,22 +1,16 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { PayzenService } from './payzen.service';
+import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 
 @Controller('payzen')
 export class PayzenController {
   constructor(private readonly payzenService: PayzenService) {}
 
   @Post('generate-psid')
-  async generatePsid(
-    @Body() body: { clientId: string; clientSecret: string; params: any },
-  ) {
-    const { clientId, clientSecret, params } = body;
+  @SkipAuth()
+  async generatePsid(@Body() body: any) {
+    // Step 1: Generate PSID - authenticate is called inside this method
 
-    // Step 1: Authenticate
-    const token = await this.payzenService.authenticate();
-
-    // Step 2: Generate PSID
-    const psid = await this.payzenService.generatePsid(params);
-
-    return { psid };
+    return await this.payzenService.generatePsid(body);
   }
 }
