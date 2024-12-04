@@ -12,10 +12,10 @@ export class PayzenController {
     const { clientId, clientSecret, params } = body;
 
     // Step 1: Authenticate
-    const token = await this.payzenService.authenticate(clientId, clientSecret);
+    const token = await this.payzenService.authenticate();
 
     // Step 2: Generate PSID
-    const psid = await this.payzenService.generatePsid(token, params);
+    const psid = await this.payzenService.generatePsid(params);
 
     return { psid };
   }

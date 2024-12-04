@@ -38,6 +38,7 @@ import { FirebaseModule } from './database/firebase/firebase.module';
 import { MasterPriceModule } from './modules/masterPriceTravelBoard/masterprice.module';
 import { JazzCashModule } from './modules/jazzcashModule/jazzcash.module';
 import { SoapHeaderUtil } from './common/utility/amadeus/soap-header.util';
+import { PayzenModule } from './modules/payzenModule/payzen.module';
 // import { SoapHeaderInterceptor } from './common/interceptors/amadeusheader.interceptor';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
@@ -65,6 +66,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     ActivityModule,
     MasterPriceModule,
     JazzCashModule,
+    PayzenModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',
