@@ -24,8 +24,8 @@ export class PaymentService {
       ReturnURL: process.env.SANDBOX_JAZZ_RETURN_URL,
       Environment: process.env.SANDBOX_JAZZ_ENVIRONMENT,
       JAZZ_HASH: process.env.SANDBOX_JAZZ_HASH,
-      CommissionMWALLET: parseInt(process.env.SANDBOX_COMMISSION_MWALLET, 10),
-      CommissionOTC: parseInt(process.env.SANDBOX_COMMISSION_OTC, 10),
+      CommissionMWALLET: parseFloat(process.env.SANDBOX_COMMISSION_MWALLET),
+      CommissionOTC: parseFloat(process.env.SANDBOX_COMMISSION_OTC),
       TestPaymentEmail: process.env.SANDBOX_TEST_PAYMENT_EMAIL,
     };
 
@@ -35,8 +35,8 @@ export class PaymentService {
       ReturnURL: process.env.JAZZ_RETURN_URL,
       Environment: process.env.JAZZ_ENVIRONMENT,
       JAZZ_HASH: process.env.JAZZ_HASH,
-      CommissionMWALLET: parseInt(process.env.COMMISSION_MWALLET, 10),
-      CommissionOTC: parseInt(process.env.COMMISSION_OTC, 10),
+      CommissionMWALLET: parseFloat(process.env.COMMISSION_MWALLET),
+      CommissionOTC: parseFloat(process.env.COMMISSION_OTC),
       TestPaymentEmail: process.env.MALL_TEST_PAYMENT_EMAIL,
     };
 
