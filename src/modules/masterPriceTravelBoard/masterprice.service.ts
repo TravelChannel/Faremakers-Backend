@@ -46,7 +46,7 @@ export class MasterPriceService {
       });
       return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
     } catch (error) {
-      throw new Error(`Failed to fetch data: ${error.message}`);
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
     }
   }
 }

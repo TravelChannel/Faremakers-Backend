@@ -15,7 +15,21 @@ export class MasterPriceTravelBoardUtil {
     };
   }
 
-  createPaxReference(ptc, ref) {
+  createPaxReferences(paxReferences: { ptc: string; traveller: any[] }[]) {
+    return paxReferences.map((pax) => ({
+      paxReference: {
+        ptc: pax.ptc,
+        traveller: pax.traveller.map((traveller) => ({
+          ref: traveller.ref,
+          ...(traveller.infantIndicator && {
+            infantIndicator: traveller.infantIndicator,
+          }),
+        })),
+      },
+    }));
+  }
+
+  createPaxReference_bk(ptc, ref) {
     return {
       paxReference: {
         ptc: ptc,
@@ -82,13 +96,21 @@ export class MasterPriceTravelBoardUtil {
     }
 
     if (requestData.paxReference) {
-      Object.assign(
-        body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
-        this.createPaxReference(
-          requestData.paxReference.ptc,
-          requestData.paxReference.ref,
-        ),
-      );
+      // Object.assign(
+      //   body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
+      //   this.createPaxReference(
+      //     requestData.paxReference.ptc,
+      //     requestData.paxReference.ref,
+      //   ),
+      // );
+
+      const paxRefs = this.createPaxReferences(requestData.paxReference);
+
+      // Append each `paxRef` to the `paxReference` array
+      // Dynamically add `paxReference` to `Fare_MasterPricerTravelBoardSearch`
+      body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'][
+        'paxReference'
+      ] = paxRefs.map((paxRef) => paxRef.paxReference);
     }
 
     if (requestData.fareOptions) {
