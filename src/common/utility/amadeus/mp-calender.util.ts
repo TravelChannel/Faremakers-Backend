@@ -14,11 +14,11 @@ export class MasterPricerCalendarUtil {
     };
   }
 
-  createPaxReferences(paxReferences: { ptc: string; travellers: any[] }[]) {
+  createPaxReferences(paxReferences: { ptc: string; traveller: any[] }[]) {
     return paxReferences.map((pax) => ({
       paxReference: {
         ptc: pax.ptc,
-        traveller: pax.travellers.map((traveller) => ({
+        traveller: pax.traveller.map((traveller) => ({
           ref: traveller.ref,
           ...(traveller.infantIndicator && {
             infantIndicator: traveller.infantIndicator,
@@ -103,12 +103,8 @@ export class MasterPricerCalendarUtil {
     // Add paxReferences section
     if (requestData.paxReferences) {
       const paxRefs = this.createPaxReferences(requestData.paxReferences);
-      paxRefs.forEach((paxRef) => {
-        Object.assign(
-          body['soapenv:Body']['Fare_MasterPricerCalendar'],
-          paxRef,
-        );
-      });
+      body['soapenv:Body']['Fare_MasterPricerCalendar']['paxReference'] =
+        paxRefs.map((paxRef) => paxRef.paxReference);
     }
 
     // Add fareOptions section
@@ -125,12 +121,8 @@ export class MasterPricerCalendarUtil {
     // Add itineraries section
     if (requestData.itineraries) {
       const itineraries = this.createItineraries(requestData.itineraries);
-      itineraries.forEach((itinerary) => {
-        Object.assign(
-          body['soapenv:Body']['Fare_MasterPricerCalendar'],
-          itinerary,
-        );
-      });
+      body['soapenv:Body']['Fare_MasterPricerCalendar']['itinerary'] =
+        itineraries.map((itinerary) => itinerary.itinerary);
     }
 
     return body;
