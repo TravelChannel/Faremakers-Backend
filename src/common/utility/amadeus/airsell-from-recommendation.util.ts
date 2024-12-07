@@ -30,18 +30,34 @@ export class AirSellRecommendationUtil {
     return segments.map((segment) => ({
       segmentInformation: {
         travelProductInformation: {
-          flightDate: { departureDate: segment.departureDate },
-          boardPointDetails: { trueLocationId: segment.boardPoint },
-          offpointDetails: { trueLocationId: segment.offPoint },
-          companyDetails: { marketingCompany: segment.marketingCompany },
+          flightDate: {
+            departureDate:
+              segment.travelProductInformation.flightDate.departureDate,
+          },
+          boardPointDetails: {
+            trueLocationId:
+              segment.travelProductInformation.boardPointDetails.trueLocationId,
+          },
+          offpointDetails: {
+            trueLocationId:
+              segment.travelProductInformation.offpointDetails.trueLocationId,
+          },
+          companyDetails: {
+            marketingCompany:
+              segment.travelProductInformation.companyDetails.marketingCompany,
+          },
           flightIdentification: {
-            flightNumber: segment.flightNumber,
-            bookingClass: segment.bookingClass,
+            flightNumber:
+              segment.travelProductInformation.flightIdentification
+                .flightNumber,
+            bookingClass:
+              segment.travelProductInformation.flightIdentification
+                .bookingClass,
           },
         },
         relatedproductInformation: {
-          quantity: segment.quantity,
-          statusCode: segment.statusCode,
+          quantity: segment.relatedproductInformation.quantity,
+          statusCode: segment.relatedproductInformation.statusCode,
         },
       },
     }));
@@ -51,15 +67,17 @@ export class AirSellRecommendationUtil {
     return itineraries.map((itinerary) => ({
       itineraryDetails: {
         ...this.createOriginDestinationDetails(
-          itinerary.origin,
-          itinerary.destination,
+          itinerary.originDestinationDetails.origin,
+          itinerary.originDestinationDetails.destination,
         ),
         message: {
           messageFunctionDetails: {
             messageFunction: '183',
           },
         },
-        segmentInformation: this.createSegmentInformation(itinerary.segments),
+        segmentInformation: this.createSegmentInformation(
+          itinerary.segmentInformation,
+        ),
       },
     }));
   }
@@ -72,35 +90,31 @@ export class AirSellRecommendationUtil {
 
   createSOAPEnvelopeBody(requestData: any) {
     const body: any = {
-      'soapenv:Envelope': {
-        $: {
-          'xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
-          'xmlns:ns': 'http://xml.amadeus.com/ASFRBQ_21_1_1A',
-        },
-        'soapenv:Header': {},
-        'soapenv:Body': {
-          'ns:Air_SellFromRecommendation': {},
-        },
+      'soapenv:Body': {
+        Air_SellFromRecommendation: {},
       },
     };
 
     // Add messageActionDetails section
     if (requestData.messageActionDetails) {
       Object.assign(
-        body['soapenv:Body']['ns:Air_SellFromRecommendation'],
+        body['soapenv:Body']['Air_SellFromRecommendation'],
         this.createMessageActionDetails(
-          requestData.messageActionDetails.messageFunction,
-          requestData.messageActionDetails.additionalMessageFunction,
+          requestData.messageActionDetails.messageFunctionDetails
+            .messageFunction,
+          requestData.messageActionDetails.messageFunctionDetails
+            .additionalMessageFunction,
         ),
       );
     }
 
     // Add itineraryDetails section
-    if (requestData.itineraries) {
-      const itineraries = this.createItineraryDetails(requestData.itineraries);
-      body['soapenv:Body']['ns:Air_SellFromRecommendation'][
-        'itineraryDetails'
-      ] = itineraries.map((itinerary) => itinerary.itineraryDetails);
+    if (requestData.itineraryDetails) {
+      const itineraries = this.createItineraryDetails(
+        requestData.itineraryDetails,
+      );
+      body['soapenv:Body']['Air_SellFromRecommendation']['itineraryDetails'] =
+        itineraries;
     }
 
     return body;

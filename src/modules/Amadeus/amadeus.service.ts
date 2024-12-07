@@ -85,7 +85,9 @@ export class AmadeusService {
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
-      this.airsellFromRecommendation.createSOAPEnvelopeBody(requestData),
+      this.airsellFromRecommendation.createSOAPEnvelopeBody(
+        requestData.Air_SellFromRecommendation,
+      ),
     );
 
     const headers = {
@@ -94,14 +96,14 @@ export class AmadeusService {
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);
-    // try {
-    //   // Make the API call
-    //   const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
-    //     headers,
-    //   });
-    //   return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
-    // } catch (error) {
-    //   throw new Error(`Failed to fetch data: ${error.response.data}`);
-    // }
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
   }
 }

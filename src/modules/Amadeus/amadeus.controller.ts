@@ -51,7 +51,8 @@ export class AmadeusController {
   @SkipAuth()
   async getAirSellFromRecommedation(@Body() body: any, @Res() res: Response) {
     try {
-      const result = await this.amadeusService.callMasterPriceCalender(body);
+      const result =
+        await this.amadeusService.callAirSellFromRecommedation(body);
       res.status(200).json({ success: true, data: result });
     } catch (error) {
       throw new HttpException(
