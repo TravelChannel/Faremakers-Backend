@@ -35,7 +35,7 @@ import { ResponseModule } from './common/utility/response/response.module';
 import { HttpModule } from '@nestjs/axios';
 import { createFileStorage } from './common/utils/file-storage.util'; // Import the utility function
 import { FirebaseModule } from './database/firebase/firebase.module';
-import { MasterPriceModule } from './modules/masterPriceTravelBoard/masterprice.module';
+import { AmadeusModule } from './modules/Amadeus/amadeus.module';
 import { JazzCashModule } from './modules/jazzcashModule/jazzcash.module';
 import { SoapHeaderUtil } from './common/utility/amadeus/soap-header.util';
 import { PayzenModule } from './modules/payzenModule/payzen.module';
@@ -64,7 +64,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     RatingsModule,
     CommissionPercentageModule,
     ActivityModule,
-    MasterPriceModule,
+    AmadeusModule,
     JazzCashModule,
     PayzenModule,
     ThrottlerModule.forRoot([
