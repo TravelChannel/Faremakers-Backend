@@ -48,7 +48,7 @@ export class SoapHeaderUtil {
     return new Date().toISOString();
   }
 
-  public createSOAPEnvelopeHeader(): object {
+  public createSOAPEnvelopeHeader(type: string): object {
     // Generate nonce, created timestamp, and password digest
     const nonce = this.generateNonce();
     const created = this.getCreatedTimestamp();
@@ -57,6 +57,12 @@ export class SoapHeaderUtil {
       created,
       process.env.AMADEUS_PASSWORDTEXT || '',
     );
+    let action = '';
+    if (type == 'master_price_travelboard') {
+      action = 'http://webservices.amadeus.com/FMPTBQ_24_1_1A';
+    } else if (type == 'master_price_calender') {
+      action = 'http://webservices.amadeus.com/FMPCAQ_20_2_1A';
+    }
 
     return {
       'soapenv:Envelope': {
@@ -69,7 +75,7 @@ export class SoapHeaderUtil {
         '@xmlns:sec': 'http://xml.amadeus.com/2010/06/Security_v1',
         'soapenv:Header': {
           'add:MessageID': uuidv4(),
-          'add:Action': 'http://webservices.amadeus.com/FMPTBQ_24_1_1A',
+          'add:Action': action,
           'add:To': 'https://nodeD2.test.webservices.amadeus.com/1ASIWWWW99T',
           'oas:Security': {
             'oas:UsernameToken': {

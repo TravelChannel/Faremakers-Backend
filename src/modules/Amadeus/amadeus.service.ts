@@ -18,19 +18,10 @@ export class AmadeusService {
     private readonly airsellFromRecommendation: AirSellRecommendationUtil,
   ) {}
 
-  public buildSOAPEnvelope(requestData: any) {
-    const soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader();
-
-    Object.assign(
-      soapEnvelope['soapenv:Envelope'],
-      this.masterPriceTravelBoardUtil.createSOAPEnvelopeBody(requestData),
-    );
-    // Convert to XML string
-    return create(soapEnvelope).end({ prettyPrint: true });
-  }
-
   public async callMasterPriceTravelBoard(requestData: any) {
-    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader();
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader(
+      'master_price_travelboard',
+    );
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
@@ -55,7 +46,9 @@ export class AmadeusService {
   }
 
   public async callMasterPriceCalender(requestData: any) {
-    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader();
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader(
+      'master_price_calender',
+    );
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
@@ -64,7 +57,7 @@ export class AmadeusService {
 
     const headers = {
       'Content-Type': 'text/xml',
-      SOAPAction: 'http://webservices.amadeus.com/FMPTBQ_24_1_1A', // Customize based on API requirements
+      SOAPAction: 'http://webservices.amadeus.com/FMPCAQ_20_2_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);

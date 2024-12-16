@@ -13,11 +13,6 @@ import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 @Controller('amadeus')
 export class AmadeusController {
   constructor(private readonly amadeusService: AmadeusService) {}
-  @Post('generate-envelope')
-  @SkipAuth()
-  async generateSOAPEnvelope(@Body() requestData: any): Promise<string> {
-    return await this.amadeusService.buildSOAPEnvelope(requestData);
-  }
 
   @Post('masterprice-travelboard')
   @SkipAuth()
