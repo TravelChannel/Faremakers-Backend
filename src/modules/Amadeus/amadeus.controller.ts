@@ -14,6 +14,20 @@ import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 export class AmadeusController {
   constructor(private readonly amadeusService: AmadeusService) {}
 
+  @Post('command-cryptic')
+  @SkipAuth()
+  async postCommandCrypticRQ(@Body() body: any, @Res() res: Response) {
+    try {
+      const result = await this.amadeusService.callCommandCryptic(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   @Post('masterprice-travelboard')
   @SkipAuth()
   async getMasterPricetravelBoard(@Body() body: any, @Res() res: Response) {

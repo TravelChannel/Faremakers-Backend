@@ -9,6 +9,7 @@ import axios from 'axios';
 import { MasterPricerCalendarUtil } from 'src/common/utility/amadeus/mp-calender.util';
 import { AirSellRecommendationUtil } from 'src/common/utility/amadeus/airsell-from-recommendation.util';
 import { FareInformativeBestPricingUtil } from 'src/common/utility/amadeus/fare_informative_bestpricing.util';
+import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.util';
 
 @Injectable()
 export class AmadeusService {
@@ -18,7 +19,34 @@ export class AmadeusService {
     private readonly masterPriceTravelCalender: MasterPricerCalendarUtil,
     private readonly airsellFromRecommendation: AirSellRecommendationUtil,
     private readonly fareinformativeBestPricing: FareInformativeBestPricingUtil,
+    private readonly commandCryptic: CommandCrypticUtil,
   ) {}
+
+  public async callCommandCryptic(requestData: any) {
+    let soapEnvelope =
+      this.soapHeaderUtil.createSOAPEnvelopeHeader('command_cryptic');
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.commandCryptic.createSOAPEnvelopeBody(requestData),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/HSFREQ_07_3_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
 
   public async callMasterPriceTravelBoard(requestData: any) {
     let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader(

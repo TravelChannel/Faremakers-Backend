@@ -141,6 +141,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/FMPCAQ_20_2_1A';
     } else if (type === 'fare_informative_best_pricing') {
       action = 'http://webservices.amadeus.com/TIBNRQ_23_1_1A';
+    } else if (type === 'command_cryptic') {
+      action = 'http://webservices.amadeus.com/HSFREQ_07_3_1A';
     }
 
     const header: any = {
