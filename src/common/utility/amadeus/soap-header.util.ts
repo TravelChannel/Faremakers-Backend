@@ -163,12 +163,15 @@ export class SoapHeaderUtil {
     };
 
     // Add TransactionFlowLink node directly below "To" node
-    if (type === 'fare_informative_best_pricing') {
+    if (
+      type === 'fare_informative_best_pricing' ||
+      type === 'command_cryptic'
+    ) {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
         {
           '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
           'link:Consumer': {
-            'link:UniqueID': '9b09f73f-44e8-7506-202b-aadcf7fc5bb9', // Replace this ID dynamically if necessary
+            'link:UniqueID': uuidv4(), // Replace this ID dynamically if necessary
           },
         };
     }
@@ -209,6 +212,114 @@ export class SoapHeaderUtil {
     requestData: any,
     type: string,
   ): object {
+    // Generate nonce, created timestamp, and password digest
+    const nonce = this.generateNonce();
+    const created = this.getCreatedTimestamp();
+    const passwordDigest = this.generatePasswordDigest(
+      nonce,
+      created,
+      process.env.AMADEUS_PASSWORDTEXT || '',
+    );
+
+    let action = '';
+    if (type === 'master_price_travelboard') {
+      action = 'http://webservices.amadeus.com/FMPTBQ_24_1_1A';
+    } else if (type === 'master_price_calender') {
+      action = 'http://webservices.amadeus.com/FMPCAQ_20_2_1A';
+    } else if (type === 'fare_informative_best_pricing') {
+      action = 'http://webservices.amadeus.com/TIBNRQ_23_1_1A';
+    } else if (type === 'command_cryptic') {
+      action = 'http://webservices.amadeus.com/HSFREQ_07_3_1A';
+    }
+
+    const header: any = {
+      'soapenv:Envelope': {
+        '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
+        '@xmlns:add': 'http://www.w3.org/2005/08/addressing',
+        '@xmlns:oas':
+          'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd',
+        '@xmlns:oas1':
+          'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
+        '@xmlns:sec': 'http://xml.amadeus.com/2010/06/Security_v1',
+        'soapenv:Header': {
+          'add:MessageID': uuidv4(),
+          'add:Action': action,
+          'add:To': 'https://nodeD2.test.webservices.amadeus.com/1ASIWWWW99T',
+        },
+      },
+    };
+
+    // Add TransactionFlowLink node directly below "To" node
+    if (
+      type === 'fare_informative_best_pricing' ||
+      type === 'command_cryptic'
+    ) {
+      header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
+        {
+          '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
+          'link:Consumer': {
+            'link:UniqueID': uuidv4(), // Replace this ID dynamically if necessary
+          },
+        };
+    }
+
+    // Add Session node based on TransactionStatusCode
+    const { TransactionStatusCode, SessionId, SequenceNumber, SecurityToken } =
+      requestData.session;
+
+    if (TransactionStatusCode === 'Start') {
+      header['soapenv:Envelope']['soapenv:Header']['Session'] = {
+        '@xmlns:awsse': 'http://xml.amadeus.com/2010/06/Session_v3',
+        '@TransactionStatusCode': TransactionStatusCode,
+      };
+    }
+
+    if (['InSeries', 'End'].includes(TransactionStatusCode)) {
+      header['soapenv:Envelope']['soapenv:Header']['Session'] = {
+        '@xmlns:awsse': 'http://xml.amadeus.com/2010/06/Session_v3',
+        '@TransactionStatusCode': TransactionStatusCode,
+        'awsse:SessionId': SessionId,
+        'awsse:SequenceNumber': SequenceNumber,
+        'awsse:SecurityToken': SecurityToken,
+      };
+    }
+
+    // Add Security details and AMA_SecurityHostedUser
+    header['soapenv:Envelope']['soapenv:Header']['oas:Security'] = {
+      'oas:UsernameToken': {
+        '@oas1:Id': 'UsernameToken-1',
+        'oas:Username': process.env.AMADEUS_USER_ID,
+        'oas:Nonce': {
+          '@EncodingType':
+            'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
+          '#text': nonce,
+        },
+        'oas:Password': {
+          '@Type':
+            'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest',
+          '#text': passwordDigest,
+        },
+        'oas1:Created': created,
+      },
+    };
+
+    header['soapenv:Envelope']['soapenv:Header']['AMA_SecurityHostedUser'] = {
+      '@xmlns': 'http://xml.amadeus.com/2010/06/Security_v1',
+      UserID: {
+        '@POS_Type': '1',
+        '@PseudoCityCode': process.env.AMADEUS_OFFICE_ID,
+        '@AgentDutyCode': 'SU',
+        '@RequestorType': 'U',
+      },
+    };
+
+    return header;
+  }
+
+  public createSOAPEnvelopeHeaderSession_bk(
+    requestData: any,
+    type: string,
+  ): object {
     let action = '';
     if (type == 'master_price_travelboard') {
       action = 'http://webservices.amadeus.com/FMPTBQ_24_1_1A';
@@ -216,6 +327,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/FMPCAQ_20_2_1A';
     } else if (type == 'fare_informative_best_pricing') {
       action = 'http://webservices.amadeus.com/TIBNRQ_23_1_1A';
+    } else if (type === 'command_cryptic') {
+      action = 'http://webservices.amadeus.com/HSFREQ_07_3_1A';
     }
 
     const header = {

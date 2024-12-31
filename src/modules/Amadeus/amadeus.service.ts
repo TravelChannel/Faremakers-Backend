@@ -23,8 +23,10 @@ export class AmadeusService {
   ) {}
 
   public async callCommandCryptic(requestData: any) {
-    let soapEnvelope =
-      this.soapHeaderUtil.createSOAPEnvelopeHeader('command_cryptic');
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'command_cryptic',
+    );
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
