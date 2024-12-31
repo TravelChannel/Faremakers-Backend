@@ -12,15 +12,15 @@ export class FareInformativeBestPricingUtil {
     };
   }
 
-  createTravellerDetails(
-    travellers: { travellerDetails: { measurementValue: number } }[],
-  ) {
+  createTravellerDetails(travellers: {
+    travellerDetails: { measurementValue: number }[];
+  }) {
     return {
-      travellersID: travellers.map((traveller) => ({
-        travellerDetails: {
-          measurementValue: traveller.travellerDetails.measurementValue,
-        },
-      })),
+      travellersID: {
+        travellerDetails: travellers.travellerDetails.map((detail) => ({
+          measurementValue: detail.measurementValue,
+        })),
+      },
     };
   }
 
