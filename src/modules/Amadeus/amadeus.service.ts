@@ -160,6 +160,7 @@ export class AmadeusService {
       const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
         headers,
       });
+      //return response.data;
       return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
     } catch (error) {
       throw new Error(`Failed to fetch data: ${error.response.data}`);
@@ -190,6 +191,7 @@ export class AmadeusService {
       const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
         headers,
       });
+
       return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
     } catch (error) {
       throw new Error(`Failed to fetch data: ${error.response.data}`);
