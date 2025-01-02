@@ -7,6 +7,7 @@ import { MasterPricerCalendarUtil } from 'src/common/utility/amadeus/mp-calender
 import { AirSellRecommendationUtil } from 'src/common/utility/amadeus/airsell-from-recommendation.util';
 import { FareInformativeBestPricingUtil } from 'src/common/utility/amadeus/fare_informative_bestpricing.util';
 import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.util';
+import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.util';
 
 @Module({
   providers: [
@@ -17,6 +18,7 @@ import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.u
     AirSellRecommendationUtil,
     FareInformativeBestPricingUtil,
     CommandCrypticUtil,
+    FareCheckRulesUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -27,6 +29,7 @@ import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.u
     AirSellRecommendationUtil,
     FareInformativeBestPricingUtil,
     CommandCrypticUtil,
+    FareCheckRulesUtil,
   ],
 })
 export class AmadeusModule {}

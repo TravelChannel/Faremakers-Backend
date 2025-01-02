@@ -10,6 +10,7 @@ import { MasterPricerCalendarUtil } from 'src/common/utility/amadeus/mp-calender
 import { AirSellRecommendationUtil } from 'src/common/utility/amadeus/airsell-from-recommendation.util';
 import { FareInformativeBestPricingUtil } from 'src/common/utility/amadeus/fare_informative_bestpricing.util';
 import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.util';
+import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.util';
 
 @Injectable()
 export class AmadeusService {
@@ -19,6 +20,7 @@ export class AmadeusService {
     private readonly masterPriceTravelCalender: MasterPricerCalendarUtil,
     private readonly airsellFromRecommendation: AirSellRecommendationUtil,
     private readonly fareinformativeBestPricing: FareInformativeBestPricingUtil,
+    private readonly farecheckrules: FareCheckRulesUtil,
     private readonly commandCryptic: CommandCrypticUtil,
   ) {}
 
@@ -135,7 +137,8 @@ export class AmadeusService {
   }
 
   public async callFareinformativeBestPricing(requestData: any) {
-    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeader(
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
       'fare_informative_best_pricing',
     );
 
@@ -149,6 +152,36 @@ export class AmadeusService {
     const headers = {
       'Content-Type': 'text/xml',
       SOAPAction: 'http://webservices.amadeus.com/TIBNRQ_23_1_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callFareRulesCheck(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'fare_rulescheck',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.farecheckrules.createFareCheckRulesRequest(
+        requestData.Fare_CheckRules,
+      ),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/FARQNQ_07_1_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);
