@@ -232,6 +232,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/HSFREQ_07_3_1A';
     } else if (type === 'fare_rulescheck') {
       action = 'http://webservices.amadeus.com/FARQNQ_07_1_1A';
+    } else if (type === 'airsell-from-recommendation') {
+      action = 'http://webservices.amadeus.com/ITAREQ_05_2_IA';
     }
 
     const header: any = {
@@ -270,19 +272,18 @@ export class SoapHeaderUtil {
       requestData.session;
 
     if (TransactionStatusCode === 'Start') {
-      header['soapenv:Envelope']['soapenv:Header']['Session'] = {
-        '@xmlns:awsse': 'http://xml.amadeus.com/2010/06/Session_v3',
+      header['soapenv:Envelope']['soapenv:Header']['ses:Session'] = {
+        '@xmlns:ses': 'http://xml.amadeus.com/2010/06/Session_v3',
         '@TransactionStatusCode': TransactionStatusCode,
       };
     }
 
     if (['InSeries', 'End'].includes(TransactionStatusCode)) {
-      header['soapenv:Envelope']['soapenv:Header']['Session'] = {
-        '@xmlns:awsse': 'http://xml.amadeus.com/2010/06/Session_v3',
+      header['soapenv:Envelope']['soapenv:Header']['ses:Session'] = {
         '@TransactionStatusCode': TransactionStatusCode,
-        'awsse:SessionId': SessionId,
-        'awsse:SequenceNumber': SequenceNumber,
-        'awsse:SecurityToken': SecurityToken,
+        'ses:SessionId': SessionId,
+        'ses:SequenceNumber': SequenceNumber,
+        'ses:SecurityToken': SecurityToken,
       };
     }
 

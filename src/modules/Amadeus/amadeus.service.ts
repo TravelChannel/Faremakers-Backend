@@ -106,36 +106,6 @@ export class AmadeusService {
     }
   }
 
-  public async callAirSellFromRecommedation(requestData: any) {
-    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
-      requestData,
-      'master_price_calender',
-    );
-
-    Object.assign(
-      soapEnvelope['soapenv:Envelope'],
-      this.airsellFromRecommendation.createSOAPEnvelopeBody(
-        requestData.Air_SellFromRecommendation,
-      ),
-    );
-
-    const headers = {
-      'Content-Type': 'text/xml',
-      SOAPAction: 'http://webservices.amadeus.com/FMPTBQ_24_1_1A', // Customize based on API requirements
-    };
-    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
-    console.log(xmlreq);
-    try {
-      // Make the API call
-      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
-        headers,
-      });
-      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
-    } catch (error) {
-      throw new Error(`Failed to fetch data: ${error.response.data}`);
-    }
-  }
-
   public async callFareinformativeBestPricing(requestData: any) {
     let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
       requestData,
@@ -192,6 +162,36 @@ export class AmadeusService {
         headers,
       });
 
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callAirSellFromRecommedation(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'airsell-from-recommendation',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.airsellFromRecommendation.createSOAPEnvelopeBody(
+        requestData.Air_SellFromRecommendation,
+      ),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/ITAREQ_05_2_IA', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
       return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
     } catch (error) {
       throw new Error(`Failed to fetch data: ${error.response.data}`);
