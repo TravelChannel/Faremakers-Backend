@@ -236,7 +236,7 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/ITAREQ_05_2_IA';
     }
 
-    const header: any = {
+    const header_bk: any = {
       'soapenv:Envelope': {
         '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
         '@xmlns:sec': 'http://xml.amadeus.com/2010/06/Security_v1',
@@ -252,7 +252,7 @@ export class SoapHeaderUtil {
       },
     };
 
-    const header_bk: any = {
+    const header: any = {
       'soapenv:Envelope': {
         '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
         '@xmlns:add': 'http://www.w3.org/2005/08/addressing',
