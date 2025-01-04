@@ -239,6 +239,22 @@ export class SoapHeaderUtil {
     const header: any = {
       'soapenv:Envelope': {
         '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
+        '@xmlns:sec': 'http://xml.amadeus.com/2010/06/Security_v1',
+        '@xmlns:typ': 'http://xml.amadeus.com/2010/06/Types_v1',
+        '@xmlns:app': 'http://xml.amadeus.com/2010/06/AppMdw_CommonTypes_v3',
+        '@xmlns:ses': 'http://xml.amadeus.com/2010/06/Session_v3',
+        'soapenv:Header': {
+          '@xmlns:add': 'http://www.w3.org/2005/08/addressing',
+          'add:MessageID': uuidv4(),
+          'add:Action': action,
+          'add:To': 'https://nodeD2.test.webservices.amadeus.com/1ASIWWWW99T',
+        },
+      },
+    };
+
+    const header_bk: any = {
+      'soapenv:Envelope': {
+        '@xmlns:soapenv': 'http://schemas.xmlsoap.org/soap/envelope/',
         '@xmlns:add': 'http://www.w3.org/2005/08/addressing',
         '@xmlns:oas':
           'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd',
@@ -272,49 +288,52 @@ export class SoapHeaderUtil {
       requestData.session;
 
     if (TransactionStatusCode === 'Start') {
-      header['soapenv:Envelope']['soapenv:Header']['ses:Session'] = {
-        '@xmlns:ses': 'http://xml.amadeus.com/2010/06/Session_v3',
+      header['soapenv:Envelope']['soapenv:Header']['awsse:Session'] = {
+        '@xmlns:awsse': 'http://xml.amadeus.com/2010/06/Session_v3',
         '@TransactionStatusCode': TransactionStatusCode,
       };
     }
 
     if (['InSeries', 'End'].includes(TransactionStatusCode)) {
-      header['soapenv:Envelope']['soapenv:Header']['ses:Session'] = {
+      header['soapenv:Envelope']['soapenv:Header']['awsse:Session'] = {
+        '@xmlns:awsse': 'http://xml.amadeus.com/2010/06/Session_v3',
         '@TransactionStatusCode': TransactionStatusCode,
-        'ses:SessionId': SessionId,
-        'ses:SequenceNumber': SequenceNumber,
-        'ses:SecurityToken': SecurityToken,
+        'awsse:SessionId': SessionId,
+        'awsse:SequenceNumber': SequenceNumber,
+        'awsse:SecurityToken': SecurityToken,
       };
     }
 
-    // Add Security details and AMA_SecurityHostedUser
-    header['soapenv:Envelope']['soapenv:Header']['oas:Security'] = {
-      'oas:UsernameToken': {
-        '@oas1:Id': 'UsernameToken-1',
-        'oas:Username': process.env.AMADEUS_USER_ID,
-        'oas:Nonce': {
-          '@EncodingType':
-            'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
-          '#text': nonce,
+    if (TransactionStatusCode !== 'InSeries') {
+      // Add Security details and AMA_SecurityHostedUser
+      header['soapenv:Envelope']['soapenv:Header']['oas:Security'] = {
+        'oas:UsernameToken': {
+          '@oas1:Id': 'UsernameToken-1',
+          'oas:Username': process.env.AMADEUS_USER_ID,
+          'oas:Nonce': {
+            '@EncodingType':
+              'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary',
+            '#text': nonce,
+          },
+          'oas:Password': {
+            '@Type':
+              'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest',
+            '#text': passwordDigest,
+          },
+          'oas1:Created': created,
         },
-        'oas:Password': {
-          '@Type':
-            'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest',
-          '#text': passwordDigest,
-        },
-        'oas1:Created': created,
-      },
-    };
+      };
 
-    header['soapenv:Envelope']['soapenv:Header']['AMA_SecurityHostedUser'] = {
-      '@xmlns': 'http://xml.amadeus.com/2010/06/Security_v1',
-      UserID: {
-        '@POS_Type': '1',
-        '@PseudoCityCode': process.env.AMADEUS_OFFICE_ID,
-        '@AgentDutyCode': 'SU',
-        '@RequestorType': 'U',
-      },
-    };
+      header['soapenv:Envelope']['soapenv:Header']['AMA_SecurityHostedUser'] = {
+        '@xmlns': 'http://xml.amadeus.com/2010/06/Security_v1',
+        UserID: {
+          '@POS_Type': '1',
+          '@PseudoCityCode': process.env.AMADEUS_OFFICE_ID,
+          '@AgentDutyCode': 'SU',
+          '@RequestorType': 'U',
+        },
+      };
+    }
 
     return header;
   }
