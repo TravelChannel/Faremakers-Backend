@@ -8,6 +8,7 @@ import { AirSellRecommendationUtil } from 'src/common/utility/amadeus/airsell-fr
 import { FareInformativeBestPricingUtil } from 'src/common/utility/amadeus/fare_informative_bestpricing.util';
 import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.util';
 import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.util';
+import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.u
     FareInformativeBestPricingUtil,
     CommandCrypticUtil,
     FareCheckRulesUtil,
+    MiniRuleUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -30,6 +32,7 @@ import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.u
     FareInformativeBestPricingUtil,
     CommandCrypticUtil,
     FareCheckRulesUtil,
+    MiniRuleUtil,
   ],
 })
 export class AmadeusModule {}

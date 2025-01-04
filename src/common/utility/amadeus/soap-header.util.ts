@@ -234,6 +234,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/FARQNQ_07_1_1A';
     } else if (type === 'airsell-from-recommendation') {
       action = 'http://webservices.amadeus.com/ITAREQ_05_2_IA';
+    } else if (type === 'mini_rules') {
+      action = 'http://webservices.amadeus.com/TMRXRQ_23_1_1A';
     }
 
     const header_bk: any = {

@@ -11,6 +11,7 @@ import { AirSellRecommendationUtil } from 'src/common/utility/amadeus/airsell-fr
 import { FareInformativeBestPricingUtil } from 'src/common/utility/amadeus/fare_informative_bestpricing.util';
 import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.util';
 import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.util';
+import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 
 @Injectable()
 export class AmadeusService {
@@ -22,6 +23,7 @@ export class AmadeusService {
     private readonly fareinformativeBestPricing: FareInformativeBestPricingUtil,
     private readonly farecheckrules: FareCheckRulesUtil,
     private readonly commandCryptic: CommandCrypticUtil,
+    private readonly miniRules: MiniRuleUtil,
   ) {}
 
   public async callCommandCryptic(requestData: any) {
@@ -153,6 +155,37 @@ export class AmadeusService {
     const headers = {
       'Content-Type': 'text/xml',
       SOAPAction: 'http://webservices.amadeus.com/FARQNQ_07_1_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callMiniRules(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'mini_rules',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.miniRules.createMiniRuleGetFromRecRequest(
+        requestData.MiniRule_GetFromRec,
+      ),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/TMRXRQ_23_1_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);

@@ -85,6 +85,20 @@ export class AmadeusController {
     }
   }
 
+  @Post('min-rules')
+  @SkipAuth()
+  async getMiniRules(@Body() body: any, @Res() res: Response) {
+    try {
+      const result = await this.amadeusService.callMiniRules(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   @Post('airsell-from-recommendation')
   @SkipAuth()
   async getAirSellFromRecommedation(@Body() body: any, @Res() res: Response) {
