@@ -26,39 +26,35 @@ export class AirSellRecommendationUtil {
     };
   }
 
-  createSegmentInformation(segments: any[]) {
+  createSegmentInformation(segments) {
     return segments.map((segment) => ({
-      segmentInformation: {
-        travelProductInformation: {
-          flightDate: {
-            departureDate:
-              segment.travelProductInformation.flightDate.departureDate,
-          },
-          boardPointDetails: {
-            trueLocationId:
-              segment.travelProductInformation.boardPointDetails.trueLocationId,
-          },
-          offpointDetails: {
-            trueLocationId:
-              segment.travelProductInformation.offpointDetails.trueLocationId,
-          },
-          companyDetails: {
-            marketingCompany:
-              segment.travelProductInformation.companyDetails.marketingCompany,
-          },
-          flightIdentification: {
-            flightNumber:
-              segment.travelProductInformation.flightIdentification
-                .flightNumber,
-            bookingClass:
-              segment.travelProductInformation.flightIdentification
-                .bookingClass,
-          },
+      travelProductInformation: {
+        flightDate: {
+          departureDate:
+            segment.travelProductInformation.flightDate.departureDate,
         },
-        relatedproductInformation: {
-          quantity: segment.relatedproductInformation.quantity,
-          statusCode: segment.relatedproductInformation.statusCode,
+        boardPointDetails: {
+          trueLocationId:
+            segment.travelProductInformation.boardPointDetails.trueLocationId,
         },
+        offpointDetails: {
+          trueLocationId:
+            segment.travelProductInformation.offpointDetails.trueLocationId,
+        },
+        companyDetails: {
+          marketingCompany:
+            segment.travelProductInformation.companyDetails.marketingCompany,
+        },
+        flightIdentification: {
+          flightNumber:
+            segment.travelProductInformation.flightIdentification.flightNumber,
+          bookingClass:
+            segment.travelProductInformation.flightIdentification.bookingClass,
+        },
+      },
+      relatedproductInformation: {
+        quantity: segment.relatedproductInformation.quantity,
+        statusCode: segment.relatedproductInformation.statusCode,
       },
     }));
   }
@@ -113,8 +109,7 @@ export class AirSellRecommendationUtil {
       const itineraries = this.createItineraryDetails(
         requestData.itineraryDetails,
       );
-      body['soapenv:Body']['Air_SellFromRecommendation']['itineraryDetails'] =
-        itineraries;
+      body['soapenv:Body']['Air_SellFromRecommendation'] = itineraries;
     }
 
     return body;

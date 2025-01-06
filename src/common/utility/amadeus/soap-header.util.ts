@@ -274,7 +274,8 @@ export class SoapHeaderUtil {
     // Add TransactionFlowLink node directly below "To" node
     if (
       type === 'fare_informative_best_pricing' ||
-      type === 'command_cryptic'
+      type === 'command_cryptic' ||
+      type === 'airsell-from-recommendation'
     ) {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
         {
