@@ -147,21 +147,21 @@ export class PnrAddMultiElementsUtil {
     // Add pnrActions
     if (requestData.pnrActions) {
       Object.assign(
-        body.PNR_AddMultiElements,
+        body['soapenv:Body']['PNR_AddMultiElements'],
         this.createPnrActions(requestData.pnrActions.optionCode),
       );
     }
 
     // Add travellerInfo
     if (requestData.travellerInfo) {
-      Object.assign(body.PNR_AddMultiElements, {
+      Object.assign(body['soapenv:Body']['PNR_AddMultiElements'], {
         travellerInfo: this.createTravellerInfo(requestData.travellerInfo),
       });
     }
 
     // Add dataElementsMaster
     if (requestData.dataElementsMaster) {
-      Object.assign(body.PNR_AddMultiElements, {
+      Object.assign(body['soapenv:Body']['PNR_AddMultiElements'], {
         dataElementsMaster: this.createDataElementsMaster(
           requestData.dataElementsMaster.dataElementsIndiv,
         ),
