@@ -10,6 +10,7 @@ import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.u
 import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.util';
 import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-multielements.util';
+import { FOPCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
 
 @Module({
   providers: [
@@ -23,6 +24,7 @@ import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-mult
     FareCheckRulesUtil,
     MiniRuleUtil,
     PnrAddMultiElementsUtil,
+    FOPCreateFormOfPaymentUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -36,6 +38,7 @@ import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-mult
     FareCheckRulesUtil,
     MiniRuleUtil,
     PnrAddMultiElementsUtil,
+    FOPCreateFormOfPaymentUtil,
   ],
 })
 export class AmadeusModule {}

@@ -127,4 +127,18 @@ export class AmadeusController {
       );
     }
   }
+
+  @Post('add-form-of-payment')
+  @SkipAuth()
+  async postaddFormOfPayment(@Body() body: any, @Res() res: Response) {
+    try {
+      const result = await this.amadeusService.callAddFormofPayment(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
