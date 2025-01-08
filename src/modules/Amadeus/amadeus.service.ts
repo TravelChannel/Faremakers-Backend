@@ -13,7 +13,7 @@ import { CommandCrypticUtil } from 'src/common/utility/amadeus/command-cryptic.u
 import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.util';
 import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-multielements.util';
-import { FOPCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
+import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
 
 @Injectable()
 export class AmadeusService {
@@ -27,7 +27,7 @@ export class AmadeusService {
     private readonly miniRules: MiniRuleUtil,
     private readonly airsellFromRecommendation: AirSellRecommendationUtil,
     private readonly pnrAddMultiElements: PnrAddMultiElementsUtil,
-    private readonly fopCreateFormOfPayment: FOPCreateFormOfPaymentUtil,
+    private readonly fopCreateFormOfPayment: FopCreateFormOfPaymentUtil,
   ) {}
 
   public async callCommandCryptic(requestData: any) {
@@ -273,14 +273,14 @@ export class AmadeusService {
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
-      this.fopCreateFormOfPayment.createSOAPEnvelopeBody(
+      this.fopCreateFormOfPayment.createFOPCreateFormOfPayment(
         requestData.FOP_CreateFormOfPayment,
       ),
     );
 
     const headers = {
       'Content-Type': 'text/xml',
-      SOAPAction: 'http://webservices.amadeus.com/FOPNAR_07_2_1A', // Customize based on API requirements
+      SOAPAction: 'http://webservices.amadeus.com/TFOPCQ_19_2_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);

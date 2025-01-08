@@ -239,7 +239,7 @@ export class SoapHeaderUtil {
     } else if (type === 'add-multi-elements') {
       action = 'http://webservices.amadeus.com/PNRADD_21_1_1A';
     } else if (type === 'add-form-of-payment') {
-      action = 'http://webservices.amadeus.com/FOPNAR_07_2_1A';
+      action = 'http://webservices.amadeus.com/TFOPCQ_19_2_1A';
     }
 
     const header_bk: any = {
