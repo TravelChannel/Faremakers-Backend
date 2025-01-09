@@ -11,6 +11,7 @@ import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.u
 import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-multielements.util';
 import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
+import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
 
 @Module({
   providers: [
@@ -25,6 +26,7 @@ import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-creat
     MiniRuleUtil,
     PnrAddMultiElementsUtil,
     FopCreateFormOfPaymentUtil,
+    FarePricePNRWithBookingClassUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -39,6 +41,7 @@ import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-creat
     MiniRuleUtil,
     PnrAddMultiElementsUtil,
     FopCreateFormOfPaymentUtil,
+    FarePricePNRWithBookingClassUtil,
   ],
 })
 export class AmadeusModule {}

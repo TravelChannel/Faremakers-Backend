@@ -240,6 +240,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/PNRADD_21_1_1A';
     } else if (type === 'add-form-of-payment') {
       action = 'http://webservices.amadeus.com/TFOPCQ_19_2_1A';
+    } else if (type === 'fare_price_pnrwithbookingclass') {
+      action = 'http://webservices.amadeus.com/TPCBRQ_23_2_1A';
     }
 
     const header_bk: any = {

@@ -141,4 +141,22 @@ export class AmadeusController {
       );
     }
   }
+
+  @Post('fare_price_pnrwithbookingclass')
+  @SkipAuth()
+  async postfarePricePNRwithBookingClass(
+    @Body() body: any,
+    @Res() res: Response,
+  ) {
+    try {
+      const result =
+        await this.amadeusService.callFarePricePNRWithBookingClass(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

@@ -14,6 +14,7 @@ import { FareCheckRulesUtil } from 'src/common/utility/amadeus/fare-checkrules.u
 import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-multielements.util';
 import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
+import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
 
 @Injectable()
 export class AmadeusService {
@@ -28,6 +29,7 @@ export class AmadeusService {
     private readonly airsellFromRecommendation: AirSellRecommendationUtil,
     private readonly pnrAddMultiElements: PnrAddMultiElementsUtil,
     private readonly fopCreateFormOfPayment: FopCreateFormOfPaymentUtil,
+    private readonly fare_price_pnrwithbookingclass: FarePricePNRWithBookingClassUtil,
   ) {}
 
   public async callCommandCryptic(requestData: any) {
@@ -281,6 +283,36 @@ export class AmadeusService {
     const headers = {
       'Content-Type': 'text/xml',
       SOAPAction: 'http://webservices.amadeus.com/TFOPCQ_19_2_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callFarePricePNRWithBookingClass(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'fare_price_pnrwithbookingclass',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.fare_price_pnrwithbookingclass.createFarePricePNRWithBookingClass(
+        requestData.Fare_PricePNRWithBookingClass,
+      ),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/TPCBRQ_23_2_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);
