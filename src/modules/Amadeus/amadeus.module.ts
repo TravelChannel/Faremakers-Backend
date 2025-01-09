@@ -12,6 +12,7 @@ import { MiniRuleUtil } from 'src/common/utility/amadeus/mini-rules.util';
 import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-multielements.util';
 import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
 import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
+import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticket-create-tst-frompricing.util';
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/far
     PnrAddMultiElementsUtil,
     FopCreateFormOfPaymentUtil,
     FarePricePNRWithBookingClassUtil,
+    TicketCreateTSTFromPricingUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -42,6 +44,7 @@ import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/far
     PnrAddMultiElementsUtil,
     FopCreateFormOfPaymentUtil,
     FarePricePNRWithBookingClassUtil,
+    TicketCreateTSTFromPricingUtil,
   ],
 })
 export class AmadeusModule {}

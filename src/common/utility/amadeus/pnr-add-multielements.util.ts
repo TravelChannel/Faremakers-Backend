@@ -3,10 +3,10 @@ import { create } from 'xmlbuilder2';
 
 @Injectable()
 export class PnrAddMultiElementsUtil {
-  createPnrActions(optionCode: string) {
+  createPnrActions(optionCodes: string[]) {
     return {
       pnrActions: {
-        optionCode: optionCode,
+        ...optionCodes,
       },
     };
   }
@@ -148,7 +148,7 @@ export class PnrAddMultiElementsUtil {
     if (requestData.pnrActions) {
       Object.assign(
         body['soapenv:Body']['PNR_AddMultiElements'],
-        this.createPnrActions(requestData.pnrActions.optionCode),
+        this.createPnrActions(requestData.pnrActions),
       );
     }
 

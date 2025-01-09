@@ -242,6 +242,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/TFOPCQ_19_2_1A';
     } else if (type === 'fare_price_pnrwithbookingclass') {
       action = 'http://webservices.amadeus.com/TPCBRQ_23_2_1A';
+    } else if (type === 'ticket_create_tst_frompricing') {
+      action = 'http://webservices.amadeus.com/TAUTCQ_04_1_1A';
     }
 
     const header_bk: any = {
