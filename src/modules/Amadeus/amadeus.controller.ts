@@ -177,4 +177,19 @@ export class AmadeusController {
       );
     }
   }
+
+  @Post('doc_issuance_issuceticket')
+  @SkipAuth()
+  async postDocIssuance_IssueTicket(@Body() body: any, @Res() res: Response) {
+    try {
+      const result =
+        await this.amadeusService.callTicketCreateTSTFromPricing(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

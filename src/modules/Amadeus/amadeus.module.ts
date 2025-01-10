@@ -13,6 +13,7 @@ import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-mult
 import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
 import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
 import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticket-create-tst-frompricing.util';
+import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issuance-issuceticket.util';
 
 @Module({
   providers: [
@@ -29,6 +30,7 @@ import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticke
     FopCreateFormOfPaymentUtil,
     FarePricePNRWithBookingClassUtil,
     TicketCreateTSTFromPricingUtil,
+    DocIssuanceIssueTicketUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -45,6 +47,7 @@ import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticke
     FopCreateFormOfPaymentUtil,
     FarePricePNRWithBookingClassUtil,
     TicketCreateTSTFromPricingUtil,
+    DocIssuanceIssueTicketUtil,
   ],
 })
 export class AmadeusModule {}

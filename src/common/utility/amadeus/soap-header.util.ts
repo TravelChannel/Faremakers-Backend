@@ -244,6 +244,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/TPCBRQ_23_2_1A';
     } else if (type === 'ticket_create_tst_frompricing') {
       action = 'http://webservices.amadeus.com/TAUTCQ_04_1_1A';
+    } else if (type === 'doc_issuance_issuceticket') {
+      action = 'http://webservices.amadeus.com/TTKTIQ_15_1_1A';
     }
 
     const header_bk: any = {

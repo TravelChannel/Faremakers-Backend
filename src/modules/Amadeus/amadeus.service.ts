@@ -358,4 +358,34 @@ export class AmadeusService {
       throw new Error(`Failed to fetch data: ${error.response.data}`);
     }
   }
+
+  public async callDocIssuanceIssueTicket(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'doc_issuance_issuceticket',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.ticketCreateTSTFromPricing.createTicketCreateTSTFromPricing(
+        requestData.Ticket_CreateTSTFromPricing,
+      ),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/TTKTIQ_15_1_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
 }
