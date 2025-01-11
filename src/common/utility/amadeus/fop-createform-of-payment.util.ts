@@ -17,61 +17,22 @@ export class FopCreateFormOfPaymentUtil {
   // Create FOP Group for each passenger (fopGroupData contains data for a single passenger)
   createFopGroup(fopGroupData: any) {
     return {
-      fopGroup: {
-        fopReference: fopGroupData.fopReference || null, // Pull fopReference from JSON or default to null
-        pnrElementAssociation: {
-          referenceDetails: {
-            type:
-              fopGroupData.pnrElementAssociation.referenceDetails.type || 'PAX', // Default 'PAX' if not present
-            value:
-              fopGroupData.pnrElementAssociation.referenceDetails.value || '', // Get value from JSON
+      fopReference: fopGroupData.fopReference || null, // Pull fopReference from JSON or default to null
+      mopDescription: {
+        fopSequenceNumber: {
+          sequenceDetails: {
+            number:
+              fopGroupData.mopDescription.fopSequenceNumber?.sequenceDetails
+                ?.number || '1', // Default to '1' if not available
           },
         },
-        mopDescription: {
-          fopSequenceNumber: {
-            sequenceDetails: {
-              number:
-                fopGroupData.mopDescription.fopSequenceNumber?.sequenceDetails
-                  ?.number || '1', // Default to '1' if not available
+        mopDetails: {
+          fopPNRDetails: {
+            fopDetails: {
+              fopCode:
+                fopGroupData.mopDescription.mopDetails.fopPNRDetails?.fopDetails
+                  ?.fopCode || 'CASH', // Default to 'CASH' if not present
             },
-          },
-          mopDetails: {
-            fopPNRDetails: {
-              fopDetails: {
-                fopCode:
-                  fopGroupData.mopDescription.mopDetails.fopPNRDetails
-                    ?.fopDetails?.fopCode || 'CASH', // Default to 'CASH' if not present
-              },
-            },
-          },
-          paymentModule: {
-            groupUsage: {
-              attributeDetails: {
-                attributeType:
-                  fopGroupData.mopDescription.paymentModule?.groupUsage
-                    ?.attributeDetails?.attributeType || 'FP', // Default to 'FP'
-              },
-            },
-            paymentData: {
-              merchantInformation: {
-                companyCode:
-                  fopGroupData.mopDescription.paymentModule?.paymentData
-                    ?.merchantInformation?.companyCode || '6X', // Default to '6X'
-              },
-            },
-            mopInformation: {
-              fopInformation: {
-                formOfPayment: {
-                  type:
-                    fopGroupData.mopDescription.paymentModule?.mopInformation
-                      ?.fopInformation?.formOfPayment?.type || 'CASH', // Default to 'CASH'
-                },
-              },
-              dummy:
-                fopGroupData.mopDescription.paymentModule?.mopInformation
-                  ?.dummy || {}, // Assuming 'dummy' is optional
-            },
-            dummy: fopGroupData.mopDescription.paymentModule?.dummy || {}, // Assuming 'dummy' is optional
           },
         },
       },
@@ -89,18 +50,20 @@ export class FopCreateFormOfPaymentUtil {
   createFOPCreateFormOfPayment(requestData: any) {
     const body: any = {
       'soapenv:Body': {
-        FOP_CreateFormOfPayment: {},
+        FOP_CreateFormOfPayment: {
+          transactionContext: {},
+          fopGroup: [],
+        },
       },
+      session: {},
     };
 
     // Add the transaction context if provided
     if (requestData.transactionContext) {
-      Object.assign(
-        body['soapenv:Body']['FOP_CreateFormOfPayment'],
+      body['soapenv:Body']['FOP_CreateFormOfPayment'].transactionContext =
         this.createTransactionContext(
           requestData.transactionContext.transactionDetails.code,
-        ),
-      );
+        ).transactionContext;
     }
 
     // Add the fopGroup for each passenger in the request
@@ -109,6 +72,16 @@ export class FopCreateFormOfPaymentUtil {
         requestData.fopGroup.map((fopGroupData: any) =>
           this.createFopGroup(fopGroupData),
         );
+    }
+
+    // Add the session information
+    if (requestData.session) {
+      body.session = {
+        TransactionStatusCode: requestData.session.TransactionStatusCode || '',
+        SessionId: requestData.session.SessionId || '',
+        SequenceNumber: requestData.session.SequenceNumber || '',
+        SecurityToken: requestData.session.SecurityToken || '',
+      };
     }
 
     return body;

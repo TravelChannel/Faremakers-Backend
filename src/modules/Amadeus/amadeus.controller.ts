@@ -182,8 +182,7 @@ export class AmadeusController {
   @SkipAuth()
   async postDocIssuance_IssueTicket(@Body() body: any, @Res() res: Response) {
     try {
-      const result =
-        await this.amadeusService.callTicketCreateTSTFromPricing(body);
+      const result = await this.amadeusService.callDocIssuanceIssueTicket(body);
       res.status(200).json({ success: true, data: result });
     } catch (error) {
       throw new HttpException(

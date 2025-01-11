@@ -4,7 +4,7 @@ import { create } from 'xmlbuilder2';
 @Injectable()
 export class DocIssuanceIssueTicketUtil {
   // Method to create optionGroup object with switches
-  createOptionGroup() {
+  createOptionGroup(requestData: any) {
     return {
       optionGroup: {
         switches: {
@@ -24,10 +24,10 @@ export class DocIssuanceIssueTicketUtil {
   }
 
   // Method to create the full DocIssuance_IssueTicket request structure
-  createDocIssuanceIssueTicket() {
+  createDocIssuanceIssueTicket(requestData: any) {
     const body: any = {
       'soapenv:Body': {
-        DocIssuance_IssueTicket: this.createOptionGroup(),
+        DocIssuance_IssueTicket: this.createOptionGroup(requestData),
       },
     };
 

@@ -16,6 +16,7 @@ import { PnrAddMultiElementsUtil } from 'src/common/utility/amadeus/pnr-add-mult
 import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-createform-of-payment.util';
 import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
 import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticket-create-tst-frompricing.util';
+import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issuance-issuceticket.util';
 
 @Injectable()
 export class AmadeusService {
@@ -32,6 +33,7 @@ export class AmadeusService {
     private readonly fopCreateFormOfPayment: FopCreateFormOfPaymentUtil,
     private readonly fare_price_pnrwithbookingclass: FarePricePNRWithBookingClassUtil,
     private readonly ticketCreateTSTFromPricing: TicketCreateTSTFromPricingUtil,
+    private readonly docIssuanceIssueTicket: DocIssuanceIssueTicketUtil,
   ) {}
 
   public async callCommandCryptic(requestData: any) {
@@ -367,8 +369,8 @@ export class AmadeusService {
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
-      this.ticketCreateTSTFromPricing.createTicketCreateTSTFromPricing(
-        requestData.Ticket_CreateTSTFromPricing,
+      this.docIssuanceIssueTicket.createDocIssuanceIssueTicket(
+        requestData.DocIssuance_IssueTicket,
       ),
     );
 
