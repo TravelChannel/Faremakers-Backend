@@ -29,6 +29,25 @@ export class PayzenService {
     );
   }
 
+  // async generateBearerToken(): Promise<string> {
+  //   const username = process.env.PAZYEN_AUTH_USERNAME;
+  //   const password = process.env.PAYZEN_AUTH_PASSWORD;
+
+  //   if (!username || !password) {
+  //     throw new Error('Username or password is not set in the .env file');
+  //   }
+
+  //   const authPayload = { username, password };
+
+  //   // Replace the URL with the actual auth endpoint
+  //   const authUrl = 'https://example.com/auth/token';
+
+  //   const response = await lastValueFrom(
+  //     this.httpService.post(authUrl, authPayload),
+  //   );
+  //   return response.data.access_token; // Assume API returns { access_token: "<token>" }
+  // }
+
   /**
    * Save the token and expiry time to a file.
    */

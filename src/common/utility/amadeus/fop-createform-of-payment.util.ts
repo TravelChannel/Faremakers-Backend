@@ -17,7 +17,7 @@ export class FopCreateFormOfPaymentUtil {
   // Create FOP Group for each passenger (fopGroupData contains data for a single passenger)
   createFopGroup(fopGroupData: any) {
     return {
-      fopReference: fopGroupData.fopReference || null, // Pull fopReference from JSON or default to null
+      fopReference: fopGroupData.fopReference || '', // Pull fopReference from JSON or default to null
       mopDescription: {
         fopSequenceNumber: {
           sequenceDetails: {
