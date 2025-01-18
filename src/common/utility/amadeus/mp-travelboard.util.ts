@@ -29,54 +29,49 @@ export class MasterPriceTravelBoardUtil {
     }));
   }
 
-  createPaxReference_bk(ptc, ref) {
-    return {
-      paxReference: {
-        ptc: ptc,
-        traveller: { ref: ref },
-      },
-    };
-  }
-
   createFareOptions(priceTypes) {
     return {
       fareOptions: {
         pricingTickInfo: {
           pricingTicketing: {
-            priceType: priceTypes.map((type) => ({ '#text': type })),
+            priceType: priceTypes.map((type) => type),
           },
         },
       },
     };
   }
 
-  createTravelFlightInfo(cabin, carrierId) {
+  createTravelFlightInfo(cabin, carrierIds) {
     return {
       travelFlightInfo: {
-        cabinId: { cabin: cabin },
         companyIdentity: {
-          carrierQualifier: 'M',
-          carrierId: carrierId,
+          carrierQualifier: 'X',
+          carrierId: carrierIds,
+        },
+        flightDetail: {
+          flightType: 'N',
         },
       },
     };
   }
 
-  createItinerary(departureId, arrivalId, date) {
-    return {
+  createItinerary(itineraries) {
+    return itineraries.map((itinerary, index) => ({
       itinerary: {
-        requestedSegmentRef: { segRef: '1' },
-        departureLocalization: { departurePoint: { locationId: departureId } },
-        arrivalLocalization: { arrivalPointDetails: { locationId: arrivalId } },
-        timeDetails: { firstDateTimeDetail: { date: date } },
+        requestedSegmentRef: { segRef: (index + 1).toString() },
+        departureLocalization: {
+          departurePoint: { locationId: itinerary.departureId },
+        },
+        arrivalLocalization: {
+          arrivalPointDetails: { locationId: itinerary.arrivalId },
+        },
+        timeDetails: { firstDateTimeDetail: { date: itinerary.date } },
       },
-    };
+    }));
   }
 
   convertToXML(object) {
-    // Use `create` to convert the JavaScript object to XML
-    const xml = create().ele(object).end({ prettyPrint: true }); // `prettyPrint` for readable XML output
-
+    const xml = create().ele(object).end({ prettyPrint: true });
     return xml;
   }
 
@@ -87,7 +82,6 @@ export class MasterPriceTravelBoardUtil {
       },
     };
 
-    // Dynamically add sections based on request data
     if (requestData.numberOfUnit) {
       Object.assign(
         body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
@@ -96,18 +90,7 @@ export class MasterPriceTravelBoardUtil {
     }
 
     if (requestData.paxReference) {
-      // Object.assign(
-      //   body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
-      //   this.createPaxReference(
-      //     requestData.paxReference.ptc,
-      //     requestData.paxReference.ref,
-      //   ),
-      // );
-
       const paxRefs = this.createPaxReferences(requestData.paxReference);
-
-      // Append each `paxRef` to the `paxReference` array
-      // Dynamically add `paxReference` to `Fare_MasterPricerTravelBoardSearch`
       body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'][
         'paxReference'
       ] = paxRefs.map((paxRef) => paxRef.paxReference);
@@ -125,20 +108,15 @@ export class MasterPriceTravelBoardUtil {
         body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
         this.createTravelFlightInfo(
           requestData.travelFlightInfo.cabin,
-          requestData.travelFlightInfo.carrierId,
+          requestData.travelFlightInfo.carrierIds,
         ),
       );
     }
 
     if (requestData.itinerary) {
-      Object.assign(
-        body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
-        this.createItinerary(
-          requestData.itinerary.departureId,
-          requestData.itinerary.arrivalId,
-          requestData.itinerary.date,
-        ),
-      );
+      const itineraries = this.createItinerary(requestData.itinerary);
+      body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch']['itinerary'] =
+        itineraries.map((itinerary) => itinerary.itinerary);
     }
 
     return body;
