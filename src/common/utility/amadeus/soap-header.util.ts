@@ -290,8 +290,7 @@ export class SoapHeaderUtil {
       type === 'fare_informative_best_pricing' ||
       type === 'command_cryptic' ||
       type === 'airsell-from-recommendation' ||
-      type === 'end_session' ||
-      type === 'pnr_retrive'
+      type === 'end_session'
     ) {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
         {

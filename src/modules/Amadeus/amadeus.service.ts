@@ -426,15 +426,12 @@ export class AmadeusService {
   public async callPNRRetrive(requestData: any) {
     let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
       requestData,
-      'pnr_retrive',
+      'retrive_pnr',
     );
 
     Object.assign(
       soapEnvelope['soapenv:Envelope'],
-      this.pnrRetrive.createPnrRetrieve(
-        requestData.PNR_Retrieve.retrievalFacts.reservationOrProfileIdentifier
-          .reservation.controlNumber,
-      ),
+      this.pnrRetrive.createSOAPEnvelopeBody(requestData),
     );
 
     const headers = {
