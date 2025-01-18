@@ -16,6 +16,7 @@ import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticke
 import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issuance-issuceticket.util';
 import { SecuritySignOutUtil } from 'src/common/utility/amadeus/security-signout.util';
 import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
+import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
 
 @Module({
   providers: [
@@ -35,6 +36,7 @@ import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
     DocIssuanceIssueTicketUtil,
     SecuritySignOutUtil,
     PnrRetrieveUtil,
+    PnrCancelUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -54,6 +56,7 @@ import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
     DocIssuanceIssueTicketUtil,
     SecuritySignOutUtil,
     PnrRetrieveUtil,
+    PnrCancelUtil,
   ],
 })
 export class AmadeusModule {}
