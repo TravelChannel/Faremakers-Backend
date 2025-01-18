@@ -191,4 +191,32 @@ export class AmadeusController {
       );
     }
   }
+
+  @Post('security_signout')
+  @SkipAuth()
+  async postSecuritySignOut(@Body() body: any, @Res() res: Response) {
+    try {
+      const result = await this.amadeusService.callEndSession(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post('retrive_pnr')
+  @SkipAuth()
+  async postRetrivePNR(@Body() body: any, @Res() res: Response) {
+    try {
+      const result = await this.amadeusService.callPNRRetrive(body);
+      res.status(200).json({ success: true, data: result });
+    } catch (error) {
+      throw new HttpException(
+        { success: false, message: error.message },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

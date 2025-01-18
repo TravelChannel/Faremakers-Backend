@@ -246,6 +246,10 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/TAUTCQ_04_1_1A';
     } else if (type === 'doc_issuance_issuceticket') {
       action = 'http://webservices.amadeus.com/TTKTIQ_15_1_1A';
+    } else if (type === 'end_session') {
+      action = 'http://webservices.amadeus.com/VLSSOQ_04_1_1A';
+    } else if (type === 'retrive_pnr') {
+      action = 'http://webservices.amadeus.com/PNRRET_21_1_1A';
     }
 
     const header_bk: any = {
@@ -285,7 +289,9 @@ export class SoapHeaderUtil {
     if (
       type === 'fare_informative_best_pricing' ||
       type === 'command_cryptic' ||
-      type === 'airsell-from-recommendation'
+      type === 'airsell-from-recommendation' ||
+      type === 'end_session' ||
+      type === 'pnr_retrive'
     ) {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
         {
@@ -317,7 +323,10 @@ export class SoapHeaderUtil {
       };
     }
 
-    if (TransactionStatusCode !== 'InSeries') {
+    if (
+      TransactionStatusCode !== 'InSeries' &&
+      TransactionStatusCode !== 'End'
+    ) {
       // Add Security details and AMA_SecurityHostedUser
       header['soapenv:Envelope']['soapenv:Header']['oas:Security'] = {
         'oas:UsernameToken': {

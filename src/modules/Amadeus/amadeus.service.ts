@@ -17,6 +17,8 @@ import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-creat
 import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
 import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticket-create-tst-frompricing.util';
 import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issuance-issuceticket.util';
+import { SecuritySignOutUtil } from 'src/common/utility/amadeus/security-signout.util';
+import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 
 @Injectable()
 export class AmadeusService {
@@ -34,6 +36,8 @@ export class AmadeusService {
     private readonly fare_price_pnrwithbookingclass: FarePricePNRWithBookingClassUtil,
     private readonly ticketCreateTSTFromPricing: TicketCreateTSTFromPricingUtil,
     private readonly docIssuanceIssueTicket: DocIssuanceIssueTicketUtil,
+    private readonly securitySignOut: SecuritySignOutUtil,
+    private readonly pnrRetrive: PnrRetrieveUtil,
   ) {}
 
   public async callCommandCryptic(requestData: any) {
@@ -377,6 +381,65 @@ export class AmadeusService {
     const headers = {
       'Content-Type': 'text/xml',
       SOAPAction: 'http://webservices.amadeus.com/TTKTIQ_15_1_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callEndSession(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'end_session',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.securitySignOut.createSecuritySignOutRequest(),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/VLSSOQ_04_1_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callPNRRetrive(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'pnr_retrive',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.pnrRetrive.createPnrRetrieve(
+        requestData.PNR_Retrieve.retrievalFacts.reservationOrProfileIdentifier
+          .reservation.controlNumber,
+      ),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/PNRRET_21_1_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);

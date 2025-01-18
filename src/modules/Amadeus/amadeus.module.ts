@@ -14,6 +14,8 @@ import { FopCreateFormOfPaymentUtil } from 'src/common/utility/amadeus/fop-creat
 import { FarePricePNRWithBookingClassUtil } from 'src/common/utility/amadeus/fare-price-pnrwithbookingclass.util';
 import { TicketCreateTSTFromPricingUtil } from 'src/common/utility/amadeus/ticket-create-tst-frompricing.util';
 import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issuance-issuceticket.util';
+import { SecuritySignOutUtil } from 'src/common/utility/amadeus/security-signout.util';
+import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 
 @Module({
   providers: [
@@ -31,6 +33,8 @@ import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issua
     FarePricePNRWithBookingClassUtil,
     TicketCreateTSTFromPricingUtil,
     DocIssuanceIssueTicketUtil,
+    SecuritySignOutUtil,
+    PnrRetrieveUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -48,6 +52,8 @@ import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issua
     FarePricePNRWithBookingClassUtil,
     TicketCreateTSTFromPricingUtil,
     DocIssuanceIssueTicketUtil,
+    SecuritySignOutUtil,
+    PnrRetrieveUtil,
   ],
 })
 export class AmadeusModule {}
