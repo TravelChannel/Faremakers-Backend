@@ -66,13 +66,13 @@ export class PnrAddMultiElementsUtil {
       dataElementsIndiv: dataElementsIndiv
         .map((element) => {
           const elementManagementData = {
-            segmentName: element.elementManagementData.segmentName,
             ...(element.elementManagementData.reference && {
               reference: {
                 qualifier: element.elementManagementData.reference.qualifier,
                 number: element.elementManagementData.reference.number,
               },
             }),
+            segmentName: element.elementManagementData.segmentName,
           };
 
           if (element.freetextData) {

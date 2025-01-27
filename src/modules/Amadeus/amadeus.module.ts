@@ -17,6 +17,7 @@ import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issua
 import { SecuritySignOutUtil } from 'src/common/utility/amadeus/security-signout.util';
 import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
+import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
 
 @Module({
   providers: [
@@ -37,6 +38,7 @@ import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
     SecuritySignOutUtil,
     PnrRetrieveUtil,
     PnrCancelUtil,
+    QueuePlacePnrUtil,
   ],
   controllers: [AmadeusController],
   exports: [
@@ -57,6 +59,7 @@ import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
     SecuritySignOutUtil,
     PnrRetrieveUtil,
     PnrCancelUtil,
+    QueuePlacePnrUtil
   ],
 })
 export class AmadeusModule {}

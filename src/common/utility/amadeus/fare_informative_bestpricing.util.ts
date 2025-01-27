@@ -117,7 +117,8 @@ export class FareInformativeBestPricingUtil {
       if (option.carrierInformation) {
         pricingOption.carrierInformation = {
           companyIdentification: {
-            otherCompany: option.carrierInformation.otherCompany,
+            otherCompany:
+              option.carrierInformation.companyIdentification.otherCompany,
           },
         };
       }

@@ -252,6 +252,8 @@ export class SoapHeaderUtil {
       action = 'http://webservices.amadeus.com/PNRRET_21_1_1A';
     } else if (type === 'pnr_cancel') {
       action = 'http://webservices.amadeus.com/PNRXCL_21_1_1A';
+    } else if (type === 'queue_place_pnr') {
+      action = 'http://webservices.amadeus.com/QUQPCQ_03_1_1A';
     }
 
     const header_bk: any = {

@@ -20,6 +20,7 @@ import { DocIssuanceIssueTicketUtil } from 'src/common/utility/amadeus/doc-issua
 import { SecuritySignOutUtil } from 'src/common/utility/amadeus/security-signout.util';
 import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
+import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
 
 @Injectable()
 export class AmadeusService {
@@ -40,6 +41,7 @@ export class AmadeusService {
     private readonly securitySignOut: SecuritySignOutUtil,
     private readonly pnrRetrive: PnrRetrieveUtil,
     private readonly pnrCancel: PnrCancelUtil,
+    private readonly queuePlacePnrUtil: QueuePlacePnrUtil,
   ) {}
 
   public async callCommandCryptic(requestData: any) {
@@ -467,6 +469,34 @@ export class AmadeusService {
     const headers = {
       'Content-Type': 'text/xml',
       SOAPAction: 'http://webservices.amadeus.com/PNRXCL_21_1_1A', // Customize based on API requirements
+    };
+    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+    console.log(xmlreq);
+    try {
+      // Make the API call
+      const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
+        headers,
+      });
+      return this.soapHeaderUtil.convertXmlToJson(response.data); // Return the data from the API response
+    } catch (error) {
+      throw new Error(`Failed to fetch data: ${error.response.data}`);
+    }
+  }
+
+  public async callQueuePlacePNR(requestData: any) {
+    let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(
+      requestData,
+      'queue_place_pnr',
+    );
+
+    Object.assign(
+      soapEnvelope['soapenv:Envelope'],
+      this.queuePlacePnrUtil.createSOAPEnvelopeBody(requestData.Queue_PlacePNR),
+    );
+
+    const headers = {
+      'Content-Type': 'text/xml',
+      SOAPAction: 'http://webservices.amadeus.com/QUQPCQ_03_1_1A', // Customize based on API requirements
     };
     let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
     console.log(xmlreq);
