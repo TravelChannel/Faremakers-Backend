@@ -61,20 +61,18 @@ export class AirSellRecommendationUtil {
 
   createItineraryDetails(itineraries: any[]) {
     return itineraries.map((itinerary) => ({
-      itineraryDetails: {
-        ...this.createOriginDestinationDetails(
-          itinerary.originDestinationDetails.origin,
-          itinerary.originDestinationDetails.destination,
-        ),
-        message: {
-          messageFunctionDetails: {
-            messageFunction: '183',
-          },
+      ...this.createOriginDestinationDetails(
+        itinerary.originDestinationDetails.origin,
+        itinerary.originDestinationDetails.destination,
+      ),
+      message: {
+        messageFunctionDetails: {
+          messageFunction: '183',
         },
-        segmentInformation: this.createSegmentInformation(
-          itinerary.segmentInformation,
-        ),
       },
+      segmentInformation: this.createSegmentInformation(
+        itinerary.segmentInformation,
+      ),
     }));
   }
 
@@ -109,7 +107,8 @@ export class AirSellRecommendationUtil {
       const itineraries = this.createItineraryDetails(
         requestData.itineraryDetails,
       );
-      body['soapenv:Body']['Air_SellFromRecommendation'] = itineraries;
+      body['soapenv:Body']['Air_SellFromRecommendation']['itineraryDetails'] =
+        itineraries;
     }
 
     return body;
