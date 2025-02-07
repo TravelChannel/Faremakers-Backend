@@ -356,8 +356,15 @@ export class AmadeusService {
       'Content-Type': 'text/xml',
       SOAPAction: 'http://webservices.amadeus.com/TAUTCQ_04_1_1A', // Customize based on API requirements
     };
-    let xmlreq = create(soapEnvelope).end({ prettyPrint: true });
-    console.log(xmlreq);
+    console.log(soapEnvelope);
+    let xmlreq;
+    try {
+      xmlreq = create(soapEnvelope).end({ prettyPrint: true });
+      console.log(xmlreq);
+    } catch (error) {
+      console.log(error);
+    }
+
     try {
       // Make the API call
       const response = await axios.post(process.env.AMADEUS_ENDPOINT, xmlreq, {
