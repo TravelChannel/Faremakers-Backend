@@ -15,9 +15,11 @@ export class TicketCreateTSTFromPricingUtil {
 
   createPsaList(psaList: any[]) {
     return {
-      itemReference: psaList.map((item) => ({
-        referenceType: item.itemReference?.referenceType || 'TST',
-        uniqueReference: item.itemReference?.uniqueReference || '1',
+      psaList: psaList.map((item) => ({
+        itemReference: {
+          referenceType: item.itemReference?.referenceType || 'TST',
+          uniqueReference: item.itemReference?.uniqueReference || '1',
+        },
       })),
     };
   }
@@ -33,16 +35,14 @@ export class TicketCreateTSTFromPricingUtil {
   createTicketCreateTSTFromPricing(requestData: any) {
     const body: any = {
       'soapenv:Body': {
-        Ticket_CreateTSTFromPricing: {
-          psalist: {},
-        },
+        Ticket_CreateTSTFromPricing: {},
       },
     };
 
     // Add psaList if provided in the requestData
     if (requestData.psaList) {
       Object.assign(
-        body['soapenv:Body']['Ticket_CreateTSTFromPricing']['psalist'],
+        body['soapenv:Body']['Ticket_CreateTSTFromPricing'],
         this.createPsaList(requestData.psaList),
       );
     }
