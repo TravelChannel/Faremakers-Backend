@@ -1,6 +1,7 @@
 import {
   Injectable,
   HttpStatus,
+  UnauthorizedException,
   // Session,
   // Req,
 } from '@nestjs/common';
@@ -13,7 +14,7 @@ import { HttpService } from '@nestjs/axios';
 // import { Request } from 'express'; // Import the Request object
 
 import { UsersService } from '../../modules/generalModules/users/users.service'; // Adjust the path based on your project structure
-import * as bcrypt from 'bcrypt';
+const bcrypt = require('bcrypt');
 import {
   generateAccessTokenOtpUser,
   generateRefreshTokenOtpUser,
@@ -40,13 +41,24 @@ const JWT_REFRESH_SECRET = dbConfig.JWT_REFRESH_SECRET;
 const OTP_SECRET = dbConfig.OTP_SECRET;
 
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
+  private users = [
+    {
+      id: 1,
+      username: 'payzen',
+      password: bcrypt.hashSync('password123',10),
+      role: 'paymentprocessor',
+    },
+  ];
+
   constructor(
     private readonly userService: UsersService,
     private readonly responseService: ResponseService,
     private readonly httpService: HttpService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async login(
@@ -361,6 +373,23 @@ export class AuthService {
     } catch (error) {
       return null;
     }
+  }
+
+  async validatepayzenuser(username: string, password: string): Promise<any> {
+    const user = this.users.find((u) => u.username === username);
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const { password, ...result } = user;
+      return result;
+    }
+    throw new UnauthorizedException('Invalid username or password');
+  }
+
+  async loginpayzen(username: string, password: string) {
+    const user = await this.validatepayzenuser(username, password);
+    const payload = { username: user.username, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 
   // async logout() {}

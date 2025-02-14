@@ -71,6 +71,25 @@ export class AuthController {
     }
   }
 
+  @Post('login-payzen')
+  @SkipAuth() // Apply the decorator here to exclude this route
+  async loginpayzen(
+    @Body() body: { username: string; password: string },
+    @Session() session: Record<string, any>,
+    @Res({ passthrough: true }) res,
+  ) {
+    try {
+      const result = await this.authService.loginpayzen(
+        body.username,
+        body.password,
+      );
+
+      return result;
+    } catch (error) {
+      throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
   // @UseGuards(AuthGuard, RolesGuard)s
   @Post('requestOtp')
   // @UseGuards(LocalAuthGuard)
