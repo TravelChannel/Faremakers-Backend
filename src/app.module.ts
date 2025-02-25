@@ -36,8 +36,10 @@ import { HttpModule } from '@nestjs/axios';
 import { createFileStorage } from './common/utils/file-storage.util'; // Import the utility function
 import { FirebaseModule } from './database/firebase/firebase.module';
 import { AmadeusModule } from './modules/Amadeus/amadeus.module';
+import { AmadeusLiveModule } from './modules/AmadeusLive/amadeus.module';
 import { JazzCashModule } from './modules/jazzcashModule/jazzcash.module';
 import { SoapHeaderUtil } from './common/utility/amadeus/soap-header.util';
+import { SoapHeaderLiveUtil } from './common/utility/amadeus/soap-header-live.util';
 import { PayzenModule } from './modules/payzenModule/payzen.module';
 // import { SoapHeaderInterceptor } from './common/interceptors/amadeusheader.interceptor';
 
@@ -65,6 +67,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     CommissionPercentageModule,
     ActivityModule,
     AmadeusModule,
+    AmadeusLiveModule,
     JazzCashModule,
     PayzenModule,
     ThrottlerModule.forRoot([
@@ -95,6 +98,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     JwtStrategy,
     AuthService,
     SoapHeaderUtil,
+    SoapHeaderLiveUtil,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard, // Use the RolesGuard as a global guard
@@ -108,7 +112,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     //   useClass: SoapHeaderInterceptor, // Register SoapHeaderInterceptor as a global interceptor
     // },
   ],
-  exports: [SoapHeaderUtil],
+  exports: [SoapHeaderUtil, SoapHeaderLiveUtil],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
