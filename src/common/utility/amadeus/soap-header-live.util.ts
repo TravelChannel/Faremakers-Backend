@@ -157,7 +157,8 @@ export class SoapHeaderLiveUtil {
         'soapenv:Header': {
           'add:MessageID': uuidv4(),
           'add:Action': action,
-          'add:To': 'https://nodeD2.test.webservices.amadeus.com/1ASIWWWW99T',
+          'add:To':
+            'https://nodeD2.production.webservices.amadeus.com/1ASIWWWW99T',
         },
       },
     };
@@ -284,7 +285,8 @@ export class SoapHeaderLiveUtil {
         'soapenv:Header': {
           'add:MessageID': uuidv4(),
           'add:Action': action,
-          'add:To': 'https://nodeD2.webservices.amadeus.com/1ASIWWWW99T',
+          'add:To':
+            'https://nodeD2.production.webservices.amadeus.com/1ASIWWWW99T',
         },
       },
     };
