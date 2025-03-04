@@ -98,7 +98,28 @@ export class PnrBookingsService {
         sendSmsCod,
         branchLabel,
         userLocation,
+        PSID,
+        ChallanNumber,
       } = pnrBookingDto;
+
+      let MessageLogPSID = `PSID: ${pnrBookingDto.PSID}`;
+
+      await Log.create({
+        level: '1',
+        message: '12334',
+        meta: pnr,
+        timestamp: new Date().toISOString(),
+      });
+
+      let newLogPSID = await Log.create({
+        level: '1',
+        message: MessageLogPSID,
+        meta: pnr,
+        timestamp: new Date().toISOString(),
+      });
+
+      console.log('nabeel PSID', newLogPSID);
+
       const tolerance = 0.001; // Define your tolerance threshold here
       const baseFare =
         typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
@@ -113,7 +134,7 @@ export class PnrBookingsService {
         {
           userId: currentUserId,
           pnr: pnr,
-          orderId: OrderId,
+          orderId: 16,
           sendSmsBranch: sendSmsBranch || false,
           sendSmsCod: sendSmsCod || false,
           branchLabel: branchLabel || '',
@@ -122,6 +143,8 @@ export class PnrBookingsService {
           pnrPaymentAmount: Amount.pnrPayment || 0,
           taxAmount: Amount.taxAmount || 0,
           totalTicketPrice: Amount.totalTicketPrice || 0,
+          PSID: PSID,
+          ChallanNumber: ChallanNumber,
         },
         { transaction: t },
       );

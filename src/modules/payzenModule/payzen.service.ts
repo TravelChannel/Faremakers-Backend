@@ -3,6 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import * as fs from 'fs';
 import * as path from 'path';
+import axios from 'axios';
 
 @Injectable()
 export class PayzenService {
@@ -86,7 +87,7 @@ export class PayzenService {
 
     // Check if the token has expired
     const currentTime = new Date().getTime();
-    if (new Date(tokenData.content.expiryDate).getTime() < currentTime) {
+    if (!this.isTokenValid(tokenData.content[0].expiryDate)) {
       // If the token has expired, generate a new token and update the file
       return await this.generateAndSaveToken();
     }
@@ -95,7 +96,11 @@ export class PayzenService {
     return tokenData.content[0].token.token;
   }
 
-  // Function to generate a new token and save it to a file
+  isTokenValid(expiryDate: number): boolean {
+    const currentTimestamp = Date.now();
+    return expiryDate > currentTimestamp;
+  }
+
   private async generateAndSaveToken(): Promise<string> {
     const clientId = process.env.PAYZEN_CLIENT_ID;
     const clientSecret = process.env.PAYZEN_CLIENT_SECRET;
@@ -108,18 +113,91 @@ export class PayzenService {
     }
 
     try {
-      // Authenticate with Payzen API to generate a new token
-      let response = await this.httpService.post(this.authUrl, {
+      const data = JSON.stringify({
         clientId,
-        clientSecret,
+        clientSecretKey: clientSecret, // Correct usage of environment variables
       });
+
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://stagingapi.payzen.pk:8445/payzen/api/auth/authenticate',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data,
+      };
+
+      // Await the response
+      const response = await axios.request(config);
+
+      // Extract token safely
+      const token = response.data?.content?.token?.token;
+
+      if (!token) {
+        throw new HttpException(
+          'Invalid response structure from Payzen API',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+
+      // Save token to file
+      fs.writeFileSync(
+        this.tokenFilePath,
+        JSON.stringify(response.data),
+        'utf-8',
+      );
+
+      return token; // Return the new token
+    } catch (error) {
+      console.error('Error authenticating with Payzen:', error);
+      throw new HttpException(
+        'Authentication with Payzen failed',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+  }
+
+  private async generateAndSaveTokenBk(): Promise<string> {
+    const clientId = process.env.PAYZEN_CLIENT_ID;
+    const clientSecret = process.env.PAYZEN_CLIENT_SECRET;
+
+    if (!clientId || !clientSecret) {
+      throw new HttpException(
+        'PAYZEN_CLIENT_ID or PAYZEN_CLIENT_SECRET is not defined in environment variables.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+
+    try {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://stagingapi.payzen.pk:8445/payzen/api/auth/authenticate',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          clientId,
+          clientSecret,
+        }),
+      };
+
+      // Await the axios request to get the response
+      const response = await axios.request(config);
+      console.log('Response Data:', response.data);
 
       const {
         content: {
           token: { token },
         },
-      } = JSON.parse(JSON.stringify(response));
-      fs.writeFileSync(this.tokenFilePath, JSON.stringify(response), 'utf-8');
+      } = response.data;
+
+      fs.writeFileSync(
+        this.tokenFilePath,
+        JSON.stringify(response.data),
+        'utf-8',
+      );
       return token; // Return the new token
     } catch (error) {
       throw new HttpException(
@@ -135,7 +213,7 @@ export class PayzenService {
    */
   async authenticate(): Promise<string> {
     // Check for an existing valid token
-    const tokenData = this.getTokenFromFile();
+    const tokenData = await this.getTokenFromFile();
 
     if (tokenData) {
       return tokenData; // Return the valid token
@@ -179,13 +257,14 @@ export class PayzenService {
    * @param requestBody - Request body parameters for PSID generation
    * @returns PSID
    */
-  async generatePsid(requestBody: Record<string, any>) {
+  async generatePsidBK(requestBody: Record<string, any>) {
     const token = await this.authenticate(); // Automatically fetch the token
     try {
       const response = await firstValueFrom(
-        this.httpService.post(this.psidUrl, requestBody, {
+        this.httpService.post(this.psidUrl, JSON.stringify(requestBody), {
           headers: {
             Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
         }),
       );
@@ -213,6 +292,51 @@ export class PayzenService {
 
       throw new HttpException(
         'Failed to generate PSID with Payzen',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async generatePsid(requestBody: Record<string, any>) {
+    const token = await this.authenticate();
+    console.log('Generated Token:', token);
+
+    try {
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://stagingapi.payzen.pk:8445/payzen/api/psid',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        data: JSON.stringify(requestBody),
+      };
+
+      // Await the axios request to get the response
+      const response = await axios.request(config);
+      console.log('Response Data:', response.data);
+
+      // Validate response and return the PSID
+      if (response.data && response.data.status === 'OK') {
+        return {
+          status: response.data.status,
+          message: response.data.message,
+          content: response.data.content, // Assuming PSID is inside "content"
+        };
+      } else {
+        throw new HttpException(
+          response.data?.message || 'Failed to generate PSID',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    } catch (error) {
+      console.error(
+        'Error generating PSID:',
+        error.response?.data || error.message,
+      );
+      throw new HttpException(
+        'Failed to generate PSID',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

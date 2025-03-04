@@ -158,9 +158,16 @@ export class PnrBooking extends Model {
   pnr: string;
   @Column({
     type: DataType.STRING,
-
     allowNull: true,
   })
+  PSID: string;
+
+  @Column({
+    type: DataType.BIGINT,
+    allowNull: true,
+  })
+  ChallanNumber: number;
+
   orderId: string;
   @BelongsTo(() => User)
   user: User;
