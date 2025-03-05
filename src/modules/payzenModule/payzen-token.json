@@ -5,11 +5,11 @@
     {
       "clientId": "50VTlHr9!@C",
       "token": {
-        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1MFZUbEhyOSFAQyIsImlhdCI6MTc0MDQ2ODg0NywiZXhwIjoxNzQxMDczNjQ3fQ.QJvBvXCYdvZPhWynfNq3GYb9dH9d5C8pv6CLHpGotsAZgfMRrLJqQdFFFxIM0BNH5vZLwIasfkTYqqGcVYHRqA",
+        "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI1MFZUbEhyOSFAQyIsImlhdCI6MTczMzIxMDE2NiwiZXhwIjoxNzMzODE0OTY2fQ.hK9J2e-W35twv_AK6d7x8On-os_X6aB0aOFBsCCv32-lHEVFNEbSLW94C3GyCkWSIo2z_s1384D3_PQv3UbGvg",
         "type": "Bearer",
-        "expiryDate": 1741073647000
+        "expiryDate": 1733814966000
       },
-      "expiryDate": 1741073647000
+      "expiryDate": 1733814966000
     }
   ]
 }

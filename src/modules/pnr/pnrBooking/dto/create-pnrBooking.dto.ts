@@ -10,6 +10,7 @@ export class PnrBookingDto {
   pnr: number;
   @IsOptional()
   OrderId: string;
+
   @ArrayNotEmpty({ message: 'Provide at least one pnrBookings' })
   pnrBookings: PnrBookingArrayDto[];
   @IsOptional()
@@ -28,8 +29,4 @@ export class PnrBookingDto {
   userLocation: any;
   @IsOptional()
   Amount: any;
-  @IsOptional()
-  PSID: string;
-  @IsOptional()
-  ChallanNumber: any;
 }

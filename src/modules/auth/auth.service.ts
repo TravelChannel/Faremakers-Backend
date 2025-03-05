@@ -49,7 +49,7 @@ export class AuthService {
     {
       id: 1,
       username: 'payzen',
-      password: bcrypt.hashSync('password123', 10),
+      password: bcrypt.hashSync('password123',10),
       role: 'paymentprocessor',
     },
   ];
@@ -154,7 +154,6 @@ export class AuthService {
       );
     }
   }
-
   async generateAndSendOtp(
     countryCode: string,
     phoneNumber: string,
@@ -268,7 +267,6 @@ export class AuthService {
       return undefined;
     }
   }
-
   private async generateOtp(): Promise<string> {
     // Implement your OTP generation logic here
     // For example, use a library or generate a random 6-digit number
@@ -353,7 +351,6 @@ export class AuthService {
     }
     return null;
   }
-
   async validateUserLocalOtp(
     countryCode: string,
     phoneNumber: string,
