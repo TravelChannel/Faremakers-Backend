@@ -3,6 +3,9 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import * as fs from 'fs';
 import * as path from 'path';
+import { InjectModel } from '@nestjs/sequelize';
+import { PayZenOrder } from './entities/payzen-order.entity';
+import { CreatePayZenOrderDto } from './dto/create-payzen-order.dto';
 
 @Injectable()
 export class PayzenService {
@@ -10,7 +13,11 @@ export class PayzenService {
   private psidUrl: string;
   private tokenFilePath: string;
 
-  constructor(private readonly httpService: HttpService) {
+  constructor(
+    private readonly httpService: HttpService,
+    @InjectModel(PayZenOrder)
+    private readonly payZenOrderModel: typeof PayZenOrder,
+  ) {
     // Determine the environment and set URLs
     const environment = process.env.PAYZEN_ENV || 'staging'; // Default to staging
     if (environment === 'live') {
@@ -216,5 +223,9 @@ export class PayzenService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async createPayZenOrder(dto: CreatePayZenOrderDto): Promise<PayZenOrder> {
+    return await this.payZenOrderModel.create(dto);
   }
 }
