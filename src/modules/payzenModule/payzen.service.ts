@@ -228,4 +228,54 @@ export class PayzenService {
   async createPayZenOrder(dto: CreatePayZenOrderDto): Promise<PayZenOrder> {
     return await this.payZenOrderModel.create(dto);
   }
+
+  async createOrUpdateBk(createPayzenOrderDto: CreatePayZenOrderDto): Promise<PayZenOrder> {
+    const { ConsumerNo } = createPayzenOrderDto;
+
+    // Check if record exists with ConsumerNo
+    const existingOrder = await this.payZenOrderModel.findOne({ where: { ConsumerNo } });
+
+    if (existingOrder) {
+      // Update existing record
+      await existingOrder.update(createPayzenOrderDto);
+      return existingOrder;
+    } else {
+      // Insert new record
+      return this.payZenOrderModel.create(createPayzenOrderDto);
+    }
+  }
+
+  async createOrUpdate(createPayzenOrderDto: CreatePayZenOrderDto): Promise<{ status: string; message: string }> {
+    const { ConsumerNo } = createPayzenOrderDto;
+  
+    try {
+      // Check if the record exists
+      const existingOrder = await this.payZenOrderModel.findOne({ where: { ConsumerNo } });
+  
+      if (existingOrder) {
+        // Update existing record and check if update was successful
+        const [updatedCount] = await this.payZenOrderModel.update(createPayzenOrderDto, { where: { ConsumerNo } });
+  
+        if (updatedCount > 0) {
+          return { status: "OK", message: "Payment intimated successfully" };
+        } else {
+          return { status: "ERROR", message: "Failed to update payment record" };
+        }
+      } else {
+        // Insert new record and check if creation was successful
+        const newOrder = await this.payZenOrderModel.create(createPayzenOrderDto);
+  
+        if (newOrder) {
+          return { status: "OK", message: "Payment intimated successfully" };
+        } else {
+          return { status: "ERROR", message: "Failed to create payment record" };
+        }
+      }
+    } catch (error) {
+      console.error("Error in createOrUpdate:", error);
+      return { status: "ERROR", message: "An error occurred while processing the payment" };
+    }
+  }
+  
+  
 }

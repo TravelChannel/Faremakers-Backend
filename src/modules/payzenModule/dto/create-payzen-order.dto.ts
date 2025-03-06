@@ -1,7 +1,17 @@
-import { IsNotEmpty, IsOptional, IsString, IsNumber } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsNumber,
+  Matches,
+  IsPositive,
+  IsDateString,
+  Min,
+  Max,
+} from 'class-validator';
 
 export class CreatePayZenOrderDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
   PayZenID: number;
 
@@ -13,23 +23,26 @@ export class CreatePayZenOrderDto {
   @IsString()
   psidStatus?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsNotEmpty({ message: 'Challan number is missing' })
+  @IsString({ message: 'Invalid challan number' })
   ChallanNo?: string;
 
-  @IsOptional()
+  @IsNotEmpty({ message: 'Amount could not be NULL' })
+  @Matches(/^\d+$/, { message: 'Only digits are allowed in amount' })
   @IsString()
-  amountPaid?: string;
+  @Min(1, { message: 'Amount cannot be in negative' }) // Ensures amount is positive
+  amountPaid?: number;
 
-  @IsOptional()
-  @IsString()
+  @IsNotEmpty({ message: 'Payment Date is missing' })
+  @IsDateString({}, { message: 'Payment Date format is not correct' })
   paidDate?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsNotEmpty({ message: 'Payment Time is missing' })
+  @Matches(/^([0-1][0-9]|2[0-3]):[0-5][0-9]$/, { message: 'Payment Time format is not correct' })
   paidTime?: string;
 
-  @IsOptional()
+  @IsNotEmpty({ message: 'Bank Code is missing' })
+  @Matches(/^[a-zA-Z0-9]+$/, { message: 'Special characters are not allowed in Bank Code' })
   @IsString()
   bankCode?: string;
 

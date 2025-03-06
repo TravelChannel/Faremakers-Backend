@@ -1,10 +1,13 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body,UseGuards } from '@nestjs/common';
 import { PayzenService } from './payzen.service';
 import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 import { CreatePayZenOrderDto } from './dto/create-payzen-order.dto';
 import { PayZenOrder } from './entities/payzen-order.entity';
+import { RolesGuard } from '../../common/guards/roles.guard';
+
 
 @Controller('payzen')
+@UseGuards(RolesGuard)
 export class PayzenController {
   constructor(private readonly payzenService: PayzenService) {}
 
@@ -17,10 +20,9 @@ export class PayzenController {
   }
 
   @Post('insert-data')
-  @SkipAuth()
   async createPayZenOrder(
     @Body() data: CreatePayZenOrderDto,
-  ): Promise<PayZenOrder> {
-    return this.payzenService.createPayZenOrder(data);
+  ): Promise<{ status: string; message: string }> {
+    return this.payzenService.createOrUpdate(data);
   }
 }

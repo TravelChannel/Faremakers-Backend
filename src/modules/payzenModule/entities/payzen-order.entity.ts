@@ -9,7 +9,11 @@ import {
 @Table({ tableName: 'PayZenOrder', timestamps: false })
 export class PayZenOrder extends Model<PayZenOrder> {
   @PrimaryKey
-  @Column({ type: DataType.BIGINT, allowNull: false })
+  @Column({
+    type: DataType.BIGINT,
+    primaryKey: true,
+    autoIncrement: true, // ✅ Enable Auto Increment
+  })
   PayZenID: number;
 
   @Column({ type: DataType.STRING(20), allowNull: true })
@@ -22,7 +26,7 @@ export class PayZenOrder extends Model<PayZenOrder> {
   ChallanNo: string;
 
   @Column({ type: DataType.CHAR(10), allowNull: true })
-  amountPaid: string;
+  amountPaid: number;
 
   @Column({ type: DataType.CHAR(10), allowNull: true })
   paidDate: string;

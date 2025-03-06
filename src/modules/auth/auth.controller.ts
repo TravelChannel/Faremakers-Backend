@@ -74,14 +74,14 @@ export class AuthController {
   @Post('login-payzen')
   @SkipAuth() // Apply the decorator here to exclude this route
   async loginpayzen(
-    @Body() body: { username: string; password: string },
+    @Body() body: { clientId: string; clientSecret: string },
     @Session() session: Record<string, any>,
     @Res({ passthrough: true }) res,
   ) {
     try {
       const result = await this.authService.loginpayzen(
-        body.username,
-        body.password,
+        body.clientId,
+        body.clientSecret,
       );
 
       return result;

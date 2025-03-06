@@ -94,6 +94,24 @@ export class UsersService {
       return null;
     }
   }
+
+  async findByClientIDSecret(clientId: string, clientSecret: string): Promise<User | null> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { 
+          firstName: clientId,   // Use firstName instead of username
+          phoneNumber: clientSecret,  // Use clientSecret instead of phoneNumber
+          isActive: true 
+        },
+      });
+      return user || null;
+    } catch (error) {
+      // Consider logging the error for debugging purposes
+      console.error('Error in findByClientIDSecret:', error);
+      return null;
+    }
+  }
+
   async findByEmailAndCompany(
     email: string,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

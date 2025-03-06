@@ -384,13 +384,59 @@ export class AuthService {
     throw new UnauthorizedException('Invalid username or password');
   }
 
-  async loginpayzen(username: string, password: string) {
+  async loginpayzenold(username: string, password: string) {
     const user = await this.validatepayzenuser(username, password);
     const payload = { username: user.username, sub: user.id };
+    console.log(process.env.JWT_SECRET);
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload,{ secret: process.env.JWT_SECRET }),
     };
   }
+  
+  async loginpayzen(
+    clientId: string, clientSecret: string,
+    // @Session() session: Record<string, any>,
+  ): Promise<any> {
+    try { 
+      const user = await this.userService.findByClientIDSecret(
+        clientId,clientSecret
+      );
+      if (!user) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
+      const isAuthorized = true;
+      if (!isAuthorized) {
+        return this.responseService.createResponse(
+          HttpStatus.UNAUTHORIZED,
+          null,
+          AUTHENTICATION_ERROR,
+        );
+      }
+      const accessToken = generateAccessTokenOtpUser(user);
+      const refreshToken = generateRefreshTokenOtpUser(user);
 
-  // async logout() {}
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        {
+          accessToken,
+          refreshToken,
+        },
+        LOGIN,
+      );
+    } catch (error) {
+      // Handle any unexpected errors here
+      console.error(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        EXCEPTION,
+      );
+    }
+  }
+
+  // async logout() {}  
 }

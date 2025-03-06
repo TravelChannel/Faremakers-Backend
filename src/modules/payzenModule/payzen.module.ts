@@ -8,10 +8,9 @@ import { PayZenOrder } from './entities/payzen-order.entity';
 @Module({
   imports: [
     SequelizeModule.forFeature([PayZenOrder]),
-    HttpModule.register({}), // Register HttpModule properly
+    HttpModule.register({})
   ],
-
   controllers: [PayzenController],
-  providers: [PayzenService], // Provide the PayzenService
+  providers: [PayzenService],
 })
 export class PayzenModule {}
