@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
   IsOptional,
@@ -28,10 +29,9 @@ export class CreatePayZenOrderDto {
   ChallanNo?: string;
 
   @IsNotEmpty({ message: 'Amount could not be NULL' })
-  @Matches(/^\d+$/, { message: 'Only digits are allowed in amount' })
-  @IsString()
-  @Min(1, { message: 'Amount cannot be in negative' }) // Ensures amount is positive
+  @Matches(/^[1-9]\d*$/, { message: 'Only positive numbers are allowed in amount' })
   amountPaid?: number;
+
 
   @IsNotEmpty({ message: 'Payment Date is missing' })
   @IsDateString({}, { message: 'Payment Date format is not correct' })
