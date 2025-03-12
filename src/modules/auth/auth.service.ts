@@ -395,12 +395,12 @@ export class AuthService {
   
   async loginpayzen(
     clientId: string, clientSecret: string,
-    // @Session() session: Record<string, any>,
   ): Promise<any> {
-    try { 
+    try {
       const user = await this.userService.findByClientIDSecret(
-        clientId,clientSecret
+        clientId, clientSecret
       );
+      
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
@@ -408,6 +408,7 @@ export class AuthService {
           AUTHENTICATION_ERROR,
         );
       }
+      
       const isAuthorized = true;
       if (!isAuthorized) {
         return this.responseService.createResponse(
@@ -416,19 +417,29 @@ export class AuthService {
           AUTHENTICATION_ERROR,
         );
       }
+      
       const accessToken = generateAccessTokenOtpUser(user);
-      const refreshToken = generateRefreshTokenOtpUser(user);
-
-      return this.responseService.createResponse(
-        HttpStatus.OK,
-        {
-          accessToken,
-          refreshToken,
-        },
-        LOGIN,
-      );
+      
+      // Set expiry date to 4 hours from now
+      const expiryDate = new Date();
+      expiryDate.setHours(expiryDate.getHours() + 4);
+      const formattedExpiryDate = expiryDate.toISOString().replace('T', ' ').split('.')[0];
+      
+      return {
+        status: "OK",
+        message: "",
+        content: [
+          {
+            clientId: clientId,
+            token: {
+              tokenType: "Bearer",
+              accessToken: accessToken,
+            },
+            expiryDate: formattedExpiryDate,
+          }
+        ]
+      };
     } catch (error) {
-      // Handle any unexpected errors here
       console.error(error);
       return this.responseService.createResponse(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -437,6 +448,7 @@ export class AuthService {
       );
     }
   }
+  
 
   // async logout() {}  
 }
