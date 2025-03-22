@@ -115,14 +115,21 @@ export class AmadeusService {
         Array.isArray(flightDetails?.matchedFlights) &&
         flightDetails.matchedFlights.length > 0
       ) {
-        for (const flight of flightDetails.matchedFlights) {
-          const segments = flight.flightDetails; // Multiple flight segments
+        for (let i = 0; i < flightDetails.matchedFlights.length; i++) {
+          const flight = flightDetails.matchedFlights[i];
+          let segments = flight.flightDetails; // Flight segments
 
-          if (Array.isArray(segments) && segments.length > 0) {
+          // Check if segments is an object (single segment case)
+          if (!Array.isArray(segments)) {
+            segments = [segments]; // Convert to array for uniform processing
+          }
+
+          if (segments.length > 1) {
             let previousSegment = null;
-            let totalStops = segments.length - 1;
 
-            for (const segment of segments) {
+            for (let j = 0; j < segments.length; j++) {
+              const segment = segments[j];
+
               const flightEntry = await this.flightModel.create(
                 {
                   departure: segment.flightInformation.location[0].locationId,
@@ -149,20 +156,22 @@ export class AmadeusService {
                 { transaction },
               );
 
-              // Ensure flightEntry has a valid ID before proceeding
               if (!flightEntry || !flightEntry.flightId) {
                 throw new Error(
-                  'Flight entry creation failed or ID is missing.',
+                  `Flight entry creation failed for segment ${j} in matchedFlight ${i}`,
                 );
               }
 
-              console.log('Flight Created:', flightEntry.flightId);
+              console.log(
+                `Flight Created (Matched Flight ${i}, Segment ${j}):`,
+                flightEntry.flightId,
+              );
 
               // Insert layover details if there's a previous segment
               if (previousSegment) {
                 await this.layoverModel.create(
                   {
-                    flightId: flightEntry.flightId, // Use correct flight ID
+                    flightId: flightEntry.flightId, // Link layover to the flight
                     location:
                       previousSegment.flightInformation.location[1].locationId, // Previous arrival location
                     duration:
@@ -179,9 +188,50 @@ export class AmadeusService {
 
               previousSegment = segment; // Update for next iteration
             }
+          } else {
+            // Handle single-segment flights
+            const segment = segments[0];
+
+            const flightEntry = await this.flightModel.create(
+              {
+                departure: segment.flightInformation.location[0].locationId,
+                arrival: segment.flightInformation.location[1].locationId,
+                departDate:
+                  segment.flightInformation.productDateTime.dateOfDeparture,
+                arrivalDate:
+                  segment.flightInformation.productDateTime.dateOfArrival,
+                departTime:
+                  segment.flightInformation.productDateTime.timeOfDeparture,
+                arrivalTime:
+                  segment.flightInformation.productDateTime.timeOfArrival,
+                marketingCarrier:
+                  segment.flightInformation.companyId.marketingCarrier,
+                flightNumber: segment.flightInformation.flightOrtrainNumber,
+                flightDuration:
+                  segment.flightInformation.attributeDetails
+                    .attributeDescription,
+                bookingClass: leadCreationData.classType,
+                cabinClass: 'N/A',
+                baggageAllowance: '0',
+                orderId: booking.orderId, // Ensure all flights share the same orderId
+              },
+              { transaction },
+            );
+
+            if (!flightEntry || !flightEntry.id) {
+              throw new Error(
+                `Single-segment flight entry creation failed for matchedFlight ${i}`,
+              );
+            }
+
+            console.log(
+              `Single-segment flight created (Matched Flight ${i}):`,
+              flightEntry.id,
+            );
           }
         }
       }
+
 
 
       // Insert Flights
