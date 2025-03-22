@@ -112,13 +112,13 @@ export class AmadeusService {
 
       // Insert Flights and Layovers
       if (
-        flightDetails?.matchedFlights &&
+        Array.isArray(flightDetails?.matchedFlights) &&
         flightDetails.matchedFlights.length > 0
       ) {
         for (const flight of flightDetails.matchedFlights) {
           const segments = flight.flightDetails; // Multiple flight segments
 
-          if (segments.length > 0) {
+          if (Array.isArray(segments) && segments.length > 0) {
             let previousSegment = null;
             let totalStops = segments.length - 1;
 
@@ -144,16 +144,25 @@ export class AmadeusService {
                   bookingClass: leadCreationData.classType,
                   cabinClass: 'N/A',
                   baggageAllowance: '0',
-                  orderId: booking.orderId,
+                  orderId: booking.orderId, // Ensure all flights share the same orderId
                 },
                 { transaction },
               );
+
+              // Ensure flightEntry has a valid ID before proceeding
+              if (!flightEntry || !flightEntry.flightId) {
+                throw new Error(
+                  'Flight entry creation failed or ID is missing.',
+                );
+              }
+
+              console.log('Flight Created:', flightEntry.flightId);
 
               // Insert layover details if there's a previous segment
               if (previousSegment) {
                 await this.layoverModel.create(
                   {
-                    flightId: flightEntry.flightId, // Link layover to the flight
+                    flightId: flightEntry.flightId, // Use correct flight ID
                     location:
                       previousSegment.flightInformation.location[1].locationId, // Previous arrival location
                     duration:
@@ -162,6 +171,10 @@ export class AmadeusService {
                   },
                   { transaction },
                 );
+
+                console.log(
+                  `Layover added at ${previousSegment.flightInformation.location[1].locationId}`,
+                );
               }
 
               previousSegment = segment; // Update for next iteration
@@ -169,6 +182,7 @@ export class AmadeusService {
           }
         }
       }
+
 
       // Insert Flights
       // if (flightDetails?.matchedFlights && flightDetails.matchedFlights.length > 0) {
