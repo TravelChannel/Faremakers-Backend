@@ -218,7 +218,7 @@ export class AmadeusService {
               { transaction },
             );
 
-            if (!flightEntry || !flightEntry.id) {
+            if (!flightEntry || !flightEntry.flightId) {
               throw new Error(
                 `Single-segment flight entry creation failed for matchedFlight ${i}`,
               );
@@ -226,7 +226,7 @@ export class AmadeusService {
 
             console.log(
               `Single-segment flight created (Matched Flight ${i}):`,
-              flightEntry.id,
+              flightEntry.flightId,
             );
           }
         }
