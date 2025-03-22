@@ -9,6 +9,7 @@ import {
 import { Response } from 'express';
 import { AmadeusService } from './amadeus.service';
 import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
+import { BookingDto } from './dto/booking.dto';
 
 @Controller('amadeus')
 export class AmadeusController {
@@ -247,4 +248,11 @@ export class AmadeusController {
       );
     }
   }
+
+  @Post('create-booking')
+  @SkipAuth()
+  async createBooking(@Body() createBookingDto: any) {
+      return this.amadeusService.createBooking(createBookingDto);
+  }
+
 }

@@ -21,6 +21,14 @@ import { SecuritySignOutUtil } from 'src/common/utility/amadeus/security-signout
 import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
 import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
+import { Sequelize } from 'sequelize-typescript';
+import { InjectModel } from '@nestjs/sequelize';
+import { AMD_Booking } from './entities/booking.entity';
+import { BookingDto } from './dto/booking.dto';
+import { AMD_Passenger } from './entities/passenger.entity';
+import { AMD_FlightDetails } from './entities/flight-details.entity';
+import { AMD_FareDetails } from './entities/fare-details.entity';
+import { AMD_Baggage } from './entities/baggage.entity';
 
 @Injectable()
 export class AmadeusService {
@@ -42,7 +50,106 @@ export class AmadeusService {
     private readonly pnrRetrive: PnrRetrieveUtil,
     private readonly pnrCancel: PnrCancelUtil,
     private readonly queuePlacePnrUtil: QueuePlacePnrUtil,
+    private readonly sequelize: Sequelize,
+    @InjectModel(AMD_Booking) private bookingModel: typeof AMD_Booking,
+    @InjectModel(AMD_Passenger) private passengerModel: typeof AMD_Passenger,
+    @InjectModel(AMD_FlightDetails) private flightModel: typeof AMD_FlightDetails,
+    @InjectModel(AMD_FareDetails) private fareDetails: typeof AMD_FareDetails,
+    @InjectModel(AMD_Baggage) private baggageModel: typeof AMD_Baggage,
   ) {}
+
+  
+  async createBooking(dto: any): Promise<any> {
+    const transaction = await this.sequelize.transaction({ autocommit: false });
+
+    
+    try {
+        const { OrderId, pnr, phoneNumber, TotalFare, pnrBookings, flightDetails, leadCreationData } = dto;
+
+
+
+        // Insert Booking Data
+        const booking = await this.bookingModel.create(
+            {
+                orderId: OrderId,
+                pnr,
+                phoneNumber,
+                userEmail: pnrBookings[0]?.userEmail,
+                totalFare: TotalFare.totalTicketPrice,
+                baseFare: TotalFare.BaseFare,
+                taxAmount: TotalFare.taxAmount,
+                serviceCharges: TotalFare.ServiceCharges
+            },
+            { transaction }
+        );
+
+        // Insert Passengers
+        if (pnrBookings && pnrBookings.length > 0) {
+            await this.passengerModel.bulkCreate(
+                pnrBookings.map((p) => ({
+                    phoneNumber: p.phoneNumber,
+                    userEmail: p.userEmail,
+                    dateOfBirth: p.dateOfBirth,
+                    passportExpiryDate: p.passportExpiryDate,
+                    firstName: p.firstName,
+                    lastName: p.lastName,
+                    title: p.title,
+                    gender: p.gender,
+                    passportNo: p.passportNo,
+                    type: p.type,
+                    orderId: booking.orderId,
+                })),
+                { transaction }
+            );
+        }
+
+        // Insert Flights
+        if (flightDetails?.matchedFlights && flightDetails.matchedFlights.length > 0) {
+            await this.flightModel.bulkCreate(
+                flightDetails.matchedFlights.map((flight) => ({
+                    departure: flight.flightDetails.flightInformation.location[0].locationId,
+                    arrival: flight.flightDetails.flightInformation.location[1].locationId,
+                    departDate: flight.flightDetails.flightInformation.productDateTime.dateOfDeparture,
+                    arrivalDate: flight.flightDetails.flightInformation.productDateTime.dateOfArrival,
+                    departTime: flight.flightDetails.flightInformation.productDateTime.timeOfDeparture,
+                    arrivalTime: flight.flightDetails.flightInformation.productDateTime.timeOfArrival,
+                    marketingCarrier: flight.flightDetails.flightInformation.companyId.marketingCarrier,
+                    flightNumber: flight.flightDetails.flightInformation.flightOrtrainNumber,
+                    flightDuration: flight.flightDetails.flightInformation.attributeDetails.attributeDescription,
+                    bookingClass: leadCreationData.classType,
+                    cabinClass: "N/A",
+                    baggageAllowance: "0",
+                    orderId: booking.orderId,
+                })),
+                { transaction }
+            );
+        }
+
+        // Insert Fare Details
+        if (flightDetails?.recommendation?.paxFareProduct?.fare && flightDetails.recommendation.paxFareProduct.fare.length > 0) {
+            await this.fareDetails.bulkCreate(
+                flightDetails.recommendation.paxFareProduct.fare.map((fare) => ({
+                    orderId: booking.orderId,
+                    rateClass: leadCreationData.classType,
+                    fareAmount:leadCreationData.TotalFare.totalTicketPrice,
+                    currency: "PKR",
+                    refundPolicy: Array.isArray(fare.pricingMessage.description) 
+                        ? fare.pricingMessage.description.join(" ") 
+                        : fare.pricingMessage.description
+                })),
+                { transaction }
+            );
+        }
+
+        // Commit Transaction
+        await transaction.commit();
+        return { success: true, message: "Booking Created Successfully", data: booking };
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
 
   public async callCommandCryptic(requestData: any) {
     let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(

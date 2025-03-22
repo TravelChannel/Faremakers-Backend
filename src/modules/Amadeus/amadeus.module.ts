@@ -19,7 +19,27 @@ import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
 import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
 
+import { AMD_Booking } from './entities/booking.entity';
+import { AMD_Passenger } from './entities/passenger.entity';
+import { AMD_FlightDetails } from './entities/flight-details.entity';
+import { AMD_Layover } from './entities/layover.entity';
+import { AMD_FareDetails } from './entities/fare-details.entity';
+import { AMD_Baggage } from './entities/baggage.entity';
+import { SequelizeModule } from '@nestjs/sequelize';
+
+
+
 @Module({
+  imports: [
+    SequelizeModule.forFeature([
+      AMD_Booking,
+      AMD_Passenger,
+      AMD_FlightDetails,
+      AMD_Layover,
+      AMD_FareDetails,
+      AMD_Baggage,
+    ]),
+  ],
   providers: [
     AmadeusService,
     SoapHeaderUtil,
