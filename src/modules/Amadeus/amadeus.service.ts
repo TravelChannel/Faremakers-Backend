@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { create } from 'xmlbuilder2';
 import { SoapHeaderUtil } from 'src/common/utility/amadeus/soap-header.util';
 import { MasterPriceTravelBoardUtil } from 'src/common/utility/amadeus/mp-travelboard.util';
@@ -145,11 +145,75 @@ export class AmadeusService {
         await transaction.commit();
         return { success: true, message: "Booking Created Successfully", data: booking };
     } catch (error) {
-        await transaction.rollback();
-        throw error;
-    }
-}
+      await transaction.rollback();
 
+      console.error("Booking Creation Error:", error);
+
+      // Identify Error Type & Return Proper Response
+      if (error.name === "SequelizeValidationError") {
+          return {
+              success: false,
+              message: "Validation Error",
+              errors: error.errors.map((e: any) => e.message)
+          };
+      }
+
+        if (error.name === "SequelizeUniqueConstraintError") {
+            return {
+                success: false,
+                message: "Duplicate Entry Error",
+                errors: error.errors.map((e: any) => e.message)
+            };
+        }
+
+        return {
+            success: false,
+            message: "Internal Server Error",
+            error: error.message || "Something went wrong while processing the booking"
+        };
+    }
+  }
+
+  async getBookings(page: number, limit: number) {
+    const offset = (page - 1) * limit; // Calculate offset for pagination
+
+    const { count, rows } = await this.bookingModel.findAndCountAll({
+      limit,
+      offset,
+      order: [['createdAt', 'DESC']], // Sort by latest bookings
+    });
+
+    return {
+      success: true,
+      message: 'Bookings retrieved successfully',
+      totalRecords: count,
+      currentPage: page,
+      totalPages: Math.ceil(count / limit),
+      data: rows,
+    };
+  }
+
+  async getBookingByOrderId(orderId: string) {
+    // Fetch booking with all related data
+    const booking = await this.bookingModel.findOne({
+      where: { orderId },
+      include: [
+        { model: this.passengerModel, as: 'passengers' },
+        { model: this.flightModel, as: 'flights' },
+        { model: this.fareDetails, as: 'fareDetails' }
+      ],
+    });
+
+    if (!booking) {
+      throw new NotFoundException(`Booking with Order ID ${orderId} not found`);
+    }
+
+    return {
+      success: true,
+      message: 'Booking details retrieved successfully',
+      data: booking,
+    };
+  }
 
   public async callCommandCryptic(requestData: any) {
     let soapEnvelope = this.soapHeaderUtil.createSOAPEnvelopeHeaderSession(

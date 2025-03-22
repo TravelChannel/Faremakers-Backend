@@ -5,6 +5,9 @@ import {
   Res,
   HttpException,
   HttpStatus,
+  Get,
+  Query,
+  Param,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AmadeusService } from './amadeus.service';
@@ -253,6 +256,21 @@ export class AmadeusController {
   @SkipAuth()
   async createBooking(@Body() createBookingDto: any) {
       return this.amadeusService.createBooking(createBookingDto);
+  }
+
+  @Get('get-bookings')
+  @SkipAuth()
+  async getBookings(
+    @Query('page') page: number = 1, // Default page 1
+    @Query('limit') limit: number = 10 // Default limit 10
+  ) {
+    return this.amadeusService.getBookings(Number(page), Number(limit));
+  }
+
+  @Get(':orderId')
+  @SkipAuth()
+  async getBookingByOrderId(@Param('orderId') orderId: string) {
+    return this.amadeusService.getBookingByOrderId(orderId);
   }
 
 }
