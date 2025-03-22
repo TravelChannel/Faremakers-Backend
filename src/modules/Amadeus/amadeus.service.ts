@@ -280,7 +280,7 @@ export class AmadeusService {
       return {
         success: true,
         message: 'Booking Created Successfully',
-        data: booking,
+        payload: booking,
       };
     } catch (error) {
       await transaction.rollback();
