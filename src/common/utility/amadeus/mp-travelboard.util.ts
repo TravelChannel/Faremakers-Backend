@@ -45,12 +45,12 @@ export class MasterPriceTravelBoardUtil {
     return {
       travelFlightInfo: {
         companyIdentity: {
-          carrierQualifier: 'X',
+          carrierQualifier: cabin,
           carrierId: carrierIds,
         },
-        flightDetail: {
-          flightType: 'N',
-        },
+        // flightDetail: {
+        //   flightType: 'N',
+        // },
       },
     };
   }
