@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { create } from 'xmlbuilder2';
 import { SoapHeaderUtil } from 'src/common/utility/amadeus/soap-header.util';
 import { MasterPriceTravelBoardUtil } from 'src/common/utility/amadeus/mp-travelboard.util';
@@ -30,6 +30,12 @@ import { AMD_FlightDetails } from './entities/flight-details.entity';
 import { AMD_FareDetails } from './entities/fare-details.entity';
 import { AMD_Baggage } from './entities/baggage.entity';
 import { AMD_Layover } from './entities/layover.entity';
+import PnrBooking from '../pnr/pnrBooking/entities/pnrBooking.entity';
+import { PnrBookingDto } from '../pnr/pnrBooking/dto/create-pnrBooking.dto';
+import User from '../generalModules/users/entities/user.entity';
+import { PnrDetail } from '../pnr/pnrDetails';
+import moment from 'moment';
+import { PNR_BOOKINGS_REPOSITORY } from 'src/shared/constants';
 
 @Injectable()
 export class AmadeusService {
@@ -52,6 +58,8 @@ export class AmadeusService {
     private readonly pnrCancel: PnrCancelUtil,
     private readonly queuePlacePnrUtil: QueuePlacePnrUtil,
     private readonly sequelize: Sequelize,
+    @Inject(PNR_BOOKINGS_REPOSITORY)
+    private pnrBookingRepository: typeof PnrBooking,
     @InjectModel(AMD_Booking) private bookingModel: typeof AMD_Booking,
     @InjectModel(AMD_Passenger) private passengerModel: typeof AMD_Passenger,
     @InjectModel(AMD_FlightDetails)
@@ -232,8 +240,6 @@ export class AmadeusService {
         }
       }
 
-
-
       // Insert Flights
       // if (flightDetails?.matchedFlights && flightDetails.matchedFlights.length > 0) {
       //     await this.flightModel.bulkCreate(
@@ -281,6 +287,277 @@ export class AmadeusService {
         success: true,
         message: 'Booking Created Successfully',
         payload: booking,
+      };
+    } catch (error) {
+      await transaction.rollback();
+
+      console.error('Booking Creation Error:', error);
+
+      // Identify Error Type & Return Proper Response
+      if (error.name === 'SequelizeValidationError') {
+        return {
+          success: false,
+          message: 'Validation Error',
+          errors: error.errors.map((e: any) => e.message),
+        };
+      }
+
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        return {
+          success: false,
+          message: 'Duplicate Entry Error',
+          errors: error.errors.map((e: any) => e.message),
+        };
+      }
+
+      return {
+        success: false,
+        message: 'Internal Server Error',
+        error:
+          error.message || 'Something went wrong while processing the booking',
+      };
+    }
+  }
+
+  async createBookingnew(
+    currentUserId: number,
+    isCurrentUserAdmin: number,
+    dto: PnrBookingDto,
+  ): Promise<any> {
+    const transaction = await this.sequelize.transaction({ autocommit: false });
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {
+        pnrBookings,
+        pnr,
+        OrderId,
+        // phoneNumber,
+        // countryCode,
+        Amount,
+        flightDetails,
+        MajorInfo,
+        leadCreationData,
+        sendSmsBranch,
+        sendSmsCod,
+        branchLabel,
+        userLocation,
+      } = dto;
+      const tolerance = 0.001; // Define your tolerance threshold here
+      const baseFare =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
+      const taxAmount =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
+      const pnrPayment =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
+
+      const isAmountEqual =
+        Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
+
+      const newPnrBookingRepository = await this.pnrBookingRepository.create(
+        {
+          userId: currentUserId,
+          pnr: pnr,
+          orderId: OrderId,
+          sendSmsBranch: sendSmsBranch || false,
+          sendSmsCod: sendSmsCod || false,
+          branchLabel: branchLabel || '',
+          BaseFare: Amount.BaseFare || 0,
+          ServiceCharges: Amount.ServiceCharges || 0,
+          pnrPaymentAmount: Amount.pnrPayment || 0,
+          taxAmount: Amount.taxAmount || 0,
+          totalTicketPrice: Amount.totalTicketPrice || 0,
+        },
+        { transaction },
+      );
+
+      const userUpdateEmail = await User.findByPk(currentUserId);
+      if (userUpdateEmail) {
+        userUpdateEmail.email =
+          pnrBookings[0].userEmail || userUpdateEmail.email;
+        await userUpdateEmail.save({ transaction });
+      }
+
+      // Insert Passengers
+      if (pnrBookings && pnrBookings.length > 0) {
+        await Promise.all(
+          pnrBookings.map(async (pnrBooking) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const newPnrDetails = await PnrDetail.create(
+              {
+                pnrBookingId: newPnrBookingRepository.id,
+                phoneNumber: pnrBooking.phoneNumber,
+                email: pnrBooking.email,
+                dateOfBirth: moment(
+                  pnrBooking.dateOfBirth,
+                  'DD-MM-YYYY',
+                ).format('yyyy-MM-DD'),
+                passportExpiryDate: moment(
+                  pnrBooking.passportExpiryDate,
+                  'DD-MM-YYYY',
+                ).format('yyyy-MM-DD'),
+                firstName: pnrBooking.firstName,
+                lastName: pnrBooking.lastName,
+                gender: pnrBooking.gender,
+                cnic: pnrBooking.cnic,
+                passportNo: pnrBooking.passportNo,
+              },
+              { transaction },
+            );
+
+            // await this.callLeadCreation(leadCreationData, pnrBooking);
+            // external api
+          }),
+        );
+      }
+
+      // Insert Flights and Layovers
+      if (
+        Array.isArray(flightDetails?.matchedFlights) &&
+        flightDetails.matchedFlights.length > 0
+      ) {
+        for (let i = 0; i < flightDetails.matchedFlights.length; i++) {
+          const flight = flightDetails.matchedFlights[i];
+          let segments = flight.flightDetails; // Flight segments
+
+          // Check if segments is an object (single segment case)
+          if (!Array.isArray(segments)) {
+            segments = [segments]; // Convert to array for uniform processing
+          }
+
+          if (segments.length > 1) {
+            let previousSegment = null;
+
+            for (let j = 0; j < segments.length; j++) {
+              const segment = segments[j];
+
+              const flightEntry = await this.flightModel.create(
+                {
+                  departure: segment.flightInformation.location[0].locationId,
+                  arrival: segment.flightInformation.location[1].locationId,
+                  departDate:
+                    segment.flightInformation.productDateTime.dateOfDeparture,
+                  arrivalDate:
+                    segment.flightInformation.productDateTime.dateOfArrival,
+                  departTime:
+                    segment.flightInformation.productDateTime.timeOfDeparture,
+                  arrivalTime:
+                    segment.flightInformation.productDateTime.timeOfArrival,
+                  marketingCarrier:
+                    segment.flightInformation.companyId.marketingCarrier,
+                  flightNumber: segment.flightInformation.flightOrtrainNumber,
+                  flightDuration:
+                    segment.flightInformation.attributeDetails
+                      .attributeDescription,
+                  bookingClass: leadCreationData.classType,
+                  cabinClass: 'N/A',
+                  baggageAllowance: '0',
+                  orderId: OrderId, // Ensure all flights share the same orderId
+                },
+                { transaction },
+              );
+
+              if (!flightEntry || !flightEntry.flightId) {
+                throw new Error(
+                  `Flight entry creation failed for segment ${j} in matchedFlight ${i}`,
+                );
+              }
+
+              console.log(
+                `Flight Created (Matched Flight ${i}, Segment ${j}):`,
+                flightEntry.flightId,
+              );
+
+              // Insert layover details if there's a previous segment
+              if (previousSegment) {
+                await this.layoverModel.create(
+                  {
+                    flightId: flightEntry.flightId, // Link layover to the flight
+                    location:
+                      previousSegment.flightInformation.location[1].locationId, // Previous arrival location
+                    duration:
+                      previousSegment.flightInformation.attributeDetails
+                        .attributeDescription, // Layover duration
+                  },
+                  { transaction },
+                );
+
+                console.log(
+                  `Layover added at ${previousSegment.flightInformation.location[1].locationId}`,
+                );
+              }
+
+              previousSegment = segment; // Update for next iteration
+            }
+          } else {
+            // Handle single-segment flights
+            const segment = segments[0];
+
+            const flightEntry = await this.flightModel.create(
+              {
+                departure: segment.flightInformation.location[0].locationId,
+                arrival: segment.flightInformation.location[1].locationId,
+                departDate:
+                  segment.flightInformation.productDateTime.dateOfDeparture,
+                arrivalDate:
+                  segment.flightInformation.productDateTime.dateOfArrival,
+                departTime:
+                  segment.flightInformation.productDateTime.timeOfDeparture,
+                arrivalTime:
+                  segment.flightInformation.productDateTime.timeOfArrival,
+                marketingCarrier:
+                  segment.flightInformation.companyId.marketingCarrier,
+                flightNumber: segment.flightInformation.flightOrtrainNumber,
+                flightDuration:
+                  segment.flightInformation.attributeDetails
+                    .attributeDescription,
+                bookingClass: leadCreationData.classType,
+                cabinClass: 'N/A',
+                baggageAllowance: '0',
+                orderId: OrderId, // Ensure all flights share the same orderId
+              },
+              { transaction },
+            );
+
+            if (!flightEntry || !flightEntry.flightId) {
+              throw new Error(
+                `Single-segment flight entry creation failed for matchedFlight ${i}`,
+              );
+            }
+
+            console.log(
+              `Single-segment flight created (Matched Flight ${i}):`,
+              flightEntry.flightId,
+            );
+          }
+        }
+      }
+
+      // Insert Fare Details
+      if (
+        flightDetails?.recommendation?.paxFareProduct?.fare &&
+        flightDetails.recommendation.paxFareProduct.fare.length > 0
+      ) {
+        await this.fareDetails.bulkCreate(
+          flightDetails.recommendation.paxFareProduct.fare.map((fare) => ({
+            orderId: OrderId,
+            rateClass: leadCreationData.classType,
+            fareAmount: leadCreationData.TotalFare.totalTicketPrice,
+            currency: 'PKR',
+            refundPolicy: Array.isArray(fare.pricingMessage.description)
+              ? fare.pricingMessage.description.join(' ')
+              : fare.pricingMessage.description,
+          })),
+          { transaction },
+        );
+      }
+
+      // Commit Transaction
+      await transaction.commit();
+      return {
+        success: true,
+        message: 'Booking Created Successfully',
+        payload: newPnrBookingRepository,
       };
     } catch (error) {
       await transaction.rollback();
