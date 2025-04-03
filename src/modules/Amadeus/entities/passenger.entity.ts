@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
-import { AMD_Booking } from './booking.entity';
 import { AMD_Baggage } from './baggage.entity';
+import PnrBooking from 'src/modules/pnr/pnrBooking/entities/pnrBooking.entity';
 
 @Table({ tableName: 'AMD_Passenger', timestamps: false })
 export class AMD_Passenger extends Model<AMD_Passenger> {
@@ -61,15 +61,14 @@ export class AMD_Passenger extends Model<AMD_Passenger> {
   type: string;
 
   // Foreign Key Relationship with AMD_Booking
-  @ForeignKey(() => AMD_Booking)
+  @ForeignKey(() => PnrBooking)
   @Column({
-    type: DataType.STRING,
-    allowNull: false,
+    type: DataType.NUMBER,
   })
-  orderId: string;
+  pnrBookingId: number;
 
-  @BelongsTo(() => AMD_Booking)
-  booking: AMD_Booking;
+  @BelongsTo(() => PnrBooking)
+  booking: PnrBooking;
 
   // Relationship with AMD_Baggage
   @HasMany(() => AMD_Baggage)

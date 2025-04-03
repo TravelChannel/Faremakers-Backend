@@ -46,6 +46,8 @@ import { GeneralTask } from '../modules/generalModules/generalTasks/entities/gen
 import { Log } from '../modules/generalModules/systemLogs/entities/log.entity';
 import { FlightSearches } from '../modules/generalModules/flightSearches';
 import { FlightSearchesDetail } from '../modules/generalModules/flightSearchesDetail';
+import { AMD_FlightDetails } from 'src/modules/Amadeus/entities/flight-details.entity';
+import { AMD_Layover } from 'src/modules/Amadeus/entities/layover.entity';
 
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const sequelize = new Sequelize({
@@ -66,6 +68,8 @@ sequelize.addModels([
   Role,
   City,
   // PnrUser,
+  AMD_FlightDetails,
+  AMD_Layover,
   PnrBooking,
   PnrDetail,
   FlightDetails,
@@ -110,10 +114,10 @@ sequelize.addModels([
 // Test
 // Sync the models with the database, dropping and recreating tables
 sequelize
-  // .sync({
-  //   force: true,
-  // })
-  .sync()
+  .sync({
+    force: true,
+  })
+  //.sync()
   .then(() => {
     console.log('----dbConfig', dbConfig);
 

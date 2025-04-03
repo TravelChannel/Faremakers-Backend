@@ -12,14 +12,13 @@ import {
 import { Response } from 'express';
 import { AmadeusService } from './amadeus.service';
 import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
-import { BookingDto } from './dto/booking.dto';
 import { PnrBookingDto } from '../pnr/pnrBooking/dto/create-pnrBooking.dto';
 import { CurrentUserId } from 'src/common/decorators/currentUserId.decorator';
 import { IsCurrentUserAdmin } from 'src/common/decorators/isCurrentUserAdmin.decorator';
 
 @Controller('amadeus')
 export class AmadeusController {
-  constructor(private readonly amadeusService: AmadeusService) {}
+  constructor(private readonly amadeusService: AmadeusService) { }
 
   @Post('command-cryptic')
   @SkipAuth()
@@ -255,19 +254,19 @@ export class AmadeusController {
     }
   }
 
-  @Post('create-booking')
-  @SkipAuth()
-  async createBooking(@Body() createBookingDto: any) {
-      return this.amadeusService.createBooking(createBookingDto);
-  }
+  // @Post('create-booking')
+  // @SkipAuth()
+  // async createBooking(@Body() createBookingDto: any) {
+  //     return this.amadeusService.createBooking(createBookingDto);
+  // }
 
   @Post('create-booking-new')
-  async createBookingnew( @Body() pnrBookingDto: PnrBookingDto,
-      @CurrentUserId() currentUserId: number,
-      @IsCurrentUserAdmin() isCurrentUserAdmin: number) {
-      return this.amadeusService.createBookingnew(currentUserId,
-        isCurrentUserAdmin,
-        pnrBookingDto,);
+  async createBookingnew(@Body() pnrBookingDto: PnrBookingDto,
+    @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number) {
+    return this.amadeusService.createBookingnew(currentUserId,
+      isCurrentUserAdmin,
+      pnrBookingDto,);
   }
 
   @Get('get-bookings')
