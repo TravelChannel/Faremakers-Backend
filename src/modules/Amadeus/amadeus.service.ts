@@ -551,23 +551,23 @@ export class AmadeusService {
       }
 
       // Insert Fare Details
-      if (
-        flightDetails?.recommendation?.paxFareProduct?.fare &&
-        flightDetails.recommendation.paxFareProduct.fare.length > 0
-      ) {
-        await this.fareDetails.bulkCreate(
-          flightDetails.recommendation.paxFareProduct.fare.map((fare) => ({
-            orderId: OrderId,
-            rateClass: leadCreationData.classType,
-            fareAmount: leadCreationData.TotalFare.totalTicketPrice,
-            currency: 'PKR',
-            refundPolicy: Array.isArray(fare.pricingMessage.description)
-              ? fare.pricingMessage.description.join(' ')
-              : fare.pricingMessage.description,
-          })),
-          { transaction },
-        );
-      }
+      // if (
+      //   flightDetails?.recommendation?.paxFareProduct?.fare &&
+      //   flightDetails.recommendation.paxFareProduct.fare.length > 0
+      // ) {
+      //   await this.fareDetails.bulkCreate(
+      //     flightDetails.recommendation.paxFareProduct.fare.map((fare) => ({
+      //       orderId: OrderId,
+      //       rateClass: leadCreationData.classType,
+      //       fareAmount: leadCreationData.TotalFare.totalTicketPrice,
+      //       currency: 'PKR',
+      //       refundPolicy: Array.isArray(fare.pricingMessage.description)
+      //         ? fare.pricingMessage.description.join(' ')
+      //         : fare.pricingMessage.description,
+      //     })),
+      //     { transaction },
+      //   );
+      // }
 
       const commissionCategory = await CommissionCategories.findOne({
         order: [['precedence', 'ASC']],
