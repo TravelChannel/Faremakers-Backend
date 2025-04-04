@@ -46,7 +46,7 @@ require('dotenv').config();
 
 @Controller('pnrBooking')
 export class PnrBookingsController {
-  constructor(private readonly pnrBookingsService: PnrBookingsService) {}
+  constructor(private readonly pnrBookingsService: PnrBookingsService) { }
   @Post()
   async create(
     @Body() pnrBookingDto: PnrBookingDto,
@@ -88,7 +88,7 @@ export class PnrBookingsController {
       } else {
         comissionPerc = parseFloat(process.env.COMMISSION_OTC);
       }
-    } catch (error) {}
+    } catch (error) { }
 
     invoiceAmount = invoiceAmount * (1 - comissionPerc / 100);
     return invoiceAmount;

@@ -54,6 +54,7 @@ import { HttpService } from '@nestjs/axios';
 import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
 require('dotenv').config();
 import { Log } from '../../generalModules/systemLogs/entities/log.entity';
+import { AMD_FlightDetails } from 'src/modules/Amadeus/entities/flight-details.entity';
 
 @Injectable()
 export class PnrBookingsService {
@@ -2508,15 +2509,17 @@ export class PnrBookingsService {
           {
             model: User,
           },
-
           {
-            model: FlightDetails,
-            include: [
-              {
-                model: GroupDescription,
-              },
-            ],
-          },
+            model: AMD_FlightDetails
+          }
+          // {
+          //   model: FlightDetails,
+          //   include: [
+          //     {
+          //       model: GroupDescription,
+          //     },
+          //   ],
+          // },
         ],
       });
       const t: Transaction = await sequelize.transaction();
@@ -2774,11 +2777,11 @@ export class PnrBookingsService {
       .format('YYYY-MM-DD HH:mm:ss.SSSZZ');
   }
 
-  async findAirlineType(id): Promise<any> {
+  async findAirlineTypebK(id): Promise<any> {
     const pnrBooking = await PnrBooking.findByPk(id, {
       include: [
         {
-          model: FlightDetails,
+          model: AMD_FlightDetails,
           include: [
             {
               model: SchedualDetGet,
@@ -2810,6 +2813,45 @@ export class PnrBookingsService {
               model: FlightSegments,
             },
           ],
+        },
+      ],
+    }).then((rawData) => {
+      // console.log('444', rawData);
+
+      // console.log(rawData);
+      const plainObject = rawData.toJSON();
+      const arr = plainObject.flightDetails.schedualDetGet;
+      plainObject.flightDetails.schedualDetGet = [];
+      arr.map((data2) => {
+        console.log('------------', data2);
+        plainObject.flightDetails.schedualDetGet.push(
+          data2.innerSchedualDetGet,
+        );
+      });
+      console.log('4444 plainObject', plainObject);
+
+      return plainObject;
+    });
+    // Airsial;
+    console.log(
+      '**************',
+      pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating,
+    );
+    if (
+      pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating ===
+      'PF'
+    ) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+
+  async findAirlineType(id): Promise<any> {
+    const pnrBooking = await PnrBooking.findByPk(id, {
+      include: [
+        {
+          model: AMD_FlightDetails,
         },
       ],
     }).then((rawData) => {

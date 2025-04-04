@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { create } from 'xmlbuilder2';
 import { SoapHeaderUtil } from 'src/common/utility/amadeus/soap-header.util';
 import { MasterPriceTravelBoardUtil } from 'src/common/utility/amadeus/mp-travelboard.util';
@@ -39,6 +39,19 @@ import * as momenttimezone from 'moment-timezone';
 import { PNR_BOOKINGS_REPOSITORY } from 'src/shared/constants';
 import { STRING } from 'sequelize';
 import { INTEGER } from 'sequelize';
+import { ResponseService } from 'src/common/utility/response/response.service';
+import {
+  SAVED_SUCCESS,
+  GET_SUCCESS,
+  AUTHENTICATION_ERROR,
+} from '../../shared/messages.constants';
+import { CommissionCategories } from '../serviceCharges/CommissionCategories';
+import CommissionPercentage from '../serviceCharges/commissionPercentage/entities/commissionPercentage.entity';
+import { Airline } from '../serviceCharges/airline';
+import { Sector } from '../serviceCharges/sector';
+import { FareClass } from '../serviceCharges/fareClass';
+import { PnrServiceCharges } from '../serviceCharges/pnrServiceCharges';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class AmadeusService {
@@ -69,6 +82,8 @@ export class AmadeusService {
     @InjectModel(AMD_FareDetails) private fareDetails: typeof AMD_FareDetails,
     @InjectModel(AMD_Baggage) private baggageModel: typeof AMD_Baggage,
     @InjectModel(AMD_Layover) private layoverModel: typeof AMD_Layover,
+    private readonly responseService: ResponseService,
+    private readonly httpService: HttpService,
   ) { }
 
   // async createBooking(dto: any): Promise<any> {
@@ -554,13 +569,165 @@ export class AmadeusService {
         );
       }
 
-      // Commit Transaction
+      const commissionCategory = await CommissionCategories.findOne({
+        order: [['precedence', 'ASC']],
+      });
+
+      if (commissionCategory) {
+
+        let pnrServiceChargesPercentage = 0;
+
+        const commissionPercentage = await CommissionPercentage.findOne({
+          where: {
+            airlineId: null,
+            fareClassId: null,
+            sectorId: null,
+          },
+        });
+
+        if (commissionPercentage) {
+          pnrServiceChargesPercentage = commissionPercentage.percentage;
+        }
+        let pnrServiceChargesCode = 'unknownCode';
+        // let a = 1;
+
+        switch (Number(commissionCategory.id)) {
+          case 1:
+            pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
+
+            const airline = await Airline.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (airline) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  airlineId: airline.id,
+                  fareClassId: null,
+                  sectorId: null,
+                },
+              });
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+
+            break;
+
+          case 2:
+            pnrServiceChargesCode = MajorInfo.Destinations[0] ?? null;
+            const sector = await Sector.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (sector) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  sectorId: sector.id,
+                  airlineId: null,
+                  fareClassId: null,
+                },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+
+            break;
+          case 3:
+            pnrServiceChargesCode = MajorInfo.ClassType[0] ?? null;
+
+            const fareClass = await FareClass.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (fareClass) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  fareClassId: fareClass.id,
+                  sectorId: null,
+                  airlineId: null,
+                },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+
+            break;
+
+          default:
+            pnrServiceChargesPercentage = 0;
+
+            break;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const newPnrServiceCharges = await PnrServiceCharges.create(
+          {
+            pnrBookingId: newPnrBookingRepository.id,
+            commissionCategoryId: commissionCategory.id,
+            percentage: pnrServiceChargesPercentage,
+            code: pnrServiceChargesCode,
+          },
+          { transaction },
+        );
+      }
+
       await transaction.commit();
-      return {
-        success: true,
-        message: 'Booking Created Successfully',
-        payload: newPnrBookingRepository,
-      };
+
+      const user = await User.findByPk(currentUserId);
+
+      if (user) {
+
+        if (sendSmsBranch) {
+
+          const message = `Your booking for ${flightDetails.groupDescription[0]?.departure
+            }-${flightDetails.groupDescription[0]?.arrival
+            } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
+          const resultSms = await this.sendSmsConfirmation(
+            { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
+            message,
+          );
+          if (resultSms) {
+            console.log('SMS sent successfully');
+          } else {
+            console.error('Failed to send SMS');
+          }
+        }
+        if (sendSmsCod) {
+
+          const message = `Hello Ticket Pay by COD (Testing).${!sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
+            }`;
+          const resultSms = await this.sendSmsConfirmation(
+            { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
+            message,
+          );
+          if (resultSms) {
+            console.log('SMS sent successfully');
+          } else {
+            console.error('Failed to send SMS');
+          }
+        }
+      }
+      // Email to client Start
+      await this.sendBookingEmail(
+        dto,
+        userUpdateEmail,
+        newPnrBookingRepository.id,
+        pnr,
+      );
+
+      // Commit Transaction
+      //await transaction.commit();
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        // {},
+        { isAmountEqual, newPnrBookingRepository },
+        SAVED_SUCCESS,
+      );
     } catch (error) {
       await transaction.rollback();
 
@@ -590,6 +757,198 @@ export class AmadeusService {
           error.message || 'Something went wrong while processing the booking',
       };
     }
+  }
+
+  async sendBookingEmail(
+    bookingData,
+    user,
+    referenceNumber,
+    pnr,
+  ): Promise<any> {
+    const message2 = `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Ticket Reservation (Awaiting Payment) - Faremakers</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+        }
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          border: 1px solid #ccc;
+        }
+        h1, h2, h3 {
+          color: #333;
+        }
+        p {
+          margin-bottom: 10px;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-bottom: 20px;
+        }
+        th, td {
+          border: 1px solid #ddd;
+          padding: 8px;
+          text-align: left;
+        }
+        th {
+          background-color: #f2f2f2;
+        }
+        .link {
+          display: inline-block;
+          margin-top: 20px;
+          background-color: #007bff;
+          color: #fff;
+          text-decoration: none;
+          padding: 10px 20px;
+          border-radius: 5px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h2> 
+        Your booking for Reference # ${referenceNumber} ( ${bookingData.flightDetails.groupDescription[0]?.departure
+      }-${bookingData.flightDetails.groupDescription[0]?.arrival
+      } ) is Awaiting Payment.
+        </h2>
+        <p>Hi!  ${user.phoneNumber},</p>
+        <p>Please check details in the following link.  </p>
+        <br>Your registered information for this booking are following:
+        <br>Email:  ${user.email} 
+        <br>Contact Number:  ${user.phoneNumber} 
+        <br>
+        <p>Your registered information for this booking:</p>
+        <ul>
+          <li>Email: ${user?.email}</li>
+          <li>Contact Number: ${user.phoneNumber}</li>
+        </ul>
+        <div>
+          <h3>Amount Due:</h3>
+          <table>
+            <tr>
+              <th>Method</th>
+              <td>
+              ${!bookingData.sendSmsCod && !bookingData.sendSmsBranch
+        ? 'Card Payment'
+        : ''
+      }
+                ${bookingData.sendSmsCod && !bookingData.sendSmsBranch
+        ? 'Cash On Delivery'
+        : ''
+      }
+                ${!bookingData.sendSmsCod && bookingData.sendSmsBranch
+        ? 'Pay at Branch'
+        : ''
+      }
+                </td>
+            </tr>
+            <tr>
+              <th>Total Amount Due</th>
+              <td>${bookingData.Amount.totalTicketPrice.toLocaleString()}</td>
+            </tr>
+          </table>
+        </div>
+                <p>Best regards,<br>faremakers</p>
+      </div>
+    </body>
+    </html>
+    `;
+    const toAddresses = ['travelchannel786@hotmail.com'];
+    if (user?.email) {
+      toAddresses.push(user.email);
+    }
+    const bccAddresses = ['bilal.tariq@faremakers.com', 'arman@faremakers.com'];
+    const mailSubject = 'Ticket Reservation (Awaiting Payment) - Faremakers';
+    const htmlBody = `${message2}`;
+    const resultEmail = await this.sendEmailConfirmation(
+      toAddresses,
+      bccAddresses,
+      mailSubject,
+      htmlBody,
+      pnr,
+    );
+    if (resultEmail) {
+      console.log('Email sent successfully');
+    } else {
+      console.error('Failed to send email');
+    }
+  }
+
+
+  private async sendEmailConfirmation(
+    toAddresses: string[],
+    bccAddresses: string[],
+    mailSubject: string,
+    htmlBody: string,
+    pnr: string,
+  ): Promise<boolean> {
+    try {
+      const mg = mailgun({
+        apiKey: process.env.MAILGUN_API,
+        domain: process.env.MAILGUN_DOMAIN,
+      });
+      const data = {
+        from: process.env.MAILGUN_FROM,
+        to: toAddresses.join(','),
+        subject: mailSubject,
+        html: htmlBody,
+      };
+
+      if (bccAddresses && bccAddresses.length > 0) {
+        data['bcc'] = bccAddresses.join(',');
+      }
+
+      await mg.messages().send(data);
+      return true;
+    } catch (error) {
+      console.error('Error sending email:', error);
+
+      return false;
+    }
+  }
+
+  private async sendSmsConfirmation(
+    userData: any,
+    message: string,
+  ): Promise<AxiosResponse> {
+    // Implement your OTP sending logic here
+    // Use Axios or any other HTTP client library to make the API request
+    // Make sure to replace the following placeholders with your actual API details
+    const payload = {
+      messages: [
+        {
+          from: 'Faremaker',
+          destinations: [
+            { to: `${userData.countryCode}${userData.phoneNumber}` },
+          ],
+          text: message,
+          // text: `Hello </br> HI`,
+        },
+      ],
+    };
+    const url =
+      process.env.INFOBIP_URL ||
+      'https://qgm2rw.api.infobip.com/sms/2/text/advanced';
+    const headers = {
+      headers: {
+        Authorization: `App ${process.env.INFOBIP_KEY ||
+          'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
+          }`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+    };
+    const response = await this.httpService
+      .post(url, payload, headers)
+      .toPromise();
+    return response;
   }
 
   async getBookings(page: number, limit: number) {

@@ -50,6 +50,7 @@ import { Arrival } from '../pnr/arrival';
 import { Departure } from '../pnr/departure';
 import { Carrier } from '../pnr/carrier';
 import { Equipment } from '../pnr/equipment';
+import { HttpModule } from '@nestjs/axios';
 
 
 @Module({
@@ -66,8 +67,9 @@ import { Equipment } from '../pnr/equipment';
       PnrServiceCharges,
       PnrPayment,
       Role,
-      CommissionCategories,
+      CommissionCategories
     ]),
+    HttpModule
   ],
   providers: [
     AmadeusService,
@@ -112,4 +114,4 @@ import { Equipment } from '../pnr/equipment';
     QueuePlacePnrUtil
   ],
 })
-export class AmadeusModule {}
+export class AmadeusModule { }
