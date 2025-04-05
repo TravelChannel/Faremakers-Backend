@@ -9,6 +9,7 @@ export class PaymentService {
     pp_CustomerID: string;
     pp_Amount: number;
     pp_CustomerMobile: string;
+    pp_PNR: string
   }) {
     const {
       pp_TxnType,
@@ -16,6 +17,7 @@ export class PaymentService {
       pp_CustomerID,
       pp_Amount,
       pp_CustomerMobile,
+      pp_PNR
     } = requestBody;
 
     const test_config = {
@@ -93,7 +95,7 @@ export class PaymentService {
       pp_ReturnURL: config.ReturnURL,
       pp_SecureHash: '',
       ppmpf_1: pp_BillReference, // Replace with additional field data
-      ppmpf_2: '2', // Replace with additional field data
+      ppmpf_2: pp_PNR, // Replace with additional field data
       ppmpf_3: '3', // Replace with additional field data
       ppmpf_4: '4', // Replace with additional field data
       ppmpf_5: '5', // Replace with additional field data

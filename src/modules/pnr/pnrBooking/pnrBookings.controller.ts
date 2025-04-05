@@ -103,9 +103,9 @@ export class PnrBookingsController {
   ): Promise<any> {
     await this.pnrBookingsService.processPaymentJazzCash(callbackData);
     // Perform the redirect after processing
-    res.redirect(
-      `https://www.faremakers.com/previewEticket?order=${encodeURIComponent(callbackData.ppmpf_1)}`,
-    );
+    const baseUrl = process.env.BASE_URL || 'https://www.faremakers.com';
+    const redirectUrl = `${baseUrl}/previewEticket?order=${encodeURIComponent(callbackData.ppmpf_1)}&ref=${encodeURIComponent(callbackData.ppmpf_2)}`;
+    return res.redirect(redirectUrl);
   }
 
   @Get()
