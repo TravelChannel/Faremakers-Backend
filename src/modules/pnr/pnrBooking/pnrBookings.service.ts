@@ -1175,13 +1175,13 @@ export class PnrBookingsService {
 
       // Process and transform data if necessary
       const plainObjects = rows.map((instance) => instance.toJSON());
-      plainObjects.forEach((data) => {
-        const arr = data.flightDetails.schedualDetGet;
-        data.flightDetails.schedualDetGet = [];
-        arr.forEach((data2) => {
-          data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
-        });
-      });
+      // plainObjects.forEach((data) => {
+      //   const arr = data.flightDetails.schedualDetGet;
+      //   data.flightDetails.schedualDetGet = [];
+      //   arr.forEach((data2) => {
+      //     data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
+      //   });
+      // });
 
       // Response with paginated data and metadata
       return this.responseService.createResponse(
