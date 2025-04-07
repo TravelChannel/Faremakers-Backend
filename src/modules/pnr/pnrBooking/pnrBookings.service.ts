@@ -1165,71 +1165,8 @@ export class PnrBookingsService {
             as: 'pnrDetail',
           },
           {
-            model: FlightDetails,
-            include: [
-              {
-                model: ExtraBaggage,
-              },
-              {
-                model: BaggageAllowance,
-              },
-              {
-                model: BookingFlight,
-              },
-              {
-                model: Fare,
-                include: [
-                  {
-                    model: PassengerInfoList,
-                    include: [
-                      {
-                        model: PassengerInfo,
-                        include: [
-                          {
-                            model: CurrencyConversion,
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                  {
-                    model: TotalFare,
-                  },
-                ],
-              },
-              {
-                model: GroupDescription,
-              },
-              {
-                model: SchedualDetGet,
-                attributes: ['id'],
-                include: [
-                  {
-                    model: InnerSchedualDetGet,
-                    include: [
-                      {
-                        model: Arrival,
-                      },
-                      {
-                        model: Departure,
-                      },
-                      {
-                        model: Carrier,
-                        include: [
-                          {
-                            model: Equipment,
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                ],
-              },
-              {
-                model: FlightSegments,
-              },
-            ],
-          },
+            model: AMD_FlightDetails
+          }
         ],
         order: [['createdAt', 'DESC']],
         limit,
