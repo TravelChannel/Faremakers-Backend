@@ -1450,9 +1450,6 @@ export class PnrBookingsService {
           {
             model: AMD_FlightDetails,
           },
-          {
-            model: FlightSegments,
-          },
         ],
       }).then((rawData) => {
         // console.log(rawData);
