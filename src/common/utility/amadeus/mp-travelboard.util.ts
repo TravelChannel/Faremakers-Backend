@@ -29,12 +29,17 @@ export class MasterPriceTravelBoardUtil {
     }));
   }
 
-  createFareOptions(priceTypes) {
+  createFareOptions(priceTypes: string[], currency: string) {
     return {
       fareOptions: {
         pricingTickInfo: {
           pricingTicketing: {
-            priceType: priceTypes.map((type) => type),
+            priceType: priceTypes,
+          },
+        },
+        conversionRate: {
+          conversionRateDetail: {
+            currency: currency,
           },
         },
       },
@@ -99,7 +104,10 @@ export class MasterPriceTravelBoardUtil {
     if (requestData.fareOptions) {
       Object.assign(
         body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
-        this.createFareOptions(requestData.fareOptions.priceTypes),
+        this.createFareOptions(
+          requestData.fareOptions.priceTypes,
+          requestData.fareOptions.currency,
+        ),
       );
     }
 
