@@ -5,7 +5,7 @@ import { SkipAuth } from 'src/common/decorators/skip-auth.decorator';
 
 @Controller('payment')
 export class PaymentController {
-  constructor(private readonly paymentService: PaymentService) { }
+  constructor(private readonly paymentService: PaymentService) {}
 
   @SkipAuth()
   @Post('PaymentAtJazzCash')
@@ -17,7 +17,6 @@ export class PaymentController {
       pp_CustomerID: string;
       pp_Amount: number;
       pp_CustomerMobile: string;
-      pp_PNR: string;
     },
     @Res() res: Response,
   ) {

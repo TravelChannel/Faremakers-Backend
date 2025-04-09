@@ -1,13 +1,13 @@
 import { Table, Column, Model, ForeignKey, BelongsTo, DataType, Sequelize } from 'sequelize-typescript';
+import { AMD_Booking } from './booking.entity';
 import { AMD_Passenger } from './passenger.entity';
-import PnrBooking from 'src/modules/pnr/pnrBooking/entities/pnrBooking.entity';
 
 @Table({ tableName: 'AMD_FareDetails', timestamps: false })
 export class AMD_FareDetails extends Model<AMD_FareDetails> {
   @Column({ primaryKey: true, autoIncrement: true })
   fareId: number;
 
-  @ForeignKey(() => PnrBooking)
+  @ForeignKey(() => AMD_Booking)
   @Column
   orderId: string;
 
@@ -29,6 +29,6 @@ export class AMD_FareDetails extends Model<AMD_FareDetails> {
   })
   createdAt: Date;
 
-  @BelongsTo(() => PnrBooking)
-  booking: PnrBooking;
+  @BelongsTo(() => AMD_Booking)
+  booking: AMD_Booking;
 }

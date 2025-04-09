@@ -3,9 +3,8 @@ import { AMD_FlightDetails } from './flight-details.entity';
 
 @Table({ tableName: 'AMD_Layover', timestamps: false })
 export class AMD_Layover extends Model<AMD_Layover> {
-  @Column({ type: DataType.BIGINT, primaryKey: true, autoIncrement: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   layoverId: number;
-
 
   @Column({ type: DataType.STRING })
   location: string;
@@ -14,7 +13,7 @@ export class AMD_Layover extends Model<AMD_Layover> {
   duration: string;
 
   @ForeignKey(() => AMD_FlightDetails)
-  @Column({ type: DataType.BIGINT, allowNull: false })
+  @Column
   flightId: number;
 
   @BelongsTo(() => AMD_FlightDetails)

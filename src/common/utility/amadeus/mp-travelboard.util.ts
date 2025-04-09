@@ -29,17 +29,12 @@ export class MasterPriceTravelBoardUtil {
     }));
   }
 
-  createFareOptions(priceTypes: string[], currency: string) {
+  createFareOptions(priceTypes) {
     return {
       fareOptions: {
         pricingTickInfo: {
           pricingTicketing: {
-            priceType: priceTypes,
-          },
-        },
-        conversionRate: {
-          conversionRateDetail: {
-            currency: currency,
+            priceType: priceTypes.map((type) => type),
           },
         },
       },
@@ -50,12 +45,12 @@ export class MasterPriceTravelBoardUtil {
     return {
       travelFlightInfo: {
         companyIdentity: {
-          carrierQualifier: cabin,
+          carrierQualifier: 'X',
           carrierId: carrierIds,
         },
-        // flightDetail: {
-        //   flightType: 'N',
-        // },
+        flightDetail: {
+          flightType: 'N',
+        },
       },
     };
   }
@@ -104,10 +99,7 @@ export class MasterPriceTravelBoardUtil {
     if (requestData.fareOptions) {
       Object.assign(
         body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
-        this.createFareOptions(
-          requestData.fareOptions.priceTypes,
-          requestData.fareOptions.currency,
-        ),
+        this.createFareOptions(requestData.fareOptions.priceTypes),
       );
     }
 

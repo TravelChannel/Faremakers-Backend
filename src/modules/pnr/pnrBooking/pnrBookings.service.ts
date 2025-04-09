@@ -54,7 +54,6 @@ import { HttpService } from '@nestjs/axios';
 import { GeneralTask } from '../../generalModules/generalTasks/entities/generalTask.entity';
 require('dotenv').config();
 import { Log } from '../../generalModules/systemLogs/entities/log.entity';
-import { AMD_FlightDetails } from 'src/modules/Amadeus/entities/flight-details.entity';
 
 @Injectable()
 export class PnrBookingsService {
@@ -67,7 +66,7 @@ export class PnrBookingsService {
     private pnrBookingRepository: typeof PnrBooking,
     private readonly responseService: ResponseService,
     private readonly httpService: HttpService,
-  ) { }
+  ) {}
   async create(
     currentUserId: number,
     isCurrentUserAdmin: number,
@@ -704,9 +703,11 @@ export class PnrBookingsService {
             meta: `${pnrBookingDto.pnr}`,
             timestamp: new Date().toISOString(),
           });
-          const message = `Your booking for ${flightDetails.groupDescription[0]?.departureLocation
-            }-${flightDetails.groupDescription[0]?.arrivalLocation
-            } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
+          const message = `Your booking for ${
+            flightDetails.groupDescription[0]?.departureLocation
+          }-${
+            flightDetails.groupDescription[0]?.arrivalLocation
+          } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -725,8 +726,9 @@ export class PnrBookingsService {
             meta: `${pnrBookingDto.pnr}`,
             timestamp: new Date().toISOString(),
           });
-          const message = `Hello Ticket Pay by COD (Testing).${!sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
-            }`;
+          const message = `Hello Ticket Pay by COD (Testing).${
+            !sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
+          }`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -845,9 +847,11 @@ export class PnrBookingsService {
     <body>
       <div class="container">
         <h2> 
-        Your booking for Reference # ${referenceNumber} ( ${bookingData.flightDetails.groupDescription[0]?.departureLocation
-      }-${bookingData.flightDetails.groupDescription[0]?.arrivalLocation
-      } ) is Awaiting Payment.
+        Your booking for Reference # ${referenceNumber} ( ${
+          bookingData.flightDetails.groupDescription[0]?.departureLocation
+        }-${
+          bookingData.flightDetails.groupDescription[0]?.arrivalLocation
+        } ) is Awaiting Payment.
         </h2>
         <p>Hi!  ${user.phoneNumber},</p>
         <p>Please check details in the following link.  </p>
@@ -866,18 +870,21 @@ export class PnrBookingsService {
             <tr>
               <th>Method</th>
               <td>
-              ${!bookingData.sendSmsCod && !bookingData.sendSmsBranch
-        ? 'Card Payment'
-        : ''
-      }
-                ${bookingData.sendSmsCod && !bookingData.sendSmsBranch
-        ? 'Cash On Delivery'
-        : ''
-      }
-                ${!bookingData.sendSmsCod && bookingData.sendSmsBranch
-        ? 'Pay at Branch'
-        : ''
-      }
+              ${
+                !bookingData.sendSmsCod && !bookingData.sendSmsBranch
+                  ? 'Card Payment'
+                  : ''
+              }
+                ${
+                  bookingData.sendSmsCod && !bookingData.sendSmsBranch
+                    ? 'Cash On Delivery'
+                    : ''
+                }
+                ${
+                  !bookingData.sendSmsCod && bookingData.sendSmsBranch
+                    ? 'Pay at Branch'
+                    : ''
+                }
                 </td>
             </tr>
             <tr>
@@ -1165,8 +1172,71 @@ export class PnrBookingsService {
             as: 'pnrDetail',
           },
           {
-            model: AMD_FlightDetails
-          }
+            model: FlightDetails,
+            include: [
+              {
+                model: ExtraBaggage,
+              },
+              {
+                model: BaggageAllowance,
+              },
+              {
+                model: BookingFlight,
+              },
+              {
+                model: Fare,
+                include: [
+                  {
+                    model: PassengerInfoList,
+                    include: [
+                      {
+                        model: PassengerInfo,
+                        include: [
+                          {
+                            model: CurrencyConversion,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    model: TotalFare,
+                  },
+                ],
+              },
+              {
+                model: GroupDescription,
+              },
+              {
+                model: SchedualDetGet,
+                attributes: ['id'],
+                include: [
+                  {
+                    model: InnerSchedualDetGet,
+                    include: [
+                      {
+                        model: Arrival,
+                      },
+                      {
+                        model: Departure,
+                      },
+                      {
+                        model: Carrier,
+                        include: [
+                          {
+                            model: Equipment,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                model: FlightSegments,
+              },
+            ],
+          },
         ],
         order: [['createdAt', 'DESC']],
         limit,
@@ -1175,13 +1245,13 @@ export class PnrBookingsService {
 
       // Process and transform data if necessary
       const plainObjects = rows.map((instance) => instance.toJSON());
-      // plainObjects.forEach((data) => {
-      //   const arr = data.flightDetails.schedualDetGet;
-      //   data.flightDetails.schedualDetGet = [];
-      //   arr.forEach((data2) => {
-      //     data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
-      //   });
-      // });
+      plainObjects.forEach((data) => {
+        const arr = data.flightDetails.schedualDetGet;
+        data.flightDetails.schedualDetGet = [];
+        arr.forEach((data2) => {
+          data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
+        });
+      });
 
       // Response with paginated data and metadata
       return this.responseService.createResponse(
@@ -1291,26 +1361,26 @@ export class PnrBookingsService {
           },
           ...(isPaid === '1'
             ? [
-              {
-                model: PnrPayment,
-                required: true,
-              },
-            ]
-            : isPaid === 0
-              ? [
                 {
                   model: PnrPayment,
-                  required: false,
-                  where: {
-                    id: null,
-                  },
+                  required: true,
                 },
               ]
+            : isPaid === 0
+              ? [
+                  {
+                    model: PnrPayment,
+                    required: false,
+                    where: {
+                      id: null,
+                    },
+                  },
+                ]
               : [
-                {
-                  model: PnrPayment,
-                },
-              ]),
+                  {
+                    model: PnrPayment,
+                  },
+                ]),
           {
             model: PnrDetail,
             as: 'pnrDetail',
@@ -1448,19 +1518,83 @@ export class PnrBookingsService {
             as: 'pnrDetail',
           },
           {
-            model: AMD_FlightDetails,
+            model: FlightDetails,
+            include: [
+              {
+                model: ExtraBaggage,
+              },
+              {
+                model: BaggageAllowance,
+              },
+              {
+                model: BookingFlight,
+              },
+              {
+                model: Fare,
+                include: [
+                  {
+                    model: PassengerInfoList,
+                    include: [
+                      {
+                        model: PassengerInfo,
+                        include: [
+                          {
+                            model: CurrencyConversion,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    model: TotalFare,
+                  },
+                ],
+              },
+              {
+                model: GroupDescription,
+              },
+              {
+                model: SchedualDetGet,
+                attributes: ['id'],
+                include: [
+                  {
+                    model: InnerSchedualDetGet,
+                    include: [
+                      {
+                        model: Arrival,
+                      },
+                      {
+                        model: Departure,
+                      },
+                      {
+                        model: Carrier,
+                        include: [
+                          {
+                            model: Equipment,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+
+              {
+                model: FlightSegments,
+              },
+            ],
           },
         ],
       }).then((rawData) => {
         // console.log(rawData);
         const plainObject = rawData.toJSON();
-        // const arr = plainObject.flightDetails.schedualDetGet;
-        // plainObject.flightDetails.schedualDetGet = [];
-        // arr.map((data2) => {
-        //   plainObject.flightDetails.schedualDetGet.push(
-        //     data2.innerSchedualDetGet,
-        //   );
-        // });
+        const arr = plainObject.flightDetails.schedualDetGet;
+        plainObject.flightDetails.schedualDetGet = [];
+        arr.map((data2) => {
+          plainObject.flightDetails.schedualDetGet.push(
+            data2.innerSchedualDetGet,
+          );
+        });
 
         return plainObject;
       });
@@ -1671,12 +1805,84 @@ export class PnrBookingsService {
               as: 'pnrDetail',
             },
             {
-              model: AMD_FlightDetails,
+              model: FlightDetails,
+              include: [
+                {
+                  model: ExtraBaggage,
+                },
+                {
+                  model: BaggageAllowance,
+                },
+                {
+                  model: BookingFlight,
+                },
+                {
+                  model: Fare,
+                  include: [
+                    {
+                      model: PassengerInfoList,
+                      include: [
+                        {
+                          model: PassengerInfo,
+                          include: [
+                            {
+                              model: CurrencyConversion,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    {
+                      model: TotalFare,
+                    },
+                  ],
+                },
+                {
+                  model: GroupDescription,
+                },
+                {
+                  model: SchedualDetGet,
+                  attributes: ['id'],
+                  include: [
+                    {
+                      model: InnerSchedualDetGet,
+                      include: [
+                        {
+                          model: Arrival,
+                        },
+                        {
+                          model: Departure,
+                        },
+                        {
+                          model: Carrier,
+                          include: [
+                            {
+                              model: Equipment,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                },
+
+                {
+                  model: FlightSegments,
+                },
+              ],
             },
           ],
         }).then((rawData) => {
           // console.log(rawData);
           const plainObject = rawData.toJSON();
+          const arr = plainObject.flightDetails.schedualDetGet;
+          plainObject.flightDetails.schedualDetGet = [];
+          arr.map((data2) => {
+            plainObject.flightDetails.schedualDetGet.push(
+              data2.innerSchedualDetGet,
+            );
+          });
+
           return plainObject;
         });
       } else {
@@ -2173,10 +2379,11 @@ export class PnrBookingsService {
         </head>
         <body>
           <div class="container">
-            <h2>Ticket Reservation Confirmation,  ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-            ? `PNR: ${pnrBooking.pnr}`
-            : ''
-          }</h2>
+            <h2>Ticket Reservation Confirmation,  ${
+              !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                ? `PNR: ${pnrBooking.pnr}`
+                : ''
+            }</h2>
             <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
             <p>PNR is generated. Please check details in the following link. </p>
             <br>Your registered information for this booking are following:
@@ -2194,18 +2401,21 @@ export class PnrBookingsService {
                 <tr>
                   <th>Method</th>
                   <td>
-                  ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-            ? 'Card Payment'
-            : ''
-          }
-                    ${pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-            ? 'Cash On Delivery'
-            : ''
-          }
-                    ${!pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
-            ? 'Pay at Branch'
-            : ''
-          }
+                  ${
+                    !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                      ? 'Card Payment'
+                      : ''
+                  }
+                    ${
+                      pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                        ? 'Cash On Delivery'
+                        : ''
+                    }
+                    ${
+                      !pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
+                        ? 'Pay at Branch'
+                        : ''
+                    }
                     </td>
                 </tr>
                 <tr>
@@ -2219,10 +2429,13 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = `Your booking for ${pnrBooking.flightDetail[0].departure
-          }-${pnrBooking.flightDetail[0].arrival
-          }, Ref# ${pnrBooking.id
-          }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
+        const message = `Your booking for ${
+          pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+        }-${
+          pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+        }, Ref# ${
+          pnrBooking.id
+        }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = ['hashamkhancust@gmail.com'];
@@ -2310,17 +2523,15 @@ export class PnrBookingsService {
           {
             model: User,
           },
+
           {
-            model: AMD_FlightDetails
-          }
-          // {
-          //   model: FlightDetails,
-          //   include: [
-          //     {
-          //       model: GroupDescription,
-          //     },
-          //   ],
-          // },
+            model: FlightDetails,
+            include: [
+              {
+                model: GroupDescription,
+              },
+            ],
+          },
         ],
       });
       const t: Transaction = await sequelize.transaction();
@@ -2457,10 +2668,11 @@ export class PnrBookingsService {
           </head>
           <body>
             <div class="container">
-              <h2>Ticket Reservation Confirmation,  ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-              ? `PNR: ${pnrBooking.pnr}`
-              : ''
-            }</h2>
+              <h2>Ticket Reservation Confirmation,  ${
+                !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                  ? `PNR: ${pnrBooking.pnr}`
+                  : ''
+              }</h2>
               <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
               <p>PNR is generated. Please check details in the following link. </p>
               <br>Your registered information for this booking are following:
@@ -2478,18 +2690,21 @@ export class PnrBookingsService {
                   <tr>
                     <th>Method</th>
                     <td>
-                    ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-              ? 'Card Payment'
-              : ''
-            }
-                      ${pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-              ? 'Cash On Delivery'
-              : ''
-            }
-                      ${!pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
-              ? 'Pay at Branch'
-              : ''
-            }
+                    ${
+                      !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                        ? 'Card Payment'
+                        : ''
+                    }
+                      ${
+                        pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+                          ? 'Cash On Delivery'
+                          : ''
+                      }
+                      ${
+                        !pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
+                          ? 'Pay at Branch'
+                          : ''
+                      }
                       </td>
                   </tr>
                   <tr>
@@ -2503,10 +2718,13 @@ export class PnrBookingsService {
           </body>
           </html>
           `;
-          const message = `Your booking for ${pnrBooking.flightDetail[0].departure
-            }-${pnrBooking.flightDetail[0].arrival
-            }, Ref# ${pnrBooking.id
-            }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
+          const message = `Your booking for ${
+            pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+          }-${
+            pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+          }, Ref# ${
+            pnrBooking.id
+          }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
           await this.sendSmsConfirmation(pnrBooking.user, message);
           const toAddresses = ['arman@faremakers.com'];
@@ -2578,11 +2796,11 @@ export class PnrBookingsService {
       .format('YYYY-MM-DD HH:mm:ss.SSSZZ');
   }
 
-  async findAirlineTypebK(id): Promise<any> {
+  async findAirlineType(id): Promise<any> {
     const pnrBooking = await PnrBooking.findByPk(id, {
       include: [
         {
-          model: AMD_FlightDetails,
+          model: FlightDetails,
           include: [
             {
               model: SchedualDetGet,
@@ -2647,45 +2865,6 @@ export class PnrBookingsService {
       return 1;
     }
   }
-
-  async findAirlineType(id): Promise<any> {
-    const pnrBooking = await PnrBooking.findByPk(id, {
-      include: [
-        {
-          model: AMD_FlightDetails,
-        },
-      ],
-    }).then((rawData) => {
-      // console.log('444', rawData);
-
-      // console.log(rawData);
-      const plainObject = rawData.toJSON();
-      const arr = plainObject.flightDetails.schedualDetGet;
-      plainObject.flightDetails.schedualDetGet = [];
-      arr.map((data2) => {
-        console.log('------------', data2);
-        plainObject.flightDetails.schedualDetGet.push(
-          data2.innerSchedualDetGet,
-        );
-      });
-      console.log('4444 plainObject', plainObject);
-
-      return plainObject;
-    });
-    // Airsial;
-    console.log(
-      '**************',
-      pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating,
-    );
-    if (
-      pnrBooking.flightDetails?.schedualDetGet?.[0]?.[0]?.carrier?.operating ===
-      'PF'
-    ) {
-      return 0;
-    } else {
-      return 1;
-    }
-  }
   async callPostPaymentApi(pnr, pnrDetail, data): Promise<any> {
     const headers = {
       'Content-Type': 'application/json',
@@ -2715,7 +2894,7 @@ export class PnrBookingsService {
       } else {
         comissionPerc = parseFloat(process.env.COMMISSION_OTC);
       }
-    } catch (error) { }
+    } catch (error) {}
 
     invoiceAmount = invoiceAmount * (1 - comissionPerc / 100);
 
@@ -2756,9 +2935,10 @@ export class PnrBookingsService {
       'https://qgm2rw.api.infobip.com/sms/2/text/advanced';
     const headers = {
       headers: {
-        Authorization: `App ${process.env.INFOBIP_KEY ||
+        Authorization: `App ${
+          process.env.INFOBIP_KEY ||
           'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
-          }`,
+        }`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -2888,9 +3068,9 @@ export class PnrBookingsService {
       for (const passenger of passengers) {
         if (
           passenger.FirstName.trim().toLowerCase() ===
-          doc.FirstName.trim().toLowerCase() &&
+            doc.FirstName.trim().toLowerCase() &&
           passenger.LastName.trim().toLowerCase() ===
-          doc.LastName.trim().toLowerCase()
+            doc.LastName.trim().toLowerCase()
         ) {
           const passengerEntity = await PnrDetail.findOne({
             where: { id: passenger.id },
