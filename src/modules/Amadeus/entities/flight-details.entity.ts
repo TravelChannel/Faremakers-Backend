@@ -1,15 +1,15 @@
 import { Table, Column, Model, ForeignKey, BelongsTo, HasMany, DataType } from 'sequelize-typescript';
-import { AMD_Booking } from './booking.entity';
 import { AMD_Layover } from './layover.entity';
+import PnrBooking from 'src/modules/pnr/pnrBooking/entities/pnrBooking.entity';
 
 @Table({ tableName: 'AMD_FlightDetails', timestamps: false })
 export class AMD_FlightDetails extends Model<AMD_FlightDetails> {
-  @Column({ primaryKey: true, autoIncrement: true })
+  @Column({ type: DataType.BIGINT, primaryKey: true, autoIncrement: true })
   flightId: number;
 
-  @ForeignKey(() => AMD_Booking)
-  @Column
-  orderId: string;
+  @ForeignKey(() => PnrBooking)
+  @Column({ type: DataType.BIGINT }) // ✅ Add explicit data type
+  pnrBookingId: number;
 
   @Column({ type: DataType.STRING })
   departure: string;
@@ -47,8 +47,8 @@ export class AMD_FlightDetails extends Model<AMD_FlightDetails> {
   @Column({ type: DataType.STRING })
   flightDuration: string;
 
-  @BelongsTo(() => AMD_Booking)
-  booking: AMD_Booking;
+  @BelongsTo(() => PnrBooking, { onDelete: 'CASCADE', onUpdate: 'CASCADE' }) // Define constraints here
+  booking: PnrBooking;
 
   @HasMany(() => AMD_Layover)
   layovers: AMD_Layover[];
