@@ -113,12 +113,12 @@ export class SoapHeaderLiveUtil {
     // Add TransactionFlowLink node for 'fare_informative_best_pricing'
     if (type === 'fare_informative_best_pricing') {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
-        {
-          '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
-          'link:Consumer': {
-            'link:UniqueID': uuidv4(), // Replace with the required UniqueID
-          },
-        };
+      {
+        '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
+        'link:Consumer': {
+          'link:UniqueID': uuidv4(), // Replace with the required UniqueID
+        },
+      };
     }
 
     return header;
@@ -169,12 +169,12 @@ export class SoapHeaderLiveUtil {
       type === 'command_cryptic'
     ) {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
-        {
-          '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
-          'link:Consumer': {
-            'link:UniqueID': uuidv4(), // Replace this ID dynamically if necessary
-          },
-        };
+      {
+        '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
+        'link:Consumer': {
+          'link:UniqueID': uuidv4(), // Replace this ID dynamically if necessary
+        },
+      };
     }
 
     // Add Security details and AMA_SecurityHostedUser
@@ -299,12 +299,12 @@ export class SoapHeaderLiveUtil {
       type === 'end_session'
     ) {
       header['soapenv:Envelope']['soapenv:Header']['link:TransactionFlowLink'] =
-        {
-          '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
-          'link:Consumer': {
-            'link:UniqueID': uuidv4(), // Replace this ID dynamically if necessary
-          },
-        };
+      {
+        '@xmlns:link': 'http://wsdl.amadeus.com/2010/06/ws/Link_v1',
+        'link:Consumer': {
+          'link:UniqueID': uuidv4(), // Replace this ID dynamically if necessary
+        },
+      };
     }
 
     // Add Session node based on TransactionStatusCode
@@ -355,7 +355,7 @@ export class SoapHeaderLiveUtil {
         '@xmlns': 'http://xml.amadeus.com/2010/06/Security_v1',
         UserID: {
           '@POS_Type': '1',
-          '@PseudoCityCode': process.env.AMADEUS_OFFICE_ID,
+          '@PseudoCityCode': requestData.office_id || process.env.AMADEUS_OFFICE_ID,
           '@AgentDutyCode': 'SU',
           '@RequestorType': 'U',
         },
