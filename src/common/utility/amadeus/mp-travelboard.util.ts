@@ -60,6 +60,26 @@ export class MasterPriceTravelBoardUtil {
     };
   }
 
+  createFareFamilies(fareFamilies) {
+    return fareFamilies.map((family) => ({
+      fareFamilies: {
+        familyInformation: {
+          refNumber: family.refNumber,
+          fareFamilyname: family.fareFamilyname,
+          hierarchy: family.hierarchy,
+        },
+        familyCriteria: {
+          cabinProduct: {
+            cabinDesignator: family.cabinDesignator,
+          },
+          ...(family.cabinProcessingIdentifier && {
+            cabinProcessingIdentifier: family.cabinProcessingIdentifier,
+          }),
+        },
+      },
+    }));
+  }
+
   createItinerary(itineraries) {
     return itineraries.map((itinerary, index) => ({
       itinerary: {
@@ -101,6 +121,12 @@ export class MasterPriceTravelBoardUtil {
       ] = paxRefs.map((paxRef) => paxRef.paxReference);
     }
 
+    if (requestData.fareFamilies) {
+      const families = this.createFareFamilies(requestData.fareFamilies);
+      body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch']['fareFamilies'] =
+        families.map((fam) => fam.fareFamilies);
+    }
+
     if (requestData.fareOptions) {
       Object.assign(
         body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'],
@@ -126,6 +152,8 @@ export class MasterPriceTravelBoardUtil {
       body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch']['itinerary'] =
         itineraries.map((itinerary) => itinerary.itinerary);
     }
+
+
 
     return body;
   }

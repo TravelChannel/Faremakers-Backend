@@ -150,6 +150,7 @@ export class PnrBookingsController {
   async createLeadCrm(@Body() body: any): Promise<any> {
     return this.pnrBookingsService.createLeadCrm(body);
   }
+
   @Get('findByPnr')
   async findByPnr(@Req() req: Request): Promise<any> {
     return this.pnrBookingsService.findByPnr(req);
@@ -178,6 +179,7 @@ export class PnrBookingsController {
   reqForCancellation(@Param('id') id: string) {
     return this.pnrBookingsService.reqForCancellation(+id);
   }
+  
   @Patch('reqForRefund/:id')
   reqForRefund(@Param('id') id: string) {
     return this.pnrBookingsService.reqForRefund(+id);

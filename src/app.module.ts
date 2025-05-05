@@ -42,6 +42,7 @@ import { SoapHeaderUtil } from './common/utility/amadeus/soap-header.util';
 import { SoapHeaderLiveUtil } from './common/utility/amadeus/soap-header-live.util';
 import { PayzenModule } from './modules/payzenModule/payzen.module';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { VonageModule } from './modules/vonage-api/vonage.module';
 // import { SoapHeaderInterceptor } from './common/interceptors/amadeusheader.interceptor';
 const dbConfig = databaseConfig[process.env.NODE_ENV || 'development']; // Load the appropriate config based on environment
 const JWT_SECRET = dbConfig.JWT_SECRET;
@@ -70,6 +71,7 @@ const JWT_SECRET = dbConfig.JWT_SECRET;
     AmadeusLiveModule,
     JazzCashModule,
     PayzenModule,
+    VonageModule,
     // Configure Sequelize with the selected database settings
     SequelizeModule.forRoot({
       dialect: dbConfig.dialect as any, // Typecast to 'any' to avoid TS errors

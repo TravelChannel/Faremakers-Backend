@@ -911,6 +911,7 @@ export class PnrBookingsService {
       console.error('Failed to send email');
     }
   }
+
   async callLeadCreation(leadCreationData, data): Promise<any> {
     const headers = {
       'Content-Type': 'application/json',
@@ -1233,6 +1234,7 @@ export class PnrBookingsService {
       );
     }
   }
+
   async findAllWithPayment(
     req,
     currentUserId: number,
@@ -1421,6 +1423,7 @@ export class PnrBookingsService {
       );
     }
   }
+
   async findOne(
     id: string,
     currentUserId: number,
