@@ -109,7 +109,7 @@ export class PnrBookingsController {
   }
 
   @Get()
-  // @SkipAuth()
+  @SkipAuth()
   async findAll(
     @Req() req: Request,
     @CurrentUserId() currentUserId: number,

@@ -924,7 +924,7 @@ export class PnrBookingsService {
 
     return result;
   }
-  async findAllbK(
+  async findAllbk(
     req,
     currentUserId: number,
     isCurrentUserAdmin: number,
@@ -1164,9 +1164,9 @@ export class PnrBookingsService {
             model: PnrDetail,
             as: 'pnrDetail',
           },
-          {
-            model: AMD_FlightDetails
-          }
+          // {
+          //   model: AMD_FlightDetails
+          // }
         ],
         order: [['createdAt', 'DESC']],
         limit,
