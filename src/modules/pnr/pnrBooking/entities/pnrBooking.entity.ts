@@ -11,9 +11,9 @@ import {
 
 import { User } from '../../../generalModules/users/entities/user.entity';
 import { PnrDetail } from '../../pnrDetails';
-import { FlightDetails } from '../../flightDetails';
 import { PnrServiceCharges } from '../../../serviceCharges/pnrServiceCharges';
 import { PnrPayment } from '../../../paymentModules/paymob/entities/pnrPayment.entity';
+import { AMD_FlightDetails } from 'src/modules/Amadeus/entities/flight-details.entity';
 
 @Table
 export class PnrBooking extends Model {
@@ -105,35 +105,29 @@ export class PnrBooking extends Model {
   userLocation: string;
 
   @Column({
-    type: DataType.DOUBLE,
-    defaultValue: 0,
-    allowNull: false,
+    type: DataType.DECIMAL(18, 2)
   })
-  BaseFare: boolean;
+  BaseFare: number;
   @Column({
-    type: DataType.DOUBLE,
-    defaultValue: 0,
+    type: DataType.DECIMAL(18, 2),
     allowNull: false,
   })
-  ServiceCharges: boolean;
+  ServiceCharges: number;
   @Column({
-    type: DataType.DOUBLE,
-    defaultValue: 0,
+    type: DataType.DECIMAL(18, 2),
     allowNull: false,
   })
-  pnrPaymentAmount: boolean;
+  pnrPaymentAmount: number;
   @Column({
-    type: DataType.DOUBLE,
-    defaultValue: 0,
+    type: DataType.DECIMAL(18, 2),
     allowNull: false,
   })
-  taxAmount: boolean;
+  taxAmount: number;
   @Column({
-    type: DataType.DOUBLE,
-    defaultValue: 0,
+    type: DataType.DECIMAL(18, 2),
     allowNull: false,
   })
-  totalTicketPrice: boolean;
+  totalTicketPrice: number;
 
   @Column({
     type: DataType.STRING,
@@ -166,8 +160,8 @@ export class PnrBooking extends Model {
   user: User;
   @HasMany(() => PnrDetail)
   pnrDetail: PnrDetail[];
-  @HasOne(() => FlightDetails)
-  flightDetails: FlightDetails;
+  @HasMany(() => AMD_FlightDetails)
+  flightDetail: AMD_FlightDetails[];
   @HasOne(() => PnrServiceCharges)
   pnrServiceCharges: PnrServiceCharges;
   @HasOne(() => PnrPayment)

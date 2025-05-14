@@ -19,7 +19,58 @@ import { PnrRetrieveUtil } from 'src/common/utility/amadeus/pnr-retrieve.util';
 import { PnrCancelUtil } from 'src/common/utility/amadeus/pnr-cancel.util';
 import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
 
+import { AMD_Passenger } from './entities/passenger.entity';
+import { AMD_FlightDetails } from './entities/flight-details.entity';
+import { AMD_Layover } from './entities/layover.entity';
+import { AMD_FareDetails } from './entities/fare-details.entity';
+import { AMD_Baggage } from './entities/baggage.entity';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { PnrBookingsProviders } from '../pnr/pnrBooking/pnrBookings.providers';
+import PnrBooking from '../pnr/pnrBooking/entities/pnrBooking.entity';
+import User from '../generalModules/users/entities/user.entity';
+import { PnrDetail } from '../pnr/pnrDetails';
+import { FlightDetails } from '../pnr/flightDetails';
+import { PnrServiceCharges } from '../serviceCharges/pnrServiceCharges';
+import PnrPayment from '../paymentModules/paymob/entities/pnrPayment.entity';
+import Role from '../generalModules/roles/entities/role.entity';
+import { ExtraBaggage } from '../pnr/extraBaggage';
+import { BaggageAllowance } from '../pnr/baggageAllowance';
+import { BookingFlight } from '../pnr/bookingFlight';
+import { Fare } from '../pnr/fare';
+import { GroupDescription } from '../pnr/groupDescription';
+import { SchedualDetGet } from '../pnr/schedualDetGet';
+import { FlightSegments } from '../pnr/flightSegments';
+import { CommissionCategories } from '../serviceCharges/CommissionCategories';
+import { TotalFare } from '../pnr/totalFare';
+import { PassengerInfo } from '../pnr/passengerInfo';
+import { PassengerInfoList } from '../pnr/passengerInfoList';
+import { InnerSchedualDetGet } from '../pnr/InnerSchedualDetGet';
+import { CurrencyConversion } from '../pnr/currencyConversion';
+import { Arrival } from '../pnr/arrival';
+import { Departure } from '../pnr/departure';
+import { Carrier } from '../pnr/carrier';
+import { Equipment } from '../pnr/equipment';
+import { HttpModule } from '@nestjs/axios';
+
+
 @Module({
+  imports: [
+    SequelizeModule.forFeature([
+      AMD_Passenger,
+      AMD_FlightDetails,
+      AMD_Layover,
+      AMD_FareDetails,
+      AMD_Baggage,
+      PnrBooking,
+      User,
+      PnrDetail,
+      PnrServiceCharges,
+      PnrPayment,
+      Role,
+      CommissionCategories
+    ]),
+    HttpModule
+  ],
   providers: [
     AmadeusService,
     SoapHeaderUtil,
@@ -39,6 +90,7 @@ import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
     PnrRetrieveUtil,
     PnrCancelUtil,
     QueuePlacePnrUtil,
+    ...PnrBookingsProviders
   ],
   controllers: [AmadeusController],
   exports: [
@@ -62,4 +114,4 @@ import { QueuePlacePnrUtil } from 'src/common/utility/amadeus/queueplace.util';
     QueuePlacePnrUtil
   ],
 })
-export class AmadeusModule {}
+export class AmadeusModule { }
