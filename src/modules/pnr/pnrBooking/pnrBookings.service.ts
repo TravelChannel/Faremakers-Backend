@@ -792,6 +792,732 @@ export class PnrBookingsService {
     }
   }
 
+  async ProcessPayment(
+    currentUserId: number,
+    isCurrentUserAdmin: number,
+    pnrBookingDto: PnrBookingDto,
+  ): Promise<any> {
+    let MessageLog = `1)  Start done: ${new Date().toISOString()}`;
+    console.log('currentUserId', currentUserId);
+    let newLog = await Log.create({
+      level: '1',
+      message: MessageLog,
+      meta: `${pnrBookingDto.pnr}`,
+      timestamp: new Date().toISOString(),
+    });
+
+    const t: Transaction = await sequelize.transaction();
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const {
+        pnrBookings,
+        pnr,
+        OrderId,
+        // phoneNumber,
+        // countryCode,
+        Amount,
+        flightDetails,
+        MajorInfo,
+        // leadCreationData,
+        sendSmsBranch,
+        sendSmsCod,
+        branchLabel,
+        userLocation,
+      } = pnrBookingDto;
+      const tolerance = 0.001; // Define your tolerance threshold here
+      const baseFare =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.BaseFare) || 0 : 0;
+      const taxAmount =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.taxAmount) || 0 : 0;
+      const pnrPayment =
+        typeof Amount !== 'undefined' ? parseFloat(Amount.pnrPayment) || 0 : 0;
+
+      const isAmountEqual =
+        Math.abs(baseFare + taxAmount - pnrPayment) < tolerance;
+      const newPnrBookingRepository = await this.pnrBookingRepository.create(
+        {
+          userId: currentUserId,
+          pnr: pnr,
+          orderId: OrderId,
+          sendSmsBranch: sendSmsBranch || false,
+          sendSmsCod: sendSmsCod || false,
+          branchLabel: branchLabel || '',
+          BaseFare: Amount.BaseFare || 0,
+          ServiceCharges: Amount.ServiceCharges || 0,
+          pnrPaymentAmount: Amount.pnrPayment || 0,
+          taxAmount: Amount.taxAmount || 0,
+          totalTicketPrice: Amount.totalTicketPrice || 0,
+        },
+        { transaction: t },
+      );
+
+      const userUpdateEmail = await User.findByPk(currentUserId);
+      if (userUpdateEmail) {
+        userUpdateEmail.email =
+          pnrBookings[0].userEmail || userUpdateEmail.email;
+        await userUpdateEmail.save({ transaction: t });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      MessageLog = `2) newPnrBookingRepository api done: ${new Date().toISOString()}`;
+      let newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
+      });
+
+      if (pnrBookings.length > 0) {
+        await Promise.all(
+          pnrBookings.map(async (pnrBooking) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const newPnrDetails = await PnrDetail.create(
+              {
+                pnrBookingId: newPnrBookingRepository.id,
+                phoneNumber: pnrBooking.phoneNumber,
+                email: pnrBooking.email,
+                dateOfBirth: moment(
+                  pnrBooking.dateOfBirth,
+                  'DD-MM-YYYY',
+                ).format('yyyy-MM-DD'),
+                passportExpiryDate: moment(
+                  pnrBooking.passportExpiryDate,
+                  'DD-MM-YYYY',
+                ).format('yyyy-MM-DD'),
+                firstName: pnrBooking.firstName,
+                lastName: pnrBooking.lastName,
+                gender: pnrBooking.gender,
+                cnic: pnrBooking.cnic,
+                passportNo: pnrBooking.passportNo,
+              },
+              { transaction: t },
+            );
+
+            // await this.callLeadCreation(leadCreationData, pnrBooking);
+            // external api
+          }),
+        );
+        MessageLog = `3) newPnrDetails api done: ${new Date().toISOString()}`;
+        let newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      //Nabeel Changes Start Here
+      if (flightDetails) {
+        const newflightDetails = await FlightDetails.create(
+          {
+            pnrBookingId: newPnrBookingRepository.id,
+            adults: flightDetails.adults,
+            children: flightDetails.children,
+            infants: flightDetails.infants,
+            classtype: flightDetails.classtype,
+            pricingSubsource: 'N/A',
+            seatsAvailables: 'N/A',
+            price: Amount.totalTicketPrice,
+          },
+          { transaction: t },
+        );
+        MessageLog = `4) newflightDetails api done: ${new Date().toISOString()}`;
+        let newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (
+          flightDetails.extraBaggages &&
+          flightDetails.extraBaggages.length > 0
+        ) {
+          await Promise.all(
+            flightDetails.extraBaggages.map(async (extraBaggage) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newExtraBaggage = await ExtraBaggage.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  SUB_CLASS_ID: extraBaggage.SUB_CLASS_ID,
+                  SUB_CLASS_DESC: extraBaggage.SUB_CLASS_DESC,
+                  ABBR: extraBaggage.ABBR,
+                  NO_OF_BAGS: extraBaggage.NO_OF_BAGS,
+                  ADV_TAX: extraBaggage.ADV_TAX,
+                  AMOUNT: extraBaggage.AMOUNT,
+                  ACTUAL_AMOUNT: extraBaggage.ACTUAL_AMOUNT,
+                  WEIGHT: extraBaggage.WEIGHT,
+                  PIECE: extraBaggage.PIECE,
+                  DESCRIPTION: extraBaggage.DESCRIPTION,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        MessageLog = `5) newExtraBaggage api done: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (flightDetails.baggageAllowance.length > 0) {
+          await Promise.all(
+            flightDetails.baggageAllowance.map(async (baggageAllowance) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newBaggageAllowance = await BaggageAllowance.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  id: baggageAllowance.id,
+                  unit: baggageAllowance.unit,
+                  weight: baggageAllowance.weight,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        MessageLog = `6) newBaggageAllowance api done: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+
+        if (
+          flightDetails.bookingFlight &&
+          flightDetails.bookingFlight.length > 0
+        ) {
+          await Promise.all(
+            flightDetails.bookingFlight.map(async (bookingFlightItem) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newBookingFlight = await BookingFlight.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  id: bookingFlightItem.id,
+                  JOURNEY_CODE: bookingFlightItem.JOURNEY_CODE,
+                  CLASS_CODE: bookingFlightItem.CLASS_CODE,
+                  FareType: bookingFlightItem.FareType,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        MessageLog = `7) newBookingFlight api done: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (flightDetails.groupDescription.length > 0) {
+          await Promise.all(
+            flightDetails.groupDescription.map(async (groupDescriptionItem) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newGroupDescription = await GroupDescription.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  arrivalLocation: groupDescriptionItem.arrival,
+                  departureDate: groupDescriptionItem.departDate,
+                  departureLocation: groupDescriptionItem.departure,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        MessageLog = `8) newGroupDescription api done: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (flightDetails.flightSegments.length > 0) {
+          await Promise.all(
+            flightDetails.flightSegments.map(async (flightSegment) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const newFlightSegment = await FlightSegments.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                  departure: flightSegment.departure,
+                  arrival: flightSegment.arrival,
+                  date: flightSegment.date,
+                },
+                { transaction: t },
+              );
+            }),
+          );
+        }
+        MessageLog = `9) newFlightSegment api done: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (flightDetails.fare) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const newFare = await Fare.create(
+            {
+              flightDetailsId: newflightDetails.id,
+              eTicketable: flightDetails.fare.eTicketable,
+              governingCarriers: flightDetails.fare.governingCarriers,
+              lastTicketDate: flightDetails.fare.lastTicketDate,
+              lastTicketTime: flightDetails.fare.lastTicketTime,
+              validatingCarrierCode: flightDetails.fare.validatingCarrierCode,
+              vita: flightDetails.fare.vita,
+            },
+            { transaction: t },
+          );
+          MessageLog = `10) newFare api done: ${new Date().toISOString()}`;
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
+          });
+          if (flightDetails.fare.totalFare) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const newTotalFare = await TotalFare.create(
+              {
+                fareId: newFare.id,
+                baseFareAmount: flightDetails.fare.totalFare.baseFareAmount,
+                baseFareCurrency: flightDetails.fare.totalFare.baseFareCurrency,
+                constructionAmount:
+                  flightDetails.fare.totalFare.constructionAmount,
+                constructionCurrency:
+                  flightDetails.fare.totalFare.constructionCurrency,
+                currency: flightDetails.fare.totalFare.currency,
+                equivalentAmount: flightDetails.fare.totalFare.equivalentAmount,
+                equivalentCurrency:
+                  flightDetails.fare.totalFare.equivalentCurrency,
+                totalPrice: flightDetails.fare.totalFare.totalPrice,
+                totalTaxAmount: flightDetails.fare.totalFare.totalTaxAmount,
+              },
+              { transaction: t },
+            );
+          }
+          MessageLog = `11) newTotalFare api done: ${new Date().toISOString()}`;
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
+          });
+          if (flightDetails.fare.passengerInfoList.length > 0) {
+            await Promise.all(
+              flightDetails.fare.passengerInfoList.map(
+                async (passengerInfoList) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newPassengerInfoList = await PassengerInfoList.create(
+                    {
+                      fareId: newFare.id,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newPassengerInfo = await PassengerInfo.create(
+                    {
+                      passengerInfoListId: newPassengerInfoList.id,
+                      nonRefundable:
+                        passengerInfoList.passengerInfo.nonRefundable,
+                      passengerNumber:
+                        passengerInfoList.passengerInfo.passengerNumber,
+                      passengerType:
+                        passengerInfoList.passengerInfo.passengerType,
+                    },
+                    { transaction: t },
+                  );
+                  if (passengerInfoList.passengerInfo.currencyConversion) {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    const newCurrencyConversion =
+                      await CurrencyConversion.create(
+                        {
+                          passengerInfoId: newPassengerInfo.id,
+                          from: passengerInfoList.passengerInfo
+                            .currencyConversion.from,
+                          to: passengerInfoList.passengerInfo.currencyConversion
+                            .to,
+                          exchangeRateUsed:
+                            passengerInfoList.passengerInfo.currencyConversion
+                              .exchangeRateUsed,
+                        },
+                        { transaction: t },
+                      );
+                  }
+                },
+              ),
+            );
+          }
+          MessageLog = `12) flightDetails.fare.passengerInfoList api done: ${new Date().toISOString()}`;
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
+          });
+        }
+        if (flightDetails.schedualDetGet.length > 0) {
+          await Promise.all(
+            flightDetails.schedualDetGet.map(async (schedualDetGet) => {
+              const newSchedualDetGet = await SchedualDetGet.create(
+                {
+                  flightDetailsId: newflightDetails.id,
+                },
+                { transaction: t },
+              );
+              await Promise.all(
+                schedualDetGet.map(async (schedualDetGetInner) => {
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newInnerSchedualDetGet =
+                    await InnerSchedualDetGet.create(
+                      {
+                        schedualDetGetId: newSchedualDetGet.id,
+                        id: schedualDetGetInner.id,
+                        frequency: schedualDetGetInner.frequency,
+                        stopCount: schedualDetGetInner.stopCount,
+                        eTicketable: schedualDetGetInner.eTicketable,
+                        totalMilesFlown: schedualDetGetInner.totalMilesFlown,
+                        elapsedTime: schedualDetGetInner.elapsedTime,
+                      },
+                      { transaction: t },
+                    );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newArrival = await Arrival.create(
+                    {
+                      innerSchedualDetGetId: newInnerSchedualDetGet.localId,
+                      airport: schedualDetGetInner.arrival.airport,
+                      city: schedualDetGetInner.arrival.city,
+                      country: schedualDetGetInner.arrival.country,
+                      terminal: schedualDetGetInner.arrival.terminal,
+                      time: schedualDetGetInner.arrival.time,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newDeparture = await Departure.create(
+                    {
+                      innerSchedualDetGetId: newInnerSchedualDetGet.localId,
+                      airport: schedualDetGetInner.departure.airport,
+                      city: schedualDetGetInner.departure.city,
+                      country: schedualDetGetInner.departure.country,
+                      terminal: schedualDetGetInner.departure.terminal,
+                      time: schedualDetGetInner.departure.time,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newCarrier = await Carrier.create(
+                    {
+                      innerSchedualDetGetId: newInnerSchedualDetGet.localId,
+                      marketing: schedualDetGetInner.carrier.marketing,
+                      marketingFlightNumber:
+                        schedualDetGetInner.carrier.marketingFlightNumber,
+                      operating: schedualDetGetInner.carrier.operating,
+                      operatingFlightNumber:
+                        schedualDetGetInner.carrier.operatingFlightNumber,
+                    },
+                    { transaction: t },
+                  );
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  const newEquipment = await Equipment.create(
+                    {
+                      carrierId: newCarrier.id,
+                      code: schedualDetGetInner.carrier.equipment.code,
+                      typeForFirstLeg:
+                        schedualDetGetInner.carrier.equipment.typeForFirstLeg,
+                      typeForLastLeg:
+                        schedualDetGetInner.carrier.equipment.typeForLastLeg,
+                    },
+                    { transaction: t },
+                  );
+                }),
+              );
+            }),
+          );
+        }
+        MessageLog = `13) newSchedualDetGet api done: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+      }
+      const commissionCategory = await CommissionCategories.findOne({
+        order: [['precedence', 'ASC']],
+      });
+
+      if (commissionCategory) {
+        MessageLog = `14)  if (commissionCategory) True: ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        let pnrServiceChargesPercentage = 0;
+
+        const commissionPercentage = await CommissionPercentage.findOne({
+          where: {
+            airlineId: null,
+            fareClassId: null,
+            sectorId: null,
+          },
+        });
+        MessageLog = `15)  commissionPercentage Find ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (commissionPercentage) {
+          pnrServiceChargesPercentage = commissionPercentage.percentage;
+        }
+        let pnrServiceChargesCode = 'unknownCode';
+        // let a = 1;
+        MessageLog = `16)   Before Switch:commissionCategory.id ${Number(
+          commissionCategory.id,
+        )} ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        switch (Number(commissionCategory.id)) {
+          case 1:
+            pnrServiceChargesCode = MajorInfo.OperatingAirline[0] ?? null;
+
+            const airline = await Airline.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (airline) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  airlineId: airline.id,
+                  fareClassId: null,
+                  sectorId: null,
+                },
+              });
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            MessageLog = `17)  case 1 :pnrServiceChargesPercentage:${pnrServiceChargesPercentage} -- ${new Date().toISOString()}`;
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
+            });
+            break;
+
+          case 2:
+            pnrServiceChargesCode = MajorInfo.Destinations[0] ?? null;
+            const sector = await Sector.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (sector) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  sectorId: sector.id,
+                  airlineId: null,
+                  fareClassId: null,
+                },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            MessageLog = `19)  case 2 :pnrServiceChargesPercentage:${pnrServiceChargesPercentage} --${new Date().toISOString()}`;
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
+            });
+            break;
+          case 3:
+            pnrServiceChargesCode = MajorInfo.ClassType[0] ?? null;
+
+            const fareClass = await FareClass.findOne({
+              where: { code: pnrServiceChargesCode },
+            });
+
+            if (fareClass) {
+              const commissionPercentage = await CommissionPercentage.findOne({
+                where: {
+                  fareClassId: fareClass.id,
+                  sectorId: null,
+                  airlineId: null,
+                },
+              });
+
+              if (commissionPercentage) {
+                pnrServiceChargesPercentage = commissionPercentage.percentage;
+              }
+            }
+            MessageLog = `20)  case 3:pnrServiceChargesPercentage:${pnrServiceChargesPercentage} --${new Date().toISOString()}`;
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
+            });
+            break;
+
+          default:
+            pnrServiceChargesPercentage = 0;
+            MessageLog = `21)  case default:pnrServiceChargesPercentage:${pnrServiceChargesPercentage}-- ${new Date().toISOString()}`;
+            newLog = await Log.create({
+              level: '1',
+              message: MessageLog,
+              meta: `${pnrBookingDto.pnr}`,
+              timestamp: new Date().toISOString(),
+            });
+            break;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const newPnrServiceCharges = await PnrServiceCharges.create(
+          {
+            pnrBookingId: newPnrBookingRepository.id,
+            commissionCategoryId: commissionCategory.id,
+            percentage: pnrServiceChargesPercentage,
+            code: pnrServiceChargesCode,
+          },
+          { transaction: t },
+        );
+      }
+      MessageLog = `22)  newPnrServiceCharges api done ${new Date().toISOString()}`;
+      newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
+      });
+      await t.commit();
+
+      const user = await User.findByPk(currentUserId);
+      MessageLog = `23)  Find user api done ${new Date().toISOString()}`;
+      newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
+      });
+      if (user) {
+        MessageLog = `24)  user Found  ${new Date().toISOString()}`;
+        newLog = await Log.create({
+          level: '1',
+          message: MessageLog,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+        if (sendSmsBranch) {
+          MessageLog = `25)if (sendSmsBranch) { ${new Date().toISOString()}`;
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
+          });
+          const message = `Your booking for ${
+            flightDetails.groupDescription[0]?.departureLocation
+          }-${
+            flightDetails.groupDescription[0]?.arrivalLocation
+          } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
+          const resultSms = await this.sendSmsConfirmation(
+            { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
+            message,
+          );
+          if (resultSms) {
+            console.log('SMS sent successfully');
+          } else {
+            console.error('Failed to send SMS');
+          }
+        }
+        if (sendSmsCod) {
+          MessageLog = `26)if (sendSmsCod) { ${new Date().toISOString()}`;
+          newLog = await Log.create({
+            level: '1',
+            message: MessageLog,
+            meta: `${pnrBookingDto.pnr}`,
+            timestamp: new Date().toISOString(),
+          });
+          const message = `Hello Ticket Pay by COD (Testing).${
+            !sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
+          }`;
+          const resultSms = await this.sendSmsConfirmation(
+            { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
+            message,
+          );
+          if (resultSms) {
+            console.log('SMS sent successfully');
+          } else {
+            console.error('Failed to send SMS');
+          }
+        }
+      }
+      // Email to client Start
+      await this.sendBookingEmail(
+        pnrBookingDto,
+        userUpdateEmail,
+        newPnrBookingRepository.id,
+        pnr,
+      );
+      // Email to client End
+      MessageLog = `27)Done Execution { ${new Date().toISOString()}`;
+      newLog = await Log.create({
+        level: '1',
+        message: MessageLog,
+        meta: `${pnrBookingDto.pnr}`,
+        timestamp: new Date().toISOString(),
+      });
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        // {},
+        { isAmountEqual, newPnrBookingRepository },
+        SAVED_SUCCESS,
+      );
+    } catch (error) {
+      console.log('Error', error.message);
+      // Log the error
+      try {
+        await Log.create({
+          level: '5',
+          message: `28) INTERNAL_SERVER_ERROR Caught: --------${MessageLog}---- ${new Date().toISOString()},- ${error.message}`,
+          meta: `${pnrBookingDto.pnr}`,
+          timestamp: new Date().toISOString(),
+        });
+      } catch (logError) {
+        console.error('Logging error:', logError.message);
+      }
+
+      // Attempt to rollback the transaction if it was started
+      // if (t.finished !== 'commit') {
+      try {
+        await t.rollback();
+      } catch (rollbackError) {
+        console.error('Rollback error:', rollbackError.message);
+      }
+      // }
+
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { isAmountEqual: false },
+        error.message,
+      );
+    }
+  }
+
   async sendBookingEmail(
     bookingData,
     user,

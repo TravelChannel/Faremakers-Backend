@@ -59,6 +59,18 @@ export class PnrBookingsController {
       pnrBookingDto,
     );
   }
+  @Post('NewProcessPayment')
+  async newProcessPayment(
+    @Body() pnrBookingDto: PnrBookingDto,
+    @CurrentUserId() currentUserId: number,
+    @IsCurrentUserAdmin() isCurrentUserAdmin: number,
+  ) {
+    return await this.pnrBookingsService.ProcessPayment(
+      currentUserId,
+      isCurrentUserAdmin,
+      pnrBookingDto,
+    );
+  }
   @Post('processPayment')
   @SkipAuth()
   async processPayment(
