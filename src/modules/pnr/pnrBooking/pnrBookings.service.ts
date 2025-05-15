@@ -1106,7 +1106,7 @@ export class PnrBookingsService {
     }
   }
 
-  async findAll(
+  async findAllBk(
     req,
     currentUserId: number,
     isCurrentUserAdmin: number,
@@ -1251,6 +1251,158 @@ export class PnrBookingsService {
         arr.forEach((data2) => {
           data.flightDetails.schedualDetGet.push(data2.innerSchedualDetGet);
         });
+      });
+
+      // Response with paginated data and metadata
+      return this.responseService.createResponse(
+        HttpStatus.OK,
+        {
+          data: plainObjects,
+          meta: {
+            totalRecords: count,
+            totalPages: Math.ceil(count / pageSize),
+            currentPage: page,
+            pageSize: pageSize,
+          },
+        },
+        'GET_SUCCESS',
+      );
+    } catch (error) {
+      console.error(error);
+      return this.responseService.createResponse(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        null,
+        error.message,
+      );
+    }
+  }
+
+  async findAll(
+    req,
+    currentUserId: number,
+    isCurrentUserAdmin: number,
+  ): Promise<any> {
+    try {
+      // Define where conditions based on user role and query parameters
+      const whereOptions: any = {};
+      if (!isCurrentUserAdmin && currentUserId) {
+        whereOptions.userId = currentUserId;
+      }
+      if (req.query.isReqForCancellation) {
+        whereOptions.isReqForCancellation = req.query.isReqForCancellation;
+      }
+      if (req.query.isReqForRefund) {
+        whereOptions.isReqForRefund = req.query.isReqForRefund;
+      }
+      if (req.query.isReqForReIssue) {
+        whereOptions.isReqForReIssue = req.query.isReqForReIssue;
+      }
+      if (req.query.id) {
+        whereOptions.id = req.query.id;
+      }
+      if (req.query.pnr) {
+        whereOptions.pnr = req.query.pnr;
+      }
+      if (req.query.startDate && req.query.endDate) {
+        whereOptions.createdAt = {
+          [Op.between]: [req.query.startDate, req.query.endDate],
+        };
+      } else if (req.query.startDate) {
+        whereOptions.createdAt = {
+          [Op.gte]: req.query.startDate,
+        };
+      } else if (req.query.endDate) {
+        whereOptions.createdAt = {
+          [Op.lte]: req.query.endDate,
+        };
+      }
+
+      // Pagination parameters
+      const page = parseInt(req.query.page) || 1;
+      const pageSize = parseInt(req.query.pageSize) || 10;
+      const offset = (page - 1) * pageSize;
+      const limit = pageSize;
+
+      // Fetch paginated data with minimal associations
+      const { count, rows } = await PnrBooking.findAndCountAll({
+        where: whereOptions,
+        include: [{ model: User }, { model: PnrDetail, as: 'pnrDetail' }],
+        order: [['createdAt', 'DESC']],
+        limit,
+        offset,
+      });
+
+      // Convert to plain objects
+      const plainObjects = rows.map((instance) => instance.toJSON());
+      const bookingIds = plainObjects.map((booking) => booking.id);
+
+      // Batch load flight details for all bookings at once
+      const allFlightDetails = await FlightDetails.findAll({
+        where: { pnrBookingId: { [Op.in]: bookingIds } },
+        include: [
+          { model: ExtraBaggage },
+          { model: BaggageAllowance },
+          { model: BookingFlight },
+          {
+            model: Fare,
+            include: [
+              {
+                model: PassengerInfoList,
+                include: [
+                  {
+                    model: PassengerInfo,
+                    include: [{ model: CurrencyConversion }],
+                  },
+                ],
+              },
+              { model: TotalFare },
+            ],
+          },
+          { model: GroupDescription },
+          {
+            model: SchedualDetGet,
+            attributes: ['id'],
+            include: [
+              {
+                model: InnerSchedualDetGet,
+                include: [
+                  { model: Arrival },
+                  { model: Departure },
+                  {
+                    model: Carrier,
+                    include: [{ model: Equipment }],
+                  },
+                ],
+              },
+            ],
+          },
+          { model: FlightSegments },
+        ],
+      });
+
+      // Group flight details by booking ID
+      const flightDetailsByBooking = allFlightDetails.reduce((acc, detail) => {
+        if (!acc[detail.pnrBookingId]) {
+          acc[detail.pnrBookingId] = [];
+        }
+        acc[detail.pnrBookingId].push(detail);
+        return acc;
+      }, {});
+
+      // Attach flight details to each booking
+      plainObjects.forEach((booking) => {
+        booking.flightDetails = flightDetailsByBooking[booking.id] || [];
+
+        // Transform schedualDetGet if needed
+        if (booking.flightDetails) {
+          booking.flightDetails.forEach((flightDetail) => {
+            if (flightDetail.schedualDetGet) {
+              flightDetail.schedualDetGet = flightDetail.schedualDetGet
+                .map((schedule) => schedule.innerSchedualDetGet)
+                .filter(Boolean); // Remove undefined/null
+            }
+          });
+        }
       });
 
       // Response with paginated data and metadata
