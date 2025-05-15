@@ -49,13 +49,13 @@ export class MasterPriceTravelBoardUtil {
   createTravelFlightInfo(cabin, carrierIds) {
     return {
       travelFlightInfo: {
+        cabinId: {
+          cabin: cabin,
+        },
         companyIdentity: {
-          carrierQualifier: cabin,
+          carrierQualifier: 'X',
           carrierId: carrierIds,
         },
-        // flightDetail: {
-        //   flightType: 'N',
-        // },
       },
     };
   }
@@ -64,17 +64,15 @@ export class MasterPriceTravelBoardUtil {
     return fareFamilies.map((family) => ({
       fareFamilies: {
         familyInformation: {
-          refNumber: family.refNumber,
-          fareFamilyname: family.fareFamilyname,
-          hierarchy: family.hierarchy,
+          refNumber: family.familyInformation.refNumber,
+          fareFamilyname: family.familyInformation.fareFamilyname,
+          hierarchy: family.familyInformation.hierarchy,
         },
         familyCriteria: {
+          carrierId: family.familyCriteria.carrierId,
           cabinProduct: {
-            cabinDesignator: family.cabinDesignator,
+            cabinDesignator: family.familyCriteria.cabinProduct.cabinDesignator,
           },
-          ...(family.cabinProcessingIdentifier && {
-            cabinProcessingIdentifier: family.cabinProcessingIdentifier,
-          }),
         },
       },
     }));
@@ -123,8 +121,9 @@ export class MasterPriceTravelBoardUtil {
 
     if (requestData.fareFamilies) {
       const families = this.createFareFamilies(requestData.fareFamilies);
-      body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch']['fareFamilies'] =
-        families.map((fam) => fam.fareFamilies);
+      body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch'][
+        'fareFamilies'
+      ] = families.map((fam) => fam.fareFamilies);
     }
 
     if (requestData.fareOptions) {
@@ -152,8 +151,6 @@ export class MasterPriceTravelBoardUtil {
       body['soapenv:Body']['Fare_MasterPricerTravelBoardSearch']['itinerary'] =
         itineraries.map((itinerary) => itinerary.itinerary);
     }
-
-
 
     return body;
   }
