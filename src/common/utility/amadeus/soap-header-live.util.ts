@@ -355,7 +355,8 @@ export class SoapHeaderLiveUtil {
         '@xmlns': 'http://xml.amadeus.com/2010/06/Security_v1',
         UserID: {
           '@POS_Type': '1',
-          '@PseudoCityCode': process.env.AMADEUS_OFFICE_ID,
+          '@PseudoCityCode':
+            requestData.session.office_id || process.env.AMADEUS_OFFICE_ID,
           '@AgentDutyCode': 'SU',
           '@RequestorType': 'U',
         },
