@@ -49,7 +49,7 @@ export class AuthService {
     {
       id: 1,
       username: 'payzen',
-      password: bcrypt.hashSync('password123',10),
+      password: bcrypt.hashSync('password123', 10),
       role: 'paymentprocessor',
     },
   ];
@@ -59,7 +59,7 @@ export class AuthService {
     private readonly responseService: ResponseService,
     private readonly httpService: HttpService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(
     loginDto: LoginDto,
@@ -202,10 +202,9 @@ export class AuthService {
       'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
     const headers = {
       headers: {
-        Authorization: `App ${
-          process.env.INFOBIP_KEY ||
+        Authorization: `App ${process.env.INFOBIP_KEY ||
           'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
-        }`,
+          }`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -239,10 +238,9 @@ export class AuthService {
       'https://qgm2rw.api.infobip.com/sms/2/text/advanced'; // Sabre API endpoint
     const headers = {
       headers: {
-        Authorization: `App ${
-          process.env.INFOBIP_KEY ||
+        Authorization: `App ${process.env.INFOBIP_KEY ||
           'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
-        }`,
+          }`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -389,10 +387,10 @@ export class AuthService {
     const payload = { username: user.username, sub: user.id };
     console.log(process.env.JWT_SECRET);
     return {
-      access_token: this.jwtService.sign(payload,{ secret: process.env.JWT_SECRET }),
+      access_token: this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }),
     };
   }
-  
+
   async loginpayzen(
     clientId: string, clientSecret: string,
   ): Promise<any> {
@@ -400,7 +398,7 @@ export class AuthService {
       const user = await this.userService.findByClientIDSecret(
         clientId, clientSecret
       );
-      
+
       if (!user) {
         return this.responseService.createResponse(
           HttpStatus.UNAUTHORIZED,
@@ -408,7 +406,7 @@ export class AuthService {
           AUTHENTICATION_ERROR,
         );
       }
-      
+
       const isAuthorized = true;
       if (!isAuthorized) {
         return this.responseService.createResponse(
@@ -417,14 +415,14 @@ export class AuthService {
           AUTHENTICATION_ERROR,
         );
       }
-      
+
       const accessToken = generateAccessTokenOtpUser(user);
-      
+
       // Set expiry date to 4 hours from now
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 4);
       const formattedExpiryDate = expiryDate.toISOString().replace('T', ' ').split('.')[0];
-      
+
       return {
         status: "OK",
         message: "",
@@ -448,7 +446,7 @@ export class AuthService {
       );
     }
   }
-  
+
 
   // async logout() {}  
 }
