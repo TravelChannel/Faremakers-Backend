@@ -8,8 +8,8 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PassengerDto } from './passenger.dto';
-import { FlightDetailsDto } from 'src/modules/Amadeus/dto/flightdetails.dto';
-import { FareDetailsDto } from 'src/modules/Amadeus/dto/faredetails.dto';
+import { FlightDetailsDto } from 'src/modules/Amadeus/dto/flightDetails.dto';
+import { FareDetailsDto } from 'src/modules/Amadeus/dto/fareDetails.dto';
 
 export class BookingDto {
   @IsString()
