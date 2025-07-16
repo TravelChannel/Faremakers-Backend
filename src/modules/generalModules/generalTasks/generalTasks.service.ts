@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, Inject, HttpStatus } from '@nestjs/common';
-import { GENERAL_TASKS_REPOSITORY } from '../../../shared/constants';
+import { GENERAL_TASKS_REPOSITORY } from 'src/shared/constants';
 import { GeneralTask } from './entities/generalTask.entity';
-import { Log } from '../../generalModules/systemLogs/entities/log.entity';
+import { Log } from 'src/modules/generalModules/systemLogs/entities/log.entity';
 
-import {
-  Op,
-  sequelize,
-  Transaction,
-} from '../../../database/sequelize.provider'; // Adjust the path accordingly
-import { ResponseService } from '../../../common/utility/response/response.service';
-import { EXCEPTION } from '../../../shared/messages.constants';
+import { Op, sequelize, Transaction } from 'src/database/sequelize.provider'; // Adjust the path accordingly
+import { ResponseService } from 'src/common/utility/response/response.service';
+import { EXCEPTION } from 'src/shared/messages.constants';
 // import { ToggleIsActiveDto } from 'src/shared/dtos/toggleIsActive.dto';
 import { FlightSearches } from '../flightSearches';
 import { FlightSearchesDetail } from '../flightSearchesDetail';
