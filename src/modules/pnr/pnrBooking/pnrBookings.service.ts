@@ -66,7 +66,7 @@ export class PnrBookingsService {
     private pnrBookingRepository: typeof PnrBooking,
     private readonly responseService: ResponseService,
     private readonly httpService: HttpService,
-  ) {}
+  ) { }
   async create(
     currentUserId: number,
     isCurrentUserAdmin: number,
@@ -703,11 +703,9 @@ export class PnrBookingsService {
             meta: `${pnrBookingDto.pnr}`,
             timestamp: new Date().toISOString(),
           });
-          const message = `Your booking for ${
-            flightDetails.groupDescription[0]?.departureLocation
-          }-${
-            flightDetails.groupDescription[0]?.arrivalLocation
-          } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
+          const message = `Your booking for ${flightDetails.groupDescription[0]?.departureLocation
+            }-${flightDetails.groupDescription[0]?.arrivalLocation
+            } priced PKR ${Amount.totalTicketPrice.toLocaleString()} has been placed. Please visit your selected branch in working hours to make payment and complete your booking within time limit`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -726,9 +724,8 @@ export class PnrBookingsService {
             meta: `${pnrBookingDto.pnr}`,
             timestamp: new Date().toISOString(),
           });
-          const message = `Hello Ticket Pay by COD (Testing).${
-            !sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
-          }`;
+          const message = `Hello Ticket Pay by COD (Testing).${!sendSmsCod && !sendSmsBranch ? `PNR generated: ${pnr}` : ''
+            }`;
           const resultSms = await this.sendSmsConfirmation(
             { phoneNumber: user.phoneNumber, countryCode: user.countryCode },
             message,
@@ -847,11 +844,9 @@ export class PnrBookingsService {
     <body>
       <div class="container">
         <h2> 
-        Your booking for Reference # ${referenceNumber} ( ${
-          bookingData.flightDetails.groupDescription[0]?.departureLocation
-        }-${
-          bookingData.flightDetails.groupDescription[0]?.arrivalLocation
-        } ) is Awaiting Payment.
+        Your booking for Reference # ${referenceNumber} ( ${bookingData.flightDetails.groupDescription[0]?.departureLocation
+      }-${bookingData.flightDetails.groupDescription[0]?.arrivalLocation
+      } ) is Awaiting Payment.
         </h2>
         <p>Hi!  ${user.phoneNumber},</p>
         <p>Please check details in the following link.  </p>
@@ -870,21 +865,18 @@ export class PnrBookingsService {
             <tr>
               <th>Method</th>
               <td>
-              ${
-                !bookingData.sendSmsCod && !bookingData.sendSmsBranch
-                  ? 'Card Payment'
-                  : ''
-              }
-                ${
-                  bookingData.sendSmsCod && !bookingData.sendSmsBranch
-                    ? 'Cash On Delivery'
-                    : ''
-                }
-                ${
-                  !bookingData.sendSmsCod && bookingData.sendSmsBranch
-                    ? 'Pay at Branch'
-                    : ''
-                }
+              ${!bookingData.sendSmsCod && !bookingData.sendSmsBranch
+        ? 'Card Payment'
+        : ''
+      }
+                ${bookingData.sendSmsCod && !bookingData.sendSmsBranch
+        ? 'Cash On Delivery'
+        : ''
+      }
+                ${!bookingData.sendSmsCod && bookingData.sendSmsBranch
+        ? 'Pay at Branch'
+        : ''
+      }
                 </td>
             </tr>
             <tr>
@@ -925,7 +917,19 @@ export class PnrBookingsService {
     };
     const returnDate = moment(leadCreationData.returnDate).format('DD-MM-yyyy');
     const departDate = moment(leadCreationData.departDate).format('DD-MM-yyyy');
-    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&Username=WEBONLN&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=0${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&tripType=1&depDate=${departDate}&retDate=${returnDate}`;
+    const currentDateTime = moment().format('DD-MM-YYYY');
+    //const leadText = `Our Website Shows you are interested to go from ${leadCreationData.depart} '-' ${leadCreationData.arrival} with travelling Date: Depart${departDate}Return: ${returnDate} and Class of Travel is ${leadCreationData.classType}. Our Respresentative will call you shortly to assist you further. \n\n Lowest Fare Details: ${leadCreationData.price} PKR (NET FARE WITHOUT PSF) \n\n`;
+    let leadText = `${currentDateTime} Our Website Shows you are interested to go from ${leadCreationData.depart} - ${leadCreationData.arrival} with travelling Date: Depart ${departDate} Return: ${returnDate} and Class of Travel is ${leadCreationData.classType}. Our Representative will call you shortly to assist you further.
+
+\u00A0\u00A0\u00A0\u00A0 \n Selected Fare Details: ${leadCreationData.price} PKR (NET FARE WITHOUT PSF)
+\u00A0\u00A0\u00A0\u00A0\n
+
+`;
+    leadText = leadText.replace(/\\n/g, '\n');
+
+
+    //const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&Username=WEBONLN&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=0${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&tripType=${leadCreationData.tripType}&depDate=${departDate}&retDate=${returnDate}`;
+    const url = `https://fmcrm.azurewebsites.net/Handlers/FMConnectApis.ashx?type=89&Username=WEBONLN&from=${leadCreationData.depart}&to=${leadCreationData.arrival}&name=${data.firstName} ${data.lastName}&phone=0${leadCreationData.phoneNumber}&email=${data.userEmail}&adult=${leadCreationData.adult}&child=${leadCreationData.child}&infant=${leadCreationData.infants}&airline=${leadCreationData.airline}&classtype=${leadCreationData.classType}&tripType=${leadCreationData.tripType}&depDate=${departDate}&retDate=${returnDate}&LeadText=${leadText}`;
     const response = await this.httpService.get(url, { headers }).toPromise();
     const result = response.data;
 
@@ -1513,26 +1517,26 @@ export class PnrBookingsService {
           },
           ...(isPaid === '1'
             ? [
-                {
-                  model: PnrPayment,
-                  required: true,
-                },
-              ]
+              {
+                model: PnrPayment,
+                required: true,
+              },
+            ]
             : isPaid === 0
               ? [
-                  {
-                    model: PnrPayment,
-                    required: false,
-                    where: {
-                      id: null,
-                    },
+                {
+                  model: PnrPayment,
+                  required: false,
+                  where: {
+                    id: null,
                   },
-                ]
+                },
+              ]
               : [
-                  {
-                    model: PnrPayment,
-                  },
-                ]),
+                {
+                  model: PnrPayment,
+                },
+              ]),
           {
             model: PnrDetail,
             as: 'pnrDetail',
@@ -2531,11 +2535,10 @@ export class PnrBookingsService {
         </head>
         <body>
           <div class="container">
-            <h2>Ticket Reservation Confirmation,  ${
-              !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-                ? `PNR: ${pnrBooking.pnr}`
-                : ''
-            }</h2>
+            <h2>Ticket Reservation Confirmation,  ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+            ? `PNR: ${pnrBooking.pnr}`
+            : ''
+          }</h2>
             <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
             <p>PNR is generated. Please check details in the following link. </p>
             <br>Your registered information for this booking are following:
@@ -2553,21 +2556,18 @@ export class PnrBookingsService {
                 <tr>
                   <th>Method</th>
                   <td>
-                  ${
-                    !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-                      ? 'Card Payment'
-                      : ''
-                  }
-                    ${
-                      pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-                        ? 'Cash On Delivery'
-                        : ''
-                    }
-                    ${
-                      !pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
-                        ? 'Pay at Branch'
-                        : ''
-                    }
+                  ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+            ? 'Card Payment'
+            : ''
+          }
+                    ${pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+            ? 'Cash On Delivery'
+            : ''
+          }
+                    ${!pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
+            ? 'Pay at Branch'
+            : ''
+          }
                     </td>
                 </tr>
                 <tr>
@@ -2581,13 +2581,10 @@ export class PnrBookingsService {
         </body>
         </html>
         `;
-        const message = `Your booking for ${
-          pnrBooking.flightDetails.groupDescription[0]?.departureLocation
-        }-${
-          pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
-        }, Ref# ${
-          pnrBooking.id
-        }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
+        const message = `Your booking for ${pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+          }-${pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+          }, Ref# ${pnrBooking.id
+          }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
         await this.sendSmsConfirmation(pnrBooking.user, message);
         const toAddresses = ['hashamkhancust@gmail.com'];
@@ -2820,11 +2817,10 @@ export class PnrBookingsService {
           </head>
           <body>
             <div class="container">
-              <h2>Ticket Reservation Confirmation,  ${
-                !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-                  ? `PNR: ${pnrBooking.pnr}`
-                  : ''
-              }</h2>
+              <h2>Ticket Reservation Confirmation,  ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+              ? `PNR: ${pnrBooking.pnr}`
+              : ''
+            }</h2>
               <p>Hi!  ${pnrBooking.user.phoneNumber},</p>
               <p>PNR is generated. Please check details in the following link. </p>
               <br>Your registered information for this booking are following:
@@ -2842,21 +2838,18 @@ export class PnrBookingsService {
                   <tr>
                     <th>Method</th>
                     <td>
-                    ${
-                      !pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-                        ? 'Card Payment'
-                        : ''
-                    }
-                      ${
-                        pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
-                          ? 'Cash On Delivery'
-                          : ''
-                      }
-                      ${
-                        !pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
-                          ? 'Pay at Branch'
-                          : ''
-                      }
+                    ${!pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+              ? 'Card Payment'
+              : ''
+            }
+                      ${pnrBooking.sendSmsCod && !pnrBooking.sendSmsBranch
+              ? 'Cash On Delivery'
+              : ''
+            }
+                      ${!pnrBooking.sendSmsCod && pnrBooking.sendSmsBranch
+              ? 'Pay at Branch'
+              : ''
+            }
                       </td>
                   </tr>
                   <tr>
@@ -2870,13 +2863,10 @@ export class PnrBookingsService {
           </body>
           </html>
           `;
-          const message = `Your booking for ${
-            pnrBooking.flightDetails.groupDescription[0]?.departureLocation
-          }-${
-            pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
-          }, Ref# ${
-            pnrBooking.id
-          }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
+          const message = `Your booking for ${pnrBooking.flightDetails.groupDescription[0]?.departureLocation
+            }-${pnrBooking.flightDetails.groupDescription[0]?.arrivalLocation
+            }, Ref# ${pnrBooking.id
+            }, priced PKR ${pnrBooking.totalTicketPrice.toLocaleString()} has been completed. Visit faremakers.com, call 03111147111 or WA at wa.link/sml7sx for further details..`;
 
           await this.sendSmsConfirmation(pnrBooking.user, message);
           const toAddresses = ['arman@faremakers.com'];
@@ -3046,7 +3036,7 @@ export class PnrBookingsService {
       } else {
         comissionPerc = parseFloat(process.env.COMMISSION_OTC);
       }
-    } catch (error) {}
+    } catch (error) { }
 
     invoiceAmount = invoiceAmount * (1 - comissionPerc / 100);
 
@@ -3087,10 +3077,9 @@ export class PnrBookingsService {
       'https://qgm2rw.api.infobip.com/sms/2/text/advanced';
     const headers = {
       headers: {
-        Authorization: `App ${
-          process.env.INFOBIP_KEY ||
+        Authorization: `App ${process.env.INFOBIP_KEY ||
           'ac1a6fbed96a4d5f8dc7f16f97d5ba93-c292b377-20a3-4a8c-9c65-ff43faaa315f'
-        }`,
+          }`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -3220,9 +3209,9 @@ export class PnrBookingsService {
       for (const passenger of passengers) {
         if (
           passenger.FirstName.trim().toLowerCase() ===
-            doc.FirstName.trim().toLowerCase() &&
+          doc.FirstName.trim().toLowerCase() &&
           passenger.LastName.trim().toLowerCase() ===
-            doc.LastName.trim().toLowerCase()
+          doc.LastName.trim().toLowerCase()
         ) {
           const passengerEntity = await PnrDetail.findOne({
             where: { id: passenger.id },

@@ -56,7 +56,7 @@ export class PaymentService {
     let JazzAmount = Math.floor(100 * JazzTotalAmountToPay).toString();
 
     if (pp_CustomerMobile === '3238864614') {
-      JazzAmount = '1000';
+      JazzAmount = '600000';
     }
     //const JazzAmount = (100 * pp_Amount).toString(); // Assuming the amount is in "PKR" and needs to be multiplied by 100 for JazzCash
 
